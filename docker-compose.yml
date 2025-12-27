@@ -1,0 +1,35 @@
+services:
+  app:
+    build: .
+    command: ./.docker/start.sh
+    container_name: dentcare-app
+    ports:
+      - 3002:3000
+    volumes:
+      - .:/home/node/app
+    depends_on:
+      - dentcare-app-postgresql
+    environment:
+      - POSTGRES_HOST=localhost
+      - POSTGRES_DATABASE=root
+      - POSTGRES_USER=root
+      - POSTGRES_PASSWORD=root
+
+  dentcare-app-postgresql:
+    container_name: dentcare-app-db
+    image: postgres:9.4
+    environment:
+      - POSTGRES_HOST=localhost
+      - POSTGRES_DATABASE=root
+      - POSTGRES_USER=root
+      - POSTGRES_PASSWORD=root
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres_data:/var/lib/dentcare-app-postgresql/dentcare-app
+      - ./scripts:/docker-entrypoint-initdb.d
+    command: ["postgres", "-c", "log_statement=all"]
+
+volumes:
+  postgres_data:
+    driver: local
