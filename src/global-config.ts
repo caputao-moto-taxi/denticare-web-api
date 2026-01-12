@@ -1,10 +1,8 @@
 import {
   BadRequestException,
-  ClassSerializerInterceptor,
   INestApplication,
   ValidationPipe,
 } from '@nestjs/common';
-import { Reflector } from '@nestjs/core';
 import { ValidationExceptionFilter } from './shared/infra/filters/validation-exception-filter';
 
 export function applyGlobalConfig(app: INestApplication) {
@@ -25,8 +23,5 @@ export function applyGlobalConfig(app: INestApplication) {
       enableDebugMessages: true,
     }),
   );
-  // TODO: Depois corrigir
-  // app.useGlobalInterceptors(new ClassSerializerInterceptor(app.get(Reflector)));
-
   app.useGlobalFilters(new ValidationExceptionFilter());
 }

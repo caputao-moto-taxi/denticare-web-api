@@ -87,7 +87,7 @@ describe('SendSMSNotification - Brazilian Phone Number Formatting', () => {
         '+447911123456', // UK number
       ];
 
-      testCases.forEach(input => {
+      testCases.forEach((input) => {
         const result = (smsService as any).formatBrazilianPhoneNumber(input);
         expect(result).toBe(input);
       });
@@ -109,7 +109,7 @@ describe('SendSMSNotification - Brazilian Phone Number Formatting', () => {
         '5511952130888', // with country code
       ];
 
-      validMobileNumbers.forEach(number => {
+      validMobileNumbers.forEach((number) => {
         const result = (smsService as any).isValidBrazilianPhoneNumber(number);
         expect(result).toBe(true);
       });
@@ -129,7 +129,7 @@ describe('SendSMSNotification - Brazilian Phone Number Formatting', () => {
         '551123456789', // with country code
       ];
 
-      validLandlineNumbers.forEach(number => {
+      validLandlineNumbers.forEach((number) => {
         const result = (smsService as any).isValidBrazilianPhoneNumber(number);
         expect(result).toBe(true);
       });
@@ -146,7 +146,7 @@ describe('SendSMSNotification - Brazilian Phone Number Formatting', () => {
         'abc123', // invalid format
       ];
 
-      invalidNumbers.forEach(number => {
+      invalidNumbers.forEach((number) => {
         const result = (smsService as any).isValidBrazilianPhoneNumber(number);
         expect(result).toBe(false);
       });
@@ -162,10 +162,10 @@ describe('SendSMSNotification - Brazilian Phone Number Formatting', () => {
         '21-98765-4321',
       ];
 
-      validNumbersWithFormatting.forEach(number => {
+      validNumbersWithFormatting.forEach((number) => {
         const result = (smsService as any).isValidBrazilianPhoneNumber(number);
         expect(result).toBe(true);
       });
     });
   });
-}); 
+});

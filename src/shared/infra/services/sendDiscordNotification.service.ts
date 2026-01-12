@@ -1,5 +1,9 @@
 import { Client, GatewayIntentBits, TextChannel } from 'discord.js';
-import { badRequestResponse, errorResponse, successResponse } from '../../contracts/httpContracts';
+import {
+  badRequestResponse,
+  errorResponse,
+  successResponse,
+} from '../../contracts/httpContracts';
 import { GetEnviromentVariable } from '../azure';
 
 export interface SendDiscordNotificationProps {
@@ -33,22 +37,23 @@ export class SendDiscordNotificationService {
 
       const guild = await client.guilds.fetch(guildId);
       if (!guild) {
-        return badRequestResponse({ message: 'Discord server not founded'});
+        return badRequestResponse({ message: 'Discord server not founded' });
       }
 
       const channels = await guild.channels.fetch();
       const channel = channels.find(
-        (ch): ch is TextChannel =>
-          ch?.isTextBased() && ch.name === channelName,
+        (ch): ch is TextChannel => ch?.isTextBased() && ch.name === channelName,
       );
 
       if (!channel) {
-        return badRequestResponse({ message: `Canal "${channelName}" não encontrado no servidor Discord.`});
+        return badRequestResponse({
+          message: `Canal "${channelName}" não encontrado no servidor Discord.`,
+        });
       }
 
       await channel.send(content);
       console.log('Notification sent to Discord channel:', channelName);
-      return successResponse(true)
+      return successResponse(true);
     } catch (error: any) {
       return errorResponse(error);
     }

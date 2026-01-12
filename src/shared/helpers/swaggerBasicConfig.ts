@@ -60,7 +60,6 @@ export const openApiFilterDocumentsPathsByTags = (
   return result;
 };
 
-
 export const openApiOptionsBase: SwaggerCustomOptions = {
   customSiteTitle: appDocTitle,
   customfavIcon: appFavicon,

@@ -2,10 +2,9 @@ import { Module, MiddlewareConsumer, NestModule } from '@nestjs/common';
 import { ConfigModule } from './shared/infra/config/config.module';
 import { DatabaseModule } from './shared/infra/db/database.module';
 import { HashModule } from './shared/application/hash.module';
-import { ApplicationModule } from './applications/application.module';
 import { NotificationModule } from './notifications/notifications.module';
 import { ApiKeyLoggerMiddleware } from './shared/middlewares/apiKeyLogger.middleware';
-import { LogsModule } from './logs/logs.module';
+import { RateLimitModule } from './shared/infra/security/rate-limit.module';
 
 @Module({
   imports: [
@@ -14,9 +13,8 @@ import { LogsModule } from './logs/logs.module';
     }),
     HashModule,
     DatabaseModule,
-    ApplicationModule,
     NotificationModule,
-    LogsModule,
+    RateLimitModule,
   ],
 })
 export class AppModule implements NestModule {

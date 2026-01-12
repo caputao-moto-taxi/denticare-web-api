@@ -15,8 +15,7 @@ import { ValueObject } from '../../../domain/value-object';
 export abstract class InMemoryRepository<
   E extends Entity,
   EntityId extends ValueObject,
-> implements IRepository<E, EntityId>
-{
+> implements IRepository<E, EntityId> {
   data: E[] = [];
 
   async insert(entity: E): Promise<void> {
@@ -92,21 +91,17 @@ export abstract class InMemoryRepository<
 }
 
 export abstract class InMemorySearchableRepository<
-    E extends Entity,
-    EntityId extends ValueObject,
-    Filter = string,
-  >
+  E extends Entity,
+  EntityId extends ValueObject,
+  Filter = string,
+>
   extends InMemoryRepository<E, EntityId>
   implements ISearchableRepository<E, EntityId, Filter>
 {
   sortableFields: string[] = [];
   async search(props: SearchParams<Filter>): Promise<SearchResult<E>> {
     const dataFiltered = await this.applyFilter(this.data, props.filter);
-    const dataSorted = this.applySort(
-      dataFiltered,
-      props.sort,
-      props.sortDir,
-    );
+    const dataSorted = this.applySort(dataFiltered, props.sort, props.sortDir);
     const dataPaginated = this.applyPaginate(
       dataSorted,
       props.page,

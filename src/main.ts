@@ -9,6 +9,8 @@ import {
   appSystemTag,
   appTitle,
   appVersion,
+  corsOptions,
+  loggerLevels,
 } from './shared/helpers/basicConfigsConstants';
 import { SwaggerModule } from '@nestjs/swagger';
 import {
@@ -16,10 +18,9 @@ import {
   openApiDocumentOptionsBase,
   openApiOptionsBase,
 } from './shared/helpers/swaggerBasicConfig';
+import * as requestIp from 'request-ip';
 
 async function bootstrap() {
-  const loggerLevels: LogLevel[] = ['log', 'error', 'warn'];
-
   const app = await NestFactory.create(AppModule, {
     logger: loggerLevels,
   });
@@ -27,17 +28,9 @@ async function bootstrap() {
   applyGlobalConfig(app);
   const logger = new Logger(appSystemTag);
 
-  const corsOptions = {
-    origin: '*',
-    methods: 'GET,HEAD,PUT,PATCH,POST,DELETE',
-    allowedHeaders: 'Content-Type,Authorization',
-    exposedHeaders: ['Content-Type', 'Authorization'],
-    preflightContinue: false,
-  };
-
+  app.use(requestIp.mw());
   app.use(expressJson({ limit: '5mb' }));
   app.use(expressUrlEncoded({ limit: '5mb', extended: true }));
-
   app.enableCors(corsOptions);
 
   SwaggerModule.setup(

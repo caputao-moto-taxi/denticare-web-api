@@ -13,7 +13,9 @@ export class ApiKeyLoggerMiddleware implements NestMiddleware {
     const url = req.originalUrl;
 
     if (apiKey) {
-      this.logger.log(`[${new Date().toISOString()}] API Key: ${apiKey} | IP: ${ip} | ${method} ${url}`);
+      this.logger.log(
+        `[${new Date().toISOString()}] API Key: ${apiKey} | IP: ${ip} | ${method} ${url}`,
+      );
     }
 
     next();

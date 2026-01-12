@@ -28,19 +28,19 @@ export class ConfigModule extends NestConfigModule {
     return super.forRoot({
       isGlobal: true,
       envFilePath: [
-      ...(Array.isArray(envFilePath) ? envFilePath : [envFilePath!]),
-      join(
-        process.cwd(),
-        './',
-        `.env.${process.env.NODE_ENV || 'development'}`,
-      ),
-      join(process.cwd(), `.env`),
+        ...(Array.isArray(envFilePath) ? envFilePath : [envFilePath!]),
+        join(
+          process.cwd(),
+          './',
+          `.env.${process.env.NODE_ENV || 'development'}`,
+        ),
+        join(process.cwd(), '.env'),
       ],
       validate: (config: Record<string, any>) => {
-      Object.keys(CONFIG_DB_SCHEMA).forEach((key) => {
-        CONFIG_DB_SCHEMA[key](config[key]);
-      });
-      return config;
+        Object.keys(CONFIG_DB_SCHEMA).forEach((key) => {
+          CONFIG_DB_SCHEMA[key](config[key]);
+        });
+        return config;
       },
       ...otherOptions,
     });

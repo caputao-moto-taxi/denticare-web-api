@@ -1,37 +1,31 @@
 generator client {
-  provider   = "prisma-client-js"
-  output     = "../generated/prisma"
-  engineType = "client"
+  provider = "prisma-client"
+  output   = "../src/generated/prisma"
 }
 
 datasource db {
   provider = "postgresql"
 }
 
-// ====================
-// PLANS AND BENEFITS
-// ====================
 model Currency {
-  id              String           @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  id              String           @id @default(dbgenerated("gen_random_uuid()"))
   name            String
-  symbol          String
-  Plan            Plan[]
+  symbol          String           @db.Char(3)
   createdAt       DateTime         @default(now())
   updatedAt       DateTime         @updatedAt
   deletedAt       DateTime?
   treatmentPrices TreatmentPrice[]
   consults        Consult[]
+  Plan            Plan[]
 
   @@map("currencies")
 }
 
 model Plan {
-  id                  String        @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  id                  String        @id @default(dbgenerated("gen_random_uuid()"))
   name                String
-  total_branch        Int?          @default(0)
   price               Float         @default(0.0)
-  currency            Currency      @relation(fields: [currencyId], references: [id])
-  currencyId          String        @db.Uuid
+  currencyId          String
   duration            Int           @default(30)
   createdAt           DateTime      @default(now())
   updatedAt           DateTime      @updatedAt
@@ -41,61 +35,60 @@ model Plan {
   promotionStartDate  DateTime?
   promotionPercentage Float?
   slug                String        @unique
-  PlanBenefit         PlanBenefit[]
-  Headquarter         Headquarter[]
   deletedAt           DateTime?
+  totalBranch         Int?          @default(0)
+  Headquarter         Headquarter[]
+  PlanBenefit         PlanBenefit[]
+  currency            Currency      @relation(fields: [currencyId], references: [id])
 
   @@map("plans")
 }
 
 model Benefit {
-  id          String        @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  id          String        @id @default(dbgenerated("gen_random_uuid()"))
   name        String
   details     String?
   createdAt   DateTime      @default(now())
   updatedAt   DateTime      @updatedAt
-  PlanBenefit PlanBenefit[]
   deletedAt   DateTime?
+  PlanBenefit PlanBenefit[]
 
   @@map("benefits")
 }
 
 model PlanBenefit {
-  id        String    @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
-  plan      Plan      @relation(fields: [planId], references: [id])
-  planId    String    @db.Uuid
-  benefit   Benefit   @relation(fields: [benefitId], references: [id])
-  benefitId String    @db.Uuid
+  id        String    @id @default(dbgenerated("gen_random_uuid()"))
+  planId    String
+  benefitId String
   createdAt DateTime  @default(now())
   updatedAt DateTime  @updatedAt
   deletedAt DateTime?
+  benefit   Benefit   @relation(fields: [benefitId], references: [id])
+  plan      Plan      @relation(fields: [planId], references: [id])
 
   @@unique([planId, benefitId])
   @@map("plan_benefits")
 }
 
-// ====================
-// HEADQUARTERS
-// ====================
 model Headquarter {
-  id          String    @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  id          String    @id @default(dbgenerated("gen_random_uuid()"))
   name        String
   address     String
   description String?
   nif         String
   logo        String?
-  plan        Plan      @relation(fields: [planId], references: [id])
-  planId      String    @db.Uuid
+  planId      String
   createdAt   DateTime  @default(now())
   updatedAt   DateTime  @updatedAt
   deletedAt   DateTime?
   Branch      Branch[]
+  plan        Plan      @relation(fields: [planId], references: [id])
 
   @@map("headquarters")
 }
 
 model Address {
-  id        String    @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  id        String    @id @default(dbgenerated("gen_random_uuid()"))
   street    String
   city      String
   province  String?
@@ -104,107 +97,98 @@ model Address {
   createdAt DateTime  @default(now())
   updatedAt DateTime  @updatedAt
   deletedAt DateTime?
-  User      User[]
-  Branch    Branch[]
   Person    Person[]
+  Branch    Branch[]
+  User      User[]
 
   @@map("addresses")
 }
 
 model Branch {
-  id              String           @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  id              String           @id @default(dbgenerated("gen_random_uuid()"))
   name            String
-  address         Address          @relation(fields: [addressId], references: [id])
-  addressId       String           @db.Uuid
-  headquarter     Headquarter      @relation(fields: [headquarterId], references: [id])
-  headquarterId   String           @db.Uuid
+  addressId       String
+  headquarterId   String
   description     String?
   isActive        Boolean          @default(true)
   createdAt       DateTime         @default(now())
   updatedAt       DateTime         @updatedAt
   deletedAt       DateTime?
-  User            User[]
-  UserBranch      UserBranch[]
   Person          Person[]
   treatmentPrices TreatmentPrice[]
+  address         Address          @relation(fields: [addressId], references: [id])
+  headquarter     Headquarter      @relation(fields: [headquarterId], references: [id])
   products        Product[]
   sales           Sale[]
+  UserBranch      UserBranch[]
+  User            User[]
 
   @@map("branches")
 }
 
-// ====================
-// USERS
-// ====================
 model User {
-  id        String   @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
-  email     String   @unique
-  password  String
-  username  String   @unique
-  branchId  String   @db.Uuid
-  addressId String?  @db.Uuid
-  roleId    String?  @db.Uuid
-  branch    Branch   @relation(fields: [branchId], references: [id])
-  Address   Address? @relation(fields: [addressId], references: [id])
-  Role      Role?    @relation(fields: [roleId], references: [id])
-
-  Appointment  Appointment[] @relation("UserPrimaryAppointments")
-  appointments Appointment[] @relation("UserSecondaryAppointments")
-
-  Consult          Consult[]
+  id               String           @id @default(dbgenerated("gen_random_uuid()"))
+  email            String           @unique
+  password         String
+  username         String           @unique
+  branchId         String
+  addressId        String?
+  roleId           String?
+  isActive         Boolean          @default(false)
+  phoneNumber      Int?
+  countryCode      String?
+  isPhoneVerified  Boolean          @default(false)
+  isEmailVerified  Boolean          @default(false)
+  createdAt        DateTime         @default(now())
+  updatedAt        DateTime         @updatedAt
+  deletedAt        DateTime?
+  accessHistories  AccessHistory[]
+  audits           Audit[]
+  loginHistories   LoginHistory[]
+  Person           Person[]
+  Appointment      Appointment[]    @relation("UserPrimaryAppointments")
+  appointments     Appointment[]    @relation("UserSecondaryAppointments")
   clinicProccesses ClinicProccess[]
+  Consult          Consult[]
   diagnostics      Diagnostic[]
   UserBranch       UserBranch[]
   UserRole         UserRole[]
-  Person           Person[]
-
-  isActive        Boolean         @default(false)
-  phoneNumber     Int?
-  countryCode     String?
-  isPhoneVerified Boolean         @default(false)
-  isEmailVerified Boolean         @default(false)
-  createdAt       DateTime        @default(now())
-  updatedAt       DateTime        @updatedAt
-  deletedAt       DateTime?
-  audits          Audit[]
-  loginHistories  LoginHistory[]
-  accessHistories AccessHistory[]
+  Address          Address?         @relation(fields: [addressId], references: [id])
+  branch           Branch           @relation(fields: [branchId], references: [id])
+  Role             Role?            @relation(fields: [roleId], references: [id])
 
   @@map("users")
 }
 
 model Person {
-  id        String    @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
-  firstName String
-  lastName  String
-  birthDate DateTime?
-  email     String?   @unique
-  gender    Sex       @default(OTHER)
-  branchId  String    @db.Uuid
-  addressId String    @db.Uuid
-  userId    String?
-  roleId    String?
-  branch    Branch    @relation(fields: [branchId], references: [id])
-  address   Address   @relation(fields: [addressId], references: [id])
-  User      User?     @relation(fields: [userId], references: [id])
-  Role      Role?     @relation(fields: [roleId], references: [id])
-
-  Appointment  Appointment[] @relation("PersonPrimaryAppointments")
-  appointments Appointment[] @relation("PersonSecondaryAppointments")
-
-  consults         Consult[]
+  id               String           @id @default(dbgenerated("gen_random_uuid()"))
+  firstName        String
+  lastName         String
+  birthDate        DateTime?
+  email            String?          @unique
+  gender           Sex              @default(OTHER)
+  branchId         String
+  addressId        String
+  userId           String?
+  roleId           String?
+  createdAt        DateTime         @default(now())
+  updatedAt        DateTime         @updatedAt
+  deletedAt        DateTime?
+  address          Address          @relation(fields: [addressId], references: [id])
+  branch           Branch           @relation(fields: [branchId], references: [id])
+  Role             Role?            @relation(fields: [roleId], references: [id])
+  User             User?            @relation(fields: [userId], references: [id])
+  Appointment      Appointment[]    @relation("PersonPrimaryAppointments")
+  appointments     Appointment[]    @relation("PersonSecondaryAppointments")
   clinicProccesses ClinicProccess[]
+  consults         Consult[]
   diagnostics      Diagnostic[]
-
-  createdAt DateTime  @default(now())
-  updatedAt DateTime  @updatedAt
-  deletedAt DateTime?
 
   @@map("Persons")
 }
 
 model Role {
-  id             String           @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  id             String           @id @default(dbgenerated("gen_random_uuid()"))
   name           String           @unique
   description    String?
   slug           String           @unique
@@ -212,16 +196,16 @@ model Role {
   createdAt      DateTime         @default(now())
   updatedAt      DateTime         @updatedAt
   deletedAt      DateTime?
-  RolePermission RolePermission[]
-  User           User[]
   Person         Person[]
+  RolePermission RolePermission[]
   UserRole       UserRole[]
+  User           User[]
 
   @@map("roles")
 }
 
 model Permission {
-  id             String           @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  id             String           @id @default(dbgenerated("gen_random_uuid()"))
   name           String           @unique
   description    String?
   slug           String           @unique
@@ -235,118 +219,109 @@ model Permission {
 }
 
 model UserBranch {
-  id        String    @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
-  user      User      @relation(fields: [userId], references: [id])
-  userId    String    @db.Uuid
-  branch    Branch    @relation(fields: [branchId], references: [id])
-  branchId  String    @db.Uuid
+  id        String    @id @default(dbgenerated("gen_random_uuid()"))
+  userId    String
+  branchId  String
   createdAt DateTime  @default(now())
   updatedAt DateTime  @updatedAt
   deletedAt DateTime?
+  branch    Branch    @relation(fields: [branchId], references: [id])
+  user      User      @relation(fields: [userId], references: [id])
 
   @@unique([userId, branchId])
   @@map("user_branches")
 }
 
 model RolePermission {
-  id           String     @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
-  role         Role       @relation(fields: [roleId], references: [id])
-  roleId       String     @db.Uuid
-  permission   Permission @relation(fields: [permissionId], references: [id])
-  permissionId String     @db.Uuid
+  id           String     @id @default(dbgenerated("gen_random_uuid()"))
+  roleId       String
+  permissionId String
   createdAt    DateTime   @default(now())
   updatedAt    DateTime   @updatedAt
   deletedAt    DateTime?
+  permission   Permission @relation(fields: [permissionId], references: [id])
+  role         Role       @relation(fields: [roleId], references: [id])
 
   @@unique([roleId, permissionId])
   @@map("role_permissions")
 }
 
 model UserRole {
-  id        String    @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
-  user      User      @relation(fields: [userId], references: [id])
-  userId    String    @db.Uuid
-  role      Role      @relation(fields: [roleId], references: [id])
-  roleId    String    @db.Uuid
+  id        String    @id @default(dbgenerated("gen_random_uuid()"))
+  userId    String
+  roleId    String
   createdAt DateTime  @default(now())
   updatedAt DateTime  @updatedAt
   deletedAt DateTime?
+  role      Role      @relation(fields: [roleId], references: [id])
+  user      User      @relation(fields: [userId], references: [id])
 
   @@unique([userId, roleId])
   @@map("user_roles")
 }
 
-// ====================
-// APPOINTMENTS AND CONSULTS
-// ====================
 model Appointment {
-  id          String            @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  id          String            @id @default(dbgenerated("gen_random_uuid()"))
   date        DateTime
   time        DateTime
   reason      String
   description String?
   status      AppointmentStatus
   asAnswered  Boolean           @default(false)
-
-  patientId String  @db.Uuid
-  doctorId  String  @db.Uuid
-  personId  String?
-  userId    String?
-
-  patient Person  @relation("PersonPrimaryAppointments", fields: [patientId], references: [id])
-  doctor  User    @relation("UserPrimaryAppointments", fields: [doctorId], references: [id])
-  Person  Person? @relation("PersonSecondaryAppointments", fields: [personId], references: [id])
-  user    User?   @relation("UserSecondaryAppointments", fields: [userId], references: [id])
-
-  createdAt DateTime  @default(now())
-  updatedAt DateTime  @updatedAt
-  deletedAt DateTime?
+  patientId   String
+  doctorId    String
+  personId    String?
+  userId      String?
+  createdAt   DateTime          @default(now())
+  updatedAt   DateTime          @updatedAt
+  deletedAt   DateTime?
+  doctor      User              @relation("UserPrimaryAppointments", fields: [doctorId], references: [id])
+  patient     Person            @relation("PersonPrimaryAppointments", fields: [patientId], references: [id])
+  Person      Person?           @relation("PersonSecondaryAppointments", fields: [personId], references: [id])
+  user        User?             @relation("UserSecondaryAppointments", fields: [userId], references: [id])
 
   @@map("appointments")
 }
 
 model Consult {
-  id                String             @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
-  patientId         String             @db.Uuid
-  patient           Person             @relation(fields: [patientId], references: [id])
-  doctorId          String             @db.Uuid
-  doctor            User               @relation(fields: [doctorId], references: [id])
+  id                String             @id @default(dbgenerated("gen_random_uuid()"))
+  patientId         String
+  doctorId          String
   description       String?
   consultType       ConsultType        @default(CONSULT)
   amount            Float
   isPaid            Boolean            @default(false)
   paidAt            DateTime?
   paidAmount        Float?
-  paidCurrency      Currency           @relation(fields: [paidCurrencyId], references: [id])
-  paidCurrencyId    String             @db.Uuid
-  consultTreatments ConsultTreatment[]
+  paidCurrencyId    String
   createdAt         DateTime           @default(now())
   updatedAt         DateTime           @updatedAt
   deletedAt         DateTime?
   prescriptions     Prescription[]
+  consultTreatments ConsultTreatment[]
+  doctor            User               @relation(fields: [doctorId], references: [id])
+  paidCurrency      Currency           @relation(fields: [paidCurrencyId], references: [id])
+  patient           Person             @relation(fields: [patientId], references: [id])
 
   @@map("consults")
 }
 
 model ConsultTreatment {
-  id          String    @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
-  consultId   String    @db.Uuid
-  consult     Consult   @relation(fields: [consultId], references: [id])
-  treatmentId String    @db.Uuid
-  treatment   Treatment @relation(fields: [treatmentId], references: [id])
+  id          String    @id @default(dbgenerated("gen_random_uuid()"))
+  consultId   String
+  treatmentId String
   createdAt   DateTime  @default(now())
   updatedAt   DateTime  @updatedAt
   deletedAt   DateTime?
+  consult     Consult   @relation(fields: [consultId], references: [id])
+  treatment   Treatment @relation(fields: [treatmentId], references: [id])
 
   @@unique([consultId, treatmentId])
   @@map("consult_treatments")
 }
 
-// ====================
-// PRODUCTS AND SALES
-// ====================
 model Treatment {
-  id                String             @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  id                String             @id @default(dbgenerated("gen_random_uuid()"))
   name              String
   description       String?
   createdAt         DateTime           @default(now())
@@ -359,21 +334,21 @@ model Treatment {
 }
 
 model TreatmentPrice {
-  id          String    @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
-  branchId    String    @db.Uuid
-  branch      Branch    @relation(fields: [branchId], references: [id])
+  id          String    @id @default(dbgenerated("gen_random_uuid()"))
+  branchId    String
   price       Float
-  Currency    Currency  @relation(fields: [currencyId], references: [id])
-  currencyId  String    @db.Uuid
-  treatmentId String    @db.Uuid
-  treatment   Treatment @relation(fields: [treatmentId], references: [id])
+  currencyId  String
+  treatmentId String
   createdAt   DateTime  @default(now())
   updatedAt   DateTime  @updatedAt
   deletedAt   DateTime?
+  branch      Branch    @relation(fields: [branchId], references: [id])
+  Currency    Currency  @relation(fields: [currencyId], references: [id])
+  treatment   Treatment @relation(fields: [treatmentId], references: [id])
 }
 
 model Product {
-  id                  String             @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  id                  String             @id @default(dbgenerated("gen_random_uuid()"))
   name                String
   brand               String?
   price               Float
@@ -381,42 +356,40 @@ model Product {
   cover               String?
   stock               Int
   recommendedQuantity Int?
-  branchId            String             @db.Uuid
-  branch              Branch             @relation(fields: [branchId], references: [id])
+  branchId            String
   createdAt           DateTime           @default(now())
   updatedAt           DateTime           @updatedAt
   deletedAt           DateTime?
   prescriptionItems   PrescriptionItem[]
+  branch              Branch             @relation(fields: [branchId], references: [id])
   saleItems           SaleItem[]
 
   @@map("products")
 }
 
 model Sale {
-  id                String        @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  id                String        @id @default(dbgenerated("gen_random_uuid()"))
   clientName        String
   clientEmail       String?
   hasPrescription   Boolean       @default(false)
-  prescriptionId    String?       @db.Uuid
-  prescription      Prescription? @relation(fields: [prescriptionId], references: [id])
+  prescriptionId    String?
   prescriptionPDF   String?
   isInternalPatient Boolean       @default(false)
-  branchId          String        @db.Uuid
-  branch            Branch        @relation(fields: [branchId], references: [id])
+  branchId          String
   createdAt         DateTime      @default(now())
   updatedAt         DateTime      @updatedAt
   deletedAt         DateTime?
   saleItems         SaleItem[]
+  branch            Branch        @relation(fields: [branchId], references: [id])
+  prescription      Prescription? @relation(fields: [prescriptionId], references: [id])
 
   @@map("sales")
 }
 
 model SaleItem {
-  id                           String    @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
-  saleId                       String    @db.Uuid
-  sale                         Sale      @relation(fields: [saleId], references: [id])
-  productId                    String    @db.Uuid
-  product                      Product   @relation(fields: [productId], references: [id])
+  id                           String    @id @default(dbgenerated("gen_random_uuid()"))
+  saleId                       String
+  productId                    String
   quantity                     Int
   unitPrice                    Float
   totalPrice                   Float
@@ -429,83 +402,76 @@ model SaleItem {
   createdAt                    DateTime  @default(now())
   updatedAt                    DateTime  @updatedAt
   deletedAt                    DateTime?
+  product                      Product   @relation(fields: [productId], references: [id])
+  sale                         Sale      @relation(fields: [saleId], references: [id])
 
   @@map("sale_items")
 }
 
-// ====================
-// PRESCRIPTIONS
-// ====================
 model Prescription {
-  id                String             @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
-  consultationId    String             @db.Uuid
-  consultation      Consult            @relation(fields: [consultationId], references: [id])
+  id                String             @id @default(dbgenerated("gen_random_uuid()"))
+  consultationId    String
   recommendations   String?
   duration          Int
   period            PrescriptionPeriod
   createdAt         DateTime           @default(now())
   updatedAt         DateTime           @updatedAt
   deletedAt         DateTime?
+  consultation      Consult            @relation(fields: [consultationId], references: [id])
   prescriptionItems PrescriptionItem[]
   sales             Sale[]
 }
 
 model PrescriptionItem {
-  id             String       @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
-  prescriptionId String       @db.Uuid
-  prescription   Prescription @relation(fields: [prescriptionId], references: [id])
-  productId      String       @db.Uuid
-  product        Product      @relation(fields: [productId], references: [id])
+  id             String       @id @default(dbgenerated("gen_random_uuid()"))
+  prescriptionId String
+  productId      String
   quantity       Int
   details        String?
   createdAt      DateTime     @default(now())
   updatedAt      DateTime     @updatedAt
   deletedAt      DateTime?
+  prescription   Prescription @relation(fields: [prescriptionId], references: [id])
+  product        Product      @relation(fields: [productId], references: [id])
 
   @@map("prescription_items")
 }
 
-// ====================
-// CLINICS  
-// ====================
 model ClinicProccess {
-  id                 String    @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  id                 String    @id @default(dbgenerated("gen_random_uuid()"))
   name               String
   content            String
-  patientId          String    @db.Uuid
-  person             Person    @relation(fields: [patientId], references: [id])
-  doctorId           String    @db.Uuid
-  doctor             User      @relation(fields: [doctorId], references: [id])
+  patientId          String
+  doctorId           String
   consultReason      String?
   alergicMedications String?
   tratamentPlan      String?
   createdAt          DateTime  @default(now())
   updatedAt          DateTime  @updatedAt
   deletedAt          DateTime?
+  doctor             User      @relation(fields: [doctorId], references: [id])
+  person             Person    @relation(fields: [patientId], references: [id])
 
   @@map("clinic_proccesses")
 }
 
 model Diagnostic {
-  id          String    @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  id          String    @id @default(dbgenerated("gen_random_uuid()"))
   designation String
-  patientId   String    @db.Uuid
-  patient     Person    @relation(fields: [patientId], references: [id])
-  doctorId    String    @db.Uuid
-  doctor      User      @relation(fields: [doctorId], references: [id])
+  patientId   String
+  doctorId    String
   description String?
   createdAt   DateTime  @default(now())
   updatedAt   DateTime  @updatedAt
   deletedAt   DateTime?
+  doctor      User      @relation(fields: [doctorId], references: [id])
+  patient     Person    @relation(fields: [patientId], references: [id])
 
   @@map("diagnostics")
 }
 
-// ====================
-// GENERAL MODELS
-// ====================
 model NewLatter {
-  id        String    @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  id        String    @id @default(dbgenerated("gen_random_uuid()"))
   email     String    @unique
   isActive  Boolean   @default(true)
   createdAt DateTime  @default(now())
@@ -516,7 +482,7 @@ model NewLatter {
 }
 
 model Message {
-  id        String    @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  id        String    @id @default(dbgenerated("gen_random_uuid()"))
   name      String
   email     String
   subject   String
@@ -528,11 +494,7 @@ model Message {
   @@map("messages")
 }
 
-// ====================
-// AUDIT, LOGS, AND ACCESS HISTORY
-// ====================
 model Audit {
-  id        String   @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
   userId    String?
   action    String
   details   String?
@@ -540,42 +502,57 @@ model Audit {
   userAgent String?
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
-
-  User User? @relation(fields: [userId], references: [id])
+  id        String   @id @default(dbgenerated("gen_random_uuid()"))
+  User      User?    @relation(fields: [userId], references: [id])
 }
 
 model Log {
-  id        String   @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
   level     String
   message   String
   meta      String?
   createdAt DateTime @default(now())
+  id        String   @id @default(dbgenerated("gen_random_uuid()"))
 }
 
 model LoginHistory {
-  id        String   @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
   userId    String
   ip        String?
   userAgent String?
   success   Boolean  @default(true)
   createdAt DateTime @default(now())
+  id        String   @id @default(dbgenerated("gen_random_uuid()"))
   User      User     @relation(fields: [userId], references: [id])
 }
 
 model AccessHistory {
-  id        String   @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
   userId    String
   route     String
   method    String
   ip        String?
   userAgent String?
   createdAt DateTime @default(now())
+  id        String   @id @default(dbgenerated("gen_random_uuid()"))
   User      User     @relation(fields: [userId], references: [id])
 }
 
-// ====================
-// ENUMS
-// ====================
+model SystemParameters {
+  id              String        @id @default(uuid()) @db.Uuid
+  key             String
+  value           String
+  created_at      DateTime      @default(now()) @db.Timestamptz(6)
+  updated_at      DateTime      @updatedAt @db.Timestamptz(6)
+  created_user_id String        @db.Uuid
+  updated_user_id String?       @db.Uuid
+  status          DefaultStatus @default(ACTIVE)
+
+  @@map("system_parameters")
+}
+
+enum DefaultStatus {
+  ACTIVE
+  INACTIVE
+}
+
 enum Sex {
   MALE
   FEMALE

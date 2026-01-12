@@ -1,7 +1,7 @@
 import { DefaultAzureCredential } from '@azure/identity';
 import { SecretClient } from '@azure/keyvault-secrets';
 
-export const GetEnviromentVariable = async(name: string): Promise<string> => {
+export const GetEnviromentVariable = async (name: string): Promise<string> => {
   const localValue = process.env[name];
   if (localValue) {
     return localValue;
@@ -32,4 +32,4 @@ export const GetEnviromentVariable = async(name: string): Promise<string> => {
       `Error retrieving environment variable from Azure Key Vault. ENV: ${name}`,
     );
   }
-}
+};

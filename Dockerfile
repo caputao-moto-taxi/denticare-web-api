@@ -1,5 +1,5 @@
 FROM node:23-slim
-RUN npm install -g @nestjs/cli@10.1.17
+RUN npm install -g npm@11.7.0 @nestjs/cli@10.1.17
 
 USER node
 
