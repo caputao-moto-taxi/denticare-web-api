@@ -7,6 +7,7 @@ import {
   IsNumber,
   IsOptional,
   IsString,
+  Min,
 } from 'class-validator';
 import { ErrorMessages } from '../../../../../shared/helpers/errorMessages';
 import { Type } from 'class-transformer';
@@ -60,5 +61,6 @@ export class CreatePlanDto {
   @ApiProperty()
   @IsNumber()
   @IsNotEmpty()
+  @Min(1)
   totalBranch: number;
 }

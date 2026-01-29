@@ -1,5 +1,6 @@
 import { IUseCase } from '../../../../shared/application/use-case.interface';
 import {
+  badRequestResponse,
   errorResponse,
   HttpResponse,
   successResponse,
@@ -13,12 +14,16 @@ export class CreatePlanUseCase implements IUseCase<
   CreatePlanInput,
   CreatePlanOutput
 > {
-  constructor(private readonly _repository: IPlanRepository) {}
+  constructor(private readonly _repository: IPlanRepository) { }
 
   async execute(
     input: CreatePlanInput,
   ): Promise<HttpResponse<CreatePlanOutput | any>> {
     try {
+      if (input.isOnPromotion === true && input.promotionalPrice === null || 0) {
+        return badRequestResponse({ message: 'Promotional price must be provided when the plan is on promotion.' });
+      }
+
       const newPlan = Plan.create({
         name: input.name,
         price: input.price,
