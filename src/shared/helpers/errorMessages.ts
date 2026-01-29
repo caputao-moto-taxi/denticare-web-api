@@ -8,4 +8,8 @@ export enum ErrorMessages {
   INVALID_KEY_OR_APPLICATION_NOT_FOUND = 'Chave inválida ou aplicação não encontrada.',
   INVALID_EMAIL = 'Email inválido.',
   LOGS_NOT_FOUND = 'Logs não encontrados.',
+  PLAN_NAME_ALREADY_EXISTS = 'Plano com esse nome já existe.',
+  PLAN_ALREADY_EXISTS = 'Plano com essas características já existe.',
+  NAME_IS_REQUIRED = 'Nome é obrigatório.',
+  PRICE_IS_REQUIRED = 'Preço é obrigatório.',
 }

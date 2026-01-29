@@ -1,4 +1,3 @@
-
 import { ThrottlerModule } from '@nestjs/throttler';
 import { SystemParametersModule } from '../services/systemParameters.module';
 import { SystemParameterService } from '../services/systemParameters.service';
@@ -16,6 +15,6 @@ import { Module } from '@nestjs/common';
         },
       ],
     }),
-  ]
+  ],
 })
-export class RateLimitModule { }
+export class RateLimitModule {}

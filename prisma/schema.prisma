@@ -1,6 +1,6 @@
 generator client {
   provider = "prisma-client"
-  output   = "../src/generated/prisma"
+  output   = "../generated/prisma"
 }
 
 datasource db {
@@ -10,7 +10,7 @@ datasource db {
 model Currency {
   id              String           @id @default(dbgenerated("gen_random_uuid()"))
   name            String
-  symbol          String           @db.Char(3)
+  symbol          String
   createdAt       DateTime         @default(now())
   updatedAt       DateTime         @updatedAt
   deletedAt       DateTime?
@@ -24,6 +24,7 @@ model Currency {
 model Plan {
   id                  String        @id @default(dbgenerated("gen_random_uuid()"))
   name                String
+  total_branch        Int?          @default(0)
   price               Float         @default(0.0)
   currencyId          String
   duration            Int           @default(30)
@@ -36,7 +37,6 @@ model Plan {
   promotionPercentage Float?
   slug                String        @unique
   deletedAt           DateTime?
-  totalBranch         Int?          @default(0)
   Headquarter         Headquarter[]
   PlanBenefit         PlanBenefit[]
   currency            Currency      @relation(fields: [currencyId], references: [id])
@@ -495,6 +495,7 @@ model Message {
 }
 
 model Audit {
+  id        String   @id @default(dbgenerated("gen_random_uuid()"))
   userId    String?
   action    String
   details   String?
@@ -502,55 +503,36 @@ model Audit {
   userAgent String?
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
-  id        String   @id @default(dbgenerated("gen_random_uuid()"))
   User      User?    @relation(fields: [userId], references: [id])
 }
 
 model Log {
+  id        String   @id @default(dbgenerated("gen_random_uuid()"))
   level     String
   message   String
   meta      String?
   createdAt DateTime @default(now())
-  id        String   @id @default(dbgenerated("gen_random_uuid()"))
 }
 
 model LoginHistory {
+  id        String   @id @default(dbgenerated("gen_random_uuid()"))
   userId    String
   ip        String?
   userAgent String?
   success   Boolean  @default(true)
   createdAt DateTime @default(now())
-  id        String   @id @default(dbgenerated("gen_random_uuid()"))
   User      User     @relation(fields: [userId], references: [id])
 }
 
 model AccessHistory {
+  id        String   @id @default(dbgenerated("gen_random_uuid()"))
   userId    String
   route     String
   method    String
   ip        String?
   userAgent String?
   createdAt DateTime @default(now())
-  id        String   @id @default(dbgenerated("gen_random_uuid()"))
   User      User     @relation(fields: [userId], references: [id])
-}
-
-model SystemParameters {
-  id              String        @id @default(uuid()) @db.Uuid
-  key             String
-  value           String
-  created_at      DateTime      @default(now()) @db.Timestamptz(6)
-  updated_at      DateTime      @updatedAt @db.Timestamptz(6)
-  created_user_id String        @db.Uuid
-  updated_user_id String?       @db.Uuid
-  status          DefaultStatus @default(ACTIVE)
-
-  @@map("system_parameters")
-}
-
-enum DefaultStatus {
-  ACTIVE
-  INACTIVE
 }
 
 enum Sex {

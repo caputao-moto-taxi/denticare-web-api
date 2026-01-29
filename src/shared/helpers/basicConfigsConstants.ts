@@ -1,4 +1,4 @@
-import type { LogLevel } from "@nestjs/common";
+import type { LogLevel } from '@nestjs/common';
 
 export const appSystemTag = 'Dentcare Notiifications Service';
 export const appTitle = 'Dentcare Notiifications Service';
@@ -18,11 +18,10 @@ export const appDocUsername = () => process.env.USER_DOCS ?? 'doc';
 export const appDocPassword = () => process.env.PASS_DOCS ?? 'password';
 
 export const corsOptions = {
-      origin: '*',
-      methods: 'GET,HEAD,PUT,PATCH,POST,DELETE',
-      allowedHeaders: 'Content-Type,Authorization',
-      exposedHeaders: ['Content-Type', 'Authorization'],
-      preflightContinue: false,
+  origin: '*',
+  methods: 'GET,HEAD,PUT,PATCH,POST,DELETE',
+  allowedHeaders: 'Content-Type,Authorization',
+  exposedHeaders: ['Content-Type', 'Authorization'],
+  preflightContinue: false,
 };
 export const loggerLevels: LogLevel[] = ['log', 'error', 'warn'];
-

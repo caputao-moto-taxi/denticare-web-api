@@ -1,10 +1,10 @@
-import { Module } from "@nestjs/common";
-
+import { Module } from '@nestjs/common';
+import { SystemParameterService } from './systemParameters.service';
+import { PrismaService } from '../db/prisma/prisma.service';
 
 @Module({
-  imports: [SystemParametersModule],
-  providers: [],
-  exports: [],
+  providers: [SystemParameterService, PrismaService],
+  exports: [SystemParameterService],
+  imports: [],
 })
-
-export class SystemParametersModule { }
+export class SystemParametersModule {}

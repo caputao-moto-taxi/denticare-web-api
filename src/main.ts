@@ -1,7 +1,8 @@
+import 'dotenv/config';
 import { NestFactory } from '@nestjs/core';
 import { AppModule } from './app.module';
 import { applyGlobalConfig } from './global-config';
-import { Logger, LogLevel } from '@nestjs/common';
+import { Logger } from '@nestjs/common';
 import { json as expressJson, urlencoded as expressUrlEncoded } from 'express';
 import {
   appDocPath,

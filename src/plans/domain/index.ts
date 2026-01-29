@@ -1,3 +1,3 @@
-export * from './notification.repository';
+export * from './plan.repository';
 export * from './plan.aggregate';
-export * from './notification.validator';
+export * from './plan.validator';

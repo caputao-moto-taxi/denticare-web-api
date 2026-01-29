@@ -1,9 +1,9 @@
 import { Uuid } from '../../shared/domain/value-objects/uuid.vo';
 import { AggregateRoot } from '../../shared/domain/aggregate-root';
 import { ValueObject } from '../../shared/domain/value-object';
-import { PlanValidatorFactory } from './Plan.validator';
+import { PlanValidatorFactory } from './plan.validator';
 
-export class PlanId extends Uuid { }
+export class PlanId extends Uuid {}
 
 export type PlanContructorProps = {
   id?: PlanId;
@@ -71,7 +71,7 @@ export class Plan extends AggregateRoot {
 
   validate(fields?: string[]) {
     const validator = PlanValidatorFactory.create();
-    return validator.validate(this.name, this.price, this.duration, this.totalBranch, fields);
+    return validator.validate(this.notification, fields);
   }
   toJSON() {
     return {

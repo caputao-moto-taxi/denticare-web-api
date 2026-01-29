@@ -1,26 +1,24 @@
 import { Injectable, OnModuleInit } from '@nestjs/common';
-import { Cron, CronExpression } from '@nestjs/schedule';
-import { DefaultStatus } from '../../../generated/prisma/enums';
 import { PrismaService } from '../db/prisma/prisma.service';
 
 @Injectable()
 export class SystemParameterService implements OnModuleInit {
   private cache: Map<string, string> = new Map();
 
-  constructor(private readonly prisma: PrismaService) { }
+  constructor(private readonly prisma: PrismaService) {}
 
   async onModuleInit() {
-    await this.loadParameters();
+    // await this.loadParameters();
   }
 
-  @Cron(CronExpression.EVERY_HOUR)
-  async loadParameters() {
-    const parameters = await this.prisma.$queryRaw(`select * from system_parameters where status = '${DefaultStatus.ACTIVE}'`) as [{ key: string; value: string }];
+  // @Cron(CronExpression.EVERY_HOUR)
+  // async loadParameters() {
+  //   const parameters = await this.prisma.systemParameters.findMany({ where: { status: DefaultStatus.ACTIVE } });
 
-    parameters.forEach((param) => {
-      this.cache.set(param.key, param.value);
-    });
-  }
+  //   parameters.forEach((param) => {
+  //     this.cache.set(param.key, param.value);
+  //   });
+  // }
 
   getValue<T = string>(key: string, defaultValue?: T): T {
     const value = this.cache.get(key);

@@ -19,7 +19,9 @@ export class PlanRules {
 
 export class PlanValidator extends ClassValidatorFields {
   validate(plan: Notification, data: any, fields?: string[]): boolean {
-    const newFields = fields?.length ? fields : ['name', 'price', 'totalBranch'];
+    const newFields = fields?.length
+      ? fields
+      : ['name', 'price', 'totalBranch'];
     return super.validate(plan, new PlanRules(data), newFields);
   }
 }
