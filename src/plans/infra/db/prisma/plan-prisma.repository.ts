@@ -12,7 +12,7 @@ import { PrismaService } from '../../../../shared/infra/db/prisma/prisma.service
 export class PlanPrismaRepository implements IPlanRepository {
   sortableFields: string[] = ['createdAt'];
 
-  constructor(private _prismaService: PrismaService) {}
+  constructor(private _prismaService: PrismaService) { }
   async insert(entity: Plan): Promise<void> {
     const modelProps = PlanModelMapper.toModel(entity);
     await this._prismaService.plan.create({
@@ -50,8 +50,8 @@ export class PlanPrismaRepository implements IPlanRepository {
       return PlanModelMapper.toEntity(plan);
     });
   }
-  async findAll(): Promise<Plan[]> {
-    const plans = await this._prismaService.plan.findMany({
+  async findAll(): Promise<any[]> {
+    return await this._prismaService.plan.findMany({
       include: {
         PlanBenefit: {
           include: {
@@ -62,9 +62,9 @@ export class PlanPrismaRepository implements IPlanRepository {
             },
           },
         },
+        currency: true,
       },
     });
-    return plans.map((plan) => PlanModelMapper.toEntity(plan));
   }
   async update(entity: Plan): Promise<void> {
     const modelProps = PlanModelMapper.toModel(entity);

@@ -39,6 +39,7 @@ export class PlanModelMapper {
       totalBranch: model.total_branch,
       createdAt: new Date(model.createdAt),
       updatedAt: new Date(model.updatedAt),
+
     });
   }
 }

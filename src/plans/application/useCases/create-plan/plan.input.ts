@@ -7,6 +7,7 @@ import {
   Min,
   IsUUID,
   IsBoolean,
+  IsArray,
 } from 'class-validator';
 
 export type CreatePlanInputConstructorProps = {
@@ -57,6 +58,8 @@ export class CreatePlanInput {
   @IsNumber()
   totalBranch: number;
 
+  @IsArray()
+  @IsOptional()
   benefits?: string[];
   createdAt?: Date;
   updatedAt?: Date;
