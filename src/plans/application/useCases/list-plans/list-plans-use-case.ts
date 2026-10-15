@@ -1,21 +1,17 @@
 import { IUseCase } from '../../../../shared/application/use-case.interface';
 import {
-  errorResponse,
   successResponse,
   HttpResponse,
 } from '../../../../shared/contracts/httpContracts';
 import { IPlanRepository } from '../../../domain';
+import { ListQuery } from '../../../../shared/domain/list-query';
 
-export class ListPlansUseCase implements IUseCase<any, undefined> {
-  constructor(private _repository: IPlanRepository) { }
+type ListPlansOutput = Awaited<ReturnType<IPlanRepository['listPaginated']>>;
 
-  async execute(_: any): Promise<HttpResponse<any>> {
-    try {
-      const searchPlans = await this._repository.findAll();
+export class ListPlansUseCase implements IUseCase<ListQuery, ListPlansOutput> {
+  constructor(private _repository: IPlanRepository) {}
 
-      return successResponse(searchPlans);
-    } catch (error: any) {
-      return errorResponse(error);
-    }
+  async execute(query: ListQuery): Promise<HttpResponse<ListPlansOutput>> {
+    return successResponse(await this._repository.listPaginated(query));
   }
 }

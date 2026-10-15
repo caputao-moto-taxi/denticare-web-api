@@ -3,6 +3,7 @@ import {
   S3Client,
   PutObjectCommand,
   GetObjectCommand,
+  DeleteObjectCommand,
 } from '@aws-sdk/client-s3';
 import { Readable } from 'stream';
 import { Buffer } from 'buffer';
@@ -48,5 +49,11 @@ export class AwsS3Storage implements IStorage {
       data: Buffer.concat(chunks),
       mime_type: response.ContentType,
     };
+  }
+
+  async delete(id: string): Promise<void> {
+    await this.storageSdk.send(
+      new DeleteObjectCommand({ Bucket: this.bucketName, Key: id }),
+    );
   }
 }

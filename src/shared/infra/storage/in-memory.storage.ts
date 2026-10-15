@@ -25,4 +25,8 @@ export class InMemoryStorage implements IStorage {
 
     return { data: file.data, mime_type: file.mime_type };
   }
+
+  async delete(id: string): Promise<void> {
+    this.storage.delete(id);
+  }
 }

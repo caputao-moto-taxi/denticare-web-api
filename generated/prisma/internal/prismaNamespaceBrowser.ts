@@ -64,8 +64,17 @@ export const ModelName = {
   Permission: 'Permission',
   UserBranch: 'UserBranch',
   RolePermission: 'RolePermission',
+  UserPermission: 'UserPermission',
   UserRole: 'UserRole',
   Appointment: 'Appointment',
+  DoctorProfile: 'DoctorProfile',
+  ChatConversation: 'ChatConversation',
+  ChatMessage: 'ChatMessage',
+  StockItem: 'StockItem',
+  StockSale: 'StockSale',
+  StockSaleItem: 'StockSaleItem',
+  TreatmentPlan: 'TreatmentPlan',
+  RevokedToken: 'RevokedToken',
   Consult: 'Consult',
   ConsultTreatment: 'ConsultTreatment',
   Treatment: 'Treatment',
@@ -77,6 +86,12 @@ export const ModelName = {
   PrescriptionItem: 'PrescriptionItem',
   ClinicProccess: 'ClinicProccess',
   Diagnostic: 'Diagnostic',
+  DiagnosticAttachment: 'DiagnosticAttachment',
+  PatientTooth: 'PatientTooth',
+  PatientPrescription: 'PatientPrescription',
+  PatientFinancialEntry: 'PatientFinancialEntry',
+  XRayAnalysis: 'XRayAnalysis',
+  PatientExam: 'PatientExam',
   NewLatter: 'NewLatter',
   Message: 'Message',
   Audit: 'Audit',
@@ -162,6 +177,8 @@ export const HeadquarterScalarFieldEnum = {
   id: 'id',
   name: 'name',
   address: 'address',
+  email: 'email',
+  phone: 'phone',
   description: 'description',
   nif: 'nif',
   logo: 'logo',
@@ -196,6 +213,9 @@ export const BranchScalarFieldEnum = {
   headquarterId: 'headquarterId',
   description: 'description',
   isActive: 'isActive',
+  workingDays: 'workingDays',
+  workingHours: 'workingHours',
+  timezone: 'timezone',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt',
   deletedAt: 'deletedAt'
@@ -231,7 +251,24 @@ export const PersonScalarFieldEnum = {
   lastName: 'lastName',
   birthDate: 'birthDate',
   email: 'email',
+  phoneNumber: 'phoneNumber',
+  medicalNotes: 'medicalNotes',
+  idNumber: 'idNumber',
+  nif: 'nif',
+  profession: 'profession',
+  bloodType: 'bloodType',
+  insuranceProvider: 'insuranceProvider',
+  insurancePlan: 'insurancePlan',
+  insurancePolicyNumber: 'insurancePolicyNumber',
+  insuranceCoveragePercent: 'insuranceCoveragePercent',
+  emergencyContactName: 'emergencyContactName',
+  emergencyContactRelationship: 'emergencyContactRelationship',
+  emergencyContactPhone: 'emergencyContactPhone',
+  allergies: 'allergies',
+  medicalConditions: 'medicalConditions',
+  medications: 'medications',
   gender: 'gender',
+  isActive: 'isActive',
   branchId: 'branchId',
   addressId: 'addressId',
   userId: 'userId',
@@ -296,6 +333,19 @@ export const RolePermissionScalarFieldEnum = {
 export type RolePermissionScalarFieldEnum = (typeof RolePermissionScalarFieldEnum)[keyof typeof RolePermissionScalarFieldEnum]
 
 
+export const UserPermissionScalarFieldEnum = {
+  id: 'id',
+  userId: 'userId',
+  permissionId: 'permissionId',
+  granted: 'granted',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt',
+  deletedAt: 'deletedAt'
+} as const
+
+export type UserPermissionScalarFieldEnum = (typeof UserPermissionScalarFieldEnum)[keyof typeof UserPermissionScalarFieldEnum]
+
+
 export const UserRoleScalarFieldEnum = {
   id: 'id',
   userId: 'userId',
@@ -326,6 +376,130 @@ export const AppointmentScalarFieldEnum = {
 } as const
 
 export type AppointmentScalarFieldEnum = (typeof AppointmentScalarFieldEnum)[keyof typeof AppointmentScalarFieldEnum]
+
+
+export const DoctorProfileScalarFieldEnum = {
+  id: 'id',
+  userId: 'userId',
+  avatar: 'avatar',
+  type: 'type',
+  crmNumber: 'crmNumber',
+  specialties: 'specialties',
+  workingDays: 'workingDays',
+  workingHours: 'workingHours',
+  daysOffNotes: 'daysOffNotes',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+} as const
+
+export type DoctorProfileScalarFieldEnum = (typeof DoctorProfileScalarFieldEnum)[keyof typeof DoctorProfileScalarFieldEnum]
+
+
+export const ChatConversationScalarFieldEnum = {
+  id: 'id',
+  branchId: 'branchId',
+  starterId: 'starterId',
+  recipientId: 'recipientId',
+  category: 'category',
+  channel: 'channel',
+  subject: 'subject',
+  starterLastReadAt: 'starterLastReadAt',
+  recipientLastReadAt: 'recipientLastReadAt',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+} as const
+
+export type ChatConversationScalarFieldEnum = (typeof ChatConversationScalarFieldEnum)[keyof typeof ChatConversationScalarFieldEnum]
+
+
+export const ChatMessageScalarFieldEnum = {
+  id: 'id',
+  conversationId: 'conversationId',
+  authorId: 'authorId',
+  content: 'content',
+  attachments: 'attachments',
+  createdAt: 'createdAt'
+} as const
+
+export type ChatMessageScalarFieldEnum = (typeof ChatMessageScalarFieldEnum)[keyof typeof ChatMessageScalarFieldEnum]
+
+
+export const StockItemScalarFieldEnum = {
+  id: 'id',
+  branchId: 'branchId',
+  name: 'name',
+  category: 'category',
+  unit: 'unit',
+  quantity: 'quantity',
+  capacity: 'capacity',
+  unitCost: 'unitCost',
+  salePrice: 'salePrice',
+  supplier: 'supplier',
+  notes: 'notes',
+  lastRestockAt: 'lastRestockAt',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt',
+  deletedAt: 'deletedAt'
+} as const
+
+export type StockItemScalarFieldEnum = (typeof StockItemScalarFieldEnum)[keyof typeof StockItemScalarFieldEnum]
+
+
+export const StockSaleScalarFieldEnum = {
+  id: 'id',
+  branchId: 'branchId',
+  soldById: 'soldById',
+  customerName: 'customerName',
+  paymentMethod: 'paymentMethod',
+  total: 'total',
+  createdAt: 'createdAt'
+} as const
+
+export type StockSaleScalarFieldEnum = (typeof StockSaleScalarFieldEnum)[keyof typeof StockSaleScalarFieldEnum]
+
+
+export const StockSaleItemScalarFieldEnum = {
+  id: 'id',
+  saleId: 'saleId',
+  stockItemId: 'stockItemId',
+  itemName: 'itemName',
+  unit: 'unit',
+  quantity: 'quantity',
+  unitPrice: 'unitPrice',
+  totalPrice: 'totalPrice'
+} as const
+
+export type StockSaleItemScalarFieldEnum = (typeof StockSaleItemScalarFieldEnum)[keyof typeof StockSaleItemScalarFieldEnum]
+
+
+export const TreatmentPlanScalarFieldEnum = {
+  id: 'id',
+  branchId: 'branchId',
+  patientId: 'patientId',
+  doctorId: 'doctorId',
+  diagnosis: 'diagnosis',
+  notes: 'notes',
+  totalCost: 'totalCost',
+  totalSteps: 'totalSteps',
+  completedSteps: 'completedSteps',
+  estimatedCompletion: 'estimatedCompletion',
+  activePhase: 'activePhase',
+  startDate: 'startDate',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt',
+  deletedAt: 'deletedAt'
+} as const
+
+export type TreatmentPlanScalarFieldEnum = (typeof TreatmentPlanScalarFieldEnum)[keyof typeof TreatmentPlanScalarFieldEnum]
+
+
+export const RevokedTokenScalarFieldEnum = {
+  jti: 'jti',
+  expiresAt: 'expiresAt',
+  createdAt: 'createdAt'
+} as const
+
+export type RevokedTokenScalarFieldEnum = (typeof RevokedTokenScalarFieldEnum)[keyof typeof RevokedTokenScalarFieldEnum]
 
 
 export const ConsultScalarFieldEnum = {
@@ -489,6 +663,10 @@ export type ClinicProccessScalarFieldEnum = (typeof ClinicProccessScalarFieldEnu
 export const DiagnosticScalarFieldEnum = {
   id: 'id',
   designation: 'designation',
+  code: 'code',
+  severity: 'severity',
+  status: 'status',
+  affectedTeeth: 'affectedTeeth',
   patientId: 'patientId',
   doctorId: 'doctorId',
   description: 'description',
@@ -498,6 +676,106 @@ export const DiagnosticScalarFieldEnum = {
 } as const
 
 export type DiagnosticScalarFieldEnum = (typeof DiagnosticScalarFieldEnum)[keyof typeof DiagnosticScalarFieldEnum]
+
+
+export const DiagnosticAttachmentScalarFieldEnum = {
+  id: 'id',
+  diagnosisId: 'diagnosisId',
+  fileName: 'fileName',
+  mimeType: 'mimeType',
+  fileSize: 'fileSize',
+  storageKey: 'storageKey',
+  createdAt: 'createdAt',
+  deletedAt: 'deletedAt'
+} as const
+
+export type DiagnosticAttachmentScalarFieldEnum = (typeof DiagnosticAttachmentScalarFieldEnum)[keyof typeof DiagnosticAttachmentScalarFieldEnum]
+
+
+export const PatientToothScalarFieldEnum = {
+  id: 'id',
+  patientId: 'patientId',
+  number: 'number',
+  state: 'state',
+  procedureDone: 'procedureDone',
+  notes: 'notes',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+} as const
+
+export type PatientToothScalarFieldEnum = (typeof PatientToothScalarFieldEnum)[keyof typeof PatientToothScalarFieldEnum]
+
+
+export const PatientPrescriptionScalarFieldEnum = {
+  id: 'id',
+  patientId: 'patientId',
+  doctorId: 'doctorId',
+  groupId: 'groupId',
+  medication: 'medication',
+  dosage: 'dosage',
+  instructions: 'instructions',
+  duration: 'duration',
+  status: 'status',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt',
+  deletedAt: 'deletedAt'
+} as const
+
+export type PatientPrescriptionScalarFieldEnum = (typeof PatientPrescriptionScalarFieldEnum)[keyof typeof PatientPrescriptionScalarFieldEnum]
+
+
+export const PatientFinancialEntryScalarFieldEnum = {
+  id: 'id',
+  patientId: 'patientId',
+  branchId: 'branchId',
+  reference: 'reference',
+  description: 'description',
+  amount: 'amount',
+  method: 'method',
+  status: 'status',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt',
+  deletedAt: 'deletedAt'
+} as const
+
+export type PatientFinancialEntryScalarFieldEnum = (typeof PatientFinancialEntryScalarFieldEnum)[keyof typeof PatientFinancialEntryScalarFieldEnum]
+
+
+export const XRayAnalysisScalarFieldEnum = {
+  id: 'id',
+  patientId: 'patientId',
+  branchId: 'branchId',
+  analyzedById: 'analyzedById',
+  type: 'type',
+  region: 'region',
+  fileName: 'fileName',
+  mimeType: 'mimeType',
+  fileSize: 'fileSize',
+  storageKey: 'storageKey',
+  analysis: 'analysis',
+  modelName: 'modelName',
+  createdAt: 'createdAt'
+} as const
+
+export type XRayAnalysisScalarFieldEnum = (typeof XRayAnalysisScalarFieldEnum)[keyof typeof XRayAnalysisScalarFieldEnum]
+
+
+export const PatientExamScalarFieldEnum = {
+  id: 'id',
+  patientId: 'patientId',
+  title: 'title',
+  type: 'type',
+  doctorName: 'doctorName',
+  fileName: 'fileName',
+  mimeType: 'mimeType',
+  fileSize: 'fileSize',
+  storageKey: 'storageKey',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt',
+  deletedAt: 'deletedAt'
+} as const
+
+export type PatientExamScalarFieldEnum = (typeof PatientExamScalarFieldEnum)[keyof typeof PatientExamScalarFieldEnum]
 
 
 export const NewLatterScalarFieldEnum = {
@@ -584,6 +862,21 @@ export const SortOrder = {
 export type SortOrder = (typeof SortOrder)[keyof typeof SortOrder]
 
 
+export const NullableJsonNullValueInput = {
+  DbNull: 'DbNull',
+  JsonNull: 'JsonNull'
+} as const
+
+export type NullableJsonNullValueInput = (typeof NullableJsonNullValueInput)[keyof typeof NullableJsonNullValueInput]
+
+
+export const JsonNullValueInput = {
+  JsonNull: 'JsonNull'
+} as const
+
+export type JsonNullValueInput = (typeof JsonNullValueInput)[keyof typeof JsonNullValueInput]
+
+
 export const QueryMode = {
   default: 'default',
   insensitive: 'insensitive'
@@ -598,4 +891,13 @@ export const NullsOrder = {
 } as const
 
 export type NullsOrder = (typeof NullsOrder)[keyof typeof NullsOrder]
+
+
+export const JsonNullValueFilter = {
+  DbNull: 'DbNull',
+  JsonNull: 'JsonNull',
+  AnyNull: 'AnyNull'
+} as const
+
+export type JsonNullValueFilter = (typeof JsonNullValueFilter)[keyof typeof JsonNullValueFilter]
 

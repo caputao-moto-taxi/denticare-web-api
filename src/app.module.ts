@@ -5,6 +5,16 @@ import { HashModule } from './shared/application/hash.module';
 import { PlanModule } from './plans/plans.module';
 import { ApiKeyLoggerMiddleware } from './shared/middlewares/apiKeyLogger.middleware';
 import { RateLimitModule } from './shared/infra/security/rate-limit.module';
+import { AuthModule } from './auth/auth.module';
+import { PatientsModule } from './patients/patients.module';
+import { DoctorsModule } from './doctors/doctors.module';
+import { AppointmentsModule } from './appointments/appointments.module';
+import { ChatModule } from './chat/chat.module';
+import { UsersModule } from './users/users.module';
+import { StockModule } from './stock/stock.module';
+import { TreatmentPlansModule } from './treatment-plans/treatment-plans.module';
+import { ClinicScheduleModule } from './clinic-schedule/clinic-schedule.module';
+import { XRayAnalysisModule } from './x-ray-analysis/x-ray-analysis.module';
 
 @Module({
   imports: [
@@ -15,6 +25,16 @@ import { RateLimitModule } from './shared/infra/security/rate-limit.module';
     DatabaseModule,
     PlanModule,
     RateLimitModule,
+    AuthModule,
+    PatientsModule,
+    DoctorsModule,
+    AppointmentsModule,
+    ChatModule,
+    UsersModule,
+    StockModule,
+    TreatmentPlansModule,
+    ClinicScheduleModule,
+    XRayAnalysisModule,
   ],
 })
 export class AppModule implements NestModule {

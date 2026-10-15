@@ -5,7 +5,6 @@ import {
   HttpResponse,
   successResponse,
 } from '../../../../shared/contracts/httpContracts';
-
 import { IPlanRepository, Plan } from '../../../domain';
 import { CreatePlanOutput, PlanOutputMapper } from '../../common/plan.output';
 import { CreatePlanInput } from './plan.input';

@@ -27,6 +27,9 @@ export type AggregateDiagnostic = {
 export type DiagnosticMinAggregateOutputType = {
   id: string | null
   designation: string | null
+  code: string | null
+  severity: string | null
+  status: string | null
   patientId: string | null
   doctorId: string | null
   description: string | null
@@ -38,6 +41,9 @@ export type DiagnosticMinAggregateOutputType = {
 export type DiagnosticMaxAggregateOutputType = {
   id: string | null
   designation: string | null
+  code: string | null
+  severity: string | null
+  status: string | null
   patientId: string | null
   doctorId: string | null
   description: string | null
@@ -49,6 +55,10 @@ export type DiagnosticMaxAggregateOutputType = {
 export type DiagnosticCountAggregateOutputType = {
   id: number
   designation: number
+  code: number
+  severity: number
+  status: number
+  affectedTeeth: number
   patientId: number
   doctorId: number
   description: number
@@ -62,6 +72,9 @@ export type DiagnosticCountAggregateOutputType = {
 export type DiagnosticMinAggregateInputType = {
   id?: true
   designation?: true
+  code?: true
+  severity?: true
+  status?: true
   patientId?: true
   doctorId?: true
   description?: true
@@ -73,6 +86,9 @@ export type DiagnosticMinAggregateInputType = {
 export type DiagnosticMaxAggregateInputType = {
   id?: true
   designation?: true
+  code?: true
+  severity?: true
+  status?: true
   patientId?: true
   doctorId?: true
   description?: true
@@ -84,6 +100,10 @@ export type DiagnosticMaxAggregateInputType = {
 export type DiagnosticCountAggregateInputType = {
   id?: true
   designation?: true
+  code?: true
+  severity?: true
+  status?: true
+  affectedTeeth?: true
   patientId?: true
   doctorId?: true
   description?: true
@@ -168,6 +188,10 @@ export type DiagnosticGroupByArgs<ExtArgs extends runtime.Types.Extensions.Inter
 export type DiagnosticGroupByOutputType = {
   id: string
   designation: string
+  code: string | null
+  severity: string
+  status: string
+  affectedTeeth: string[]
   patientId: string
   doctorId: string
   description: string | null
@@ -200,6 +224,10 @@ export type DiagnosticWhereInput = {
   NOT?: Prisma.DiagnosticWhereInput | Prisma.DiagnosticWhereInput[]
   id?: Prisma.StringFilter<"Diagnostic"> | string
   designation?: Prisma.StringFilter<"Diagnostic"> | string
+  code?: Prisma.StringNullableFilter<"Diagnostic"> | string | null
+  severity?: Prisma.StringFilter<"Diagnostic"> | string
+  status?: Prisma.StringFilter<"Diagnostic"> | string
+  affectedTeeth?: Prisma.StringNullableListFilter<"Diagnostic">
   patientId?: Prisma.StringFilter<"Diagnostic"> | string
   doctorId?: Prisma.StringFilter<"Diagnostic"> | string
   description?: Prisma.StringNullableFilter<"Diagnostic"> | string | null
@@ -208,11 +236,16 @@ export type DiagnosticWhereInput = {
   deletedAt?: Prisma.DateTimeNullableFilter<"Diagnostic"> | Date | string | null
   doctor?: Prisma.XOR<Prisma.UserScalarRelationFilter, Prisma.UserWhereInput>
   patient?: Prisma.XOR<Prisma.PersonScalarRelationFilter, Prisma.PersonWhereInput>
+  attachments?: Prisma.DiagnosticAttachmentListRelationFilter
 }
 
 export type DiagnosticOrderByWithRelationInput = {
   id?: Prisma.SortOrder
   designation?: Prisma.SortOrder
+  code?: Prisma.SortOrderInput | Prisma.SortOrder
+  severity?: Prisma.SortOrder
+  status?: Prisma.SortOrder
+  affectedTeeth?: Prisma.SortOrder
   patientId?: Prisma.SortOrder
   doctorId?: Prisma.SortOrder
   description?: Prisma.SortOrderInput | Prisma.SortOrder
@@ -221,6 +254,7 @@ export type DiagnosticOrderByWithRelationInput = {
   deletedAt?: Prisma.SortOrderInput | Prisma.SortOrder
   doctor?: Prisma.UserOrderByWithRelationInput
   patient?: Prisma.PersonOrderByWithRelationInput
+  attachments?: Prisma.DiagnosticAttachmentOrderByRelationAggregateInput
 }
 
 export type DiagnosticWhereUniqueInput = Prisma.AtLeast<{
@@ -229,6 +263,10 @@ export type DiagnosticWhereUniqueInput = Prisma.AtLeast<{
   OR?: Prisma.DiagnosticWhereInput[]
   NOT?: Prisma.DiagnosticWhereInput | Prisma.DiagnosticWhereInput[]
   designation?: Prisma.StringFilter<"Diagnostic"> | string
+  code?: Prisma.StringNullableFilter<"Diagnostic"> | string | null
+  severity?: Prisma.StringFilter<"Diagnostic"> | string
+  status?: Prisma.StringFilter<"Diagnostic"> | string
+  affectedTeeth?: Prisma.StringNullableListFilter<"Diagnostic">
   patientId?: Prisma.StringFilter<"Diagnostic"> | string
   doctorId?: Prisma.StringFilter<"Diagnostic"> | string
   description?: Prisma.StringNullableFilter<"Diagnostic"> | string | null
@@ -237,11 +275,16 @@ export type DiagnosticWhereUniqueInput = Prisma.AtLeast<{
   deletedAt?: Prisma.DateTimeNullableFilter<"Diagnostic"> | Date | string | null
   doctor?: Prisma.XOR<Prisma.UserScalarRelationFilter, Prisma.UserWhereInput>
   patient?: Prisma.XOR<Prisma.PersonScalarRelationFilter, Prisma.PersonWhereInput>
+  attachments?: Prisma.DiagnosticAttachmentListRelationFilter
 }, "id">
 
 export type DiagnosticOrderByWithAggregationInput = {
   id?: Prisma.SortOrder
   designation?: Prisma.SortOrder
+  code?: Prisma.SortOrderInput | Prisma.SortOrder
+  severity?: Prisma.SortOrder
+  status?: Prisma.SortOrder
+  affectedTeeth?: Prisma.SortOrder
   patientId?: Prisma.SortOrder
   doctorId?: Prisma.SortOrder
   description?: Prisma.SortOrderInput | Prisma.SortOrder
@@ -259,6 +302,10 @@ export type DiagnosticScalarWhereWithAggregatesInput = {
   NOT?: Prisma.DiagnosticScalarWhereWithAggregatesInput | Prisma.DiagnosticScalarWhereWithAggregatesInput[]
   id?: Prisma.StringWithAggregatesFilter<"Diagnostic"> | string
   designation?: Prisma.StringWithAggregatesFilter<"Diagnostic"> | string
+  code?: Prisma.StringNullableWithAggregatesFilter<"Diagnostic"> | string | null
+  severity?: Prisma.StringWithAggregatesFilter<"Diagnostic"> | string
+  status?: Prisma.StringWithAggregatesFilter<"Diagnostic"> | string
+  affectedTeeth?: Prisma.StringNullableListFilter<"Diagnostic">
   patientId?: Prisma.StringWithAggregatesFilter<"Diagnostic"> | string
   doctorId?: Prisma.StringWithAggregatesFilter<"Diagnostic"> | string
   description?: Prisma.StringNullableWithAggregatesFilter<"Diagnostic"> | string | null
@@ -270,50 +317,74 @@ export type DiagnosticScalarWhereWithAggregatesInput = {
 export type DiagnosticCreateInput = {
   id?: string
   designation: string
+  code?: string | null
+  severity?: string
+  status?: string
+  affectedTeeth?: Prisma.DiagnosticCreateaffectedTeethInput | string[]
   description?: string | null
   createdAt?: Date | string
   updatedAt?: Date | string
   deletedAt?: Date | string | null
   doctor: Prisma.UserCreateNestedOneWithoutDiagnosticsInput
   patient: Prisma.PersonCreateNestedOneWithoutDiagnosticsInput
+  attachments?: Prisma.DiagnosticAttachmentCreateNestedManyWithoutDiagnosisInput
 }
 
 export type DiagnosticUncheckedCreateInput = {
   id?: string
   designation: string
+  code?: string | null
+  severity?: string
+  status?: string
+  affectedTeeth?: Prisma.DiagnosticCreateaffectedTeethInput | string[]
   patientId: string
   doctorId: string
   description?: string | null
   createdAt?: Date | string
   updatedAt?: Date | string
   deletedAt?: Date | string | null
+  attachments?: Prisma.DiagnosticAttachmentUncheckedCreateNestedManyWithoutDiagnosisInput
 }
 
 export type DiagnosticUpdateInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   designation?: Prisma.StringFieldUpdateOperationsInput | string
+  code?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  severity?: Prisma.StringFieldUpdateOperationsInput | string
+  status?: Prisma.StringFieldUpdateOperationsInput | string
+  affectedTeeth?: Prisma.DiagnosticUpdateaffectedTeethInput | string[]
   description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   deletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   doctor?: Prisma.UserUpdateOneRequiredWithoutDiagnosticsNestedInput
   patient?: Prisma.PersonUpdateOneRequiredWithoutDiagnosticsNestedInput
+  attachments?: Prisma.DiagnosticAttachmentUpdateManyWithoutDiagnosisNestedInput
 }
 
 export type DiagnosticUncheckedUpdateInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   designation?: Prisma.StringFieldUpdateOperationsInput | string
+  code?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  severity?: Prisma.StringFieldUpdateOperationsInput | string
+  status?: Prisma.StringFieldUpdateOperationsInput | string
+  affectedTeeth?: Prisma.DiagnosticUpdateaffectedTeethInput | string[]
   patientId?: Prisma.StringFieldUpdateOperationsInput | string
   doctorId?: Prisma.StringFieldUpdateOperationsInput | string
   description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   deletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  attachments?: Prisma.DiagnosticAttachmentUncheckedUpdateManyWithoutDiagnosisNestedInput
 }
 
 export type DiagnosticCreateManyInput = {
   id?: string
   designation: string
+  code?: string | null
+  severity?: string
+  status?: string
+  affectedTeeth?: Prisma.DiagnosticCreateaffectedTeethInput | string[]
   patientId: string
   doctorId: string
   description?: string | null
@@ -325,6 +396,10 @@ export type DiagnosticCreateManyInput = {
 export type DiagnosticUpdateManyMutationInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   designation?: Prisma.StringFieldUpdateOperationsInput | string
+  code?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  severity?: Prisma.StringFieldUpdateOperationsInput | string
+  status?: Prisma.StringFieldUpdateOperationsInput | string
+  affectedTeeth?: Prisma.DiagnosticUpdateaffectedTeethInput | string[]
   description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -334,6 +409,10 @@ export type DiagnosticUpdateManyMutationInput = {
 export type DiagnosticUncheckedUpdateManyInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   designation?: Prisma.StringFieldUpdateOperationsInput | string
+  code?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  severity?: Prisma.StringFieldUpdateOperationsInput | string
+  status?: Prisma.StringFieldUpdateOperationsInput | string
+  affectedTeeth?: Prisma.DiagnosticUpdateaffectedTeethInput | string[]
   patientId?: Prisma.StringFieldUpdateOperationsInput | string
   doctorId?: Prisma.StringFieldUpdateOperationsInput | string
   description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -355,6 +434,10 @@ export type DiagnosticOrderByRelationAggregateInput = {
 export type DiagnosticCountOrderByAggregateInput = {
   id?: Prisma.SortOrder
   designation?: Prisma.SortOrder
+  code?: Prisma.SortOrder
+  severity?: Prisma.SortOrder
+  status?: Prisma.SortOrder
+  affectedTeeth?: Prisma.SortOrder
   patientId?: Prisma.SortOrder
   doctorId?: Prisma.SortOrder
   description?: Prisma.SortOrder
@@ -366,6 +449,9 @@ export type DiagnosticCountOrderByAggregateInput = {
 export type DiagnosticMaxOrderByAggregateInput = {
   id?: Prisma.SortOrder
   designation?: Prisma.SortOrder
+  code?: Prisma.SortOrder
+  severity?: Prisma.SortOrder
+  status?: Prisma.SortOrder
   patientId?: Prisma.SortOrder
   doctorId?: Prisma.SortOrder
   description?: Prisma.SortOrder
@@ -377,12 +463,20 @@ export type DiagnosticMaxOrderByAggregateInput = {
 export type DiagnosticMinOrderByAggregateInput = {
   id?: Prisma.SortOrder
   designation?: Prisma.SortOrder
+  code?: Prisma.SortOrder
+  severity?: Prisma.SortOrder
+  status?: Prisma.SortOrder
   patientId?: Prisma.SortOrder
   doctorId?: Prisma.SortOrder
   description?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
   deletedAt?: Prisma.SortOrder
+}
+
+export type DiagnosticScalarRelationFilter = {
+  is?: Prisma.DiagnosticWhereInput
+  isNot?: Prisma.DiagnosticWhereInput
 }
 
 export type DiagnosticCreateNestedManyWithoutDoctorInput = {
@@ -469,24 +563,57 @@ export type DiagnosticUncheckedUpdateManyWithoutPatientNestedInput = {
   deleteMany?: Prisma.DiagnosticScalarWhereInput | Prisma.DiagnosticScalarWhereInput[]
 }
 
+export type DiagnosticCreateaffectedTeethInput = {
+  set: string[]
+}
+
+export type DiagnosticUpdateaffectedTeethInput = {
+  set?: string[]
+  push?: string | string[]
+}
+
+export type DiagnosticCreateNestedOneWithoutAttachmentsInput = {
+  create?: Prisma.XOR<Prisma.DiagnosticCreateWithoutAttachmentsInput, Prisma.DiagnosticUncheckedCreateWithoutAttachmentsInput>
+  connectOrCreate?: Prisma.DiagnosticCreateOrConnectWithoutAttachmentsInput
+  connect?: Prisma.DiagnosticWhereUniqueInput
+}
+
+export type DiagnosticUpdateOneRequiredWithoutAttachmentsNestedInput = {
+  create?: Prisma.XOR<Prisma.DiagnosticCreateWithoutAttachmentsInput, Prisma.DiagnosticUncheckedCreateWithoutAttachmentsInput>
+  connectOrCreate?: Prisma.DiagnosticCreateOrConnectWithoutAttachmentsInput
+  upsert?: Prisma.DiagnosticUpsertWithoutAttachmentsInput
+  connect?: Prisma.DiagnosticWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.DiagnosticUpdateToOneWithWhereWithoutAttachmentsInput, Prisma.DiagnosticUpdateWithoutAttachmentsInput>, Prisma.DiagnosticUncheckedUpdateWithoutAttachmentsInput>
+}
+
 export type DiagnosticCreateWithoutDoctorInput = {
   id?: string
   designation: string
+  code?: string | null
+  severity?: string
+  status?: string
+  affectedTeeth?: Prisma.DiagnosticCreateaffectedTeethInput | string[]
   description?: string | null
   createdAt?: Date | string
   updatedAt?: Date | string
   deletedAt?: Date | string | null
   patient: Prisma.PersonCreateNestedOneWithoutDiagnosticsInput
+  attachments?: Prisma.DiagnosticAttachmentCreateNestedManyWithoutDiagnosisInput
 }
 
 export type DiagnosticUncheckedCreateWithoutDoctorInput = {
   id?: string
   designation: string
+  code?: string | null
+  severity?: string
+  status?: string
+  affectedTeeth?: Prisma.DiagnosticCreateaffectedTeethInput | string[]
   patientId: string
   description?: string | null
   createdAt?: Date | string
   updatedAt?: Date | string
   deletedAt?: Date | string | null
+  attachments?: Prisma.DiagnosticAttachmentUncheckedCreateNestedManyWithoutDiagnosisInput
 }
 
 export type DiagnosticCreateOrConnectWithoutDoctorInput = {
@@ -521,6 +648,10 @@ export type DiagnosticScalarWhereInput = {
   NOT?: Prisma.DiagnosticScalarWhereInput | Prisma.DiagnosticScalarWhereInput[]
   id?: Prisma.StringFilter<"Diagnostic"> | string
   designation?: Prisma.StringFilter<"Diagnostic"> | string
+  code?: Prisma.StringNullableFilter<"Diagnostic"> | string | null
+  severity?: Prisma.StringFilter<"Diagnostic"> | string
+  status?: Prisma.StringFilter<"Diagnostic"> | string
+  affectedTeeth?: Prisma.StringNullableListFilter<"Diagnostic">
   patientId?: Prisma.StringFilter<"Diagnostic"> | string
   doctorId?: Prisma.StringFilter<"Diagnostic"> | string
   description?: Prisma.StringNullableFilter<"Diagnostic"> | string | null
@@ -532,21 +663,31 @@ export type DiagnosticScalarWhereInput = {
 export type DiagnosticCreateWithoutPatientInput = {
   id?: string
   designation: string
+  code?: string | null
+  severity?: string
+  status?: string
+  affectedTeeth?: Prisma.DiagnosticCreateaffectedTeethInput | string[]
   description?: string | null
   createdAt?: Date | string
   updatedAt?: Date | string
   deletedAt?: Date | string | null
   doctor: Prisma.UserCreateNestedOneWithoutDiagnosticsInput
+  attachments?: Prisma.DiagnosticAttachmentCreateNestedManyWithoutDiagnosisInput
 }
 
 export type DiagnosticUncheckedCreateWithoutPatientInput = {
   id?: string
   designation: string
+  code?: string | null
+  severity?: string
+  status?: string
+  affectedTeeth?: Prisma.DiagnosticCreateaffectedTeethInput | string[]
   doctorId: string
   description?: string | null
   createdAt?: Date | string
   updatedAt?: Date | string
   deletedAt?: Date | string | null
+  attachments?: Prisma.DiagnosticAttachmentUncheckedCreateNestedManyWithoutDiagnosisInput
 }
 
 export type DiagnosticCreateOrConnectWithoutPatientInput = {
@@ -575,9 +716,89 @@ export type DiagnosticUpdateManyWithWhereWithoutPatientInput = {
   data: Prisma.XOR<Prisma.DiagnosticUpdateManyMutationInput, Prisma.DiagnosticUncheckedUpdateManyWithoutPatientInput>
 }
 
+export type DiagnosticCreateWithoutAttachmentsInput = {
+  id?: string
+  designation: string
+  code?: string | null
+  severity?: string
+  status?: string
+  affectedTeeth?: Prisma.DiagnosticCreateaffectedTeethInput | string[]
+  description?: string | null
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  deletedAt?: Date | string | null
+  doctor: Prisma.UserCreateNestedOneWithoutDiagnosticsInput
+  patient: Prisma.PersonCreateNestedOneWithoutDiagnosticsInput
+}
+
+export type DiagnosticUncheckedCreateWithoutAttachmentsInput = {
+  id?: string
+  designation: string
+  code?: string | null
+  severity?: string
+  status?: string
+  affectedTeeth?: Prisma.DiagnosticCreateaffectedTeethInput | string[]
+  patientId: string
+  doctorId: string
+  description?: string | null
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  deletedAt?: Date | string | null
+}
+
+export type DiagnosticCreateOrConnectWithoutAttachmentsInput = {
+  where: Prisma.DiagnosticWhereUniqueInput
+  create: Prisma.XOR<Prisma.DiagnosticCreateWithoutAttachmentsInput, Prisma.DiagnosticUncheckedCreateWithoutAttachmentsInput>
+}
+
+export type DiagnosticUpsertWithoutAttachmentsInput = {
+  update: Prisma.XOR<Prisma.DiagnosticUpdateWithoutAttachmentsInput, Prisma.DiagnosticUncheckedUpdateWithoutAttachmentsInput>
+  create: Prisma.XOR<Prisma.DiagnosticCreateWithoutAttachmentsInput, Prisma.DiagnosticUncheckedCreateWithoutAttachmentsInput>
+  where?: Prisma.DiagnosticWhereInput
+}
+
+export type DiagnosticUpdateToOneWithWhereWithoutAttachmentsInput = {
+  where?: Prisma.DiagnosticWhereInput
+  data: Prisma.XOR<Prisma.DiagnosticUpdateWithoutAttachmentsInput, Prisma.DiagnosticUncheckedUpdateWithoutAttachmentsInput>
+}
+
+export type DiagnosticUpdateWithoutAttachmentsInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  designation?: Prisma.StringFieldUpdateOperationsInput | string
+  code?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  severity?: Prisma.StringFieldUpdateOperationsInput | string
+  status?: Prisma.StringFieldUpdateOperationsInput | string
+  affectedTeeth?: Prisma.DiagnosticUpdateaffectedTeethInput | string[]
+  description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  deletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  doctor?: Prisma.UserUpdateOneRequiredWithoutDiagnosticsNestedInput
+  patient?: Prisma.PersonUpdateOneRequiredWithoutDiagnosticsNestedInput
+}
+
+export type DiagnosticUncheckedUpdateWithoutAttachmentsInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  designation?: Prisma.StringFieldUpdateOperationsInput | string
+  code?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  severity?: Prisma.StringFieldUpdateOperationsInput | string
+  status?: Prisma.StringFieldUpdateOperationsInput | string
+  affectedTeeth?: Prisma.DiagnosticUpdateaffectedTeethInput | string[]
+  patientId?: Prisma.StringFieldUpdateOperationsInput | string
+  doctorId?: Prisma.StringFieldUpdateOperationsInput | string
+  description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  deletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+}
+
 export type DiagnosticCreateManyDoctorInput = {
   id?: string
   designation: string
+  code?: string | null
+  severity?: string
+  status?: string
+  affectedTeeth?: Prisma.DiagnosticCreateaffectedTeethInput | string[]
   patientId: string
   description?: string | null
   createdAt?: Date | string
@@ -588,26 +809,40 @@ export type DiagnosticCreateManyDoctorInput = {
 export type DiagnosticUpdateWithoutDoctorInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   designation?: Prisma.StringFieldUpdateOperationsInput | string
+  code?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  severity?: Prisma.StringFieldUpdateOperationsInput | string
+  status?: Prisma.StringFieldUpdateOperationsInput | string
+  affectedTeeth?: Prisma.DiagnosticUpdateaffectedTeethInput | string[]
   description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   deletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   patient?: Prisma.PersonUpdateOneRequiredWithoutDiagnosticsNestedInput
+  attachments?: Prisma.DiagnosticAttachmentUpdateManyWithoutDiagnosisNestedInput
 }
 
 export type DiagnosticUncheckedUpdateWithoutDoctorInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   designation?: Prisma.StringFieldUpdateOperationsInput | string
+  code?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  severity?: Prisma.StringFieldUpdateOperationsInput | string
+  status?: Prisma.StringFieldUpdateOperationsInput | string
+  affectedTeeth?: Prisma.DiagnosticUpdateaffectedTeethInput | string[]
   patientId?: Prisma.StringFieldUpdateOperationsInput | string
   description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   deletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  attachments?: Prisma.DiagnosticAttachmentUncheckedUpdateManyWithoutDiagnosisNestedInput
 }
 
 export type DiagnosticUncheckedUpdateManyWithoutDoctorInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   designation?: Prisma.StringFieldUpdateOperationsInput | string
+  code?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  severity?: Prisma.StringFieldUpdateOperationsInput | string
+  status?: Prisma.StringFieldUpdateOperationsInput | string
+  affectedTeeth?: Prisma.DiagnosticUpdateaffectedTeethInput | string[]
   patientId?: Prisma.StringFieldUpdateOperationsInput | string
   description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -618,6 +853,10 @@ export type DiagnosticUncheckedUpdateManyWithoutDoctorInput = {
 export type DiagnosticCreateManyPatientInput = {
   id?: string
   designation: string
+  code?: string | null
+  severity?: string
+  status?: string
+  affectedTeeth?: Prisma.DiagnosticCreateaffectedTeethInput | string[]
   doctorId: string
   description?: string | null
   createdAt?: Date | string
@@ -628,26 +867,40 @@ export type DiagnosticCreateManyPatientInput = {
 export type DiagnosticUpdateWithoutPatientInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   designation?: Prisma.StringFieldUpdateOperationsInput | string
+  code?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  severity?: Prisma.StringFieldUpdateOperationsInput | string
+  status?: Prisma.StringFieldUpdateOperationsInput | string
+  affectedTeeth?: Prisma.DiagnosticUpdateaffectedTeethInput | string[]
   description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   deletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   doctor?: Prisma.UserUpdateOneRequiredWithoutDiagnosticsNestedInput
+  attachments?: Prisma.DiagnosticAttachmentUpdateManyWithoutDiagnosisNestedInput
 }
 
 export type DiagnosticUncheckedUpdateWithoutPatientInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   designation?: Prisma.StringFieldUpdateOperationsInput | string
+  code?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  severity?: Prisma.StringFieldUpdateOperationsInput | string
+  status?: Prisma.StringFieldUpdateOperationsInput | string
+  affectedTeeth?: Prisma.DiagnosticUpdateaffectedTeethInput | string[]
   doctorId?: Prisma.StringFieldUpdateOperationsInput | string
   description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   deletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  attachments?: Prisma.DiagnosticAttachmentUncheckedUpdateManyWithoutDiagnosisNestedInput
 }
 
 export type DiagnosticUncheckedUpdateManyWithoutPatientInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   designation?: Prisma.StringFieldUpdateOperationsInput | string
+  code?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  severity?: Prisma.StringFieldUpdateOperationsInput | string
+  status?: Prisma.StringFieldUpdateOperationsInput | string
+  affectedTeeth?: Prisma.DiagnosticUpdateaffectedTeethInput | string[]
   doctorId?: Prisma.StringFieldUpdateOperationsInput | string
   description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -656,10 +909,43 @@ export type DiagnosticUncheckedUpdateManyWithoutPatientInput = {
 }
 
 
+/**
+ * Count Type DiagnosticCountOutputType
+ */
+
+export type DiagnosticCountOutputType = {
+  attachments: number
+}
+
+export type DiagnosticCountOutputTypeSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  attachments?: boolean | DiagnosticCountOutputTypeCountAttachmentsArgs
+}
+
+/**
+ * DiagnosticCountOutputType without action
+ */
+export type DiagnosticCountOutputTypeDefaultArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the DiagnosticCountOutputType
+   */
+  select?: Prisma.DiagnosticCountOutputTypeSelect<ExtArgs> | null
+}
+
+/**
+ * DiagnosticCountOutputType without action
+ */
+export type DiagnosticCountOutputTypeCountAttachmentsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  where?: Prisma.DiagnosticAttachmentWhereInput
+}
+
 
 export type DiagnosticSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
   id?: boolean
   designation?: boolean
+  code?: boolean
+  severity?: boolean
+  status?: boolean
+  affectedTeeth?: boolean
   patientId?: boolean
   doctorId?: boolean
   description?: boolean
@@ -668,11 +954,17 @@ export type DiagnosticSelect<ExtArgs extends runtime.Types.Extensions.InternalAr
   deletedAt?: boolean
   doctor?: boolean | Prisma.UserDefaultArgs<ExtArgs>
   patient?: boolean | Prisma.PersonDefaultArgs<ExtArgs>
+  attachments?: boolean | Prisma.Diagnostic$attachmentsArgs<ExtArgs>
+  _count?: boolean | Prisma.DiagnosticCountOutputTypeDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["diagnostic"]>
 
 export type DiagnosticSelectCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
   id?: boolean
   designation?: boolean
+  code?: boolean
+  severity?: boolean
+  status?: boolean
+  affectedTeeth?: boolean
   patientId?: boolean
   doctorId?: boolean
   description?: boolean
@@ -686,6 +978,10 @@ export type DiagnosticSelectCreateManyAndReturn<ExtArgs extends runtime.Types.Ex
 export type DiagnosticSelectUpdateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
   id?: boolean
   designation?: boolean
+  code?: boolean
+  severity?: boolean
+  status?: boolean
+  affectedTeeth?: boolean
   patientId?: boolean
   doctorId?: boolean
   description?: boolean
@@ -699,6 +995,10 @@ export type DiagnosticSelectUpdateManyAndReturn<ExtArgs extends runtime.Types.Ex
 export type DiagnosticSelectScalar = {
   id?: boolean
   designation?: boolean
+  code?: boolean
+  severity?: boolean
+  status?: boolean
+  affectedTeeth?: boolean
   patientId?: boolean
   doctorId?: boolean
   description?: boolean
@@ -707,10 +1007,12 @@ export type DiagnosticSelectScalar = {
   deletedAt?: boolean
 }
 
-export type DiagnosticOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "designation" | "patientId" | "doctorId" | "description" | "createdAt" | "updatedAt" | "deletedAt", ExtArgs["result"]["diagnostic"]>
+export type DiagnosticOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "designation" | "code" | "severity" | "status" | "affectedTeeth" | "patientId" | "doctorId" | "description" | "createdAt" | "updatedAt" | "deletedAt", ExtArgs["result"]["diagnostic"]>
 export type DiagnosticInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   doctor?: boolean | Prisma.UserDefaultArgs<ExtArgs>
   patient?: boolean | Prisma.PersonDefaultArgs<ExtArgs>
+  attachments?: boolean | Prisma.Diagnostic$attachmentsArgs<ExtArgs>
+  _count?: boolean | Prisma.DiagnosticCountOutputTypeDefaultArgs<ExtArgs>
 }
 export type DiagnosticIncludeCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   doctor?: boolean | Prisma.UserDefaultArgs<ExtArgs>
@@ -726,10 +1028,15 @@ export type $DiagnosticPayload<ExtArgs extends runtime.Types.Extensions.Internal
   objects: {
     doctor: Prisma.$UserPayload<ExtArgs>
     patient: Prisma.$PersonPayload<ExtArgs>
+    attachments: Prisma.$DiagnosticAttachmentPayload<ExtArgs>[]
   }
   scalars: runtime.Types.Extensions.GetPayloadResult<{
     id: string
     designation: string
+    code: string | null
+    severity: string
+    status: string
+    affectedTeeth: string[]
     patientId: string
     doctorId: string
     description: string | null
@@ -1132,6 +1439,7 @@ export interface Prisma__DiagnosticClient<T, Null = never, ExtArgs extends runti
   readonly [Symbol.toStringTag]: "PrismaPromise"
   doctor<T extends Prisma.UserDefaultArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.UserDefaultArgs<ExtArgs>>): Prisma.Prisma__UserClient<runtime.Types.Result.GetResult<Prisma.$UserPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
   patient<T extends Prisma.PersonDefaultArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.PersonDefaultArgs<ExtArgs>>): Prisma.Prisma__PersonClient<runtime.Types.Result.GetResult<Prisma.$PersonPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
+  attachments<T extends Prisma.Diagnostic$attachmentsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Diagnostic$attachmentsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$DiagnosticAttachmentPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   /**
    * Attaches callbacks for the resolution and/or rejection of the Promise.
    * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -1163,6 +1471,10 @@ export interface Prisma__DiagnosticClient<T, Null = never, ExtArgs extends runti
 export interface DiagnosticFieldRefs {
   readonly id: Prisma.FieldRef<"Diagnostic", 'String'>
   readonly designation: Prisma.FieldRef<"Diagnostic", 'String'>
+  readonly code: Prisma.FieldRef<"Diagnostic", 'String'>
+  readonly severity: Prisma.FieldRef<"Diagnostic", 'String'>
+  readonly status: Prisma.FieldRef<"Diagnostic", 'String'>
+  readonly affectedTeeth: Prisma.FieldRef<"Diagnostic", 'String[]'>
   readonly patientId: Prisma.FieldRef<"Diagnostic", 'String'>
   readonly doctorId: Prisma.FieldRef<"Diagnostic", 'String'>
   readonly description: Prisma.FieldRef<"Diagnostic", 'String'>
@@ -1562,6 +1874,30 @@ export type DiagnosticDeleteManyArgs<ExtArgs extends runtime.Types.Extensions.In
    * Limit how many Diagnostics to delete.
    */
   limit?: number
+}
+
+/**
+ * Diagnostic.attachments
+ */
+export type Diagnostic$attachmentsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the DiagnosticAttachment
+   */
+  select?: Prisma.DiagnosticAttachmentSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the DiagnosticAttachment
+   */
+  omit?: Prisma.DiagnosticAttachmentOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.DiagnosticAttachmentInclude<ExtArgs> | null
+  where?: Prisma.DiagnosticAttachmentWhereInput
+  orderBy?: Prisma.DiagnosticAttachmentOrderByWithRelationInput | Prisma.DiagnosticAttachmentOrderByWithRelationInput[]
+  cursor?: Prisma.DiagnosticAttachmentWhereUniqueInput
+  take?: number
+  skip?: number
+  distinct?: Prisma.DiagnosticAttachmentScalarFieldEnum | Prisma.DiagnosticAttachmentScalarFieldEnum[]
 }
 
 /**

@@ -8,11 +8,48 @@ import {
 import { PlanModelMapper } from './plan-model.mapper';
 import { NotFoundError } from '../../../../shared/domain/errors/not-found.error';
 import { PrismaService } from '../../../../shared/infra/db/prisma/prisma.service';
+import { Prisma } from '../../../../../generated/prisma/client';
+import {
+  ListQuery,
+  pageWindow,
+  paginated,
+} from '../../../../shared/domain/list-query';
+import {
+  dateRange,
+  validateListFilters,
+} from '../../../../shared/helpers/list-filters';
 
 export class PlanPrismaRepository implements IPlanRepository {
+  async listPaginated(query: ListQuery) {
+    validateListFilters(query);
+    const where: Prisma.PlanWhereInput = {
+      deletedAt: null,
+      createdAt: dateRange(query),
+      ...(query.search && {
+        OR: [
+          { name: { contains: query.search, mode: 'insensitive' } },
+          { slug: { contains: query.search, mode: 'insensitive' } },
+        ],
+      }),
+    };
+    const [data, total] = await this._prismaService.$transaction([
+      this._prismaService.plan.findMany({
+        where,
+        include: {
+          currency: true,
+          PlanBenefit: { include: { benefit: true } },
+        },
+        orderBy: [{ createdAt: 'asc' }, { id: 'asc' }],
+        ...pageWindow(query),
+      }),
+      this._prismaService.plan.count({ where }),
+    ]);
+    return paginated(data, total, query);
+  }
+
   sortableFields: string[] = ['createdAt'];
 
-  constructor(private _prismaService: PrismaService) { }
+  constructor(private _prismaService: PrismaService) {}
   async insert(entity: Plan): Promise<void> {
     const modelProps = PlanModelMapper.toModel(entity);
     await this._prismaService.plan.create({
