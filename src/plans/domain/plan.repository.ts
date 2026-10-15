@@ -2,6 +2,7 @@ import { ISearchableRepository } from '../../shared/domain/repository/repository
 import { SearchParams } from '../../shared/domain/repository/search-params';
 import { SearchResult } from '../../shared/domain/repository/search-result';
 import { Plan, PlanId } from './plan.aggregate';
+import { ListQuery, paginated } from '../../shared/domain/list-query';
 
 export type PlanFilter = string;
 
@@ -15,4 +16,6 @@ export interface IPlanRepository extends ISearchableRepository<
   PlanFilter,
   PlanSearchParams,
   PlanSearchResult
-> {}
+> {
+  listPaginated(query: ListQuery): Promise<ReturnType<typeof paginated>>;
+}

@@ -6,4 +6,6 @@ export interface IStorage {
   }): Promise<void>;
 
   get(id: string): Promise<{ data: Buffer; mime_type: string | undefined }>;
+
+  delete(id: string): Promise<void>;
 }

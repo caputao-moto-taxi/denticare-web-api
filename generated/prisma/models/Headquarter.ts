@@ -28,6 +28,8 @@ export type HeadquarterMinAggregateOutputType = {
   id: string | null
   name: string | null
   address: string | null
+  email: string | null
+  phone: string | null
   description: string | null
   nif: string | null
   logo: string | null
@@ -41,6 +43,8 @@ export type HeadquarterMaxAggregateOutputType = {
   id: string | null
   name: string | null
   address: string | null
+  email: string | null
+  phone: string | null
   description: string | null
   nif: string | null
   logo: string | null
@@ -54,6 +58,8 @@ export type HeadquarterCountAggregateOutputType = {
   id: number
   name: number
   address: number
+  email: number
+  phone: number
   description: number
   nif: number
   logo: number
@@ -69,6 +75,8 @@ export type HeadquarterMinAggregateInputType = {
   id?: true
   name?: true
   address?: true
+  email?: true
+  phone?: true
   description?: true
   nif?: true
   logo?: true
@@ -82,6 +90,8 @@ export type HeadquarterMaxAggregateInputType = {
   id?: true
   name?: true
   address?: true
+  email?: true
+  phone?: true
   description?: true
   nif?: true
   logo?: true
@@ -95,6 +105,8 @@ export type HeadquarterCountAggregateInputType = {
   id?: true
   name?: true
   address?: true
+  email?: true
+  phone?: true
   description?: true
   nif?: true
   logo?: true
@@ -181,6 +193,8 @@ export type HeadquarterGroupByOutputType = {
   id: string
   name: string
   address: string
+  email: string | null
+  phone: string | null
   description: string | null
   nif: string
   logo: string | null
@@ -215,6 +229,8 @@ export type HeadquarterWhereInput = {
   id?: Prisma.StringFilter<"Headquarter"> | string
   name?: Prisma.StringFilter<"Headquarter"> | string
   address?: Prisma.StringFilter<"Headquarter"> | string
+  email?: Prisma.StringNullableFilter<"Headquarter"> | string | null
+  phone?: Prisma.StringNullableFilter<"Headquarter"> | string | null
   description?: Prisma.StringNullableFilter<"Headquarter"> | string | null
   nif?: Prisma.StringFilter<"Headquarter"> | string
   logo?: Prisma.StringNullableFilter<"Headquarter"> | string | null
@@ -230,6 +246,8 @@ export type HeadquarterOrderByWithRelationInput = {
   id?: Prisma.SortOrder
   name?: Prisma.SortOrder
   address?: Prisma.SortOrder
+  email?: Prisma.SortOrderInput | Prisma.SortOrder
+  phone?: Prisma.SortOrderInput | Prisma.SortOrder
   description?: Prisma.SortOrderInput | Prisma.SortOrder
   nif?: Prisma.SortOrder
   logo?: Prisma.SortOrderInput | Prisma.SortOrder
@@ -248,6 +266,8 @@ export type HeadquarterWhereUniqueInput = Prisma.AtLeast<{
   NOT?: Prisma.HeadquarterWhereInput | Prisma.HeadquarterWhereInput[]
   name?: Prisma.StringFilter<"Headquarter"> | string
   address?: Prisma.StringFilter<"Headquarter"> | string
+  email?: Prisma.StringNullableFilter<"Headquarter"> | string | null
+  phone?: Prisma.StringNullableFilter<"Headquarter"> | string | null
   description?: Prisma.StringNullableFilter<"Headquarter"> | string | null
   nif?: Prisma.StringFilter<"Headquarter"> | string
   logo?: Prisma.StringNullableFilter<"Headquarter"> | string | null
@@ -263,6 +283,8 @@ export type HeadquarterOrderByWithAggregationInput = {
   id?: Prisma.SortOrder
   name?: Prisma.SortOrder
   address?: Prisma.SortOrder
+  email?: Prisma.SortOrderInput | Prisma.SortOrder
+  phone?: Prisma.SortOrderInput | Prisma.SortOrder
   description?: Prisma.SortOrderInput | Prisma.SortOrder
   nif?: Prisma.SortOrder
   logo?: Prisma.SortOrderInput | Prisma.SortOrder
@@ -282,6 +304,8 @@ export type HeadquarterScalarWhereWithAggregatesInput = {
   id?: Prisma.StringWithAggregatesFilter<"Headquarter"> | string
   name?: Prisma.StringWithAggregatesFilter<"Headquarter"> | string
   address?: Prisma.StringWithAggregatesFilter<"Headquarter"> | string
+  email?: Prisma.StringNullableWithAggregatesFilter<"Headquarter"> | string | null
+  phone?: Prisma.StringNullableWithAggregatesFilter<"Headquarter"> | string | null
   description?: Prisma.StringNullableWithAggregatesFilter<"Headquarter"> | string | null
   nif?: Prisma.StringWithAggregatesFilter<"Headquarter"> | string
   logo?: Prisma.StringNullableWithAggregatesFilter<"Headquarter"> | string | null
@@ -295,6 +319,8 @@ export type HeadquarterCreateInput = {
   id?: string
   name: string
   address: string
+  email?: string | null
+  phone?: string | null
   description?: string | null
   nif: string
   logo?: string | null
@@ -309,6 +335,8 @@ export type HeadquarterUncheckedCreateInput = {
   id?: string
   name: string
   address: string
+  email?: string | null
+  phone?: string | null
   description?: string | null
   nif: string
   logo?: string | null
@@ -323,6 +351,8 @@ export type HeadquarterUpdateInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   name?: Prisma.StringFieldUpdateOperationsInput | string
   address?: Prisma.StringFieldUpdateOperationsInput | string
+  email?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  phone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   nif?: Prisma.StringFieldUpdateOperationsInput | string
   logo?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -337,6 +367,8 @@ export type HeadquarterUncheckedUpdateInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   name?: Prisma.StringFieldUpdateOperationsInput | string
   address?: Prisma.StringFieldUpdateOperationsInput | string
+  email?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  phone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   nif?: Prisma.StringFieldUpdateOperationsInput | string
   logo?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -351,6 +383,8 @@ export type HeadquarterCreateManyInput = {
   id?: string
   name: string
   address: string
+  email?: string | null
+  phone?: string | null
   description?: string | null
   nif: string
   logo?: string | null
@@ -364,6 +398,8 @@ export type HeadquarterUpdateManyMutationInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   name?: Prisma.StringFieldUpdateOperationsInput | string
   address?: Prisma.StringFieldUpdateOperationsInput | string
+  email?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  phone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   nif?: Prisma.StringFieldUpdateOperationsInput | string
   logo?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -376,6 +412,8 @@ export type HeadquarterUncheckedUpdateManyInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   name?: Prisma.StringFieldUpdateOperationsInput | string
   address?: Prisma.StringFieldUpdateOperationsInput | string
+  email?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  phone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   nif?: Prisma.StringFieldUpdateOperationsInput | string
   logo?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -399,6 +437,8 @@ export type HeadquarterCountOrderByAggregateInput = {
   id?: Prisma.SortOrder
   name?: Prisma.SortOrder
   address?: Prisma.SortOrder
+  email?: Prisma.SortOrder
+  phone?: Prisma.SortOrder
   description?: Prisma.SortOrder
   nif?: Prisma.SortOrder
   logo?: Prisma.SortOrder
@@ -412,6 +452,8 @@ export type HeadquarterMaxOrderByAggregateInput = {
   id?: Prisma.SortOrder
   name?: Prisma.SortOrder
   address?: Prisma.SortOrder
+  email?: Prisma.SortOrder
+  phone?: Prisma.SortOrder
   description?: Prisma.SortOrder
   nif?: Prisma.SortOrder
   logo?: Prisma.SortOrder
@@ -425,6 +467,8 @@ export type HeadquarterMinOrderByAggregateInput = {
   id?: Prisma.SortOrder
   name?: Prisma.SortOrder
   address?: Prisma.SortOrder
+  email?: Prisma.SortOrder
+  phone?: Prisma.SortOrder
   description?: Prisma.SortOrder
   nif?: Prisma.SortOrder
   logo?: Prisma.SortOrder
@@ -499,6 +543,8 @@ export type HeadquarterCreateWithoutPlanInput = {
   id?: string
   name: string
   address: string
+  email?: string | null
+  phone?: string | null
   description?: string | null
   nif: string
   logo?: string | null
@@ -512,6 +558,8 @@ export type HeadquarterUncheckedCreateWithoutPlanInput = {
   id?: string
   name: string
   address: string
+  email?: string | null
+  phone?: string | null
   description?: string | null
   nif: string
   logo?: string | null
@@ -554,6 +602,8 @@ export type HeadquarterScalarWhereInput = {
   id?: Prisma.StringFilter<"Headquarter"> | string
   name?: Prisma.StringFilter<"Headquarter"> | string
   address?: Prisma.StringFilter<"Headquarter"> | string
+  email?: Prisma.StringNullableFilter<"Headquarter"> | string | null
+  phone?: Prisma.StringNullableFilter<"Headquarter"> | string | null
   description?: Prisma.StringNullableFilter<"Headquarter"> | string | null
   nif?: Prisma.StringFilter<"Headquarter"> | string
   logo?: Prisma.StringNullableFilter<"Headquarter"> | string | null
@@ -567,6 +617,8 @@ export type HeadquarterCreateWithoutBranchInput = {
   id?: string
   name: string
   address: string
+  email?: string | null
+  phone?: string | null
   description?: string | null
   nif: string
   logo?: string | null
@@ -580,6 +632,8 @@ export type HeadquarterUncheckedCreateWithoutBranchInput = {
   id?: string
   name: string
   address: string
+  email?: string | null
+  phone?: string | null
   description?: string | null
   nif: string
   logo?: string | null
@@ -609,6 +663,8 @@ export type HeadquarterUpdateWithoutBranchInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   name?: Prisma.StringFieldUpdateOperationsInput | string
   address?: Prisma.StringFieldUpdateOperationsInput | string
+  email?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  phone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   nif?: Prisma.StringFieldUpdateOperationsInput | string
   logo?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -622,6 +678,8 @@ export type HeadquarterUncheckedUpdateWithoutBranchInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   name?: Prisma.StringFieldUpdateOperationsInput | string
   address?: Prisma.StringFieldUpdateOperationsInput | string
+  email?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  phone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   nif?: Prisma.StringFieldUpdateOperationsInput | string
   logo?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -635,6 +693,8 @@ export type HeadquarterCreateManyPlanInput = {
   id?: string
   name: string
   address: string
+  email?: string | null
+  phone?: string | null
   description?: string | null
   nif: string
   logo?: string | null
@@ -647,6 +707,8 @@ export type HeadquarterUpdateWithoutPlanInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   name?: Prisma.StringFieldUpdateOperationsInput | string
   address?: Prisma.StringFieldUpdateOperationsInput | string
+  email?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  phone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   nif?: Prisma.StringFieldUpdateOperationsInput | string
   logo?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -660,6 +722,8 @@ export type HeadquarterUncheckedUpdateWithoutPlanInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   name?: Prisma.StringFieldUpdateOperationsInput | string
   address?: Prisma.StringFieldUpdateOperationsInput | string
+  email?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  phone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   nif?: Prisma.StringFieldUpdateOperationsInput | string
   logo?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -673,6 +737,8 @@ export type HeadquarterUncheckedUpdateManyWithoutPlanInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   name?: Prisma.StringFieldUpdateOperationsInput | string
   address?: Prisma.StringFieldUpdateOperationsInput | string
+  email?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  phone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   nif?: Prisma.StringFieldUpdateOperationsInput | string
   logo?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -716,6 +782,8 @@ export type HeadquarterSelect<ExtArgs extends runtime.Types.Extensions.InternalA
   id?: boolean
   name?: boolean
   address?: boolean
+  email?: boolean
+  phone?: boolean
   description?: boolean
   nif?: boolean
   logo?: boolean
@@ -732,6 +800,8 @@ export type HeadquarterSelectCreateManyAndReturn<ExtArgs extends runtime.Types.E
   id?: boolean
   name?: boolean
   address?: boolean
+  email?: boolean
+  phone?: boolean
   description?: boolean
   nif?: boolean
   logo?: boolean
@@ -746,6 +816,8 @@ export type HeadquarterSelectUpdateManyAndReturn<ExtArgs extends runtime.Types.E
   id?: boolean
   name?: boolean
   address?: boolean
+  email?: boolean
+  phone?: boolean
   description?: boolean
   nif?: boolean
   logo?: boolean
@@ -760,6 +832,8 @@ export type HeadquarterSelectScalar = {
   id?: boolean
   name?: boolean
   address?: boolean
+  email?: boolean
+  phone?: boolean
   description?: boolean
   nif?: boolean
   logo?: boolean
@@ -769,7 +843,7 @@ export type HeadquarterSelectScalar = {
   deletedAt?: boolean
 }
 
-export type HeadquarterOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "name" | "address" | "description" | "nif" | "logo" | "planId" | "createdAt" | "updatedAt" | "deletedAt", ExtArgs["result"]["headquarter"]>
+export type HeadquarterOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "name" | "address" | "email" | "phone" | "description" | "nif" | "logo" | "planId" | "createdAt" | "updatedAt" | "deletedAt", ExtArgs["result"]["headquarter"]>
 export type HeadquarterInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   Branch?: boolean | Prisma.Headquarter$BranchArgs<ExtArgs>
   plan?: boolean | Prisma.PlanDefaultArgs<ExtArgs>
@@ -792,6 +866,8 @@ export type $HeadquarterPayload<ExtArgs extends runtime.Types.Extensions.Interna
     id: string
     name: string
     address: string
+    email: string | null
+    phone: string | null
     description: string | null
     nif: string
     logo: string | null
@@ -1227,6 +1303,8 @@ export interface HeadquarterFieldRefs {
   readonly id: Prisma.FieldRef<"Headquarter", 'String'>
   readonly name: Prisma.FieldRef<"Headquarter", 'String'>
   readonly address: Prisma.FieldRef<"Headquarter", 'String'>
+  readonly email: Prisma.FieldRef<"Headquarter", 'String'>
+  readonly phone: Prisma.FieldRef<"Headquarter", 'String'>
   readonly description: Prisma.FieldRef<"Headquarter", 'String'>
   readonly nif: Prisma.FieldRef<"Headquarter", 'String'>
   readonly logo: Prisma.FieldRef<"Headquarter", 'String'>

@@ -103,6 +103,11 @@ export type UserBranch = Prisma.UserBranchModel
  */
 export type RolePermission = Prisma.RolePermissionModel
 /**
+ * Model UserPermission
+ * 
+ */
+export type UserPermission = Prisma.UserPermissionModel
+/**
  * Model UserRole
  * 
  */
@@ -112,6 +117,46 @@ export type UserRole = Prisma.UserRoleModel
  * 
  */
 export type Appointment = Prisma.AppointmentModel
+/**
+ * Model DoctorProfile
+ * 
+ */
+export type DoctorProfile = Prisma.DoctorProfileModel
+/**
+ * Model ChatConversation
+ * 
+ */
+export type ChatConversation = Prisma.ChatConversationModel
+/**
+ * Model ChatMessage
+ * 
+ */
+export type ChatMessage = Prisma.ChatMessageModel
+/**
+ * Model StockItem
+ * 
+ */
+export type StockItem = Prisma.StockItemModel
+/**
+ * Model StockSale
+ * 
+ */
+export type StockSale = Prisma.StockSaleModel
+/**
+ * Model StockSaleItem
+ * 
+ */
+export type StockSaleItem = Prisma.StockSaleItemModel
+/**
+ * Model TreatmentPlan
+ * 
+ */
+export type TreatmentPlan = Prisma.TreatmentPlanModel
+/**
+ * Model RevokedToken
+ * 
+ */
+export type RevokedToken = Prisma.RevokedTokenModel
 /**
  * Model Consult
  * 
@@ -167,6 +212,36 @@ export type ClinicProccess = Prisma.ClinicProccessModel
  * 
  */
 export type Diagnostic = Prisma.DiagnosticModel
+/**
+ * Model DiagnosticAttachment
+ * 
+ */
+export type DiagnosticAttachment = Prisma.DiagnosticAttachmentModel
+/**
+ * Model PatientTooth
+ * 
+ */
+export type PatientTooth = Prisma.PatientToothModel
+/**
+ * Model PatientPrescription
+ * 
+ */
+export type PatientPrescription = Prisma.PatientPrescriptionModel
+/**
+ * Model PatientFinancialEntry
+ * 
+ */
+export type PatientFinancialEntry = Prisma.PatientFinancialEntryModel
+/**
+ * Model XRayAnalysis
+ * 
+ */
+export type XRayAnalysis = Prisma.XRayAnalysisModel
+/**
+ * Model PatientExam
+ * 
+ */
+export type PatientExam = Prisma.PatientExamModel
 /**
  * Model NewLatter
  * 

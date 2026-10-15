@@ -31,6 +31,7 @@ export type BranchMinAggregateOutputType = {
   headquarterId: string | null
   description: string | null
   isActive: boolean | null
+  timezone: string | null
   createdAt: Date | null
   updatedAt: Date | null
   deletedAt: Date | null
@@ -43,6 +44,7 @@ export type BranchMaxAggregateOutputType = {
   headquarterId: string | null
   description: string | null
   isActive: boolean | null
+  timezone: string | null
   createdAt: Date | null
   updatedAt: Date | null
   deletedAt: Date | null
@@ -55,6 +57,9 @@ export type BranchCountAggregateOutputType = {
   headquarterId: number
   description: number
   isActive: number
+  workingDays: number
+  workingHours: number
+  timezone: number
   createdAt: number
   updatedAt: number
   deletedAt: number
@@ -69,6 +74,7 @@ export type BranchMinAggregateInputType = {
   headquarterId?: true
   description?: true
   isActive?: true
+  timezone?: true
   createdAt?: true
   updatedAt?: true
   deletedAt?: true
@@ -81,6 +87,7 @@ export type BranchMaxAggregateInputType = {
   headquarterId?: true
   description?: true
   isActive?: true
+  timezone?: true
   createdAt?: true
   updatedAt?: true
   deletedAt?: true
@@ -93,6 +100,9 @@ export type BranchCountAggregateInputType = {
   headquarterId?: true
   description?: true
   isActive?: true
+  workingDays?: true
+  workingHours?: true
+  timezone?: true
   createdAt?: true
   updatedAt?: true
   deletedAt?: true
@@ -178,6 +188,9 @@ export type BranchGroupByOutputType = {
   headquarterId: string
   description: string | null
   isActive: boolean
+  workingDays: string[]
+  workingHours: runtime.JsonValue | null
+  timezone: string
   createdAt: Date
   updatedAt: Date
   deletedAt: Date | null
@@ -211,6 +224,9 @@ export type BranchWhereInput = {
   headquarterId?: Prisma.StringFilter<"Branch"> | string
   description?: Prisma.StringNullableFilter<"Branch"> | string | null
   isActive?: Prisma.BoolFilter<"Branch"> | boolean
+  workingDays?: Prisma.StringNullableListFilter<"Branch">
+  workingHours?: Prisma.JsonNullableFilter<"Branch">
+  timezone?: Prisma.StringFilter<"Branch"> | string
   createdAt?: Prisma.DateTimeFilter<"Branch"> | Date | string
   updatedAt?: Prisma.DateTimeFilter<"Branch"> | Date | string
   deletedAt?: Prisma.DateTimeNullableFilter<"Branch"> | Date | string | null
@@ -220,8 +236,13 @@ export type BranchWhereInput = {
   headquarter?: Prisma.XOR<Prisma.HeadquarterScalarRelationFilter, Prisma.HeadquarterWhereInput>
   products?: Prisma.ProductListRelationFilter
   sales?: Prisma.SaleListRelationFilter
+  stockSales?: Prisma.StockSaleListRelationFilter
   UserBranch?: Prisma.UserBranchListRelationFilter
   User?: Prisma.UserListRelationFilter
+  stockItems?: Prisma.StockItemListRelationFilter
+  treatmentPlans?: Prisma.TreatmentPlanListRelationFilter
+  patientFinancialEntries?: Prisma.PatientFinancialEntryListRelationFilter
+  xrayAnalyses?: Prisma.XRayAnalysisListRelationFilter
 }
 
 export type BranchOrderByWithRelationInput = {
@@ -231,6 +252,9 @@ export type BranchOrderByWithRelationInput = {
   headquarterId?: Prisma.SortOrder
   description?: Prisma.SortOrderInput | Prisma.SortOrder
   isActive?: Prisma.SortOrder
+  workingDays?: Prisma.SortOrder
+  workingHours?: Prisma.SortOrderInput | Prisma.SortOrder
+  timezone?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
   deletedAt?: Prisma.SortOrderInput | Prisma.SortOrder
@@ -240,8 +264,13 @@ export type BranchOrderByWithRelationInput = {
   headquarter?: Prisma.HeadquarterOrderByWithRelationInput
   products?: Prisma.ProductOrderByRelationAggregateInput
   sales?: Prisma.SaleOrderByRelationAggregateInput
+  stockSales?: Prisma.StockSaleOrderByRelationAggregateInput
   UserBranch?: Prisma.UserBranchOrderByRelationAggregateInput
   User?: Prisma.UserOrderByRelationAggregateInput
+  stockItems?: Prisma.StockItemOrderByRelationAggregateInput
+  treatmentPlans?: Prisma.TreatmentPlanOrderByRelationAggregateInput
+  patientFinancialEntries?: Prisma.PatientFinancialEntryOrderByRelationAggregateInput
+  xrayAnalyses?: Prisma.XRayAnalysisOrderByRelationAggregateInput
 }
 
 export type BranchWhereUniqueInput = Prisma.AtLeast<{
@@ -254,6 +283,9 @@ export type BranchWhereUniqueInput = Prisma.AtLeast<{
   headquarterId?: Prisma.StringFilter<"Branch"> | string
   description?: Prisma.StringNullableFilter<"Branch"> | string | null
   isActive?: Prisma.BoolFilter<"Branch"> | boolean
+  workingDays?: Prisma.StringNullableListFilter<"Branch">
+  workingHours?: Prisma.JsonNullableFilter<"Branch">
+  timezone?: Prisma.StringFilter<"Branch"> | string
   createdAt?: Prisma.DateTimeFilter<"Branch"> | Date | string
   updatedAt?: Prisma.DateTimeFilter<"Branch"> | Date | string
   deletedAt?: Prisma.DateTimeNullableFilter<"Branch"> | Date | string | null
@@ -263,8 +295,13 @@ export type BranchWhereUniqueInput = Prisma.AtLeast<{
   headquarter?: Prisma.XOR<Prisma.HeadquarterScalarRelationFilter, Prisma.HeadquarterWhereInput>
   products?: Prisma.ProductListRelationFilter
   sales?: Prisma.SaleListRelationFilter
+  stockSales?: Prisma.StockSaleListRelationFilter
   UserBranch?: Prisma.UserBranchListRelationFilter
   User?: Prisma.UserListRelationFilter
+  stockItems?: Prisma.StockItemListRelationFilter
+  treatmentPlans?: Prisma.TreatmentPlanListRelationFilter
+  patientFinancialEntries?: Prisma.PatientFinancialEntryListRelationFilter
+  xrayAnalyses?: Prisma.XRayAnalysisListRelationFilter
 }, "id">
 
 export type BranchOrderByWithAggregationInput = {
@@ -274,6 +311,9 @@ export type BranchOrderByWithAggregationInput = {
   headquarterId?: Prisma.SortOrder
   description?: Prisma.SortOrderInput | Prisma.SortOrder
   isActive?: Prisma.SortOrder
+  workingDays?: Prisma.SortOrder
+  workingHours?: Prisma.SortOrderInput | Prisma.SortOrder
+  timezone?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
   deletedAt?: Prisma.SortOrderInput | Prisma.SortOrder
@@ -292,6 +332,9 @@ export type BranchScalarWhereWithAggregatesInput = {
   headquarterId?: Prisma.StringWithAggregatesFilter<"Branch"> | string
   description?: Prisma.StringNullableWithAggregatesFilter<"Branch"> | string | null
   isActive?: Prisma.BoolWithAggregatesFilter<"Branch"> | boolean
+  workingDays?: Prisma.StringNullableListFilter<"Branch">
+  workingHours?: Prisma.JsonNullableWithAggregatesFilter<"Branch">
+  timezone?: Prisma.StringWithAggregatesFilter<"Branch"> | string
   createdAt?: Prisma.DateTimeWithAggregatesFilter<"Branch"> | Date | string
   updatedAt?: Prisma.DateTimeWithAggregatesFilter<"Branch"> | Date | string
   deletedAt?: Prisma.DateTimeNullableWithAggregatesFilter<"Branch"> | Date | string | null
@@ -302,6 +345,9 @@ export type BranchCreateInput = {
   name: string
   description?: string | null
   isActive?: boolean
+  workingDays?: Prisma.BranchCreateworkingDaysInput | string[]
+  workingHours?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  timezone?: string
   createdAt?: Date | string
   updatedAt?: Date | string
   deletedAt?: Date | string | null
@@ -311,8 +357,13 @@ export type BranchCreateInput = {
   headquarter: Prisma.HeadquarterCreateNestedOneWithoutBranchInput
   products?: Prisma.ProductCreateNestedManyWithoutBranchInput
   sales?: Prisma.SaleCreateNestedManyWithoutBranchInput
+  stockSales?: Prisma.StockSaleCreateNestedManyWithoutBranchInput
   UserBranch?: Prisma.UserBranchCreateNestedManyWithoutBranchInput
   User?: Prisma.UserCreateNestedManyWithoutBranchInput
+  stockItems?: Prisma.StockItemCreateNestedManyWithoutBranchInput
+  treatmentPlans?: Prisma.TreatmentPlanCreateNestedManyWithoutBranchInput
+  patientFinancialEntries?: Prisma.PatientFinancialEntryCreateNestedManyWithoutBranchInput
+  xrayAnalyses?: Prisma.XRayAnalysisCreateNestedManyWithoutBranchInput
 }
 
 export type BranchUncheckedCreateInput = {
@@ -322,6 +373,9 @@ export type BranchUncheckedCreateInput = {
   headquarterId: string
   description?: string | null
   isActive?: boolean
+  workingDays?: Prisma.BranchCreateworkingDaysInput | string[]
+  workingHours?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  timezone?: string
   createdAt?: Date | string
   updatedAt?: Date | string
   deletedAt?: Date | string | null
@@ -329,8 +383,13 @@ export type BranchUncheckedCreateInput = {
   treatmentPrices?: Prisma.TreatmentPriceUncheckedCreateNestedManyWithoutBranchInput
   products?: Prisma.ProductUncheckedCreateNestedManyWithoutBranchInput
   sales?: Prisma.SaleUncheckedCreateNestedManyWithoutBranchInput
+  stockSales?: Prisma.StockSaleUncheckedCreateNestedManyWithoutBranchInput
   UserBranch?: Prisma.UserBranchUncheckedCreateNestedManyWithoutBranchInput
   User?: Prisma.UserUncheckedCreateNestedManyWithoutBranchInput
+  stockItems?: Prisma.StockItemUncheckedCreateNestedManyWithoutBranchInput
+  treatmentPlans?: Prisma.TreatmentPlanUncheckedCreateNestedManyWithoutBranchInput
+  patientFinancialEntries?: Prisma.PatientFinancialEntryUncheckedCreateNestedManyWithoutBranchInput
+  xrayAnalyses?: Prisma.XRayAnalysisUncheckedCreateNestedManyWithoutBranchInput
 }
 
 export type BranchUpdateInput = {
@@ -338,6 +397,9 @@ export type BranchUpdateInput = {
   name?: Prisma.StringFieldUpdateOperationsInput | string
   description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  workingDays?: Prisma.BranchUpdateworkingDaysInput | string[]
+  workingHours?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  timezone?: Prisma.StringFieldUpdateOperationsInput | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   deletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -347,8 +409,13 @@ export type BranchUpdateInput = {
   headquarter?: Prisma.HeadquarterUpdateOneRequiredWithoutBranchNestedInput
   products?: Prisma.ProductUpdateManyWithoutBranchNestedInput
   sales?: Prisma.SaleUpdateManyWithoutBranchNestedInput
+  stockSales?: Prisma.StockSaleUpdateManyWithoutBranchNestedInput
   UserBranch?: Prisma.UserBranchUpdateManyWithoutBranchNestedInput
   User?: Prisma.UserUpdateManyWithoutBranchNestedInput
+  stockItems?: Prisma.StockItemUpdateManyWithoutBranchNestedInput
+  treatmentPlans?: Prisma.TreatmentPlanUpdateManyWithoutBranchNestedInput
+  patientFinancialEntries?: Prisma.PatientFinancialEntryUpdateManyWithoutBranchNestedInput
+  xrayAnalyses?: Prisma.XRayAnalysisUpdateManyWithoutBranchNestedInput
 }
 
 export type BranchUncheckedUpdateInput = {
@@ -358,6 +425,9 @@ export type BranchUncheckedUpdateInput = {
   headquarterId?: Prisma.StringFieldUpdateOperationsInput | string
   description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  workingDays?: Prisma.BranchUpdateworkingDaysInput | string[]
+  workingHours?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  timezone?: Prisma.StringFieldUpdateOperationsInput | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   deletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -365,8 +435,13 @@ export type BranchUncheckedUpdateInput = {
   treatmentPrices?: Prisma.TreatmentPriceUncheckedUpdateManyWithoutBranchNestedInput
   products?: Prisma.ProductUncheckedUpdateManyWithoutBranchNestedInput
   sales?: Prisma.SaleUncheckedUpdateManyWithoutBranchNestedInput
+  stockSales?: Prisma.StockSaleUncheckedUpdateManyWithoutBranchNestedInput
   UserBranch?: Prisma.UserBranchUncheckedUpdateManyWithoutBranchNestedInput
   User?: Prisma.UserUncheckedUpdateManyWithoutBranchNestedInput
+  stockItems?: Prisma.StockItemUncheckedUpdateManyWithoutBranchNestedInput
+  treatmentPlans?: Prisma.TreatmentPlanUncheckedUpdateManyWithoutBranchNestedInput
+  patientFinancialEntries?: Prisma.PatientFinancialEntryUncheckedUpdateManyWithoutBranchNestedInput
+  xrayAnalyses?: Prisma.XRayAnalysisUncheckedUpdateManyWithoutBranchNestedInput
 }
 
 export type BranchCreateManyInput = {
@@ -376,6 +451,9 @@ export type BranchCreateManyInput = {
   headquarterId: string
   description?: string | null
   isActive?: boolean
+  workingDays?: Prisma.BranchCreateworkingDaysInput | string[]
+  workingHours?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  timezone?: string
   createdAt?: Date | string
   updatedAt?: Date | string
   deletedAt?: Date | string | null
@@ -386,6 +464,9 @@ export type BranchUpdateManyMutationInput = {
   name?: Prisma.StringFieldUpdateOperationsInput | string
   description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  workingDays?: Prisma.BranchUpdateworkingDaysInput | string[]
+  workingHours?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  timezone?: Prisma.StringFieldUpdateOperationsInput | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   deletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -398,6 +479,9 @@ export type BranchUncheckedUpdateManyInput = {
   headquarterId?: Prisma.StringFieldUpdateOperationsInput | string
   description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  workingDays?: Prisma.BranchUpdateworkingDaysInput | string[]
+  workingHours?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  timezone?: Prisma.StringFieldUpdateOperationsInput | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   deletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -413,6 +497,14 @@ export type BranchOrderByRelationAggregateInput = {
   _count?: Prisma.SortOrder
 }
 
+export type StringNullableListFilter<$PrismaModel = never> = {
+  equals?: string[] | Prisma.ListStringFieldRefInput<$PrismaModel> | null
+  has?: string | Prisma.StringFieldRefInput<$PrismaModel> | null
+  hasEvery?: string[] | Prisma.ListStringFieldRefInput<$PrismaModel>
+  hasSome?: string[] | Prisma.ListStringFieldRefInput<$PrismaModel>
+  isEmpty?: boolean
+}
+
 export type BranchCountOrderByAggregateInput = {
   id?: Prisma.SortOrder
   name?: Prisma.SortOrder
@@ -420,6 +512,9 @@ export type BranchCountOrderByAggregateInput = {
   headquarterId?: Prisma.SortOrder
   description?: Prisma.SortOrder
   isActive?: Prisma.SortOrder
+  workingDays?: Prisma.SortOrder
+  workingHours?: Prisma.SortOrder
+  timezone?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
   deletedAt?: Prisma.SortOrder
@@ -432,6 +527,7 @@ export type BranchMaxOrderByAggregateInput = {
   headquarterId?: Prisma.SortOrder
   description?: Prisma.SortOrder
   isActive?: Prisma.SortOrder
+  timezone?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
   deletedAt?: Prisma.SortOrder
@@ -444,6 +540,7 @@ export type BranchMinOrderByAggregateInput = {
   headquarterId?: Prisma.SortOrder
   description?: Prisma.SortOrder
   isActive?: Prisma.SortOrder
+  timezone?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
   deletedAt?: Prisma.SortOrder
@@ -538,6 +635,15 @@ export type BranchUncheckedUpdateManyWithoutAddressNestedInput = {
   deleteMany?: Prisma.BranchScalarWhereInput | Prisma.BranchScalarWhereInput[]
 }
 
+export type BranchCreateworkingDaysInput = {
+  set: string[]
+}
+
+export type BranchUpdateworkingDaysInput = {
+  set?: string[]
+  push?: string | string[]
+}
+
 export type BranchCreateNestedOneWithoutUserInput = {
   create?: Prisma.XOR<Prisma.BranchCreateWithoutUserInput, Prisma.BranchUncheckedCreateWithoutUserInput>
   connectOrCreate?: Prisma.BranchCreateOrConnectWithoutUserInput
@@ -578,6 +684,48 @@ export type BranchUpdateOneRequiredWithoutUserBranchNestedInput = {
   upsert?: Prisma.BranchUpsertWithoutUserBranchInput
   connect?: Prisma.BranchWhereUniqueInput
   update?: Prisma.XOR<Prisma.XOR<Prisma.BranchUpdateToOneWithWhereWithoutUserBranchInput, Prisma.BranchUpdateWithoutUserBranchInput>, Prisma.BranchUncheckedUpdateWithoutUserBranchInput>
+}
+
+export type BranchCreateNestedOneWithoutStockItemsInput = {
+  create?: Prisma.XOR<Prisma.BranchCreateWithoutStockItemsInput, Prisma.BranchUncheckedCreateWithoutStockItemsInput>
+  connectOrCreate?: Prisma.BranchCreateOrConnectWithoutStockItemsInput
+  connect?: Prisma.BranchWhereUniqueInput
+}
+
+export type BranchUpdateOneRequiredWithoutStockItemsNestedInput = {
+  create?: Prisma.XOR<Prisma.BranchCreateWithoutStockItemsInput, Prisma.BranchUncheckedCreateWithoutStockItemsInput>
+  connectOrCreate?: Prisma.BranchCreateOrConnectWithoutStockItemsInput
+  upsert?: Prisma.BranchUpsertWithoutStockItemsInput
+  connect?: Prisma.BranchWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.BranchUpdateToOneWithWhereWithoutStockItemsInput, Prisma.BranchUpdateWithoutStockItemsInput>, Prisma.BranchUncheckedUpdateWithoutStockItemsInput>
+}
+
+export type BranchCreateNestedOneWithoutStockSalesInput = {
+  create?: Prisma.XOR<Prisma.BranchCreateWithoutStockSalesInput, Prisma.BranchUncheckedCreateWithoutStockSalesInput>
+  connectOrCreate?: Prisma.BranchCreateOrConnectWithoutStockSalesInput
+  connect?: Prisma.BranchWhereUniqueInput
+}
+
+export type BranchUpdateOneRequiredWithoutStockSalesNestedInput = {
+  create?: Prisma.XOR<Prisma.BranchCreateWithoutStockSalesInput, Prisma.BranchUncheckedCreateWithoutStockSalesInput>
+  connectOrCreate?: Prisma.BranchCreateOrConnectWithoutStockSalesInput
+  upsert?: Prisma.BranchUpsertWithoutStockSalesInput
+  connect?: Prisma.BranchWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.BranchUpdateToOneWithWhereWithoutStockSalesInput, Prisma.BranchUpdateWithoutStockSalesInput>, Prisma.BranchUncheckedUpdateWithoutStockSalesInput>
+}
+
+export type BranchCreateNestedOneWithoutTreatmentPlansInput = {
+  create?: Prisma.XOR<Prisma.BranchCreateWithoutTreatmentPlansInput, Prisma.BranchUncheckedCreateWithoutTreatmentPlansInput>
+  connectOrCreate?: Prisma.BranchCreateOrConnectWithoutTreatmentPlansInput
+  connect?: Prisma.BranchWhereUniqueInput
+}
+
+export type BranchUpdateOneRequiredWithoutTreatmentPlansNestedInput = {
+  create?: Prisma.XOR<Prisma.BranchCreateWithoutTreatmentPlansInput, Prisma.BranchUncheckedCreateWithoutTreatmentPlansInput>
+  connectOrCreate?: Prisma.BranchCreateOrConnectWithoutTreatmentPlansInput
+  upsert?: Prisma.BranchUpsertWithoutTreatmentPlansInput
+  connect?: Prisma.BranchWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.BranchUpdateToOneWithWhereWithoutTreatmentPlansInput, Prisma.BranchUpdateWithoutTreatmentPlansInput>, Prisma.BranchUncheckedUpdateWithoutTreatmentPlansInput>
 }
 
 export type BranchCreateNestedOneWithoutTreatmentPricesInput = {
@@ -622,11 +770,42 @@ export type BranchUpdateOneRequiredWithoutSalesNestedInput = {
   update?: Prisma.XOR<Prisma.XOR<Prisma.BranchUpdateToOneWithWhereWithoutSalesInput, Prisma.BranchUpdateWithoutSalesInput>, Prisma.BranchUncheckedUpdateWithoutSalesInput>
 }
 
+export type BranchCreateNestedOneWithoutPatientFinancialEntriesInput = {
+  create?: Prisma.XOR<Prisma.BranchCreateWithoutPatientFinancialEntriesInput, Prisma.BranchUncheckedCreateWithoutPatientFinancialEntriesInput>
+  connectOrCreate?: Prisma.BranchCreateOrConnectWithoutPatientFinancialEntriesInput
+  connect?: Prisma.BranchWhereUniqueInput
+}
+
+export type BranchUpdateOneRequiredWithoutPatientFinancialEntriesNestedInput = {
+  create?: Prisma.XOR<Prisma.BranchCreateWithoutPatientFinancialEntriesInput, Prisma.BranchUncheckedCreateWithoutPatientFinancialEntriesInput>
+  connectOrCreate?: Prisma.BranchCreateOrConnectWithoutPatientFinancialEntriesInput
+  upsert?: Prisma.BranchUpsertWithoutPatientFinancialEntriesInput
+  connect?: Prisma.BranchWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.BranchUpdateToOneWithWhereWithoutPatientFinancialEntriesInput, Prisma.BranchUpdateWithoutPatientFinancialEntriesInput>, Prisma.BranchUncheckedUpdateWithoutPatientFinancialEntriesInput>
+}
+
+export type BranchCreateNestedOneWithoutXrayAnalysesInput = {
+  create?: Prisma.XOR<Prisma.BranchCreateWithoutXrayAnalysesInput, Prisma.BranchUncheckedCreateWithoutXrayAnalysesInput>
+  connectOrCreate?: Prisma.BranchCreateOrConnectWithoutXrayAnalysesInput
+  connect?: Prisma.BranchWhereUniqueInput
+}
+
+export type BranchUpdateOneRequiredWithoutXrayAnalysesNestedInput = {
+  create?: Prisma.XOR<Prisma.BranchCreateWithoutXrayAnalysesInput, Prisma.BranchUncheckedCreateWithoutXrayAnalysesInput>
+  connectOrCreate?: Prisma.BranchCreateOrConnectWithoutXrayAnalysesInput
+  upsert?: Prisma.BranchUpsertWithoutXrayAnalysesInput
+  connect?: Prisma.BranchWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.BranchUpdateToOneWithWhereWithoutXrayAnalysesInput, Prisma.BranchUpdateWithoutXrayAnalysesInput>, Prisma.BranchUncheckedUpdateWithoutXrayAnalysesInput>
+}
+
 export type BranchCreateWithoutHeadquarterInput = {
   id?: string
   name: string
   description?: string | null
   isActive?: boolean
+  workingDays?: Prisma.BranchCreateworkingDaysInput | string[]
+  workingHours?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  timezone?: string
   createdAt?: Date | string
   updatedAt?: Date | string
   deletedAt?: Date | string | null
@@ -635,8 +814,13 @@ export type BranchCreateWithoutHeadquarterInput = {
   address: Prisma.AddressCreateNestedOneWithoutBranchInput
   products?: Prisma.ProductCreateNestedManyWithoutBranchInput
   sales?: Prisma.SaleCreateNestedManyWithoutBranchInput
+  stockSales?: Prisma.StockSaleCreateNestedManyWithoutBranchInput
   UserBranch?: Prisma.UserBranchCreateNestedManyWithoutBranchInput
   User?: Prisma.UserCreateNestedManyWithoutBranchInput
+  stockItems?: Prisma.StockItemCreateNestedManyWithoutBranchInput
+  treatmentPlans?: Prisma.TreatmentPlanCreateNestedManyWithoutBranchInput
+  patientFinancialEntries?: Prisma.PatientFinancialEntryCreateNestedManyWithoutBranchInput
+  xrayAnalyses?: Prisma.XRayAnalysisCreateNestedManyWithoutBranchInput
 }
 
 export type BranchUncheckedCreateWithoutHeadquarterInput = {
@@ -645,6 +829,9 @@ export type BranchUncheckedCreateWithoutHeadquarterInput = {
   addressId: string
   description?: string | null
   isActive?: boolean
+  workingDays?: Prisma.BranchCreateworkingDaysInput | string[]
+  workingHours?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  timezone?: string
   createdAt?: Date | string
   updatedAt?: Date | string
   deletedAt?: Date | string | null
@@ -652,8 +839,13 @@ export type BranchUncheckedCreateWithoutHeadquarterInput = {
   treatmentPrices?: Prisma.TreatmentPriceUncheckedCreateNestedManyWithoutBranchInput
   products?: Prisma.ProductUncheckedCreateNestedManyWithoutBranchInput
   sales?: Prisma.SaleUncheckedCreateNestedManyWithoutBranchInput
+  stockSales?: Prisma.StockSaleUncheckedCreateNestedManyWithoutBranchInput
   UserBranch?: Prisma.UserBranchUncheckedCreateNestedManyWithoutBranchInput
   User?: Prisma.UserUncheckedCreateNestedManyWithoutBranchInput
+  stockItems?: Prisma.StockItemUncheckedCreateNestedManyWithoutBranchInput
+  treatmentPlans?: Prisma.TreatmentPlanUncheckedCreateNestedManyWithoutBranchInput
+  patientFinancialEntries?: Prisma.PatientFinancialEntryUncheckedCreateNestedManyWithoutBranchInput
+  xrayAnalyses?: Prisma.XRayAnalysisUncheckedCreateNestedManyWithoutBranchInput
 }
 
 export type BranchCreateOrConnectWithoutHeadquarterInput = {
@@ -692,6 +884,9 @@ export type BranchScalarWhereInput = {
   headquarterId?: Prisma.StringFilter<"Branch"> | string
   description?: Prisma.StringNullableFilter<"Branch"> | string | null
   isActive?: Prisma.BoolFilter<"Branch"> | boolean
+  workingDays?: Prisma.StringNullableListFilter<"Branch">
+  workingHours?: Prisma.JsonNullableFilter<"Branch">
+  timezone?: Prisma.StringFilter<"Branch"> | string
   createdAt?: Prisma.DateTimeFilter<"Branch"> | Date | string
   updatedAt?: Prisma.DateTimeFilter<"Branch"> | Date | string
   deletedAt?: Prisma.DateTimeNullableFilter<"Branch"> | Date | string | null
@@ -702,6 +897,9 @@ export type BranchCreateWithoutAddressInput = {
   name: string
   description?: string | null
   isActive?: boolean
+  workingDays?: Prisma.BranchCreateworkingDaysInput | string[]
+  workingHours?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  timezone?: string
   createdAt?: Date | string
   updatedAt?: Date | string
   deletedAt?: Date | string | null
@@ -710,8 +908,13 @@ export type BranchCreateWithoutAddressInput = {
   headquarter: Prisma.HeadquarterCreateNestedOneWithoutBranchInput
   products?: Prisma.ProductCreateNestedManyWithoutBranchInput
   sales?: Prisma.SaleCreateNestedManyWithoutBranchInput
+  stockSales?: Prisma.StockSaleCreateNestedManyWithoutBranchInput
   UserBranch?: Prisma.UserBranchCreateNestedManyWithoutBranchInput
   User?: Prisma.UserCreateNestedManyWithoutBranchInput
+  stockItems?: Prisma.StockItemCreateNestedManyWithoutBranchInput
+  treatmentPlans?: Prisma.TreatmentPlanCreateNestedManyWithoutBranchInput
+  patientFinancialEntries?: Prisma.PatientFinancialEntryCreateNestedManyWithoutBranchInput
+  xrayAnalyses?: Prisma.XRayAnalysisCreateNestedManyWithoutBranchInput
 }
 
 export type BranchUncheckedCreateWithoutAddressInput = {
@@ -720,6 +923,9 @@ export type BranchUncheckedCreateWithoutAddressInput = {
   headquarterId: string
   description?: string | null
   isActive?: boolean
+  workingDays?: Prisma.BranchCreateworkingDaysInput | string[]
+  workingHours?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  timezone?: string
   createdAt?: Date | string
   updatedAt?: Date | string
   deletedAt?: Date | string | null
@@ -727,8 +933,13 @@ export type BranchUncheckedCreateWithoutAddressInput = {
   treatmentPrices?: Prisma.TreatmentPriceUncheckedCreateNestedManyWithoutBranchInput
   products?: Prisma.ProductUncheckedCreateNestedManyWithoutBranchInput
   sales?: Prisma.SaleUncheckedCreateNestedManyWithoutBranchInput
+  stockSales?: Prisma.StockSaleUncheckedCreateNestedManyWithoutBranchInput
   UserBranch?: Prisma.UserBranchUncheckedCreateNestedManyWithoutBranchInput
   User?: Prisma.UserUncheckedCreateNestedManyWithoutBranchInput
+  stockItems?: Prisma.StockItemUncheckedCreateNestedManyWithoutBranchInput
+  treatmentPlans?: Prisma.TreatmentPlanUncheckedCreateNestedManyWithoutBranchInput
+  patientFinancialEntries?: Prisma.PatientFinancialEntryUncheckedCreateNestedManyWithoutBranchInput
+  xrayAnalyses?: Prisma.XRayAnalysisUncheckedCreateNestedManyWithoutBranchInput
 }
 
 export type BranchCreateOrConnectWithoutAddressInput = {
@@ -762,6 +973,9 @@ export type BranchCreateWithoutUserInput = {
   name: string
   description?: string | null
   isActive?: boolean
+  workingDays?: Prisma.BranchCreateworkingDaysInput | string[]
+  workingHours?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  timezone?: string
   createdAt?: Date | string
   updatedAt?: Date | string
   deletedAt?: Date | string | null
@@ -771,7 +985,12 @@ export type BranchCreateWithoutUserInput = {
   headquarter: Prisma.HeadquarterCreateNestedOneWithoutBranchInput
   products?: Prisma.ProductCreateNestedManyWithoutBranchInput
   sales?: Prisma.SaleCreateNestedManyWithoutBranchInput
+  stockSales?: Prisma.StockSaleCreateNestedManyWithoutBranchInput
   UserBranch?: Prisma.UserBranchCreateNestedManyWithoutBranchInput
+  stockItems?: Prisma.StockItemCreateNestedManyWithoutBranchInput
+  treatmentPlans?: Prisma.TreatmentPlanCreateNestedManyWithoutBranchInput
+  patientFinancialEntries?: Prisma.PatientFinancialEntryCreateNestedManyWithoutBranchInput
+  xrayAnalyses?: Prisma.XRayAnalysisCreateNestedManyWithoutBranchInput
 }
 
 export type BranchUncheckedCreateWithoutUserInput = {
@@ -781,6 +1000,9 @@ export type BranchUncheckedCreateWithoutUserInput = {
   headquarterId: string
   description?: string | null
   isActive?: boolean
+  workingDays?: Prisma.BranchCreateworkingDaysInput | string[]
+  workingHours?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  timezone?: string
   createdAt?: Date | string
   updatedAt?: Date | string
   deletedAt?: Date | string | null
@@ -788,7 +1010,12 @@ export type BranchUncheckedCreateWithoutUserInput = {
   treatmentPrices?: Prisma.TreatmentPriceUncheckedCreateNestedManyWithoutBranchInput
   products?: Prisma.ProductUncheckedCreateNestedManyWithoutBranchInput
   sales?: Prisma.SaleUncheckedCreateNestedManyWithoutBranchInput
+  stockSales?: Prisma.StockSaleUncheckedCreateNestedManyWithoutBranchInput
   UserBranch?: Prisma.UserBranchUncheckedCreateNestedManyWithoutBranchInput
+  stockItems?: Prisma.StockItemUncheckedCreateNestedManyWithoutBranchInput
+  treatmentPlans?: Prisma.TreatmentPlanUncheckedCreateNestedManyWithoutBranchInput
+  patientFinancialEntries?: Prisma.PatientFinancialEntryUncheckedCreateNestedManyWithoutBranchInput
+  xrayAnalyses?: Prisma.XRayAnalysisUncheckedCreateNestedManyWithoutBranchInput
 }
 
 export type BranchCreateOrConnectWithoutUserInput = {
@@ -812,6 +1039,9 @@ export type BranchUpdateWithoutUserInput = {
   name?: Prisma.StringFieldUpdateOperationsInput | string
   description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  workingDays?: Prisma.BranchUpdateworkingDaysInput | string[]
+  workingHours?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  timezone?: Prisma.StringFieldUpdateOperationsInput | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   deletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -821,7 +1051,12 @@ export type BranchUpdateWithoutUserInput = {
   headquarter?: Prisma.HeadquarterUpdateOneRequiredWithoutBranchNestedInput
   products?: Prisma.ProductUpdateManyWithoutBranchNestedInput
   sales?: Prisma.SaleUpdateManyWithoutBranchNestedInput
+  stockSales?: Prisma.StockSaleUpdateManyWithoutBranchNestedInput
   UserBranch?: Prisma.UserBranchUpdateManyWithoutBranchNestedInput
+  stockItems?: Prisma.StockItemUpdateManyWithoutBranchNestedInput
+  treatmentPlans?: Prisma.TreatmentPlanUpdateManyWithoutBranchNestedInput
+  patientFinancialEntries?: Prisma.PatientFinancialEntryUpdateManyWithoutBranchNestedInput
+  xrayAnalyses?: Prisma.XRayAnalysisUpdateManyWithoutBranchNestedInput
 }
 
 export type BranchUncheckedUpdateWithoutUserInput = {
@@ -831,6 +1066,9 @@ export type BranchUncheckedUpdateWithoutUserInput = {
   headquarterId?: Prisma.StringFieldUpdateOperationsInput | string
   description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  workingDays?: Prisma.BranchUpdateworkingDaysInput | string[]
+  workingHours?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  timezone?: Prisma.StringFieldUpdateOperationsInput | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   deletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -838,7 +1076,12 @@ export type BranchUncheckedUpdateWithoutUserInput = {
   treatmentPrices?: Prisma.TreatmentPriceUncheckedUpdateManyWithoutBranchNestedInput
   products?: Prisma.ProductUncheckedUpdateManyWithoutBranchNestedInput
   sales?: Prisma.SaleUncheckedUpdateManyWithoutBranchNestedInput
+  stockSales?: Prisma.StockSaleUncheckedUpdateManyWithoutBranchNestedInput
   UserBranch?: Prisma.UserBranchUncheckedUpdateManyWithoutBranchNestedInput
+  stockItems?: Prisma.StockItemUncheckedUpdateManyWithoutBranchNestedInput
+  treatmentPlans?: Prisma.TreatmentPlanUncheckedUpdateManyWithoutBranchNestedInput
+  patientFinancialEntries?: Prisma.PatientFinancialEntryUncheckedUpdateManyWithoutBranchNestedInput
+  xrayAnalyses?: Prisma.XRayAnalysisUncheckedUpdateManyWithoutBranchNestedInput
 }
 
 export type BranchCreateWithoutPersonInput = {
@@ -846,6 +1089,9 @@ export type BranchCreateWithoutPersonInput = {
   name: string
   description?: string | null
   isActive?: boolean
+  workingDays?: Prisma.BranchCreateworkingDaysInput | string[]
+  workingHours?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  timezone?: string
   createdAt?: Date | string
   updatedAt?: Date | string
   deletedAt?: Date | string | null
@@ -854,8 +1100,13 @@ export type BranchCreateWithoutPersonInput = {
   headquarter: Prisma.HeadquarterCreateNestedOneWithoutBranchInput
   products?: Prisma.ProductCreateNestedManyWithoutBranchInput
   sales?: Prisma.SaleCreateNestedManyWithoutBranchInput
+  stockSales?: Prisma.StockSaleCreateNestedManyWithoutBranchInput
   UserBranch?: Prisma.UserBranchCreateNestedManyWithoutBranchInput
   User?: Prisma.UserCreateNestedManyWithoutBranchInput
+  stockItems?: Prisma.StockItemCreateNestedManyWithoutBranchInput
+  treatmentPlans?: Prisma.TreatmentPlanCreateNestedManyWithoutBranchInput
+  patientFinancialEntries?: Prisma.PatientFinancialEntryCreateNestedManyWithoutBranchInput
+  xrayAnalyses?: Prisma.XRayAnalysisCreateNestedManyWithoutBranchInput
 }
 
 export type BranchUncheckedCreateWithoutPersonInput = {
@@ -865,14 +1116,22 @@ export type BranchUncheckedCreateWithoutPersonInput = {
   headquarterId: string
   description?: string | null
   isActive?: boolean
+  workingDays?: Prisma.BranchCreateworkingDaysInput | string[]
+  workingHours?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  timezone?: string
   createdAt?: Date | string
   updatedAt?: Date | string
   deletedAt?: Date | string | null
   treatmentPrices?: Prisma.TreatmentPriceUncheckedCreateNestedManyWithoutBranchInput
   products?: Prisma.ProductUncheckedCreateNestedManyWithoutBranchInput
   sales?: Prisma.SaleUncheckedCreateNestedManyWithoutBranchInput
+  stockSales?: Prisma.StockSaleUncheckedCreateNestedManyWithoutBranchInput
   UserBranch?: Prisma.UserBranchUncheckedCreateNestedManyWithoutBranchInput
   User?: Prisma.UserUncheckedCreateNestedManyWithoutBranchInput
+  stockItems?: Prisma.StockItemUncheckedCreateNestedManyWithoutBranchInput
+  treatmentPlans?: Prisma.TreatmentPlanUncheckedCreateNestedManyWithoutBranchInput
+  patientFinancialEntries?: Prisma.PatientFinancialEntryUncheckedCreateNestedManyWithoutBranchInput
+  xrayAnalyses?: Prisma.XRayAnalysisUncheckedCreateNestedManyWithoutBranchInput
 }
 
 export type BranchCreateOrConnectWithoutPersonInput = {
@@ -896,6 +1155,9 @@ export type BranchUpdateWithoutPersonInput = {
   name?: Prisma.StringFieldUpdateOperationsInput | string
   description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  workingDays?: Prisma.BranchUpdateworkingDaysInput | string[]
+  workingHours?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  timezone?: Prisma.StringFieldUpdateOperationsInput | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   deletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -904,8 +1166,13 @@ export type BranchUpdateWithoutPersonInput = {
   headquarter?: Prisma.HeadquarterUpdateOneRequiredWithoutBranchNestedInput
   products?: Prisma.ProductUpdateManyWithoutBranchNestedInput
   sales?: Prisma.SaleUpdateManyWithoutBranchNestedInput
+  stockSales?: Prisma.StockSaleUpdateManyWithoutBranchNestedInput
   UserBranch?: Prisma.UserBranchUpdateManyWithoutBranchNestedInput
   User?: Prisma.UserUpdateManyWithoutBranchNestedInput
+  stockItems?: Prisma.StockItemUpdateManyWithoutBranchNestedInput
+  treatmentPlans?: Prisma.TreatmentPlanUpdateManyWithoutBranchNestedInput
+  patientFinancialEntries?: Prisma.PatientFinancialEntryUpdateManyWithoutBranchNestedInput
+  xrayAnalyses?: Prisma.XRayAnalysisUpdateManyWithoutBranchNestedInput
 }
 
 export type BranchUncheckedUpdateWithoutPersonInput = {
@@ -915,14 +1182,22 @@ export type BranchUncheckedUpdateWithoutPersonInput = {
   headquarterId?: Prisma.StringFieldUpdateOperationsInput | string
   description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  workingDays?: Prisma.BranchUpdateworkingDaysInput | string[]
+  workingHours?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  timezone?: Prisma.StringFieldUpdateOperationsInput | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   deletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   treatmentPrices?: Prisma.TreatmentPriceUncheckedUpdateManyWithoutBranchNestedInput
   products?: Prisma.ProductUncheckedUpdateManyWithoutBranchNestedInput
   sales?: Prisma.SaleUncheckedUpdateManyWithoutBranchNestedInput
+  stockSales?: Prisma.StockSaleUncheckedUpdateManyWithoutBranchNestedInput
   UserBranch?: Prisma.UserBranchUncheckedUpdateManyWithoutBranchNestedInput
   User?: Prisma.UserUncheckedUpdateManyWithoutBranchNestedInput
+  stockItems?: Prisma.StockItemUncheckedUpdateManyWithoutBranchNestedInput
+  treatmentPlans?: Prisma.TreatmentPlanUncheckedUpdateManyWithoutBranchNestedInput
+  patientFinancialEntries?: Prisma.PatientFinancialEntryUncheckedUpdateManyWithoutBranchNestedInput
+  xrayAnalyses?: Prisma.XRayAnalysisUncheckedUpdateManyWithoutBranchNestedInput
 }
 
 export type BranchCreateWithoutUserBranchInput = {
@@ -930,6 +1205,9 @@ export type BranchCreateWithoutUserBranchInput = {
   name: string
   description?: string | null
   isActive?: boolean
+  workingDays?: Prisma.BranchCreateworkingDaysInput | string[]
+  workingHours?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  timezone?: string
   createdAt?: Date | string
   updatedAt?: Date | string
   deletedAt?: Date | string | null
@@ -939,7 +1217,12 @@ export type BranchCreateWithoutUserBranchInput = {
   headquarter: Prisma.HeadquarterCreateNestedOneWithoutBranchInput
   products?: Prisma.ProductCreateNestedManyWithoutBranchInput
   sales?: Prisma.SaleCreateNestedManyWithoutBranchInput
+  stockSales?: Prisma.StockSaleCreateNestedManyWithoutBranchInput
   User?: Prisma.UserCreateNestedManyWithoutBranchInput
+  stockItems?: Prisma.StockItemCreateNestedManyWithoutBranchInput
+  treatmentPlans?: Prisma.TreatmentPlanCreateNestedManyWithoutBranchInput
+  patientFinancialEntries?: Prisma.PatientFinancialEntryCreateNestedManyWithoutBranchInput
+  xrayAnalyses?: Prisma.XRayAnalysisCreateNestedManyWithoutBranchInput
 }
 
 export type BranchUncheckedCreateWithoutUserBranchInput = {
@@ -949,6 +1232,9 @@ export type BranchUncheckedCreateWithoutUserBranchInput = {
   headquarterId: string
   description?: string | null
   isActive?: boolean
+  workingDays?: Prisma.BranchCreateworkingDaysInput | string[]
+  workingHours?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  timezone?: string
   createdAt?: Date | string
   updatedAt?: Date | string
   deletedAt?: Date | string | null
@@ -956,7 +1242,12 @@ export type BranchUncheckedCreateWithoutUserBranchInput = {
   treatmentPrices?: Prisma.TreatmentPriceUncheckedCreateNestedManyWithoutBranchInput
   products?: Prisma.ProductUncheckedCreateNestedManyWithoutBranchInput
   sales?: Prisma.SaleUncheckedCreateNestedManyWithoutBranchInput
+  stockSales?: Prisma.StockSaleUncheckedCreateNestedManyWithoutBranchInput
   User?: Prisma.UserUncheckedCreateNestedManyWithoutBranchInput
+  stockItems?: Prisma.StockItemUncheckedCreateNestedManyWithoutBranchInput
+  treatmentPlans?: Prisma.TreatmentPlanUncheckedCreateNestedManyWithoutBranchInput
+  patientFinancialEntries?: Prisma.PatientFinancialEntryUncheckedCreateNestedManyWithoutBranchInput
+  xrayAnalyses?: Prisma.XRayAnalysisUncheckedCreateNestedManyWithoutBranchInput
 }
 
 export type BranchCreateOrConnectWithoutUserBranchInput = {
@@ -980,6 +1271,9 @@ export type BranchUpdateWithoutUserBranchInput = {
   name?: Prisma.StringFieldUpdateOperationsInput | string
   description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  workingDays?: Prisma.BranchUpdateworkingDaysInput | string[]
+  workingHours?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  timezone?: Prisma.StringFieldUpdateOperationsInput | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   deletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -989,7 +1283,12 @@ export type BranchUpdateWithoutUserBranchInput = {
   headquarter?: Prisma.HeadquarterUpdateOneRequiredWithoutBranchNestedInput
   products?: Prisma.ProductUpdateManyWithoutBranchNestedInput
   sales?: Prisma.SaleUpdateManyWithoutBranchNestedInput
+  stockSales?: Prisma.StockSaleUpdateManyWithoutBranchNestedInput
   User?: Prisma.UserUpdateManyWithoutBranchNestedInput
+  stockItems?: Prisma.StockItemUpdateManyWithoutBranchNestedInput
+  treatmentPlans?: Prisma.TreatmentPlanUpdateManyWithoutBranchNestedInput
+  patientFinancialEntries?: Prisma.PatientFinancialEntryUpdateManyWithoutBranchNestedInput
+  xrayAnalyses?: Prisma.XRayAnalysisUpdateManyWithoutBranchNestedInput
 }
 
 export type BranchUncheckedUpdateWithoutUserBranchInput = {
@@ -999,6 +1298,9 @@ export type BranchUncheckedUpdateWithoutUserBranchInput = {
   headquarterId?: Prisma.StringFieldUpdateOperationsInput | string
   description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  workingDays?: Prisma.BranchUpdateworkingDaysInput | string[]
+  workingHours?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  timezone?: Prisma.StringFieldUpdateOperationsInput | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   deletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -1006,7 +1308,360 @@ export type BranchUncheckedUpdateWithoutUserBranchInput = {
   treatmentPrices?: Prisma.TreatmentPriceUncheckedUpdateManyWithoutBranchNestedInput
   products?: Prisma.ProductUncheckedUpdateManyWithoutBranchNestedInput
   sales?: Prisma.SaleUncheckedUpdateManyWithoutBranchNestedInput
+  stockSales?: Prisma.StockSaleUncheckedUpdateManyWithoutBranchNestedInput
   User?: Prisma.UserUncheckedUpdateManyWithoutBranchNestedInput
+  stockItems?: Prisma.StockItemUncheckedUpdateManyWithoutBranchNestedInput
+  treatmentPlans?: Prisma.TreatmentPlanUncheckedUpdateManyWithoutBranchNestedInput
+  patientFinancialEntries?: Prisma.PatientFinancialEntryUncheckedUpdateManyWithoutBranchNestedInput
+  xrayAnalyses?: Prisma.XRayAnalysisUncheckedUpdateManyWithoutBranchNestedInput
+}
+
+export type BranchCreateWithoutStockItemsInput = {
+  id?: string
+  name: string
+  description?: string | null
+  isActive?: boolean
+  workingDays?: Prisma.BranchCreateworkingDaysInput | string[]
+  workingHours?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  timezone?: string
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  deletedAt?: Date | string | null
+  Person?: Prisma.PersonCreateNestedManyWithoutBranchInput
+  treatmentPrices?: Prisma.TreatmentPriceCreateNestedManyWithoutBranchInput
+  address: Prisma.AddressCreateNestedOneWithoutBranchInput
+  headquarter: Prisma.HeadquarterCreateNestedOneWithoutBranchInput
+  products?: Prisma.ProductCreateNestedManyWithoutBranchInput
+  sales?: Prisma.SaleCreateNestedManyWithoutBranchInput
+  stockSales?: Prisma.StockSaleCreateNestedManyWithoutBranchInput
+  UserBranch?: Prisma.UserBranchCreateNestedManyWithoutBranchInput
+  User?: Prisma.UserCreateNestedManyWithoutBranchInput
+  treatmentPlans?: Prisma.TreatmentPlanCreateNestedManyWithoutBranchInput
+  patientFinancialEntries?: Prisma.PatientFinancialEntryCreateNestedManyWithoutBranchInput
+  xrayAnalyses?: Prisma.XRayAnalysisCreateNestedManyWithoutBranchInput
+}
+
+export type BranchUncheckedCreateWithoutStockItemsInput = {
+  id?: string
+  name: string
+  addressId: string
+  headquarterId: string
+  description?: string | null
+  isActive?: boolean
+  workingDays?: Prisma.BranchCreateworkingDaysInput | string[]
+  workingHours?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  timezone?: string
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  deletedAt?: Date | string | null
+  Person?: Prisma.PersonUncheckedCreateNestedManyWithoutBranchInput
+  treatmentPrices?: Prisma.TreatmentPriceUncheckedCreateNestedManyWithoutBranchInput
+  products?: Prisma.ProductUncheckedCreateNestedManyWithoutBranchInput
+  sales?: Prisma.SaleUncheckedCreateNestedManyWithoutBranchInput
+  stockSales?: Prisma.StockSaleUncheckedCreateNestedManyWithoutBranchInput
+  UserBranch?: Prisma.UserBranchUncheckedCreateNestedManyWithoutBranchInput
+  User?: Prisma.UserUncheckedCreateNestedManyWithoutBranchInput
+  treatmentPlans?: Prisma.TreatmentPlanUncheckedCreateNestedManyWithoutBranchInput
+  patientFinancialEntries?: Prisma.PatientFinancialEntryUncheckedCreateNestedManyWithoutBranchInput
+  xrayAnalyses?: Prisma.XRayAnalysisUncheckedCreateNestedManyWithoutBranchInput
+}
+
+export type BranchCreateOrConnectWithoutStockItemsInput = {
+  where: Prisma.BranchWhereUniqueInput
+  create: Prisma.XOR<Prisma.BranchCreateWithoutStockItemsInput, Prisma.BranchUncheckedCreateWithoutStockItemsInput>
+}
+
+export type BranchUpsertWithoutStockItemsInput = {
+  update: Prisma.XOR<Prisma.BranchUpdateWithoutStockItemsInput, Prisma.BranchUncheckedUpdateWithoutStockItemsInput>
+  create: Prisma.XOR<Prisma.BranchCreateWithoutStockItemsInput, Prisma.BranchUncheckedCreateWithoutStockItemsInput>
+  where?: Prisma.BranchWhereInput
+}
+
+export type BranchUpdateToOneWithWhereWithoutStockItemsInput = {
+  where?: Prisma.BranchWhereInput
+  data: Prisma.XOR<Prisma.BranchUpdateWithoutStockItemsInput, Prisma.BranchUncheckedUpdateWithoutStockItemsInput>
+}
+
+export type BranchUpdateWithoutStockItemsInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  workingDays?: Prisma.BranchUpdateworkingDaysInput | string[]
+  workingHours?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  timezone?: Prisma.StringFieldUpdateOperationsInput | string
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  deletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  Person?: Prisma.PersonUpdateManyWithoutBranchNestedInput
+  treatmentPrices?: Prisma.TreatmentPriceUpdateManyWithoutBranchNestedInput
+  address?: Prisma.AddressUpdateOneRequiredWithoutBranchNestedInput
+  headquarter?: Prisma.HeadquarterUpdateOneRequiredWithoutBranchNestedInput
+  products?: Prisma.ProductUpdateManyWithoutBranchNestedInput
+  sales?: Prisma.SaleUpdateManyWithoutBranchNestedInput
+  stockSales?: Prisma.StockSaleUpdateManyWithoutBranchNestedInput
+  UserBranch?: Prisma.UserBranchUpdateManyWithoutBranchNestedInput
+  User?: Prisma.UserUpdateManyWithoutBranchNestedInput
+  treatmentPlans?: Prisma.TreatmentPlanUpdateManyWithoutBranchNestedInput
+  patientFinancialEntries?: Prisma.PatientFinancialEntryUpdateManyWithoutBranchNestedInput
+  xrayAnalyses?: Prisma.XRayAnalysisUpdateManyWithoutBranchNestedInput
+}
+
+export type BranchUncheckedUpdateWithoutStockItemsInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  addressId?: Prisma.StringFieldUpdateOperationsInput | string
+  headquarterId?: Prisma.StringFieldUpdateOperationsInput | string
+  description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  workingDays?: Prisma.BranchUpdateworkingDaysInput | string[]
+  workingHours?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  timezone?: Prisma.StringFieldUpdateOperationsInput | string
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  deletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  Person?: Prisma.PersonUncheckedUpdateManyWithoutBranchNestedInput
+  treatmentPrices?: Prisma.TreatmentPriceUncheckedUpdateManyWithoutBranchNestedInput
+  products?: Prisma.ProductUncheckedUpdateManyWithoutBranchNestedInput
+  sales?: Prisma.SaleUncheckedUpdateManyWithoutBranchNestedInput
+  stockSales?: Prisma.StockSaleUncheckedUpdateManyWithoutBranchNestedInput
+  UserBranch?: Prisma.UserBranchUncheckedUpdateManyWithoutBranchNestedInput
+  User?: Prisma.UserUncheckedUpdateManyWithoutBranchNestedInput
+  treatmentPlans?: Prisma.TreatmentPlanUncheckedUpdateManyWithoutBranchNestedInput
+  patientFinancialEntries?: Prisma.PatientFinancialEntryUncheckedUpdateManyWithoutBranchNestedInput
+  xrayAnalyses?: Prisma.XRayAnalysisUncheckedUpdateManyWithoutBranchNestedInput
+}
+
+export type BranchCreateWithoutStockSalesInput = {
+  id?: string
+  name: string
+  description?: string | null
+  isActive?: boolean
+  workingDays?: Prisma.BranchCreateworkingDaysInput | string[]
+  workingHours?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  timezone?: string
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  deletedAt?: Date | string | null
+  Person?: Prisma.PersonCreateNestedManyWithoutBranchInput
+  treatmentPrices?: Prisma.TreatmentPriceCreateNestedManyWithoutBranchInput
+  address: Prisma.AddressCreateNestedOneWithoutBranchInput
+  headquarter: Prisma.HeadquarterCreateNestedOneWithoutBranchInput
+  products?: Prisma.ProductCreateNestedManyWithoutBranchInput
+  sales?: Prisma.SaleCreateNestedManyWithoutBranchInput
+  UserBranch?: Prisma.UserBranchCreateNestedManyWithoutBranchInput
+  User?: Prisma.UserCreateNestedManyWithoutBranchInput
+  stockItems?: Prisma.StockItemCreateNestedManyWithoutBranchInput
+  treatmentPlans?: Prisma.TreatmentPlanCreateNestedManyWithoutBranchInput
+  patientFinancialEntries?: Prisma.PatientFinancialEntryCreateNestedManyWithoutBranchInput
+  xrayAnalyses?: Prisma.XRayAnalysisCreateNestedManyWithoutBranchInput
+}
+
+export type BranchUncheckedCreateWithoutStockSalesInput = {
+  id?: string
+  name: string
+  addressId: string
+  headquarterId: string
+  description?: string | null
+  isActive?: boolean
+  workingDays?: Prisma.BranchCreateworkingDaysInput | string[]
+  workingHours?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  timezone?: string
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  deletedAt?: Date | string | null
+  Person?: Prisma.PersonUncheckedCreateNestedManyWithoutBranchInput
+  treatmentPrices?: Prisma.TreatmentPriceUncheckedCreateNestedManyWithoutBranchInput
+  products?: Prisma.ProductUncheckedCreateNestedManyWithoutBranchInput
+  sales?: Prisma.SaleUncheckedCreateNestedManyWithoutBranchInput
+  UserBranch?: Prisma.UserBranchUncheckedCreateNestedManyWithoutBranchInput
+  User?: Prisma.UserUncheckedCreateNestedManyWithoutBranchInput
+  stockItems?: Prisma.StockItemUncheckedCreateNestedManyWithoutBranchInput
+  treatmentPlans?: Prisma.TreatmentPlanUncheckedCreateNestedManyWithoutBranchInput
+  patientFinancialEntries?: Prisma.PatientFinancialEntryUncheckedCreateNestedManyWithoutBranchInput
+  xrayAnalyses?: Prisma.XRayAnalysisUncheckedCreateNestedManyWithoutBranchInput
+}
+
+export type BranchCreateOrConnectWithoutStockSalesInput = {
+  where: Prisma.BranchWhereUniqueInput
+  create: Prisma.XOR<Prisma.BranchCreateWithoutStockSalesInput, Prisma.BranchUncheckedCreateWithoutStockSalesInput>
+}
+
+export type BranchUpsertWithoutStockSalesInput = {
+  update: Prisma.XOR<Prisma.BranchUpdateWithoutStockSalesInput, Prisma.BranchUncheckedUpdateWithoutStockSalesInput>
+  create: Prisma.XOR<Prisma.BranchCreateWithoutStockSalesInput, Prisma.BranchUncheckedCreateWithoutStockSalesInput>
+  where?: Prisma.BranchWhereInput
+}
+
+export type BranchUpdateToOneWithWhereWithoutStockSalesInput = {
+  where?: Prisma.BranchWhereInput
+  data: Prisma.XOR<Prisma.BranchUpdateWithoutStockSalesInput, Prisma.BranchUncheckedUpdateWithoutStockSalesInput>
+}
+
+export type BranchUpdateWithoutStockSalesInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  workingDays?: Prisma.BranchUpdateworkingDaysInput | string[]
+  workingHours?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  timezone?: Prisma.StringFieldUpdateOperationsInput | string
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  deletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  Person?: Prisma.PersonUpdateManyWithoutBranchNestedInput
+  treatmentPrices?: Prisma.TreatmentPriceUpdateManyWithoutBranchNestedInput
+  address?: Prisma.AddressUpdateOneRequiredWithoutBranchNestedInput
+  headquarter?: Prisma.HeadquarterUpdateOneRequiredWithoutBranchNestedInput
+  products?: Prisma.ProductUpdateManyWithoutBranchNestedInput
+  sales?: Prisma.SaleUpdateManyWithoutBranchNestedInput
+  UserBranch?: Prisma.UserBranchUpdateManyWithoutBranchNestedInput
+  User?: Prisma.UserUpdateManyWithoutBranchNestedInput
+  stockItems?: Prisma.StockItemUpdateManyWithoutBranchNestedInput
+  treatmentPlans?: Prisma.TreatmentPlanUpdateManyWithoutBranchNestedInput
+  patientFinancialEntries?: Prisma.PatientFinancialEntryUpdateManyWithoutBranchNestedInput
+  xrayAnalyses?: Prisma.XRayAnalysisUpdateManyWithoutBranchNestedInput
+}
+
+export type BranchUncheckedUpdateWithoutStockSalesInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  addressId?: Prisma.StringFieldUpdateOperationsInput | string
+  headquarterId?: Prisma.StringFieldUpdateOperationsInput | string
+  description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  workingDays?: Prisma.BranchUpdateworkingDaysInput | string[]
+  workingHours?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  timezone?: Prisma.StringFieldUpdateOperationsInput | string
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  deletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  Person?: Prisma.PersonUncheckedUpdateManyWithoutBranchNestedInput
+  treatmentPrices?: Prisma.TreatmentPriceUncheckedUpdateManyWithoutBranchNestedInput
+  products?: Prisma.ProductUncheckedUpdateManyWithoutBranchNestedInput
+  sales?: Prisma.SaleUncheckedUpdateManyWithoutBranchNestedInput
+  UserBranch?: Prisma.UserBranchUncheckedUpdateManyWithoutBranchNestedInput
+  User?: Prisma.UserUncheckedUpdateManyWithoutBranchNestedInput
+  stockItems?: Prisma.StockItemUncheckedUpdateManyWithoutBranchNestedInput
+  treatmentPlans?: Prisma.TreatmentPlanUncheckedUpdateManyWithoutBranchNestedInput
+  patientFinancialEntries?: Prisma.PatientFinancialEntryUncheckedUpdateManyWithoutBranchNestedInput
+  xrayAnalyses?: Prisma.XRayAnalysisUncheckedUpdateManyWithoutBranchNestedInput
+}
+
+export type BranchCreateWithoutTreatmentPlansInput = {
+  id?: string
+  name: string
+  description?: string | null
+  isActive?: boolean
+  workingDays?: Prisma.BranchCreateworkingDaysInput | string[]
+  workingHours?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  timezone?: string
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  deletedAt?: Date | string | null
+  Person?: Prisma.PersonCreateNestedManyWithoutBranchInput
+  treatmentPrices?: Prisma.TreatmentPriceCreateNestedManyWithoutBranchInput
+  address: Prisma.AddressCreateNestedOneWithoutBranchInput
+  headquarter: Prisma.HeadquarterCreateNestedOneWithoutBranchInput
+  products?: Prisma.ProductCreateNestedManyWithoutBranchInput
+  sales?: Prisma.SaleCreateNestedManyWithoutBranchInput
+  stockSales?: Prisma.StockSaleCreateNestedManyWithoutBranchInput
+  UserBranch?: Prisma.UserBranchCreateNestedManyWithoutBranchInput
+  User?: Prisma.UserCreateNestedManyWithoutBranchInput
+  stockItems?: Prisma.StockItemCreateNestedManyWithoutBranchInput
+  patientFinancialEntries?: Prisma.PatientFinancialEntryCreateNestedManyWithoutBranchInput
+  xrayAnalyses?: Prisma.XRayAnalysisCreateNestedManyWithoutBranchInput
+}
+
+export type BranchUncheckedCreateWithoutTreatmentPlansInput = {
+  id?: string
+  name: string
+  addressId: string
+  headquarterId: string
+  description?: string | null
+  isActive?: boolean
+  workingDays?: Prisma.BranchCreateworkingDaysInput | string[]
+  workingHours?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  timezone?: string
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  deletedAt?: Date | string | null
+  Person?: Prisma.PersonUncheckedCreateNestedManyWithoutBranchInput
+  treatmentPrices?: Prisma.TreatmentPriceUncheckedCreateNestedManyWithoutBranchInput
+  products?: Prisma.ProductUncheckedCreateNestedManyWithoutBranchInput
+  sales?: Prisma.SaleUncheckedCreateNestedManyWithoutBranchInput
+  stockSales?: Prisma.StockSaleUncheckedCreateNestedManyWithoutBranchInput
+  UserBranch?: Prisma.UserBranchUncheckedCreateNestedManyWithoutBranchInput
+  User?: Prisma.UserUncheckedCreateNestedManyWithoutBranchInput
+  stockItems?: Prisma.StockItemUncheckedCreateNestedManyWithoutBranchInput
+  patientFinancialEntries?: Prisma.PatientFinancialEntryUncheckedCreateNestedManyWithoutBranchInput
+  xrayAnalyses?: Prisma.XRayAnalysisUncheckedCreateNestedManyWithoutBranchInput
+}
+
+export type BranchCreateOrConnectWithoutTreatmentPlansInput = {
+  where: Prisma.BranchWhereUniqueInput
+  create: Prisma.XOR<Prisma.BranchCreateWithoutTreatmentPlansInput, Prisma.BranchUncheckedCreateWithoutTreatmentPlansInput>
+}
+
+export type BranchUpsertWithoutTreatmentPlansInput = {
+  update: Prisma.XOR<Prisma.BranchUpdateWithoutTreatmentPlansInput, Prisma.BranchUncheckedUpdateWithoutTreatmentPlansInput>
+  create: Prisma.XOR<Prisma.BranchCreateWithoutTreatmentPlansInput, Prisma.BranchUncheckedCreateWithoutTreatmentPlansInput>
+  where?: Prisma.BranchWhereInput
+}
+
+export type BranchUpdateToOneWithWhereWithoutTreatmentPlansInput = {
+  where?: Prisma.BranchWhereInput
+  data: Prisma.XOR<Prisma.BranchUpdateWithoutTreatmentPlansInput, Prisma.BranchUncheckedUpdateWithoutTreatmentPlansInput>
+}
+
+export type BranchUpdateWithoutTreatmentPlansInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  workingDays?: Prisma.BranchUpdateworkingDaysInput | string[]
+  workingHours?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  timezone?: Prisma.StringFieldUpdateOperationsInput | string
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  deletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  Person?: Prisma.PersonUpdateManyWithoutBranchNestedInput
+  treatmentPrices?: Prisma.TreatmentPriceUpdateManyWithoutBranchNestedInput
+  address?: Prisma.AddressUpdateOneRequiredWithoutBranchNestedInput
+  headquarter?: Prisma.HeadquarterUpdateOneRequiredWithoutBranchNestedInput
+  products?: Prisma.ProductUpdateManyWithoutBranchNestedInput
+  sales?: Prisma.SaleUpdateManyWithoutBranchNestedInput
+  stockSales?: Prisma.StockSaleUpdateManyWithoutBranchNestedInput
+  UserBranch?: Prisma.UserBranchUpdateManyWithoutBranchNestedInput
+  User?: Prisma.UserUpdateManyWithoutBranchNestedInput
+  stockItems?: Prisma.StockItemUpdateManyWithoutBranchNestedInput
+  patientFinancialEntries?: Prisma.PatientFinancialEntryUpdateManyWithoutBranchNestedInput
+  xrayAnalyses?: Prisma.XRayAnalysisUpdateManyWithoutBranchNestedInput
+}
+
+export type BranchUncheckedUpdateWithoutTreatmentPlansInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  addressId?: Prisma.StringFieldUpdateOperationsInput | string
+  headquarterId?: Prisma.StringFieldUpdateOperationsInput | string
+  description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  workingDays?: Prisma.BranchUpdateworkingDaysInput | string[]
+  workingHours?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  timezone?: Prisma.StringFieldUpdateOperationsInput | string
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  deletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  Person?: Prisma.PersonUncheckedUpdateManyWithoutBranchNestedInput
+  treatmentPrices?: Prisma.TreatmentPriceUncheckedUpdateManyWithoutBranchNestedInput
+  products?: Prisma.ProductUncheckedUpdateManyWithoutBranchNestedInput
+  sales?: Prisma.SaleUncheckedUpdateManyWithoutBranchNestedInput
+  stockSales?: Prisma.StockSaleUncheckedUpdateManyWithoutBranchNestedInput
+  UserBranch?: Prisma.UserBranchUncheckedUpdateManyWithoutBranchNestedInput
+  User?: Prisma.UserUncheckedUpdateManyWithoutBranchNestedInput
+  stockItems?: Prisma.StockItemUncheckedUpdateManyWithoutBranchNestedInput
+  patientFinancialEntries?: Prisma.PatientFinancialEntryUncheckedUpdateManyWithoutBranchNestedInput
+  xrayAnalyses?: Prisma.XRayAnalysisUncheckedUpdateManyWithoutBranchNestedInput
 }
 
 export type BranchCreateWithoutTreatmentPricesInput = {
@@ -1014,6 +1669,9 @@ export type BranchCreateWithoutTreatmentPricesInput = {
   name: string
   description?: string | null
   isActive?: boolean
+  workingDays?: Prisma.BranchCreateworkingDaysInput | string[]
+  workingHours?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  timezone?: string
   createdAt?: Date | string
   updatedAt?: Date | string
   deletedAt?: Date | string | null
@@ -1022,8 +1680,13 @@ export type BranchCreateWithoutTreatmentPricesInput = {
   headquarter: Prisma.HeadquarterCreateNestedOneWithoutBranchInput
   products?: Prisma.ProductCreateNestedManyWithoutBranchInput
   sales?: Prisma.SaleCreateNestedManyWithoutBranchInput
+  stockSales?: Prisma.StockSaleCreateNestedManyWithoutBranchInput
   UserBranch?: Prisma.UserBranchCreateNestedManyWithoutBranchInput
   User?: Prisma.UserCreateNestedManyWithoutBranchInput
+  stockItems?: Prisma.StockItemCreateNestedManyWithoutBranchInput
+  treatmentPlans?: Prisma.TreatmentPlanCreateNestedManyWithoutBranchInput
+  patientFinancialEntries?: Prisma.PatientFinancialEntryCreateNestedManyWithoutBranchInput
+  xrayAnalyses?: Prisma.XRayAnalysisCreateNestedManyWithoutBranchInput
 }
 
 export type BranchUncheckedCreateWithoutTreatmentPricesInput = {
@@ -1033,14 +1696,22 @@ export type BranchUncheckedCreateWithoutTreatmentPricesInput = {
   headquarterId: string
   description?: string | null
   isActive?: boolean
+  workingDays?: Prisma.BranchCreateworkingDaysInput | string[]
+  workingHours?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  timezone?: string
   createdAt?: Date | string
   updatedAt?: Date | string
   deletedAt?: Date | string | null
   Person?: Prisma.PersonUncheckedCreateNestedManyWithoutBranchInput
   products?: Prisma.ProductUncheckedCreateNestedManyWithoutBranchInput
   sales?: Prisma.SaleUncheckedCreateNestedManyWithoutBranchInput
+  stockSales?: Prisma.StockSaleUncheckedCreateNestedManyWithoutBranchInput
   UserBranch?: Prisma.UserBranchUncheckedCreateNestedManyWithoutBranchInput
   User?: Prisma.UserUncheckedCreateNestedManyWithoutBranchInput
+  stockItems?: Prisma.StockItemUncheckedCreateNestedManyWithoutBranchInput
+  treatmentPlans?: Prisma.TreatmentPlanUncheckedCreateNestedManyWithoutBranchInput
+  patientFinancialEntries?: Prisma.PatientFinancialEntryUncheckedCreateNestedManyWithoutBranchInput
+  xrayAnalyses?: Prisma.XRayAnalysisUncheckedCreateNestedManyWithoutBranchInput
 }
 
 export type BranchCreateOrConnectWithoutTreatmentPricesInput = {
@@ -1064,6 +1735,9 @@ export type BranchUpdateWithoutTreatmentPricesInput = {
   name?: Prisma.StringFieldUpdateOperationsInput | string
   description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  workingDays?: Prisma.BranchUpdateworkingDaysInput | string[]
+  workingHours?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  timezone?: Prisma.StringFieldUpdateOperationsInput | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   deletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -1072,8 +1746,13 @@ export type BranchUpdateWithoutTreatmentPricesInput = {
   headquarter?: Prisma.HeadquarterUpdateOneRequiredWithoutBranchNestedInput
   products?: Prisma.ProductUpdateManyWithoutBranchNestedInput
   sales?: Prisma.SaleUpdateManyWithoutBranchNestedInput
+  stockSales?: Prisma.StockSaleUpdateManyWithoutBranchNestedInput
   UserBranch?: Prisma.UserBranchUpdateManyWithoutBranchNestedInput
   User?: Prisma.UserUpdateManyWithoutBranchNestedInput
+  stockItems?: Prisma.StockItemUpdateManyWithoutBranchNestedInput
+  treatmentPlans?: Prisma.TreatmentPlanUpdateManyWithoutBranchNestedInput
+  patientFinancialEntries?: Prisma.PatientFinancialEntryUpdateManyWithoutBranchNestedInput
+  xrayAnalyses?: Prisma.XRayAnalysisUpdateManyWithoutBranchNestedInput
 }
 
 export type BranchUncheckedUpdateWithoutTreatmentPricesInput = {
@@ -1083,14 +1762,22 @@ export type BranchUncheckedUpdateWithoutTreatmentPricesInput = {
   headquarterId?: Prisma.StringFieldUpdateOperationsInput | string
   description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  workingDays?: Prisma.BranchUpdateworkingDaysInput | string[]
+  workingHours?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  timezone?: Prisma.StringFieldUpdateOperationsInput | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   deletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   Person?: Prisma.PersonUncheckedUpdateManyWithoutBranchNestedInput
   products?: Prisma.ProductUncheckedUpdateManyWithoutBranchNestedInput
   sales?: Prisma.SaleUncheckedUpdateManyWithoutBranchNestedInput
+  stockSales?: Prisma.StockSaleUncheckedUpdateManyWithoutBranchNestedInput
   UserBranch?: Prisma.UserBranchUncheckedUpdateManyWithoutBranchNestedInput
   User?: Prisma.UserUncheckedUpdateManyWithoutBranchNestedInput
+  stockItems?: Prisma.StockItemUncheckedUpdateManyWithoutBranchNestedInput
+  treatmentPlans?: Prisma.TreatmentPlanUncheckedUpdateManyWithoutBranchNestedInput
+  patientFinancialEntries?: Prisma.PatientFinancialEntryUncheckedUpdateManyWithoutBranchNestedInput
+  xrayAnalyses?: Prisma.XRayAnalysisUncheckedUpdateManyWithoutBranchNestedInput
 }
 
 export type BranchCreateWithoutProductsInput = {
@@ -1098,6 +1785,9 @@ export type BranchCreateWithoutProductsInput = {
   name: string
   description?: string | null
   isActive?: boolean
+  workingDays?: Prisma.BranchCreateworkingDaysInput | string[]
+  workingHours?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  timezone?: string
   createdAt?: Date | string
   updatedAt?: Date | string
   deletedAt?: Date | string | null
@@ -1106,8 +1796,13 @@ export type BranchCreateWithoutProductsInput = {
   address: Prisma.AddressCreateNestedOneWithoutBranchInput
   headquarter: Prisma.HeadquarterCreateNestedOneWithoutBranchInput
   sales?: Prisma.SaleCreateNestedManyWithoutBranchInput
+  stockSales?: Prisma.StockSaleCreateNestedManyWithoutBranchInput
   UserBranch?: Prisma.UserBranchCreateNestedManyWithoutBranchInput
   User?: Prisma.UserCreateNestedManyWithoutBranchInput
+  stockItems?: Prisma.StockItemCreateNestedManyWithoutBranchInput
+  treatmentPlans?: Prisma.TreatmentPlanCreateNestedManyWithoutBranchInput
+  patientFinancialEntries?: Prisma.PatientFinancialEntryCreateNestedManyWithoutBranchInput
+  xrayAnalyses?: Prisma.XRayAnalysisCreateNestedManyWithoutBranchInput
 }
 
 export type BranchUncheckedCreateWithoutProductsInput = {
@@ -1117,14 +1812,22 @@ export type BranchUncheckedCreateWithoutProductsInput = {
   headquarterId: string
   description?: string | null
   isActive?: boolean
+  workingDays?: Prisma.BranchCreateworkingDaysInput | string[]
+  workingHours?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  timezone?: string
   createdAt?: Date | string
   updatedAt?: Date | string
   deletedAt?: Date | string | null
   Person?: Prisma.PersonUncheckedCreateNestedManyWithoutBranchInput
   treatmentPrices?: Prisma.TreatmentPriceUncheckedCreateNestedManyWithoutBranchInput
   sales?: Prisma.SaleUncheckedCreateNestedManyWithoutBranchInput
+  stockSales?: Prisma.StockSaleUncheckedCreateNestedManyWithoutBranchInput
   UserBranch?: Prisma.UserBranchUncheckedCreateNestedManyWithoutBranchInput
   User?: Prisma.UserUncheckedCreateNestedManyWithoutBranchInput
+  stockItems?: Prisma.StockItemUncheckedCreateNestedManyWithoutBranchInput
+  treatmentPlans?: Prisma.TreatmentPlanUncheckedCreateNestedManyWithoutBranchInput
+  patientFinancialEntries?: Prisma.PatientFinancialEntryUncheckedCreateNestedManyWithoutBranchInput
+  xrayAnalyses?: Prisma.XRayAnalysisUncheckedCreateNestedManyWithoutBranchInput
 }
 
 export type BranchCreateOrConnectWithoutProductsInput = {
@@ -1148,6 +1851,9 @@ export type BranchUpdateWithoutProductsInput = {
   name?: Prisma.StringFieldUpdateOperationsInput | string
   description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  workingDays?: Prisma.BranchUpdateworkingDaysInput | string[]
+  workingHours?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  timezone?: Prisma.StringFieldUpdateOperationsInput | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   deletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -1156,8 +1862,13 @@ export type BranchUpdateWithoutProductsInput = {
   address?: Prisma.AddressUpdateOneRequiredWithoutBranchNestedInput
   headquarter?: Prisma.HeadquarterUpdateOneRequiredWithoutBranchNestedInput
   sales?: Prisma.SaleUpdateManyWithoutBranchNestedInput
+  stockSales?: Prisma.StockSaleUpdateManyWithoutBranchNestedInput
   UserBranch?: Prisma.UserBranchUpdateManyWithoutBranchNestedInput
   User?: Prisma.UserUpdateManyWithoutBranchNestedInput
+  stockItems?: Prisma.StockItemUpdateManyWithoutBranchNestedInput
+  treatmentPlans?: Prisma.TreatmentPlanUpdateManyWithoutBranchNestedInput
+  patientFinancialEntries?: Prisma.PatientFinancialEntryUpdateManyWithoutBranchNestedInput
+  xrayAnalyses?: Prisma.XRayAnalysisUpdateManyWithoutBranchNestedInput
 }
 
 export type BranchUncheckedUpdateWithoutProductsInput = {
@@ -1167,14 +1878,22 @@ export type BranchUncheckedUpdateWithoutProductsInput = {
   headquarterId?: Prisma.StringFieldUpdateOperationsInput | string
   description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  workingDays?: Prisma.BranchUpdateworkingDaysInput | string[]
+  workingHours?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  timezone?: Prisma.StringFieldUpdateOperationsInput | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   deletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   Person?: Prisma.PersonUncheckedUpdateManyWithoutBranchNestedInput
   treatmentPrices?: Prisma.TreatmentPriceUncheckedUpdateManyWithoutBranchNestedInput
   sales?: Prisma.SaleUncheckedUpdateManyWithoutBranchNestedInput
+  stockSales?: Prisma.StockSaleUncheckedUpdateManyWithoutBranchNestedInput
   UserBranch?: Prisma.UserBranchUncheckedUpdateManyWithoutBranchNestedInput
   User?: Prisma.UserUncheckedUpdateManyWithoutBranchNestedInput
+  stockItems?: Prisma.StockItemUncheckedUpdateManyWithoutBranchNestedInput
+  treatmentPlans?: Prisma.TreatmentPlanUncheckedUpdateManyWithoutBranchNestedInput
+  patientFinancialEntries?: Prisma.PatientFinancialEntryUncheckedUpdateManyWithoutBranchNestedInput
+  xrayAnalyses?: Prisma.XRayAnalysisUncheckedUpdateManyWithoutBranchNestedInput
 }
 
 export type BranchCreateWithoutSalesInput = {
@@ -1182,6 +1901,9 @@ export type BranchCreateWithoutSalesInput = {
   name: string
   description?: string | null
   isActive?: boolean
+  workingDays?: Prisma.BranchCreateworkingDaysInput | string[]
+  workingHours?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  timezone?: string
   createdAt?: Date | string
   updatedAt?: Date | string
   deletedAt?: Date | string | null
@@ -1190,8 +1912,13 @@ export type BranchCreateWithoutSalesInput = {
   address: Prisma.AddressCreateNestedOneWithoutBranchInput
   headquarter: Prisma.HeadquarterCreateNestedOneWithoutBranchInput
   products?: Prisma.ProductCreateNestedManyWithoutBranchInput
+  stockSales?: Prisma.StockSaleCreateNestedManyWithoutBranchInput
   UserBranch?: Prisma.UserBranchCreateNestedManyWithoutBranchInput
   User?: Prisma.UserCreateNestedManyWithoutBranchInput
+  stockItems?: Prisma.StockItemCreateNestedManyWithoutBranchInput
+  treatmentPlans?: Prisma.TreatmentPlanCreateNestedManyWithoutBranchInput
+  patientFinancialEntries?: Prisma.PatientFinancialEntryCreateNestedManyWithoutBranchInput
+  xrayAnalyses?: Prisma.XRayAnalysisCreateNestedManyWithoutBranchInput
 }
 
 export type BranchUncheckedCreateWithoutSalesInput = {
@@ -1201,14 +1928,22 @@ export type BranchUncheckedCreateWithoutSalesInput = {
   headquarterId: string
   description?: string | null
   isActive?: boolean
+  workingDays?: Prisma.BranchCreateworkingDaysInput | string[]
+  workingHours?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  timezone?: string
   createdAt?: Date | string
   updatedAt?: Date | string
   deletedAt?: Date | string | null
   Person?: Prisma.PersonUncheckedCreateNestedManyWithoutBranchInput
   treatmentPrices?: Prisma.TreatmentPriceUncheckedCreateNestedManyWithoutBranchInput
   products?: Prisma.ProductUncheckedCreateNestedManyWithoutBranchInput
+  stockSales?: Prisma.StockSaleUncheckedCreateNestedManyWithoutBranchInput
   UserBranch?: Prisma.UserBranchUncheckedCreateNestedManyWithoutBranchInput
   User?: Prisma.UserUncheckedCreateNestedManyWithoutBranchInput
+  stockItems?: Prisma.StockItemUncheckedCreateNestedManyWithoutBranchInput
+  treatmentPlans?: Prisma.TreatmentPlanUncheckedCreateNestedManyWithoutBranchInput
+  patientFinancialEntries?: Prisma.PatientFinancialEntryUncheckedCreateNestedManyWithoutBranchInput
+  xrayAnalyses?: Prisma.XRayAnalysisUncheckedCreateNestedManyWithoutBranchInput
 }
 
 export type BranchCreateOrConnectWithoutSalesInput = {
@@ -1232,6 +1967,9 @@ export type BranchUpdateWithoutSalesInput = {
   name?: Prisma.StringFieldUpdateOperationsInput | string
   description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  workingDays?: Prisma.BranchUpdateworkingDaysInput | string[]
+  workingHours?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  timezone?: Prisma.StringFieldUpdateOperationsInput | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   deletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -1240,8 +1978,13 @@ export type BranchUpdateWithoutSalesInput = {
   address?: Prisma.AddressUpdateOneRequiredWithoutBranchNestedInput
   headquarter?: Prisma.HeadquarterUpdateOneRequiredWithoutBranchNestedInput
   products?: Prisma.ProductUpdateManyWithoutBranchNestedInput
+  stockSales?: Prisma.StockSaleUpdateManyWithoutBranchNestedInput
   UserBranch?: Prisma.UserBranchUpdateManyWithoutBranchNestedInput
   User?: Prisma.UserUpdateManyWithoutBranchNestedInput
+  stockItems?: Prisma.StockItemUpdateManyWithoutBranchNestedInput
+  treatmentPlans?: Prisma.TreatmentPlanUpdateManyWithoutBranchNestedInput
+  patientFinancialEntries?: Prisma.PatientFinancialEntryUpdateManyWithoutBranchNestedInput
+  xrayAnalyses?: Prisma.XRayAnalysisUpdateManyWithoutBranchNestedInput
 }
 
 export type BranchUncheckedUpdateWithoutSalesInput = {
@@ -1251,14 +1994,254 @@ export type BranchUncheckedUpdateWithoutSalesInput = {
   headquarterId?: Prisma.StringFieldUpdateOperationsInput | string
   description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  workingDays?: Prisma.BranchUpdateworkingDaysInput | string[]
+  workingHours?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  timezone?: Prisma.StringFieldUpdateOperationsInput | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   deletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   Person?: Prisma.PersonUncheckedUpdateManyWithoutBranchNestedInput
   treatmentPrices?: Prisma.TreatmentPriceUncheckedUpdateManyWithoutBranchNestedInput
   products?: Prisma.ProductUncheckedUpdateManyWithoutBranchNestedInput
+  stockSales?: Prisma.StockSaleUncheckedUpdateManyWithoutBranchNestedInput
   UserBranch?: Prisma.UserBranchUncheckedUpdateManyWithoutBranchNestedInput
   User?: Prisma.UserUncheckedUpdateManyWithoutBranchNestedInput
+  stockItems?: Prisma.StockItemUncheckedUpdateManyWithoutBranchNestedInput
+  treatmentPlans?: Prisma.TreatmentPlanUncheckedUpdateManyWithoutBranchNestedInput
+  patientFinancialEntries?: Prisma.PatientFinancialEntryUncheckedUpdateManyWithoutBranchNestedInput
+  xrayAnalyses?: Prisma.XRayAnalysisUncheckedUpdateManyWithoutBranchNestedInput
+}
+
+export type BranchCreateWithoutPatientFinancialEntriesInput = {
+  id?: string
+  name: string
+  description?: string | null
+  isActive?: boolean
+  workingDays?: Prisma.BranchCreateworkingDaysInput | string[]
+  workingHours?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  timezone?: string
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  deletedAt?: Date | string | null
+  Person?: Prisma.PersonCreateNestedManyWithoutBranchInput
+  treatmentPrices?: Prisma.TreatmentPriceCreateNestedManyWithoutBranchInput
+  address: Prisma.AddressCreateNestedOneWithoutBranchInput
+  headquarter: Prisma.HeadquarterCreateNestedOneWithoutBranchInput
+  products?: Prisma.ProductCreateNestedManyWithoutBranchInput
+  sales?: Prisma.SaleCreateNestedManyWithoutBranchInput
+  stockSales?: Prisma.StockSaleCreateNestedManyWithoutBranchInput
+  UserBranch?: Prisma.UserBranchCreateNestedManyWithoutBranchInput
+  User?: Prisma.UserCreateNestedManyWithoutBranchInput
+  stockItems?: Prisma.StockItemCreateNestedManyWithoutBranchInput
+  treatmentPlans?: Prisma.TreatmentPlanCreateNestedManyWithoutBranchInput
+  xrayAnalyses?: Prisma.XRayAnalysisCreateNestedManyWithoutBranchInput
+}
+
+export type BranchUncheckedCreateWithoutPatientFinancialEntriesInput = {
+  id?: string
+  name: string
+  addressId: string
+  headquarterId: string
+  description?: string | null
+  isActive?: boolean
+  workingDays?: Prisma.BranchCreateworkingDaysInput | string[]
+  workingHours?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  timezone?: string
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  deletedAt?: Date | string | null
+  Person?: Prisma.PersonUncheckedCreateNestedManyWithoutBranchInput
+  treatmentPrices?: Prisma.TreatmentPriceUncheckedCreateNestedManyWithoutBranchInput
+  products?: Prisma.ProductUncheckedCreateNestedManyWithoutBranchInput
+  sales?: Prisma.SaleUncheckedCreateNestedManyWithoutBranchInput
+  stockSales?: Prisma.StockSaleUncheckedCreateNestedManyWithoutBranchInput
+  UserBranch?: Prisma.UserBranchUncheckedCreateNestedManyWithoutBranchInput
+  User?: Prisma.UserUncheckedCreateNestedManyWithoutBranchInput
+  stockItems?: Prisma.StockItemUncheckedCreateNestedManyWithoutBranchInput
+  treatmentPlans?: Prisma.TreatmentPlanUncheckedCreateNestedManyWithoutBranchInput
+  xrayAnalyses?: Prisma.XRayAnalysisUncheckedCreateNestedManyWithoutBranchInput
+}
+
+export type BranchCreateOrConnectWithoutPatientFinancialEntriesInput = {
+  where: Prisma.BranchWhereUniqueInput
+  create: Prisma.XOR<Prisma.BranchCreateWithoutPatientFinancialEntriesInput, Prisma.BranchUncheckedCreateWithoutPatientFinancialEntriesInput>
+}
+
+export type BranchUpsertWithoutPatientFinancialEntriesInput = {
+  update: Prisma.XOR<Prisma.BranchUpdateWithoutPatientFinancialEntriesInput, Prisma.BranchUncheckedUpdateWithoutPatientFinancialEntriesInput>
+  create: Prisma.XOR<Prisma.BranchCreateWithoutPatientFinancialEntriesInput, Prisma.BranchUncheckedCreateWithoutPatientFinancialEntriesInput>
+  where?: Prisma.BranchWhereInput
+}
+
+export type BranchUpdateToOneWithWhereWithoutPatientFinancialEntriesInput = {
+  where?: Prisma.BranchWhereInput
+  data: Prisma.XOR<Prisma.BranchUpdateWithoutPatientFinancialEntriesInput, Prisma.BranchUncheckedUpdateWithoutPatientFinancialEntriesInput>
+}
+
+export type BranchUpdateWithoutPatientFinancialEntriesInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  workingDays?: Prisma.BranchUpdateworkingDaysInput | string[]
+  workingHours?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  timezone?: Prisma.StringFieldUpdateOperationsInput | string
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  deletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  Person?: Prisma.PersonUpdateManyWithoutBranchNestedInput
+  treatmentPrices?: Prisma.TreatmentPriceUpdateManyWithoutBranchNestedInput
+  address?: Prisma.AddressUpdateOneRequiredWithoutBranchNestedInput
+  headquarter?: Prisma.HeadquarterUpdateOneRequiredWithoutBranchNestedInput
+  products?: Prisma.ProductUpdateManyWithoutBranchNestedInput
+  sales?: Prisma.SaleUpdateManyWithoutBranchNestedInput
+  stockSales?: Prisma.StockSaleUpdateManyWithoutBranchNestedInput
+  UserBranch?: Prisma.UserBranchUpdateManyWithoutBranchNestedInput
+  User?: Prisma.UserUpdateManyWithoutBranchNestedInput
+  stockItems?: Prisma.StockItemUpdateManyWithoutBranchNestedInput
+  treatmentPlans?: Prisma.TreatmentPlanUpdateManyWithoutBranchNestedInput
+  xrayAnalyses?: Prisma.XRayAnalysisUpdateManyWithoutBranchNestedInput
+}
+
+export type BranchUncheckedUpdateWithoutPatientFinancialEntriesInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  addressId?: Prisma.StringFieldUpdateOperationsInput | string
+  headquarterId?: Prisma.StringFieldUpdateOperationsInput | string
+  description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  workingDays?: Prisma.BranchUpdateworkingDaysInput | string[]
+  workingHours?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  timezone?: Prisma.StringFieldUpdateOperationsInput | string
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  deletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  Person?: Prisma.PersonUncheckedUpdateManyWithoutBranchNestedInput
+  treatmentPrices?: Prisma.TreatmentPriceUncheckedUpdateManyWithoutBranchNestedInput
+  products?: Prisma.ProductUncheckedUpdateManyWithoutBranchNestedInput
+  sales?: Prisma.SaleUncheckedUpdateManyWithoutBranchNestedInput
+  stockSales?: Prisma.StockSaleUncheckedUpdateManyWithoutBranchNestedInput
+  UserBranch?: Prisma.UserBranchUncheckedUpdateManyWithoutBranchNestedInput
+  User?: Prisma.UserUncheckedUpdateManyWithoutBranchNestedInput
+  stockItems?: Prisma.StockItemUncheckedUpdateManyWithoutBranchNestedInput
+  treatmentPlans?: Prisma.TreatmentPlanUncheckedUpdateManyWithoutBranchNestedInput
+  xrayAnalyses?: Prisma.XRayAnalysisUncheckedUpdateManyWithoutBranchNestedInput
+}
+
+export type BranchCreateWithoutXrayAnalysesInput = {
+  id?: string
+  name: string
+  description?: string | null
+  isActive?: boolean
+  workingDays?: Prisma.BranchCreateworkingDaysInput | string[]
+  workingHours?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  timezone?: string
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  deletedAt?: Date | string | null
+  Person?: Prisma.PersonCreateNestedManyWithoutBranchInput
+  treatmentPrices?: Prisma.TreatmentPriceCreateNestedManyWithoutBranchInput
+  address: Prisma.AddressCreateNestedOneWithoutBranchInput
+  headquarter: Prisma.HeadquarterCreateNestedOneWithoutBranchInput
+  products?: Prisma.ProductCreateNestedManyWithoutBranchInput
+  sales?: Prisma.SaleCreateNestedManyWithoutBranchInput
+  stockSales?: Prisma.StockSaleCreateNestedManyWithoutBranchInput
+  UserBranch?: Prisma.UserBranchCreateNestedManyWithoutBranchInput
+  User?: Prisma.UserCreateNestedManyWithoutBranchInput
+  stockItems?: Prisma.StockItemCreateNestedManyWithoutBranchInput
+  treatmentPlans?: Prisma.TreatmentPlanCreateNestedManyWithoutBranchInput
+  patientFinancialEntries?: Prisma.PatientFinancialEntryCreateNestedManyWithoutBranchInput
+}
+
+export type BranchUncheckedCreateWithoutXrayAnalysesInput = {
+  id?: string
+  name: string
+  addressId: string
+  headquarterId: string
+  description?: string | null
+  isActive?: boolean
+  workingDays?: Prisma.BranchCreateworkingDaysInput | string[]
+  workingHours?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  timezone?: string
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  deletedAt?: Date | string | null
+  Person?: Prisma.PersonUncheckedCreateNestedManyWithoutBranchInput
+  treatmentPrices?: Prisma.TreatmentPriceUncheckedCreateNestedManyWithoutBranchInput
+  products?: Prisma.ProductUncheckedCreateNestedManyWithoutBranchInput
+  sales?: Prisma.SaleUncheckedCreateNestedManyWithoutBranchInput
+  stockSales?: Prisma.StockSaleUncheckedCreateNestedManyWithoutBranchInput
+  UserBranch?: Prisma.UserBranchUncheckedCreateNestedManyWithoutBranchInput
+  User?: Prisma.UserUncheckedCreateNestedManyWithoutBranchInput
+  stockItems?: Prisma.StockItemUncheckedCreateNestedManyWithoutBranchInput
+  treatmentPlans?: Prisma.TreatmentPlanUncheckedCreateNestedManyWithoutBranchInput
+  patientFinancialEntries?: Prisma.PatientFinancialEntryUncheckedCreateNestedManyWithoutBranchInput
+}
+
+export type BranchCreateOrConnectWithoutXrayAnalysesInput = {
+  where: Prisma.BranchWhereUniqueInput
+  create: Prisma.XOR<Prisma.BranchCreateWithoutXrayAnalysesInput, Prisma.BranchUncheckedCreateWithoutXrayAnalysesInput>
+}
+
+export type BranchUpsertWithoutXrayAnalysesInput = {
+  update: Prisma.XOR<Prisma.BranchUpdateWithoutXrayAnalysesInput, Prisma.BranchUncheckedUpdateWithoutXrayAnalysesInput>
+  create: Prisma.XOR<Prisma.BranchCreateWithoutXrayAnalysesInput, Prisma.BranchUncheckedCreateWithoutXrayAnalysesInput>
+  where?: Prisma.BranchWhereInput
+}
+
+export type BranchUpdateToOneWithWhereWithoutXrayAnalysesInput = {
+  where?: Prisma.BranchWhereInput
+  data: Prisma.XOR<Prisma.BranchUpdateWithoutXrayAnalysesInput, Prisma.BranchUncheckedUpdateWithoutXrayAnalysesInput>
+}
+
+export type BranchUpdateWithoutXrayAnalysesInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  workingDays?: Prisma.BranchUpdateworkingDaysInput | string[]
+  workingHours?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  timezone?: Prisma.StringFieldUpdateOperationsInput | string
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  deletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  Person?: Prisma.PersonUpdateManyWithoutBranchNestedInput
+  treatmentPrices?: Prisma.TreatmentPriceUpdateManyWithoutBranchNestedInput
+  address?: Prisma.AddressUpdateOneRequiredWithoutBranchNestedInput
+  headquarter?: Prisma.HeadquarterUpdateOneRequiredWithoutBranchNestedInput
+  products?: Prisma.ProductUpdateManyWithoutBranchNestedInput
+  sales?: Prisma.SaleUpdateManyWithoutBranchNestedInput
+  stockSales?: Prisma.StockSaleUpdateManyWithoutBranchNestedInput
+  UserBranch?: Prisma.UserBranchUpdateManyWithoutBranchNestedInput
+  User?: Prisma.UserUpdateManyWithoutBranchNestedInput
+  stockItems?: Prisma.StockItemUpdateManyWithoutBranchNestedInput
+  treatmentPlans?: Prisma.TreatmentPlanUpdateManyWithoutBranchNestedInput
+  patientFinancialEntries?: Prisma.PatientFinancialEntryUpdateManyWithoutBranchNestedInput
+}
+
+export type BranchUncheckedUpdateWithoutXrayAnalysesInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  addressId?: Prisma.StringFieldUpdateOperationsInput | string
+  headquarterId?: Prisma.StringFieldUpdateOperationsInput | string
+  description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  workingDays?: Prisma.BranchUpdateworkingDaysInput | string[]
+  workingHours?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  timezone?: Prisma.StringFieldUpdateOperationsInput | string
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  deletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  Person?: Prisma.PersonUncheckedUpdateManyWithoutBranchNestedInput
+  treatmentPrices?: Prisma.TreatmentPriceUncheckedUpdateManyWithoutBranchNestedInput
+  products?: Prisma.ProductUncheckedUpdateManyWithoutBranchNestedInput
+  sales?: Prisma.SaleUncheckedUpdateManyWithoutBranchNestedInput
+  stockSales?: Prisma.StockSaleUncheckedUpdateManyWithoutBranchNestedInput
+  UserBranch?: Prisma.UserBranchUncheckedUpdateManyWithoutBranchNestedInput
+  User?: Prisma.UserUncheckedUpdateManyWithoutBranchNestedInput
+  stockItems?: Prisma.StockItemUncheckedUpdateManyWithoutBranchNestedInput
+  treatmentPlans?: Prisma.TreatmentPlanUncheckedUpdateManyWithoutBranchNestedInput
+  patientFinancialEntries?: Prisma.PatientFinancialEntryUncheckedUpdateManyWithoutBranchNestedInput
 }
 
 export type BranchCreateManyHeadquarterInput = {
@@ -1267,6 +2250,9 @@ export type BranchCreateManyHeadquarterInput = {
   addressId: string
   description?: string | null
   isActive?: boolean
+  workingDays?: Prisma.BranchCreateworkingDaysInput | string[]
+  workingHours?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  timezone?: string
   createdAt?: Date | string
   updatedAt?: Date | string
   deletedAt?: Date | string | null
@@ -1277,6 +2263,9 @@ export type BranchUpdateWithoutHeadquarterInput = {
   name?: Prisma.StringFieldUpdateOperationsInput | string
   description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  workingDays?: Prisma.BranchUpdateworkingDaysInput | string[]
+  workingHours?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  timezone?: Prisma.StringFieldUpdateOperationsInput | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   deletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -1285,8 +2274,13 @@ export type BranchUpdateWithoutHeadquarterInput = {
   address?: Prisma.AddressUpdateOneRequiredWithoutBranchNestedInput
   products?: Prisma.ProductUpdateManyWithoutBranchNestedInput
   sales?: Prisma.SaleUpdateManyWithoutBranchNestedInput
+  stockSales?: Prisma.StockSaleUpdateManyWithoutBranchNestedInput
   UserBranch?: Prisma.UserBranchUpdateManyWithoutBranchNestedInput
   User?: Prisma.UserUpdateManyWithoutBranchNestedInput
+  stockItems?: Prisma.StockItemUpdateManyWithoutBranchNestedInput
+  treatmentPlans?: Prisma.TreatmentPlanUpdateManyWithoutBranchNestedInput
+  patientFinancialEntries?: Prisma.PatientFinancialEntryUpdateManyWithoutBranchNestedInput
+  xrayAnalyses?: Prisma.XRayAnalysisUpdateManyWithoutBranchNestedInput
 }
 
 export type BranchUncheckedUpdateWithoutHeadquarterInput = {
@@ -1295,6 +2289,9 @@ export type BranchUncheckedUpdateWithoutHeadquarterInput = {
   addressId?: Prisma.StringFieldUpdateOperationsInput | string
   description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  workingDays?: Prisma.BranchUpdateworkingDaysInput | string[]
+  workingHours?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  timezone?: Prisma.StringFieldUpdateOperationsInput | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   deletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -1302,8 +2299,13 @@ export type BranchUncheckedUpdateWithoutHeadquarterInput = {
   treatmentPrices?: Prisma.TreatmentPriceUncheckedUpdateManyWithoutBranchNestedInput
   products?: Prisma.ProductUncheckedUpdateManyWithoutBranchNestedInput
   sales?: Prisma.SaleUncheckedUpdateManyWithoutBranchNestedInput
+  stockSales?: Prisma.StockSaleUncheckedUpdateManyWithoutBranchNestedInput
   UserBranch?: Prisma.UserBranchUncheckedUpdateManyWithoutBranchNestedInput
   User?: Prisma.UserUncheckedUpdateManyWithoutBranchNestedInput
+  stockItems?: Prisma.StockItemUncheckedUpdateManyWithoutBranchNestedInput
+  treatmentPlans?: Prisma.TreatmentPlanUncheckedUpdateManyWithoutBranchNestedInput
+  patientFinancialEntries?: Prisma.PatientFinancialEntryUncheckedUpdateManyWithoutBranchNestedInput
+  xrayAnalyses?: Prisma.XRayAnalysisUncheckedUpdateManyWithoutBranchNestedInput
 }
 
 export type BranchUncheckedUpdateManyWithoutHeadquarterInput = {
@@ -1312,6 +2314,9 @@ export type BranchUncheckedUpdateManyWithoutHeadquarterInput = {
   addressId?: Prisma.StringFieldUpdateOperationsInput | string
   description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  workingDays?: Prisma.BranchUpdateworkingDaysInput | string[]
+  workingHours?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  timezone?: Prisma.StringFieldUpdateOperationsInput | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   deletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -1323,6 +2328,9 @@ export type BranchCreateManyAddressInput = {
   headquarterId: string
   description?: string | null
   isActive?: boolean
+  workingDays?: Prisma.BranchCreateworkingDaysInput | string[]
+  workingHours?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  timezone?: string
   createdAt?: Date | string
   updatedAt?: Date | string
   deletedAt?: Date | string | null
@@ -1333,6 +2341,9 @@ export type BranchUpdateWithoutAddressInput = {
   name?: Prisma.StringFieldUpdateOperationsInput | string
   description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  workingDays?: Prisma.BranchUpdateworkingDaysInput | string[]
+  workingHours?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  timezone?: Prisma.StringFieldUpdateOperationsInput | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   deletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -1341,8 +2352,13 @@ export type BranchUpdateWithoutAddressInput = {
   headquarter?: Prisma.HeadquarterUpdateOneRequiredWithoutBranchNestedInput
   products?: Prisma.ProductUpdateManyWithoutBranchNestedInput
   sales?: Prisma.SaleUpdateManyWithoutBranchNestedInput
+  stockSales?: Prisma.StockSaleUpdateManyWithoutBranchNestedInput
   UserBranch?: Prisma.UserBranchUpdateManyWithoutBranchNestedInput
   User?: Prisma.UserUpdateManyWithoutBranchNestedInput
+  stockItems?: Prisma.StockItemUpdateManyWithoutBranchNestedInput
+  treatmentPlans?: Prisma.TreatmentPlanUpdateManyWithoutBranchNestedInput
+  patientFinancialEntries?: Prisma.PatientFinancialEntryUpdateManyWithoutBranchNestedInput
+  xrayAnalyses?: Prisma.XRayAnalysisUpdateManyWithoutBranchNestedInput
 }
 
 export type BranchUncheckedUpdateWithoutAddressInput = {
@@ -1351,6 +2367,9 @@ export type BranchUncheckedUpdateWithoutAddressInput = {
   headquarterId?: Prisma.StringFieldUpdateOperationsInput | string
   description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  workingDays?: Prisma.BranchUpdateworkingDaysInput | string[]
+  workingHours?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  timezone?: Prisma.StringFieldUpdateOperationsInput | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   deletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -1358,8 +2377,13 @@ export type BranchUncheckedUpdateWithoutAddressInput = {
   treatmentPrices?: Prisma.TreatmentPriceUncheckedUpdateManyWithoutBranchNestedInput
   products?: Prisma.ProductUncheckedUpdateManyWithoutBranchNestedInput
   sales?: Prisma.SaleUncheckedUpdateManyWithoutBranchNestedInput
+  stockSales?: Prisma.StockSaleUncheckedUpdateManyWithoutBranchNestedInput
   UserBranch?: Prisma.UserBranchUncheckedUpdateManyWithoutBranchNestedInput
   User?: Prisma.UserUncheckedUpdateManyWithoutBranchNestedInput
+  stockItems?: Prisma.StockItemUncheckedUpdateManyWithoutBranchNestedInput
+  treatmentPlans?: Prisma.TreatmentPlanUncheckedUpdateManyWithoutBranchNestedInput
+  patientFinancialEntries?: Prisma.PatientFinancialEntryUncheckedUpdateManyWithoutBranchNestedInput
+  xrayAnalyses?: Prisma.XRayAnalysisUncheckedUpdateManyWithoutBranchNestedInput
 }
 
 export type BranchUncheckedUpdateManyWithoutAddressInput = {
@@ -1368,6 +2392,9 @@ export type BranchUncheckedUpdateManyWithoutAddressInput = {
   headquarterId?: Prisma.StringFieldUpdateOperationsInput | string
   description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  workingDays?: Prisma.BranchUpdateworkingDaysInput | string[]
+  workingHours?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  timezone?: Prisma.StringFieldUpdateOperationsInput | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   deletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -1383,8 +2410,13 @@ export type BranchCountOutputType = {
   treatmentPrices: number
   products: number
   sales: number
+  stockSales: number
   UserBranch: number
   User: number
+  stockItems: number
+  treatmentPlans: number
+  patientFinancialEntries: number
+  xrayAnalyses: number
 }
 
 export type BranchCountOutputTypeSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
@@ -1392,8 +2424,13 @@ export type BranchCountOutputTypeSelect<ExtArgs extends runtime.Types.Extensions
   treatmentPrices?: boolean | BranchCountOutputTypeCountTreatmentPricesArgs
   products?: boolean | BranchCountOutputTypeCountProductsArgs
   sales?: boolean | BranchCountOutputTypeCountSalesArgs
+  stockSales?: boolean | BranchCountOutputTypeCountStockSalesArgs
   UserBranch?: boolean | BranchCountOutputTypeCountUserBranchArgs
   User?: boolean | BranchCountOutputTypeCountUserArgs
+  stockItems?: boolean | BranchCountOutputTypeCountStockItemsArgs
+  treatmentPlans?: boolean | BranchCountOutputTypeCountTreatmentPlansArgs
+  patientFinancialEntries?: boolean | BranchCountOutputTypeCountPatientFinancialEntriesArgs
+  xrayAnalyses?: boolean | BranchCountOutputTypeCountXrayAnalysesArgs
 }
 
 /**
@@ -1437,6 +2474,13 @@ export type BranchCountOutputTypeCountSalesArgs<ExtArgs extends runtime.Types.Ex
 /**
  * BranchCountOutputType without action
  */
+export type BranchCountOutputTypeCountStockSalesArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  where?: Prisma.StockSaleWhereInput
+}
+
+/**
+ * BranchCountOutputType without action
+ */
 export type BranchCountOutputTypeCountUserBranchArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   where?: Prisma.UserBranchWhereInput
 }
@@ -1448,6 +2492,34 @@ export type BranchCountOutputTypeCountUserArgs<ExtArgs extends runtime.Types.Ext
   where?: Prisma.UserWhereInput
 }
 
+/**
+ * BranchCountOutputType without action
+ */
+export type BranchCountOutputTypeCountStockItemsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  where?: Prisma.StockItemWhereInput
+}
+
+/**
+ * BranchCountOutputType without action
+ */
+export type BranchCountOutputTypeCountTreatmentPlansArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  where?: Prisma.TreatmentPlanWhereInput
+}
+
+/**
+ * BranchCountOutputType without action
+ */
+export type BranchCountOutputTypeCountPatientFinancialEntriesArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  where?: Prisma.PatientFinancialEntryWhereInput
+}
+
+/**
+ * BranchCountOutputType without action
+ */
+export type BranchCountOutputTypeCountXrayAnalysesArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  where?: Prisma.XRayAnalysisWhereInput
+}
+
 
 export type BranchSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
   id?: boolean
@@ -1456,6 +2528,9 @@ export type BranchSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs =
   headquarterId?: boolean
   description?: boolean
   isActive?: boolean
+  workingDays?: boolean
+  workingHours?: boolean
+  timezone?: boolean
   createdAt?: boolean
   updatedAt?: boolean
   deletedAt?: boolean
@@ -1465,8 +2540,13 @@ export type BranchSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs =
   headquarter?: boolean | Prisma.HeadquarterDefaultArgs<ExtArgs>
   products?: boolean | Prisma.Branch$productsArgs<ExtArgs>
   sales?: boolean | Prisma.Branch$salesArgs<ExtArgs>
+  stockSales?: boolean | Prisma.Branch$stockSalesArgs<ExtArgs>
   UserBranch?: boolean | Prisma.Branch$UserBranchArgs<ExtArgs>
   User?: boolean | Prisma.Branch$UserArgs<ExtArgs>
+  stockItems?: boolean | Prisma.Branch$stockItemsArgs<ExtArgs>
+  treatmentPlans?: boolean | Prisma.Branch$treatmentPlansArgs<ExtArgs>
+  patientFinancialEntries?: boolean | Prisma.Branch$patientFinancialEntriesArgs<ExtArgs>
+  xrayAnalyses?: boolean | Prisma.Branch$xrayAnalysesArgs<ExtArgs>
   _count?: boolean | Prisma.BranchCountOutputTypeDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["branch"]>
 
@@ -1477,6 +2557,9 @@ export type BranchSelectCreateManyAndReturn<ExtArgs extends runtime.Types.Extens
   headquarterId?: boolean
   description?: boolean
   isActive?: boolean
+  workingDays?: boolean
+  workingHours?: boolean
+  timezone?: boolean
   createdAt?: boolean
   updatedAt?: boolean
   deletedAt?: boolean
@@ -1491,6 +2574,9 @@ export type BranchSelectUpdateManyAndReturn<ExtArgs extends runtime.Types.Extens
   headquarterId?: boolean
   description?: boolean
   isActive?: boolean
+  workingDays?: boolean
+  workingHours?: boolean
+  timezone?: boolean
   createdAt?: boolean
   updatedAt?: boolean
   deletedAt?: boolean
@@ -1505,12 +2591,15 @@ export type BranchSelectScalar = {
   headquarterId?: boolean
   description?: boolean
   isActive?: boolean
+  workingDays?: boolean
+  workingHours?: boolean
+  timezone?: boolean
   createdAt?: boolean
   updatedAt?: boolean
   deletedAt?: boolean
 }
 
-export type BranchOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "name" | "addressId" | "headquarterId" | "description" | "isActive" | "createdAt" | "updatedAt" | "deletedAt", ExtArgs["result"]["branch"]>
+export type BranchOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "name" | "addressId" | "headquarterId" | "description" | "isActive" | "workingDays" | "workingHours" | "timezone" | "createdAt" | "updatedAt" | "deletedAt", ExtArgs["result"]["branch"]>
 export type BranchInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   Person?: boolean | Prisma.Branch$PersonArgs<ExtArgs>
   treatmentPrices?: boolean | Prisma.Branch$treatmentPricesArgs<ExtArgs>
@@ -1518,8 +2607,13 @@ export type BranchInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs 
   headquarter?: boolean | Prisma.HeadquarterDefaultArgs<ExtArgs>
   products?: boolean | Prisma.Branch$productsArgs<ExtArgs>
   sales?: boolean | Prisma.Branch$salesArgs<ExtArgs>
+  stockSales?: boolean | Prisma.Branch$stockSalesArgs<ExtArgs>
   UserBranch?: boolean | Prisma.Branch$UserBranchArgs<ExtArgs>
   User?: boolean | Prisma.Branch$UserArgs<ExtArgs>
+  stockItems?: boolean | Prisma.Branch$stockItemsArgs<ExtArgs>
+  treatmentPlans?: boolean | Prisma.Branch$treatmentPlansArgs<ExtArgs>
+  patientFinancialEntries?: boolean | Prisma.Branch$patientFinancialEntriesArgs<ExtArgs>
+  xrayAnalyses?: boolean | Prisma.Branch$xrayAnalysesArgs<ExtArgs>
   _count?: boolean | Prisma.BranchCountOutputTypeDefaultArgs<ExtArgs>
 }
 export type BranchIncludeCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
@@ -1540,8 +2634,13 @@ export type $BranchPayload<ExtArgs extends runtime.Types.Extensions.InternalArgs
     headquarter: Prisma.$HeadquarterPayload<ExtArgs>
     products: Prisma.$ProductPayload<ExtArgs>[]
     sales: Prisma.$SalePayload<ExtArgs>[]
+    stockSales: Prisma.$StockSalePayload<ExtArgs>[]
     UserBranch: Prisma.$UserBranchPayload<ExtArgs>[]
     User: Prisma.$UserPayload<ExtArgs>[]
+    stockItems: Prisma.$StockItemPayload<ExtArgs>[]
+    treatmentPlans: Prisma.$TreatmentPlanPayload<ExtArgs>[]
+    patientFinancialEntries: Prisma.$PatientFinancialEntryPayload<ExtArgs>[]
+    xrayAnalyses: Prisma.$XRayAnalysisPayload<ExtArgs>[]
   }
   scalars: runtime.Types.Extensions.GetPayloadResult<{
     id: string
@@ -1550,6 +2649,9 @@ export type $BranchPayload<ExtArgs extends runtime.Types.Extensions.InternalArgs
     headquarterId: string
     description: string | null
     isActive: boolean
+    workingDays: string[]
+    workingHours: runtime.JsonValue | null
+    timezone: string
     createdAt: Date
     updatedAt: Date
     deletedAt: Date | null
@@ -1953,8 +3055,13 @@ export interface Prisma__BranchClient<T, Null = never, ExtArgs extends runtime.T
   headquarter<T extends Prisma.HeadquarterDefaultArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.HeadquarterDefaultArgs<ExtArgs>>): Prisma.Prisma__HeadquarterClient<runtime.Types.Result.GetResult<Prisma.$HeadquarterPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
   products<T extends Prisma.Branch$productsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Branch$productsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$ProductPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   sales<T extends Prisma.Branch$salesArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Branch$salesArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$SalePayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+  stockSales<T extends Prisma.Branch$stockSalesArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Branch$stockSalesArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$StockSalePayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   UserBranch<T extends Prisma.Branch$UserBranchArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Branch$UserBranchArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$UserBranchPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   User<T extends Prisma.Branch$UserArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Branch$UserArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$UserPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+  stockItems<T extends Prisma.Branch$stockItemsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Branch$stockItemsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$StockItemPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+  treatmentPlans<T extends Prisma.Branch$treatmentPlansArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Branch$treatmentPlansArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$TreatmentPlanPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+  patientFinancialEntries<T extends Prisma.Branch$patientFinancialEntriesArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Branch$patientFinancialEntriesArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$PatientFinancialEntryPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+  xrayAnalyses<T extends Prisma.Branch$xrayAnalysesArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Branch$xrayAnalysesArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$XRayAnalysisPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   /**
    * Attaches callbacks for the resolution and/or rejection of the Promise.
    * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -1990,6 +3097,9 @@ export interface BranchFieldRefs {
   readonly headquarterId: Prisma.FieldRef<"Branch", 'String'>
   readonly description: Prisma.FieldRef<"Branch", 'String'>
   readonly isActive: Prisma.FieldRef<"Branch", 'Boolean'>
+  readonly workingDays: Prisma.FieldRef<"Branch", 'String[]'>
+  readonly workingHours: Prisma.FieldRef<"Branch", 'Json'>
+  readonly timezone: Prisma.FieldRef<"Branch", 'String'>
   readonly createdAt: Prisma.FieldRef<"Branch", 'DateTime'>
   readonly updatedAt: Prisma.FieldRef<"Branch", 'DateTime'>
   readonly deletedAt: Prisma.FieldRef<"Branch", 'DateTime'>
@@ -2485,6 +3595,30 @@ export type Branch$salesArgs<ExtArgs extends runtime.Types.Extensions.InternalAr
 }
 
 /**
+ * Branch.stockSales
+ */
+export type Branch$stockSalesArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the StockSale
+   */
+  select?: Prisma.StockSaleSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the StockSale
+   */
+  omit?: Prisma.StockSaleOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.StockSaleInclude<ExtArgs> | null
+  where?: Prisma.StockSaleWhereInput
+  orderBy?: Prisma.StockSaleOrderByWithRelationInput | Prisma.StockSaleOrderByWithRelationInput[]
+  cursor?: Prisma.StockSaleWhereUniqueInput
+  take?: number
+  skip?: number
+  distinct?: Prisma.StockSaleScalarFieldEnum | Prisma.StockSaleScalarFieldEnum[]
+}
+
+/**
  * Branch.UserBranch
  */
 export type Branch$UserBranchArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
@@ -2530,6 +3664,102 @@ export type Branch$UserArgs<ExtArgs extends runtime.Types.Extensions.InternalArg
   take?: number
   skip?: number
   distinct?: Prisma.UserScalarFieldEnum | Prisma.UserScalarFieldEnum[]
+}
+
+/**
+ * Branch.stockItems
+ */
+export type Branch$stockItemsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the StockItem
+   */
+  select?: Prisma.StockItemSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the StockItem
+   */
+  omit?: Prisma.StockItemOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.StockItemInclude<ExtArgs> | null
+  where?: Prisma.StockItemWhereInput
+  orderBy?: Prisma.StockItemOrderByWithRelationInput | Prisma.StockItemOrderByWithRelationInput[]
+  cursor?: Prisma.StockItemWhereUniqueInput
+  take?: number
+  skip?: number
+  distinct?: Prisma.StockItemScalarFieldEnum | Prisma.StockItemScalarFieldEnum[]
+}
+
+/**
+ * Branch.treatmentPlans
+ */
+export type Branch$treatmentPlansArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the TreatmentPlan
+   */
+  select?: Prisma.TreatmentPlanSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the TreatmentPlan
+   */
+  omit?: Prisma.TreatmentPlanOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.TreatmentPlanInclude<ExtArgs> | null
+  where?: Prisma.TreatmentPlanWhereInput
+  orderBy?: Prisma.TreatmentPlanOrderByWithRelationInput | Prisma.TreatmentPlanOrderByWithRelationInput[]
+  cursor?: Prisma.TreatmentPlanWhereUniqueInput
+  take?: number
+  skip?: number
+  distinct?: Prisma.TreatmentPlanScalarFieldEnum | Prisma.TreatmentPlanScalarFieldEnum[]
+}
+
+/**
+ * Branch.patientFinancialEntries
+ */
+export type Branch$patientFinancialEntriesArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the PatientFinancialEntry
+   */
+  select?: Prisma.PatientFinancialEntrySelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the PatientFinancialEntry
+   */
+  omit?: Prisma.PatientFinancialEntryOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.PatientFinancialEntryInclude<ExtArgs> | null
+  where?: Prisma.PatientFinancialEntryWhereInput
+  orderBy?: Prisma.PatientFinancialEntryOrderByWithRelationInput | Prisma.PatientFinancialEntryOrderByWithRelationInput[]
+  cursor?: Prisma.PatientFinancialEntryWhereUniqueInput
+  take?: number
+  skip?: number
+  distinct?: Prisma.PatientFinancialEntryScalarFieldEnum | Prisma.PatientFinancialEntryScalarFieldEnum[]
+}
+
+/**
+ * Branch.xrayAnalyses
+ */
+export type Branch$xrayAnalysesArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the XRayAnalysis
+   */
+  select?: Prisma.XRayAnalysisSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the XRayAnalysis
+   */
+  omit?: Prisma.XRayAnalysisOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.XRayAnalysisInclude<ExtArgs> | null
+  where?: Prisma.XRayAnalysisWhereInput
+  orderBy?: Prisma.XRayAnalysisOrderByWithRelationInput | Prisma.XRayAnalysisOrderByWithRelationInput[]
+  cursor?: Prisma.XRayAnalysisWhereUniqueInput
+  take?: number
+  skip?: number
+  distinct?: Prisma.XRayAnalysisScalarFieldEnum | Prisma.XRayAnalysisScalarFieldEnum[]
 }
 
 /**

@@ -2,6 +2,7 @@ import { Controller, Get, Post, Param, Body, Query, Res } from '@nestjs/common';
 
 import { ApiTags } from '@nestjs/swagger';
 import { Response } from 'express';
+import { ListQueryDto } from '../../../../shared/infra/http/list-query.dto';
 import { CreatePlanDto } from './dtos/plan-dto';
 import {
   CreatePlanUseCase,
@@ -25,15 +26,8 @@ export class PlansController {
   }
 
   @Get()
-  async findAll(
-    @Query('page') page = 1,
-    @Query('perPage') perPage = 10,
-    @Res() res: Response,
-  ) {
-    const index = await this._findAllPlansUseCase.execute({
-      page,
-      perPage,
-    });
+  async findAll(@Query() query: ListQueryDto, @Res() res: Response) {
+    const index = await this._findAllPlansUseCase.execute(query);
     return res.status(index.status).json(index.data);
   }
 

@@ -74,6 +74,8 @@ model Headquarter {
   id          String    @id @default(dbgenerated("gen_random_uuid()"))
   name        String
   address     String
+  email       String?
+  phone       String?
   description String?
   nif         String
   logo        String?
@@ -105,84 +107,124 @@ model Address {
 }
 
 model Branch {
-  id              String           @id @default(dbgenerated("gen_random_uuid()"))
-  name            String
-  addressId       String
-  headquarterId   String
-  description     String?
-  isActive        Boolean          @default(true)
-  createdAt       DateTime         @default(now())
-  updatedAt       DateTime         @updatedAt
-  deletedAt       DateTime?
-  Person          Person[]
-  treatmentPrices TreatmentPrice[]
-  address         Address          @relation(fields: [addressId], references: [id])
-  headquarter     Headquarter      @relation(fields: [headquarterId], references: [id])
-  products        Product[]
-  sales           Sale[]
-  UserBranch      UserBranch[]
-  User            User[]
+  id                      String                  @id @default(dbgenerated("gen_random_uuid()"))
+  name                    String
+  addressId               String
+  headquarterId           String
+  description             String?
+  isActive                Boolean                 @default(true)
+  workingDays             String[]                @default([])
+  workingHours            Json?
+  timezone                String                  @default("Africa/Luanda")
+  createdAt               DateTime                @default(now())
+  updatedAt               DateTime                @updatedAt
+  deletedAt               DateTime?
+  Person                  Person[]
+  treatmentPrices         TreatmentPrice[]
+  address                 Address                 @relation(fields: [addressId], references: [id])
+  headquarter             Headquarter             @relation(fields: [headquarterId], references: [id])
+  products                Product[]
+  sales                   Sale[]
+  stockSales              StockSale[]
+  UserBranch              UserBranch[]
+  User                    User[]
+  stockItems              StockItem[]
+  treatmentPlans          TreatmentPlan[]
+  patientFinancialEntries PatientFinancialEntry[]
+  xrayAnalyses            XRayAnalysis[]
 
   @@map("branches")
 }
 
 model User {
-  id               String           @id @default(dbgenerated("gen_random_uuid()"))
-  email            String           @unique
-  password         String
-  username         String           @unique
-  branchId         String
-  addressId        String?
-  roleId           String?
-  isActive         Boolean          @default(false)
-  phoneNumber      Int?
-  countryCode      String?
-  isPhoneVerified  Boolean          @default(false)
-  isEmailVerified  Boolean          @default(false)
-  createdAt        DateTime         @default(now())
-  updatedAt        DateTime         @updatedAt
-  deletedAt        DateTime?
-  accessHistories  AccessHistory[]
-  audits           Audit[]
-  loginHistories   LoginHistory[]
-  Person           Person[]
-  Appointment      Appointment[]    @relation("UserPrimaryAppointments")
-  appointments     Appointment[]    @relation("UserSecondaryAppointments")
-  clinicProccesses ClinicProccess[]
-  Consult          Consult[]
-  diagnostics      Diagnostic[]
-  UserBranch       UserBranch[]
-  UserRole         UserRole[]
-  Address          Address?         @relation(fields: [addressId], references: [id])
-  branch           Branch           @relation(fields: [branchId], references: [id])
-  Role             Role?            @relation(fields: [roleId], references: [id])
+  id                    String                @id @default(dbgenerated("gen_random_uuid()"))
+  email                 String                @unique
+  password              String
+  username              String                @unique
+  branchId              String
+  addressId             String?
+  roleId                String?
+  isActive              Boolean               @default(false)
+  phoneNumber           Int?
+  countryCode           String?
+  isPhoneVerified       Boolean               @default(false)
+  isEmailVerified       Boolean               @default(false)
+  createdAt             DateTime              @default(now())
+  updatedAt             DateTime              @updatedAt
+  deletedAt             DateTime?
+  accessHistories       AccessHistory[]
+  audits                Audit[]
+  loginHistories        LoginHistory[]
+  Person                Person[]
+  Appointment           Appointment[]         @relation("UserPrimaryAppointments")
+  appointments          Appointment[]         @relation("UserSecondaryAppointments")
+  clinicProccesses      ClinicProccess[]
+  Consult               Consult[]
+  diagnostics           Diagnostic[]
+  doctorProfile         DoctorProfile?
+  conversationsStarted  ChatConversation[]    @relation("ConversationStarter")
+  conversationsReceived ChatConversation[]    @relation("ConversationRecipient")
+  chatMessages          ChatMessage[]
+  treatmentPlans        TreatmentPlan[]
+  patientPrescriptions  PatientPrescription[]
+  xrayAnalyses          XRayAnalysis[]
+  UserBranch            UserBranch[]
+  UserRole              UserRole[]
+  UserPermission        UserPermission[]
+  stockSales            StockSale[]
+  Address               Address?              @relation(fields: [addressId], references: [id])
+  branch                Branch                @relation(fields: [branchId], references: [id])
+  Role                  Role?                 @relation(fields: [roleId], references: [id])
 
   @@map("users")
 }
 
 model Person {
-  id               String           @id @default(dbgenerated("gen_random_uuid()"))
-  firstName        String
-  lastName         String
-  birthDate        DateTime?
-  email            String?          @unique
-  gender           Sex              @default(OTHER)
-  branchId         String
-  addressId        String
-  userId           String?
-  roleId           String?
-  createdAt        DateTime         @default(now())
-  updatedAt        DateTime         @updatedAt
-  deletedAt        DateTime?
-  address          Address          @relation(fields: [addressId], references: [id])
-  branch           Branch           @relation(fields: [branchId], references: [id])
-  Role             Role?            @relation(fields: [roleId], references: [id])
-  User             User?            @relation(fields: [userId], references: [id])
-  Appointment      Appointment[]    @relation("PersonPrimaryAppointments")
-  appointments     Appointment[]    @relation("PersonSecondaryAppointments")
-  clinicProccesses ClinicProccess[]
-  consults         Consult[]
-  diagnostics      Diagnostic[]
+  id                           String                  @id @default(dbgenerated("gen_random_uuid()"))
+  firstName                    String
+  lastName                     String
+  birthDate                    DateTime?
+  email                        String?                 @unique
+  phoneNumber                  String?
+  medicalNotes                 String?
+  idNumber                     String?
+  nif                          String?
+  profession                   String?
+  bloodType                    String?
+  insuranceProvider            String?
+  insurancePlan                String?
+  insurancePolicyNumber        String?
+  insuranceCoveragePercent     Int?
+  emergencyContactName         String?
+  emergencyContactRelationship String?
+  emergencyContactPhone        String?
+  allergies                    String[]                @default([])
+  medicalConditions            String[]                @default([])
+  medications                  String[]                @default([])
+  gender                       Sex                     @default(OTHER)
+  isActive                     Boolean                 @default(true)
+  branchId                     String
+  addressId                    String
+  userId                       String?
+  roleId                       String?
+  createdAt                    DateTime                @default(now())
+  updatedAt                    DateTime                @updatedAt
+  deletedAt                    DateTime?
+  address                      Address                 @relation(fields: [addressId], references: [id])
+  branch                       Branch                  @relation(fields: [branchId], references: [id])
+  Role                         Role?                   @relation(fields: [roleId], references: [id])
+  User                         User?                   @relation(fields: [userId], references: [id])
+  Appointment                  Appointment[]           @relation("PersonPrimaryAppointments")
+  appointments                 Appointment[]           @relation("PersonSecondaryAppointments")
+  clinicProccesses             ClinicProccess[]
+  consults                     Consult[]
+  diagnostics                  Diagnostic[]
+  treatmentPlans               TreatmentPlan[]
+  odontogram                   PatientTooth[]
+  patientPrescriptions         PatientPrescription[]
+  financialEntries             PatientFinancialEntry[]
+  exams                        PatientExam[]
+  xrayAnalyses                 XRayAnalysis[]
 
   @@map("Persons")
 }
@@ -214,6 +256,7 @@ model Permission {
   updatedAt      DateTime         @updatedAt
   deletedAt      DateTime?
   RolePermission RolePermission[]
+  UserPermission UserPermission[]
 
   @@map("permissions")
 }
@@ -244,6 +287,21 @@ model RolePermission {
 
   @@unique([roleId, permissionId])
   @@map("role_permissions")
+}
+
+model UserPermission {
+  id           String     @id @default(dbgenerated("gen_random_uuid()"))
+  userId       String
+  permissionId String
+  granted      Boolean    @default(true)
+  createdAt    DateTime   @default(now())
+  updatedAt    DateTime   @updatedAt
+  deletedAt    DateTime?
+  permission   Permission @relation(fields: [permissionId], references: [id])
+  user         User       @relation(fields: [userId], references: [id])
+
+  @@unique([userId, permissionId])
+  @@map("user_permissions")
 }
 
 model UserRole {
@@ -281,6 +339,146 @@ model Appointment {
   user        User?             @relation("UserSecondaryAppointments", fields: [userId], references: [id])
 
   @@map("appointments")
+}
+
+model DoctorProfile {
+  id           String   @id @default(dbgenerated("gen_random_uuid()"))
+  userId       String   @unique
+  avatar       String?
+  type         String   @default("FULL_TIME")
+  crmNumber    String?
+  specialties  String[] @default([])
+  workingDays  String[] @default([])
+  workingHours Json?
+  daysOffNotes String?
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @updatedAt
+  user         User     @relation(fields: [userId], references: [id])
+
+  @@map("doctor_profiles")
+}
+
+model ChatConversation {
+  id                  String        @id @default(dbgenerated("gen_random_uuid()"))
+  branchId            String
+  starterId           String
+  recipientId         String
+  category            String        @default("staff")
+  channel             String        @default("internal")
+  subject             String
+  starterLastReadAt   DateTime?
+  recipientLastReadAt DateTime?
+  createdAt           DateTime      @default(now())
+  updatedAt           DateTime      @updatedAt
+  starter             User          @relation("ConversationStarter", fields: [starterId], references: [id])
+  recipient           User          @relation("ConversationRecipient", fields: [recipientId], references: [id])
+  messages            ChatMessage[]
+
+  @@index([branchId, updatedAt])
+  @@map("chat_conversations")
+}
+
+model ChatMessage {
+  id             String           @id @default(dbgenerated("gen_random_uuid()"))
+  conversationId String
+  authorId       String
+  content        String
+  attachments    Json?
+  createdAt      DateTime         @default(now())
+  conversation   ChatConversation @relation(fields: [conversationId], references: [id])
+  author         User             @relation(fields: [authorId], references: [id])
+
+  @@index([conversationId, createdAt])
+  @@map("chat_messages")
+}
+
+model StockItem {
+  id            String    @id @default(dbgenerated("gen_random_uuid()"))
+  branchId      String
+  name          String
+  category      String
+  unit          String
+  quantity      Int
+  capacity      Int
+  unitCost      Float
+  salePrice     Float     @default(0)
+  supplier      String
+  notes         String?
+  lastRestockAt DateTime  @default(now())
+  createdAt     DateTime  @default(now())
+  updatedAt     DateTime  @updatedAt
+  deletedAt     DateTime?
+  branch        Branch    @relation(fields: [branchId], references: [id])
+  saleItems     StockSaleItem[]
+
+  @@index([branchId, deletedAt])
+  @@map("stock_items")
+}
+
+model StockSale {
+  id            String          @id @default(dbgenerated("gen_random_uuid()"))
+  branchId      String
+  soldById      String
+  customerName  String?
+  paymentMethod String
+  total         Float
+  createdAt     DateTime        @default(now())
+  branch        Branch          @relation(fields: [branchId], references: [id])
+  soldBy        User            @relation(fields: [soldById], references: [id])
+  items         StockSaleItem[]
+
+  @@index([branchId, createdAt])
+  @@map("stock_sales")
+}
+
+model StockSaleItem {
+  id            String    @id @default(dbgenerated("gen_random_uuid()"))
+  saleId        String
+  stockItemId   String
+  itemName      String
+  unit          String
+  quantity      Int
+  unitPrice     Float
+  totalPrice    Float
+  sale          StockSale @relation(fields: [saleId], references: [id])
+  stockItem     StockItem @relation(fields: [stockItemId], references: [id], onDelete: Restrict)
+
+  @@index([saleId])
+  @@index([stockItemId])
+  @@map("stock_sale_items")
+}
+
+model TreatmentPlan {
+  id                  String    @id @default(dbgenerated("gen_random_uuid()"))
+  branchId            String
+  patientId           String
+  doctorId            String
+  diagnosis           String
+  notes               String?
+  totalCost           Float
+  totalSteps          Int
+  completedSteps      Int       @default(0)
+  estimatedCompletion DateTime?
+  activePhase         String?
+  startDate           DateTime  @default(now())
+  createdAt           DateTime  @default(now())
+  updatedAt           DateTime  @updatedAt
+  deletedAt           DateTime?
+  branch              Branch    @relation(fields: [branchId], references: [id])
+  patient             Person    @relation(fields: [patientId], references: [id])
+  doctor              User      @relation(fields: [doctorId], references: [id])
+
+  @@index([branchId, deletedAt])
+  @@map("treatment_plans")
+}
+
+model RevokedToken {
+  jti       String   @id
+  expiresAt DateTime
+  createdAt DateTime @default(now())
+
+  @@index([expiresAt])
+  @@map("revoked_tokens")
 }
 
 model Consult {
@@ -456,18 +654,136 @@ model ClinicProccess {
 }
 
 model Diagnostic {
+  id            String    @id @default(dbgenerated("gen_random_uuid()"))
+  designation   String
+  code          String?
+  severity      String    @default("low")
+  status        String    @default("monitoring")
+  affectedTeeth String[]  @default([])
+  patientId     String
+  doctorId      String
+  description   String?
+  createdAt     DateTime  @default(now())
+  updatedAt     DateTime  @updatedAt
+  deletedAt     DateTime?
+  doctor        User      @relation(fields: [doctorId], references: [id])
+  patient       Person    @relation(fields: [patientId], references: [id])
+  attachments   DiagnosticAttachment[]
+
+  @@map("diagnostics")
+}
+
+model DiagnosticAttachment {
+  id           String     @id @default(dbgenerated("gen_random_uuid()"))
+  diagnosisId  String
+  fileName     String
+  mimeType     String
+  fileSize     Int
+  storageKey   String     @unique
+  createdAt    DateTime   @default(now())
+  deletedAt    DateTime?
+  diagnosis    Diagnostic @relation(fields: [diagnosisId], references: [id])
+
+  @@index([diagnosisId, deletedAt])
+  @@map("diagnostic_attachments")
+}
+
+model PatientTooth {
+  id            String   @id @default(dbgenerated("gen_random_uuid()"))
+  patientId     String
+  number        Int
+  state         String
+  procedureDone String?
+  notes         String?
+  createdAt     DateTime @default(now())
+  updatedAt     DateTime @updatedAt
+  patient       Person   @relation(fields: [patientId], references: [id])
+
+  @@unique([patientId, number])
+  @@index([patientId])
+  @@map("patient_teeth")
+}
+
+model PatientPrescription {
+  id           String    @id @default(dbgenerated("gen_random_uuid()"))
+  patientId    String
+  doctorId     String
+  groupId      String?
+  medication   String
+  dosage       String
+  instructions String
+  duration     String
+  status       String    @default("active")
+  createdAt    DateTime  @default(now())
+  updatedAt    DateTime  @updatedAt
+  deletedAt    DateTime?
+  patient      Person    @relation(fields: [patientId], references: [id])
+  doctor       User      @relation(fields: [doctorId], references: [id])
+
+  @@index([groupId])
+  @@index([patientId, deletedAt])
+  @@map("patient_prescriptions")
+}
+
+model PatientFinancialEntry {
   id          String    @id @default(dbgenerated("gen_random_uuid()"))
-  designation String
   patientId   String
-  doctorId    String
-  description String?
+  branchId    String
+  reference   String    @unique
+  description String
+  amount      Float
+  method      String
+  status      String    @default("paid")
   createdAt   DateTime  @default(now())
   updatedAt   DateTime  @updatedAt
   deletedAt   DateTime?
-  doctor      User      @relation(fields: [doctorId], references: [id])
   patient     Person    @relation(fields: [patientId], references: [id])
+  branch      Branch    @relation(fields: [branchId], references: [id])
 
-  @@map("diagnostics")
+  @@index([branchId, patientId, deletedAt])
+  @@map("patient_financial_entries")
+}
+
+model XRayAnalysis {
+  id           String   @id @default(dbgenerated("gen_random_uuid()"))
+  patientId    String
+  branchId     String
+  analyzedById String
+  type         String
+  region       String
+  fileName     String
+  mimeType     String
+  fileSize     Int
+  storageKey   String   @unique
+  analysis     Json
+  modelName    String
+  createdAt    DateTime @default(now())
+  patient      Person   @relation(fields: [patientId], references: [id], onDelete: Restrict)
+  branch       Branch   @relation(fields: [branchId], references: [id], onDelete: Restrict)
+  analyzedBy   User     @relation(fields: [analyzedById], references: [id], onDelete: Restrict)
+
+  @@index([branchId, createdAt])
+  @@index([branchId, patientId, createdAt])
+  @@map("xray_analyses")
+}
+
+model PatientExam {
+  id         String    @id @default(dbgenerated("gen_random_uuid()"))
+  patientId  String
+  title      String
+  type       String
+  doctorName String
+  fileName   String
+  mimeType   String
+  fileSize   Int
+  storageKey String    @unique
+  createdAt  DateTime  @default(now())
+  updatedAt  DateTime  @updatedAt
+  deletedAt  DateTime?
+  patient    Person    @relation(fields: [patientId], references: [id])
+
+  @@index([patientId, deletedAt])
+  @@map("patient_exams")
 }
 
 model NewLatter {
