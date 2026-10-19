@@ -1,4 +1,4 @@
-import { ICreateBranchWithHeadquarterCommand } from "../_@types/create-branch.t";
+import { ICreateBranchWithHeadquarterCommand } from '../_@types/create-branch.t';
 
 export abstract class IBranchRepository {
   abstract create(branch: ICreateBranchWithHeadquarterCommand): Promise<any>;

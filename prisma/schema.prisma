@@ -129,6 +129,7 @@ model Branch {
   UserBranch              UserBranch[]
   User                    User[]
   stockItems              StockItem[]
+  stockCatalogEntries     StockCatalogEntry[]
   treatmentPlans          TreatmentPlan[]
   patientFinancialEntries PatientFinancialEntry[]
   xrayAnalyses            XRayAnalysis[]
@@ -171,6 +172,8 @@ model User {
   UserBranch            UserBranch[]
   UserRole              UserRole[]
   UserPermission        UserPermission[]
+  refreshTokens         RefreshToken[]
+  authActionTokens      AuthActionToken[]
   stockSales            StockSale[]
   Address               Address?              @relation(fields: [addressId], references: [id])
   branch                Branch                @relation(fields: [branchId], references: [id])
@@ -186,6 +189,7 @@ model Person {
   birthDate                    DateTime?
   email                        String?                 @unique
   phoneNumber                  String?
+  avatar                       String?
   medicalNotes                 String?
   idNumber                     String?
   nif                          String?
@@ -415,6 +419,19 @@ model StockItem {
   @@map("stock_items")
 }
 
+model StockCatalogEntry {
+  id        String   @id @default(dbgenerated("gen_random_uuid()"))
+  branchId  String
+  kind      String
+  name      String
+  createdAt DateTime @default(now())
+  branch    Branch   @relation(fields: [branchId], references: [id])
+
+  @@unique([branchId, kind, name])
+  @@index([branchId, kind])
+  @@map("stock_catalog_entries")
+}
+
 model StockSale {
   id            String          @id @default(dbgenerated("gen_random_uuid()"))
   branchId      String
@@ -479,6 +496,34 @@ model RevokedToken {
 
   @@index([expiresAt])
   @@map("revoked_tokens")
+}
+
+model RefreshToken {
+  jti       String    @id
+  userId    String
+  expiresAt DateTime
+  revokedAt DateTime?
+  createdAt DateTime  @default(now())
+  user      User      @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([userId, revokedAt])
+  @@index([expiresAt])
+  @@map("refresh_tokens")
+}
+
+model AuthActionToken {
+  id        String    @id @default(dbgenerated("gen_random_uuid()"))
+  userId    String
+  tokenHash String    @unique
+  type      String
+  expiresAt DateTime
+  usedAt    DateTime?
+  createdAt DateTime  @default(now())
+  user      User      @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([userId, type])
+  @@index([expiresAt])
+  @@map("auth_action_tokens")
 }
 
 model Consult {

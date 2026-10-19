@@ -118,6 +118,11 @@ export type ChatMessage = Prisma.ChatMessageModel
  */
 export type StockItem = Prisma.StockItemModel
 /**
+ * Model StockCatalogEntry
+ * 
+ */
+export type StockCatalogEntry = Prisma.StockCatalogEntryModel
+/**
  * Model StockSale
  * 
  */
@@ -137,6 +142,16 @@ export type TreatmentPlan = Prisma.TreatmentPlanModel
  * 
  */
 export type RevokedToken = Prisma.RevokedTokenModel
+/**
+ * Model RefreshToken
+ * 
+ */
+export type RefreshToken = Prisma.RefreshTokenModel
+/**
+ * Model AuthActionToken
+ * 
+ */
+export type AuthActionToken = Prisma.AuthActionTokenModel
 /**
  * Model Consult
  * 

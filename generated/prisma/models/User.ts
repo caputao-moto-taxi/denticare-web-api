@@ -315,6 +315,8 @@ export type UserWhereInput = {
   UserBranch?: Prisma.UserBranchListRelationFilter
   UserRole?: Prisma.UserRoleListRelationFilter
   UserPermission?: Prisma.UserPermissionListRelationFilter
+  refreshTokens?: Prisma.RefreshTokenListRelationFilter
+  authActionTokens?: Prisma.AuthActionTokenListRelationFilter
   stockSales?: Prisma.StockSaleListRelationFilter
   Address?: Prisma.XOR<Prisma.AddressNullableScalarRelationFilter, Prisma.AddressWhereInput> | null
   branch?: Prisma.XOR<Prisma.BranchScalarRelationFilter, Prisma.BranchWhereInput>
@@ -356,6 +358,8 @@ export type UserOrderByWithRelationInput = {
   UserBranch?: Prisma.UserBranchOrderByRelationAggregateInput
   UserRole?: Prisma.UserRoleOrderByRelationAggregateInput
   UserPermission?: Prisma.UserPermissionOrderByRelationAggregateInput
+  refreshTokens?: Prisma.RefreshTokenOrderByRelationAggregateInput
+  authActionTokens?: Prisma.AuthActionTokenOrderByRelationAggregateInput
   stockSales?: Prisma.StockSaleOrderByRelationAggregateInput
   Address?: Prisma.AddressOrderByWithRelationInput
   branch?: Prisma.BranchOrderByWithRelationInput
@@ -400,6 +404,8 @@ export type UserWhereUniqueInput = Prisma.AtLeast<{
   UserBranch?: Prisma.UserBranchListRelationFilter
   UserRole?: Prisma.UserRoleListRelationFilter
   UserPermission?: Prisma.UserPermissionListRelationFilter
+  refreshTokens?: Prisma.RefreshTokenListRelationFilter
+  authActionTokens?: Prisma.AuthActionTokenListRelationFilter
   stockSales?: Prisma.StockSaleListRelationFilter
   Address?: Prisma.XOR<Prisma.AddressNullableScalarRelationFilter, Prisma.AddressWhereInput> | null
   branch?: Prisma.XOR<Prisma.BranchScalarRelationFilter, Prisma.BranchWhereInput>
@@ -482,6 +488,8 @@ export type UserCreateInput = {
   UserBranch?: Prisma.UserBranchCreateNestedManyWithoutUserInput
   UserRole?: Prisma.UserRoleCreateNestedManyWithoutUserInput
   UserPermission?: Prisma.UserPermissionCreateNestedManyWithoutUserInput
+  refreshTokens?: Prisma.RefreshTokenCreateNestedManyWithoutUserInput
+  authActionTokens?: Prisma.AuthActionTokenCreateNestedManyWithoutUserInput
   stockSales?: Prisma.StockSaleCreateNestedManyWithoutSoldByInput
   Address?: Prisma.AddressCreateNestedOneWithoutUserInput
   branch: Prisma.BranchCreateNestedOneWithoutUserInput
@@ -523,6 +531,8 @@ export type UserUncheckedCreateInput = {
   UserBranch?: Prisma.UserBranchUncheckedCreateNestedManyWithoutUserInput
   UserRole?: Prisma.UserRoleUncheckedCreateNestedManyWithoutUserInput
   UserPermission?: Prisma.UserPermissionUncheckedCreateNestedManyWithoutUserInput
+  refreshTokens?: Prisma.RefreshTokenUncheckedCreateNestedManyWithoutUserInput
+  authActionTokens?: Prisma.AuthActionTokenUncheckedCreateNestedManyWithoutUserInput
   stockSales?: Prisma.StockSaleUncheckedCreateNestedManyWithoutSoldByInput
 }
 
@@ -558,6 +568,8 @@ export type UserUpdateInput = {
   UserBranch?: Prisma.UserBranchUpdateManyWithoutUserNestedInput
   UserRole?: Prisma.UserRoleUpdateManyWithoutUserNestedInput
   UserPermission?: Prisma.UserPermissionUpdateManyWithoutUserNestedInput
+  refreshTokens?: Prisma.RefreshTokenUpdateManyWithoutUserNestedInput
+  authActionTokens?: Prisma.AuthActionTokenUpdateManyWithoutUserNestedInput
   stockSales?: Prisma.StockSaleUpdateManyWithoutSoldByNestedInput
   Address?: Prisma.AddressUpdateOneWithoutUserNestedInput
   branch?: Prisma.BranchUpdateOneRequiredWithoutUserNestedInput
@@ -599,6 +611,8 @@ export type UserUncheckedUpdateInput = {
   UserBranch?: Prisma.UserBranchUncheckedUpdateManyWithoutUserNestedInput
   UserRole?: Prisma.UserRoleUncheckedUpdateManyWithoutUserNestedInput
   UserPermission?: Prisma.UserPermissionUncheckedUpdateManyWithoutUserNestedInput
+  refreshTokens?: Prisma.RefreshTokenUncheckedUpdateManyWithoutUserNestedInput
+  authActionTokens?: Prisma.AuthActionTokenUncheckedUpdateManyWithoutUserNestedInput
   stockSales?: Prisma.StockSaleUncheckedUpdateManyWithoutSoldByNestedInput
 }
 
@@ -1033,6 +1047,34 @@ export type UserUpdateOneRequiredWithoutTreatmentPlansNestedInput = {
   update?: Prisma.XOR<Prisma.XOR<Prisma.UserUpdateToOneWithWhereWithoutTreatmentPlansInput, Prisma.UserUpdateWithoutTreatmentPlansInput>, Prisma.UserUncheckedUpdateWithoutTreatmentPlansInput>
 }
 
+export type UserCreateNestedOneWithoutRefreshTokensInput = {
+  create?: Prisma.XOR<Prisma.UserCreateWithoutRefreshTokensInput, Prisma.UserUncheckedCreateWithoutRefreshTokensInput>
+  connectOrCreate?: Prisma.UserCreateOrConnectWithoutRefreshTokensInput
+  connect?: Prisma.UserWhereUniqueInput
+}
+
+export type UserUpdateOneRequiredWithoutRefreshTokensNestedInput = {
+  create?: Prisma.XOR<Prisma.UserCreateWithoutRefreshTokensInput, Prisma.UserUncheckedCreateWithoutRefreshTokensInput>
+  connectOrCreate?: Prisma.UserCreateOrConnectWithoutRefreshTokensInput
+  upsert?: Prisma.UserUpsertWithoutRefreshTokensInput
+  connect?: Prisma.UserWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.UserUpdateToOneWithWhereWithoutRefreshTokensInput, Prisma.UserUpdateWithoutRefreshTokensInput>, Prisma.UserUncheckedUpdateWithoutRefreshTokensInput>
+}
+
+export type UserCreateNestedOneWithoutAuthActionTokensInput = {
+  create?: Prisma.XOR<Prisma.UserCreateWithoutAuthActionTokensInput, Prisma.UserUncheckedCreateWithoutAuthActionTokensInput>
+  connectOrCreate?: Prisma.UserCreateOrConnectWithoutAuthActionTokensInput
+  connect?: Prisma.UserWhereUniqueInput
+}
+
+export type UserUpdateOneRequiredWithoutAuthActionTokensNestedInput = {
+  create?: Prisma.XOR<Prisma.UserCreateWithoutAuthActionTokensInput, Prisma.UserUncheckedCreateWithoutAuthActionTokensInput>
+  connectOrCreate?: Prisma.UserCreateOrConnectWithoutAuthActionTokensInput
+  upsert?: Prisma.UserUpsertWithoutAuthActionTokensInput
+  connect?: Prisma.UserWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.UserUpdateToOneWithWhereWithoutAuthActionTokensInput, Prisma.UserUpdateWithoutAuthActionTokensInput>, Prisma.UserUncheckedUpdateWithoutAuthActionTokensInput>
+}
+
 export type UserCreateNestedOneWithoutConsultInput = {
   create?: Prisma.XOR<Prisma.UserCreateWithoutConsultInput, Prisma.UserUncheckedCreateWithoutConsultInput>
   connectOrCreate?: Prisma.UserCreateOrConnectWithoutConsultInput
@@ -1179,6 +1221,8 @@ export type UserCreateWithoutAddressInput = {
   UserBranch?: Prisma.UserBranchCreateNestedManyWithoutUserInput
   UserRole?: Prisma.UserRoleCreateNestedManyWithoutUserInput
   UserPermission?: Prisma.UserPermissionCreateNestedManyWithoutUserInput
+  refreshTokens?: Prisma.RefreshTokenCreateNestedManyWithoutUserInput
+  authActionTokens?: Prisma.AuthActionTokenCreateNestedManyWithoutUserInput
   stockSales?: Prisma.StockSaleCreateNestedManyWithoutSoldByInput
   branch: Prisma.BranchCreateNestedOneWithoutUserInput
   Role?: Prisma.RoleCreateNestedOneWithoutUserInput
@@ -1218,6 +1262,8 @@ export type UserUncheckedCreateWithoutAddressInput = {
   UserBranch?: Prisma.UserBranchUncheckedCreateNestedManyWithoutUserInput
   UserRole?: Prisma.UserRoleUncheckedCreateNestedManyWithoutUserInput
   UserPermission?: Prisma.UserPermissionUncheckedCreateNestedManyWithoutUserInput
+  refreshTokens?: Prisma.RefreshTokenUncheckedCreateNestedManyWithoutUserInput
+  authActionTokens?: Prisma.AuthActionTokenUncheckedCreateNestedManyWithoutUserInput
   stockSales?: Prisma.StockSaleUncheckedCreateNestedManyWithoutSoldByInput
 }
 
@@ -1300,6 +1346,8 @@ export type UserCreateWithoutBranchInput = {
   UserBranch?: Prisma.UserBranchCreateNestedManyWithoutUserInput
   UserRole?: Prisma.UserRoleCreateNestedManyWithoutUserInput
   UserPermission?: Prisma.UserPermissionCreateNestedManyWithoutUserInput
+  refreshTokens?: Prisma.RefreshTokenCreateNestedManyWithoutUserInput
+  authActionTokens?: Prisma.AuthActionTokenCreateNestedManyWithoutUserInput
   stockSales?: Prisma.StockSaleCreateNestedManyWithoutSoldByInput
   Address?: Prisma.AddressCreateNestedOneWithoutUserInput
   Role?: Prisma.RoleCreateNestedOneWithoutUserInput
@@ -1339,6 +1387,8 @@ export type UserUncheckedCreateWithoutBranchInput = {
   UserBranch?: Prisma.UserBranchUncheckedCreateNestedManyWithoutUserInput
   UserRole?: Prisma.UserRoleUncheckedCreateNestedManyWithoutUserInput
   UserPermission?: Prisma.UserPermissionUncheckedCreateNestedManyWithoutUserInput
+  refreshTokens?: Prisma.RefreshTokenUncheckedCreateNestedManyWithoutUserInput
+  authActionTokens?: Prisma.AuthActionTokenUncheckedCreateNestedManyWithoutUserInput
   stockSales?: Prisma.StockSaleUncheckedCreateNestedManyWithoutSoldByInput
 }
 
@@ -1399,6 +1449,8 @@ export type UserCreateWithoutPersonInput = {
   UserBranch?: Prisma.UserBranchCreateNestedManyWithoutUserInput
   UserRole?: Prisma.UserRoleCreateNestedManyWithoutUserInput
   UserPermission?: Prisma.UserPermissionCreateNestedManyWithoutUserInput
+  refreshTokens?: Prisma.RefreshTokenCreateNestedManyWithoutUserInput
+  authActionTokens?: Prisma.AuthActionTokenCreateNestedManyWithoutUserInput
   stockSales?: Prisma.StockSaleCreateNestedManyWithoutSoldByInput
   Address?: Prisma.AddressCreateNestedOneWithoutUserInput
   branch: Prisma.BranchCreateNestedOneWithoutUserInput
@@ -1439,6 +1491,8 @@ export type UserUncheckedCreateWithoutPersonInput = {
   UserBranch?: Prisma.UserBranchUncheckedCreateNestedManyWithoutUserInput
   UserRole?: Prisma.UserRoleUncheckedCreateNestedManyWithoutUserInput
   UserPermission?: Prisma.UserPermissionUncheckedCreateNestedManyWithoutUserInput
+  refreshTokens?: Prisma.RefreshTokenUncheckedCreateNestedManyWithoutUserInput
+  authActionTokens?: Prisma.AuthActionTokenUncheckedCreateNestedManyWithoutUserInput
   stockSales?: Prisma.StockSaleUncheckedCreateNestedManyWithoutSoldByInput
 }
 
@@ -1489,6 +1543,8 @@ export type UserUpdateWithoutPersonInput = {
   UserBranch?: Prisma.UserBranchUpdateManyWithoutUserNestedInput
   UserRole?: Prisma.UserRoleUpdateManyWithoutUserNestedInput
   UserPermission?: Prisma.UserPermissionUpdateManyWithoutUserNestedInput
+  refreshTokens?: Prisma.RefreshTokenUpdateManyWithoutUserNestedInput
+  authActionTokens?: Prisma.AuthActionTokenUpdateManyWithoutUserNestedInput
   stockSales?: Prisma.StockSaleUpdateManyWithoutSoldByNestedInput
   Address?: Prisma.AddressUpdateOneWithoutUserNestedInput
   branch?: Prisma.BranchUpdateOneRequiredWithoutUserNestedInput
@@ -1529,6 +1585,8 @@ export type UserUncheckedUpdateWithoutPersonInput = {
   UserBranch?: Prisma.UserBranchUncheckedUpdateManyWithoutUserNestedInput
   UserRole?: Prisma.UserRoleUncheckedUpdateManyWithoutUserNestedInput
   UserPermission?: Prisma.UserPermissionUncheckedUpdateManyWithoutUserNestedInput
+  refreshTokens?: Prisma.RefreshTokenUncheckedUpdateManyWithoutUserNestedInput
+  authActionTokens?: Prisma.AuthActionTokenUncheckedUpdateManyWithoutUserNestedInput
   stockSales?: Prisma.StockSaleUncheckedUpdateManyWithoutSoldByNestedInput
 }
 
@@ -1564,6 +1622,8 @@ export type UserCreateWithoutRoleInput = {
   UserBranch?: Prisma.UserBranchCreateNestedManyWithoutUserInput
   UserRole?: Prisma.UserRoleCreateNestedManyWithoutUserInput
   UserPermission?: Prisma.UserPermissionCreateNestedManyWithoutUserInput
+  refreshTokens?: Prisma.RefreshTokenCreateNestedManyWithoutUserInput
+  authActionTokens?: Prisma.AuthActionTokenCreateNestedManyWithoutUserInput
   stockSales?: Prisma.StockSaleCreateNestedManyWithoutSoldByInput
   Address?: Prisma.AddressCreateNestedOneWithoutUserInput
   branch: Prisma.BranchCreateNestedOneWithoutUserInput
@@ -1603,6 +1663,8 @@ export type UserUncheckedCreateWithoutRoleInput = {
   UserBranch?: Prisma.UserBranchUncheckedCreateNestedManyWithoutUserInput
   UserRole?: Prisma.UserRoleUncheckedCreateNestedManyWithoutUserInput
   UserPermission?: Prisma.UserPermissionUncheckedCreateNestedManyWithoutUserInput
+  refreshTokens?: Prisma.RefreshTokenUncheckedCreateNestedManyWithoutUserInput
+  authActionTokens?: Prisma.AuthActionTokenUncheckedCreateNestedManyWithoutUserInput
   stockSales?: Prisma.StockSaleUncheckedCreateNestedManyWithoutSoldByInput
 }
 
@@ -1663,6 +1725,8 @@ export type UserCreateWithoutUserBranchInput = {
   xrayAnalyses?: Prisma.XRayAnalysisCreateNestedManyWithoutAnalyzedByInput
   UserRole?: Prisma.UserRoleCreateNestedManyWithoutUserInput
   UserPermission?: Prisma.UserPermissionCreateNestedManyWithoutUserInput
+  refreshTokens?: Prisma.RefreshTokenCreateNestedManyWithoutUserInput
+  authActionTokens?: Prisma.AuthActionTokenCreateNestedManyWithoutUserInput
   stockSales?: Prisma.StockSaleCreateNestedManyWithoutSoldByInput
   Address?: Prisma.AddressCreateNestedOneWithoutUserInput
   branch: Prisma.BranchCreateNestedOneWithoutUserInput
@@ -1703,6 +1767,8 @@ export type UserUncheckedCreateWithoutUserBranchInput = {
   xrayAnalyses?: Prisma.XRayAnalysisUncheckedCreateNestedManyWithoutAnalyzedByInput
   UserRole?: Prisma.UserRoleUncheckedCreateNestedManyWithoutUserInput
   UserPermission?: Prisma.UserPermissionUncheckedCreateNestedManyWithoutUserInput
+  refreshTokens?: Prisma.RefreshTokenUncheckedCreateNestedManyWithoutUserInput
+  authActionTokens?: Prisma.AuthActionTokenUncheckedCreateNestedManyWithoutUserInput
   stockSales?: Prisma.StockSaleUncheckedCreateNestedManyWithoutSoldByInput
 }
 
@@ -1753,6 +1819,8 @@ export type UserUpdateWithoutUserBranchInput = {
   xrayAnalyses?: Prisma.XRayAnalysisUpdateManyWithoutAnalyzedByNestedInput
   UserRole?: Prisma.UserRoleUpdateManyWithoutUserNestedInput
   UserPermission?: Prisma.UserPermissionUpdateManyWithoutUserNestedInput
+  refreshTokens?: Prisma.RefreshTokenUpdateManyWithoutUserNestedInput
+  authActionTokens?: Prisma.AuthActionTokenUpdateManyWithoutUserNestedInput
   stockSales?: Prisma.StockSaleUpdateManyWithoutSoldByNestedInput
   Address?: Prisma.AddressUpdateOneWithoutUserNestedInput
   branch?: Prisma.BranchUpdateOneRequiredWithoutUserNestedInput
@@ -1793,6 +1861,8 @@ export type UserUncheckedUpdateWithoutUserBranchInput = {
   xrayAnalyses?: Prisma.XRayAnalysisUncheckedUpdateManyWithoutAnalyzedByNestedInput
   UserRole?: Prisma.UserRoleUncheckedUpdateManyWithoutUserNestedInput
   UserPermission?: Prisma.UserPermissionUncheckedUpdateManyWithoutUserNestedInput
+  refreshTokens?: Prisma.RefreshTokenUncheckedUpdateManyWithoutUserNestedInput
+  authActionTokens?: Prisma.AuthActionTokenUncheckedUpdateManyWithoutUserNestedInput
   stockSales?: Prisma.StockSaleUncheckedUpdateManyWithoutSoldByNestedInput
 }
 
@@ -1827,6 +1897,8 @@ export type UserCreateWithoutUserPermissionInput = {
   xrayAnalyses?: Prisma.XRayAnalysisCreateNestedManyWithoutAnalyzedByInput
   UserBranch?: Prisma.UserBranchCreateNestedManyWithoutUserInput
   UserRole?: Prisma.UserRoleCreateNestedManyWithoutUserInput
+  refreshTokens?: Prisma.RefreshTokenCreateNestedManyWithoutUserInput
+  authActionTokens?: Prisma.AuthActionTokenCreateNestedManyWithoutUserInput
   stockSales?: Prisma.StockSaleCreateNestedManyWithoutSoldByInput
   Address?: Prisma.AddressCreateNestedOneWithoutUserInput
   branch: Prisma.BranchCreateNestedOneWithoutUserInput
@@ -1867,6 +1939,8 @@ export type UserUncheckedCreateWithoutUserPermissionInput = {
   xrayAnalyses?: Prisma.XRayAnalysisUncheckedCreateNestedManyWithoutAnalyzedByInput
   UserBranch?: Prisma.UserBranchUncheckedCreateNestedManyWithoutUserInput
   UserRole?: Prisma.UserRoleUncheckedCreateNestedManyWithoutUserInput
+  refreshTokens?: Prisma.RefreshTokenUncheckedCreateNestedManyWithoutUserInput
+  authActionTokens?: Prisma.AuthActionTokenUncheckedCreateNestedManyWithoutUserInput
   stockSales?: Prisma.StockSaleUncheckedCreateNestedManyWithoutSoldByInput
 }
 
@@ -1917,6 +1991,8 @@ export type UserUpdateWithoutUserPermissionInput = {
   xrayAnalyses?: Prisma.XRayAnalysisUpdateManyWithoutAnalyzedByNestedInput
   UserBranch?: Prisma.UserBranchUpdateManyWithoutUserNestedInput
   UserRole?: Prisma.UserRoleUpdateManyWithoutUserNestedInput
+  refreshTokens?: Prisma.RefreshTokenUpdateManyWithoutUserNestedInput
+  authActionTokens?: Prisma.AuthActionTokenUpdateManyWithoutUserNestedInput
   stockSales?: Prisma.StockSaleUpdateManyWithoutSoldByNestedInput
   Address?: Prisma.AddressUpdateOneWithoutUserNestedInput
   branch?: Prisma.BranchUpdateOneRequiredWithoutUserNestedInput
@@ -1957,6 +2033,8 @@ export type UserUncheckedUpdateWithoutUserPermissionInput = {
   xrayAnalyses?: Prisma.XRayAnalysisUncheckedUpdateManyWithoutAnalyzedByNestedInput
   UserBranch?: Prisma.UserBranchUncheckedUpdateManyWithoutUserNestedInput
   UserRole?: Prisma.UserRoleUncheckedUpdateManyWithoutUserNestedInput
+  refreshTokens?: Prisma.RefreshTokenUncheckedUpdateManyWithoutUserNestedInput
+  authActionTokens?: Prisma.AuthActionTokenUncheckedUpdateManyWithoutUserNestedInput
   stockSales?: Prisma.StockSaleUncheckedUpdateManyWithoutSoldByNestedInput
 }
 
@@ -1991,6 +2069,8 @@ export type UserCreateWithoutUserRoleInput = {
   xrayAnalyses?: Prisma.XRayAnalysisCreateNestedManyWithoutAnalyzedByInput
   UserBranch?: Prisma.UserBranchCreateNestedManyWithoutUserInput
   UserPermission?: Prisma.UserPermissionCreateNestedManyWithoutUserInput
+  refreshTokens?: Prisma.RefreshTokenCreateNestedManyWithoutUserInput
+  authActionTokens?: Prisma.AuthActionTokenCreateNestedManyWithoutUserInput
   stockSales?: Prisma.StockSaleCreateNestedManyWithoutSoldByInput
   Address?: Prisma.AddressCreateNestedOneWithoutUserInput
   branch: Prisma.BranchCreateNestedOneWithoutUserInput
@@ -2031,6 +2111,8 @@ export type UserUncheckedCreateWithoutUserRoleInput = {
   xrayAnalyses?: Prisma.XRayAnalysisUncheckedCreateNestedManyWithoutAnalyzedByInput
   UserBranch?: Prisma.UserBranchUncheckedCreateNestedManyWithoutUserInput
   UserPermission?: Prisma.UserPermissionUncheckedCreateNestedManyWithoutUserInput
+  refreshTokens?: Prisma.RefreshTokenUncheckedCreateNestedManyWithoutUserInput
+  authActionTokens?: Prisma.AuthActionTokenUncheckedCreateNestedManyWithoutUserInput
   stockSales?: Prisma.StockSaleUncheckedCreateNestedManyWithoutSoldByInput
 }
 
@@ -2081,6 +2163,8 @@ export type UserUpdateWithoutUserRoleInput = {
   xrayAnalyses?: Prisma.XRayAnalysisUpdateManyWithoutAnalyzedByNestedInput
   UserBranch?: Prisma.UserBranchUpdateManyWithoutUserNestedInput
   UserPermission?: Prisma.UserPermissionUpdateManyWithoutUserNestedInput
+  refreshTokens?: Prisma.RefreshTokenUpdateManyWithoutUserNestedInput
+  authActionTokens?: Prisma.AuthActionTokenUpdateManyWithoutUserNestedInput
   stockSales?: Prisma.StockSaleUpdateManyWithoutSoldByNestedInput
   Address?: Prisma.AddressUpdateOneWithoutUserNestedInput
   branch?: Prisma.BranchUpdateOneRequiredWithoutUserNestedInput
@@ -2121,6 +2205,8 @@ export type UserUncheckedUpdateWithoutUserRoleInput = {
   xrayAnalyses?: Prisma.XRayAnalysisUncheckedUpdateManyWithoutAnalyzedByNestedInput
   UserBranch?: Prisma.UserBranchUncheckedUpdateManyWithoutUserNestedInput
   UserPermission?: Prisma.UserPermissionUncheckedUpdateManyWithoutUserNestedInput
+  refreshTokens?: Prisma.RefreshTokenUncheckedUpdateManyWithoutUserNestedInput
+  authActionTokens?: Prisma.AuthActionTokenUncheckedUpdateManyWithoutUserNestedInput
   stockSales?: Prisma.StockSaleUncheckedUpdateManyWithoutSoldByNestedInput
 }
 
@@ -2155,6 +2241,8 @@ export type UserCreateWithoutAppointmentInput = {
   UserBranch?: Prisma.UserBranchCreateNestedManyWithoutUserInput
   UserRole?: Prisma.UserRoleCreateNestedManyWithoutUserInput
   UserPermission?: Prisma.UserPermissionCreateNestedManyWithoutUserInput
+  refreshTokens?: Prisma.RefreshTokenCreateNestedManyWithoutUserInput
+  authActionTokens?: Prisma.AuthActionTokenCreateNestedManyWithoutUserInput
   stockSales?: Prisma.StockSaleCreateNestedManyWithoutSoldByInput
   Address?: Prisma.AddressCreateNestedOneWithoutUserInput
   branch: Prisma.BranchCreateNestedOneWithoutUserInput
@@ -2195,6 +2283,8 @@ export type UserUncheckedCreateWithoutAppointmentInput = {
   UserBranch?: Prisma.UserBranchUncheckedCreateNestedManyWithoutUserInput
   UserRole?: Prisma.UserRoleUncheckedCreateNestedManyWithoutUserInput
   UserPermission?: Prisma.UserPermissionUncheckedCreateNestedManyWithoutUserInput
+  refreshTokens?: Prisma.RefreshTokenUncheckedCreateNestedManyWithoutUserInput
+  authActionTokens?: Prisma.AuthActionTokenUncheckedCreateNestedManyWithoutUserInput
   stockSales?: Prisma.StockSaleUncheckedCreateNestedManyWithoutSoldByInput
 }
 
@@ -2234,6 +2324,8 @@ export type UserCreateWithoutAppointmentsInput = {
   UserBranch?: Prisma.UserBranchCreateNestedManyWithoutUserInput
   UserRole?: Prisma.UserRoleCreateNestedManyWithoutUserInput
   UserPermission?: Prisma.UserPermissionCreateNestedManyWithoutUserInput
+  refreshTokens?: Prisma.RefreshTokenCreateNestedManyWithoutUserInput
+  authActionTokens?: Prisma.AuthActionTokenCreateNestedManyWithoutUserInput
   stockSales?: Prisma.StockSaleCreateNestedManyWithoutSoldByInput
   Address?: Prisma.AddressCreateNestedOneWithoutUserInput
   branch: Prisma.BranchCreateNestedOneWithoutUserInput
@@ -2274,6 +2366,8 @@ export type UserUncheckedCreateWithoutAppointmentsInput = {
   UserBranch?: Prisma.UserBranchUncheckedCreateNestedManyWithoutUserInput
   UserRole?: Prisma.UserRoleUncheckedCreateNestedManyWithoutUserInput
   UserPermission?: Prisma.UserPermissionUncheckedCreateNestedManyWithoutUserInput
+  refreshTokens?: Prisma.RefreshTokenUncheckedCreateNestedManyWithoutUserInput
+  authActionTokens?: Prisma.AuthActionTokenUncheckedCreateNestedManyWithoutUserInput
   stockSales?: Prisma.StockSaleUncheckedCreateNestedManyWithoutSoldByInput
 }
 
@@ -2324,6 +2418,8 @@ export type UserUpdateWithoutAppointmentInput = {
   UserBranch?: Prisma.UserBranchUpdateManyWithoutUserNestedInput
   UserRole?: Prisma.UserRoleUpdateManyWithoutUserNestedInput
   UserPermission?: Prisma.UserPermissionUpdateManyWithoutUserNestedInput
+  refreshTokens?: Prisma.RefreshTokenUpdateManyWithoutUserNestedInput
+  authActionTokens?: Prisma.AuthActionTokenUpdateManyWithoutUserNestedInput
   stockSales?: Prisma.StockSaleUpdateManyWithoutSoldByNestedInput
   Address?: Prisma.AddressUpdateOneWithoutUserNestedInput
   branch?: Prisma.BranchUpdateOneRequiredWithoutUserNestedInput
@@ -2364,6 +2460,8 @@ export type UserUncheckedUpdateWithoutAppointmentInput = {
   UserBranch?: Prisma.UserBranchUncheckedUpdateManyWithoutUserNestedInput
   UserRole?: Prisma.UserRoleUncheckedUpdateManyWithoutUserNestedInput
   UserPermission?: Prisma.UserPermissionUncheckedUpdateManyWithoutUserNestedInput
+  refreshTokens?: Prisma.RefreshTokenUncheckedUpdateManyWithoutUserNestedInput
+  authActionTokens?: Prisma.AuthActionTokenUncheckedUpdateManyWithoutUserNestedInput
   stockSales?: Prisma.StockSaleUncheckedUpdateManyWithoutSoldByNestedInput
 }
 
@@ -2409,6 +2507,8 @@ export type UserUpdateWithoutAppointmentsInput = {
   UserBranch?: Prisma.UserBranchUpdateManyWithoutUserNestedInput
   UserRole?: Prisma.UserRoleUpdateManyWithoutUserNestedInput
   UserPermission?: Prisma.UserPermissionUpdateManyWithoutUserNestedInput
+  refreshTokens?: Prisma.RefreshTokenUpdateManyWithoutUserNestedInput
+  authActionTokens?: Prisma.AuthActionTokenUpdateManyWithoutUserNestedInput
   stockSales?: Prisma.StockSaleUpdateManyWithoutSoldByNestedInput
   Address?: Prisma.AddressUpdateOneWithoutUserNestedInput
   branch?: Prisma.BranchUpdateOneRequiredWithoutUserNestedInput
@@ -2449,6 +2549,8 @@ export type UserUncheckedUpdateWithoutAppointmentsInput = {
   UserBranch?: Prisma.UserBranchUncheckedUpdateManyWithoutUserNestedInput
   UserRole?: Prisma.UserRoleUncheckedUpdateManyWithoutUserNestedInput
   UserPermission?: Prisma.UserPermissionUncheckedUpdateManyWithoutUserNestedInput
+  refreshTokens?: Prisma.RefreshTokenUncheckedUpdateManyWithoutUserNestedInput
+  authActionTokens?: Prisma.AuthActionTokenUncheckedUpdateManyWithoutUserNestedInput
   stockSales?: Prisma.StockSaleUncheckedUpdateManyWithoutSoldByNestedInput
 }
 
@@ -2483,6 +2585,8 @@ export type UserCreateWithoutDoctorProfileInput = {
   UserBranch?: Prisma.UserBranchCreateNestedManyWithoutUserInput
   UserRole?: Prisma.UserRoleCreateNestedManyWithoutUserInput
   UserPermission?: Prisma.UserPermissionCreateNestedManyWithoutUserInput
+  refreshTokens?: Prisma.RefreshTokenCreateNestedManyWithoutUserInput
+  authActionTokens?: Prisma.AuthActionTokenCreateNestedManyWithoutUserInput
   stockSales?: Prisma.StockSaleCreateNestedManyWithoutSoldByInput
   Address?: Prisma.AddressCreateNestedOneWithoutUserInput
   branch: Prisma.BranchCreateNestedOneWithoutUserInput
@@ -2523,6 +2627,8 @@ export type UserUncheckedCreateWithoutDoctorProfileInput = {
   UserBranch?: Prisma.UserBranchUncheckedCreateNestedManyWithoutUserInput
   UserRole?: Prisma.UserRoleUncheckedCreateNestedManyWithoutUserInput
   UserPermission?: Prisma.UserPermissionUncheckedCreateNestedManyWithoutUserInput
+  refreshTokens?: Prisma.RefreshTokenUncheckedCreateNestedManyWithoutUserInput
+  authActionTokens?: Prisma.AuthActionTokenUncheckedCreateNestedManyWithoutUserInput
   stockSales?: Prisma.StockSaleUncheckedCreateNestedManyWithoutSoldByInput
 }
 
@@ -2573,6 +2679,8 @@ export type UserUpdateWithoutDoctorProfileInput = {
   UserBranch?: Prisma.UserBranchUpdateManyWithoutUserNestedInput
   UserRole?: Prisma.UserRoleUpdateManyWithoutUserNestedInput
   UserPermission?: Prisma.UserPermissionUpdateManyWithoutUserNestedInput
+  refreshTokens?: Prisma.RefreshTokenUpdateManyWithoutUserNestedInput
+  authActionTokens?: Prisma.AuthActionTokenUpdateManyWithoutUserNestedInput
   stockSales?: Prisma.StockSaleUpdateManyWithoutSoldByNestedInput
   Address?: Prisma.AddressUpdateOneWithoutUserNestedInput
   branch?: Prisma.BranchUpdateOneRequiredWithoutUserNestedInput
@@ -2613,6 +2721,8 @@ export type UserUncheckedUpdateWithoutDoctorProfileInput = {
   UserBranch?: Prisma.UserBranchUncheckedUpdateManyWithoutUserNestedInput
   UserRole?: Prisma.UserRoleUncheckedUpdateManyWithoutUserNestedInput
   UserPermission?: Prisma.UserPermissionUncheckedUpdateManyWithoutUserNestedInput
+  refreshTokens?: Prisma.RefreshTokenUncheckedUpdateManyWithoutUserNestedInput
+  authActionTokens?: Prisma.AuthActionTokenUncheckedUpdateManyWithoutUserNestedInput
   stockSales?: Prisma.StockSaleUncheckedUpdateManyWithoutSoldByNestedInput
 }
 
@@ -2647,6 +2757,8 @@ export type UserCreateWithoutConversationsStartedInput = {
   UserBranch?: Prisma.UserBranchCreateNestedManyWithoutUserInput
   UserRole?: Prisma.UserRoleCreateNestedManyWithoutUserInput
   UserPermission?: Prisma.UserPermissionCreateNestedManyWithoutUserInput
+  refreshTokens?: Prisma.RefreshTokenCreateNestedManyWithoutUserInput
+  authActionTokens?: Prisma.AuthActionTokenCreateNestedManyWithoutUserInput
   stockSales?: Prisma.StockSaleCreateNestedManyWithoutSoldByInput
   Address?: Prisma.AddressCreateNestedOneWithoutUserInput
   branch: Prisma.BranchCreateNestedOneWithoutUserInput
@@ -2687,6 +2799,8 @@ export type UserUncheckedCreateWithoutConversationsStartedInput = {
   UserBranch?: Prisma.UserBranchUncheckedCreateNestedManyWithoutUserInput
   UserRole?: Prisma.UserRoleUncheckedCreateNestedManyWithoutUserInput
   UserPermission?: Prisma.UserPermissionUncheckedCreateNestedManyWithoutUserInput
+  refreshTokens?: Prisma.RefreshTokenUncheckedCreateNestedManyWithoutUserInput
+  authActionTokens?: Prisma.AuthActionTokenUncheckedCreateNestedManyWithoutUserInput
   stockSales?: Prisma.StockSaleUncheckedCreateNestedManyWithoutSoldByInput
 }
 
@@ -2726,6 +2840,8 @@ export type UserCreateWithoutConversationsReceivedInput = {
   UserBranch?: Prisma.UserBranchCreateNestedManyWithoutUserInput
   UserRole?: Prisma.UserRoleCreateNestedManyWithoutUserInput
   UserPermission?: Prisma.UserPermissionCreateNestedManyWithoutUserInput
+  refreshTokens?: Prisma.RefreshTokenCreateNestedManyWithoutUserInput
+  authActionTokens?: Prisma.AuthActionTokenCreateNestedManyWithoutUserInput
   stockSales?: Prisma.StockSaleCreateNestedManyWithoutSoldByInput
   Address?: Prisma.AddressCreateNestedOneWithoutUserInput
   branch: Prisma.BranchCreateNestedOneWithoutUserInput
@@ -2766,6 +2882,8 @@ export type UserUncheckedCreateWithoutConversationsReceivedInput = {
   UserBranch?: Prisma.UserBranchUncheckedCreateNestedManyWithoutUserInput
   UserRole?: Prisma.UserRoleUncheckedCreateNestedManyWithoutUserInput
   UserPermission?: Prisma.UserPermissionUncheckedCreateNestedManyWithoutUserInput
+  refreshTokens?: Prisma.RefreshTokenUncheckedCreateNestedManyWithoutUserInput
+  authActionTokens?: Prisma.AuthActionTokenUncheckedCreateNestedManyWithoutUserInput
   stockSales?: Prisma.StockSaleUncheckedCreateNestedManyWithoutSoldByInput
 }
 
@@ -2816,6 +2934,8 @@ export type UserUpdateWithoutConversationsStartedInput = {
   UserBranch?: Prisma.UserBranchUpdateManyWithoutUserNestedInput
   UserRole?: Prisma.UserRoleUpdateManyWithoutUserNestedInput
   UserPermission?: Prisma.UserPermissionUpdateManyWithoutUserNestedInput
+  refreshTokens?: Prisma.RefreshTokenUpdateManyWithoutUserNestedInput
+  authActionTokens?: Prisma.AuthActionTokenUpdateManyWithoutUserNestedInput
   stockSales?: Prisma.StockSaleUpdateManyWithoutSoldByNestedInput
   Address?: Prisma.AddressUpdateOneWithoutUserNestedInput
   branch?: Prisma.BranchUpdateOneRequiredWithoutUserNestedInput
@@ -2856,6 +2976,8 @@ export type UserUncheckedUpdateWithoutConversationsStartedInput = {
   UserBranch?: Prisma.UserBranchUncheckedUpdateManyWithoutUserNestedInput
   UserRole?: Prisma.UserRoleUncheckedUpdateManyWithoutUserNestedInput
   UserPermission?: Prisma.UserPermissionUncheckedUpdateManyWithoutUserNestedInput
+  refreshTokens?: Prisma.RefreshTokenUncheckedUpdateManyWithoutUserNestedInput
+  authActionTokens?: Prisma.AuthActionTokenUncheckedUpdateManyWithoutUserNestedInput
   stockSales?: Prisma.StockSaleUncheckedUpdateManyWithoutSoldByNestedInput
 }
 
@@ -2901,6 +3023,8 @@ export type UserUpdateWithoutConversationsReceivedInput = {
   UserBranch?: Prisma.UserBranchUpdateManyWithoutUserNestedInput
   UserRole?: Prisma.UserRoleUpdateManyWithoutUserNestedInput
   UserPermission?: Prisma.UserPermissionUpdateManyWithoutUserNestedInput
+  refreshTokens?: Prisma.RefreshTokenUpdateManyWithoutUserNestedInput
+  authActionTokens?: Prisma.AuthActionTokenUpdateManyWithoutUserNestedInput
   stockSales?: Prisma.StockSaleUpdateManyWithoutSoldByNestedInput
   Address?: Prisma.AddressUpdateOneWithoutUserNestedInput
   branch?: Prisma.BranchUpdateOneRequiredWithoutUserNestedInput
@@ -2941,6 +3065,8 @@ export type UserUncheckedUpdateWithoutConversationsReceivedInput = {
   UserBranch?: Prisma.UserBranchUncheckedUpdateManyWithoutUserNestedInput
   UserRole?: Prisma.UserRoleUncheckedUpdateManyWithoutUserNestedInput
   UserPermission?: Prisma.UserPermissionUncheckedUpdateManyWithoutUserNestedInput
+  refreshTokens?: Prisma.RefreshTokenUncheckedUpdateManyWithoutUserNestedInput
+  authActionTokens?: Prisma.AuthActionTokenUncheckedUpdateManyWithoutUserNestedInput
   stockSales?: Prisma.StockSaleUncheckedUpdateManyWithoutSoldByNestedInput
 }
 
@@ -2975,6 +3101,8 @@ export type UserCreateWithoutChatMessagesInput = {
   UserBranch?: Prisma.UserBranchCreateNestedManyWithoutUserInput
   UserRole?: Prisma.UserRoleCreateNestedManyWithoutUserInput
   UserPermission?: Prisma.UserPermissionCreateNestedManyWithoutUserInput
+  refreshTokens?: Prisma.RefreshTokenCreateNestedManyWithoutUserInput
+  authActionTokens?: Prisma.AuthActionTokenCreateNestedManyWithoutUserInput
   stockSales?: Prisma.StockSaleCreateNestedManyWithoutSoldByInput
   Address?: Prisma.AddressCreateNestedOneWithoutUserInput
   branch: Prisma.BranchCreateNestedOneWithoutUserInput
@@ -3015,6 +3143,8 @@ export type UserUncheckedCreateWithoutChatMessagesInput = {
   UserBranch?: Prisma.UserBranchUncheckedCreateNestedManyWithoutUserInput
   UserRole?: Prisma.UserRoleUncheckedCreateNestedManyWithoutUserInput
   UserPermission?: Prisma.UserPermissionUncheckedCreateNestedManyWithoutUserInput
+  refreshTokens?: Prisma.RefreshTokenUncheckedCreateNestedManyWithoutUserInput
+  authActionTokens?: Prisma.AuthActionTokenUncheckedCreateNestedManyWithoutUserInput
   stockSales?: Prisma.StockSaleUncheckedCreateNestedManyWithoutSoldByInput
 }
 
@@ -3065,6 +3195,8 @@ export type UserUpdateWithoutChatMessagesInput = {
   UserBranch?: Prisma.UserBranchUpdateManyWithoutUserNestedInput
   UserRole?: Prisma.UserRoleUpdateManyWithoutUserNestedInput
   UserPermission?: Prisma.UserPermissionUpdateManyWithoutUserNestedInput
+  refreshTokens?: Prisma.RefreshTokenUpdateManyWithoutUserNestedInput
+  authActionTokens?: Prisma.AuthActionTokenUpdateManyWithoutUserNestedInput
   stockSales?: Prisma.StockSaleUpdateManyWithoutSoldByNestedInput
   Address?: Prisma.AddressUpdateOneWithoutUserNestedInput
   branch?: Prisma.BranchUpdateOneRequiredWithoutUserNestedInput
@@ -3105,6 +3237,8 @@ export type UserUncheckedUpdateWithoutChatMessagesInput = {
   UserBranch?: Prisma.UserBranchUncheckedUpdateManyWithoutUserNestedInput
   UserRole?: Prisma.UserRoleUncheckedUpdateManyWithoutUserNestedInput
   UserPermission?: Prisma.UserPermissionUncheckedUpdateManyWithoutUserNestedInput
+  refreshTokens?: Prisma.RefreshTokenUncheckedUpdateManyWithoutUserNestedInput
+  authActionTokens?: Prisma.AuthActionTokenUncheckedUpdateManyWithoutUserNestedInput
   stockSales?: Prisma.StockSaleUncheckedUpdateManyWithoutSoldByNestedInput
 }
 
@@ -3140,6 +3274,8 @@ export type UserCreateWithoutStockSalesInput = {
   UserBranch?: Prisma.UserBranchCreateNestedManyWithoutUserInput
   UserRole?: Prisma.UserRoleCreateNestedManyWithoutUserInput
   UserPermission?: Prisma.UserPermissionCreateNestedManyWithoutUserInput
+  refreshTokens?: Prisma.RefreshTokenCreateNestedManyWithoutUserInput
+  authActionTokens?: Prisma.AuthActionTokenCreateNestedManyWithoutUserInput
   Address?: Prisma.AddressCreateNestedOneWithoutUserInput
   branch: Prisma.BranchCreateNestedOneWithoutUserInput
   Role?: Prisma.RoleCreateNestedOneWithoutUserInput
@@ -3180,6 +3316,8 @@ export type UserUncheckedCreateWithoutStockSalesInput = {
   UserBranch?: Prisma.UserBranchUncheckedCreateNestedManyWithoutUserInput
   UserRole?: Prisma.UserRoleUncheckedCreateNestedManyWithoutUserInput
   UserPermission?: Prisma.UserPermissionUncheckedCreateNestedManyWithoutUserInput
+  refreshTokens?: Prisma.RefreshTokenUncheckedCreateNestedManyWithoutUserInput
+  authActionTokens?: Prisma.AuthActionTokenUncheckedCreateNestedManyWithoutUserInput
 }
 
 export type UserCreateOrConnectWithoutStockSalesInput = {
@@ -3230,6 +3368,8 @@ export type UserUpdateWithoutStockSalesInput = {
   UserBranch?: Prisma.UserBranchUpdateManyWithoutUserNestedInput
   UserRole?: Prisma.UserRoleUpdateManyWithoutUserNestedInput
   UserPermission?: Prisma.UserPermissionUpdateManyWithoutUserNestedInput
+  refreshTokens?: Prisma.RefreshTokenUpdateManyWithoutUserNestedInput
+  authActionTokens?: Prisma.AuthActionTokenUpdateManyWithoutUserNestedInput
   Address?: Prisma.AddressUpdateOneWithoutUserNestedInput
   branch?: Prisma.BranchUpdateOneRequiredWithoutUserNestedInput
   Role?: Prisma.RoleUpdateOneWithoutUserNestedInput
@@ -3270,6 +3410,8 @@ export type UserUncheckedUpdateWithoutStockSalesInput = {
   UserBranch?: Prisma.UserBranchUncheckedUpdateManyWithoutUserNestedInput
   UserRole?: Prisma.UserRoleUncheckedUpdateManyWithoutUserNestedInput
   UserPermission?: Prisma.UserPermissionUncheckedUpdateManyWithoutUserNestedInput
+  refreshTokens?: Prisma.RefreshTokenUncheckedUpdateManyWithoutUserNestedInput
+  authActionTokens?: Prisma.AuthActionTokenUncheckedUpdateManyWithoutUserNestedInput
 }
 
 export type UserCreateWithoutTreatmentPlansInput = {
@@ -3303,6 +3445,8 @@ export type UserCreateWithoutTreatmentPlansInput = {
   UserBranch?: Prisma.UserBranchCreateNestedManyWithoutUserInput
   UserRole?: Prisma.UserRoleCreateNestedManyWithoutUserInput
   UserPermission?: Prisma.UserPermissionCreateNestedManyWithoutUserInput
+  refreshTokens?: Prisma.RefreshTokenCreateNestedManyWithoutUserInput
+  authActionTokens?: Prisma.AuthActionTokenCreateNestedManyWithoutUserInput
   stockSales?: Prisma.StockSaleCreateNestedManyWithoutSoldByInput
   Address?: Prisma.AddressCreateNestedOneWithoutUserInput
   branch: Prisma.BranchCreateNestedOneWithoutUserInput
@@ -3343,6 +3487,8 @@ export type UserUncheckedCreateWithoutTreatmentPlansInput = {
   UserBranch?: Prisma.UserBranchUncheckedCreateNestedManyWithoutUserInput
   UserRole?: Prisma.UserRoleUncheckedCreateNestedManyWithoutUserInput
   UserPermission?: Prisma.UserPermissionUncheckedCreateNestedManyWithoutUserInput
+  refreshTokens?: Prisma.RefreshTokenUncheckedCreateNestedManyWithoutUserInput
+  authActionTokens?: Prisma.AuthActionTokenUncheckedCreateNestedManyWithoutUserInput
   stockSales?: Prisma.StockSaleUncheckedCreateNestedManyWithoutSoldByInput
 }
 
@@ -3393,6 +3539,8 @@ export type UserUpdateWithoutTreatmentPlansInput = {
   UserBranch?: Prisma.UserBranchUpdateManyWithoutUserNestedInput
   UserRole?: Prisma.UserRoleUpdateManyWithoutUserNestedInput
   UserPermission?: Prisma.UserPermissionUpdateManyWithoutUserNestedInput
+  refreshTokens?: Prisma.RefreshTokenUpdateManyWithoutUserNestedInput
+  authActionTokens?: Prisma.AuthActionTokenUpdateManyWithoutUserNestedInput
   stockSales?: Prisma.StockSaleUpdateManyWithoutSoldByNestedInput
   Address?: Prisma.AddressUpdateOneWithoutUserNestedInput
   branch?: Prisma.BranchUpdateOneRequiredWithoutUserNestedInput
@@ -3433,6 +3581,352 @@ export type UserUncheckedUpdateWithoutTreatmentPlansInput = {
   UserBranch?: Prisma.UserBranchUncheckedUpdateManyWithoutUserNestedInput
   UserRole?: Prisma.UserRoleUncheckedUpdateManyWithoutUserNestedInput
   UserPermission?: Prisma.UserPermissionUncheckedUpdateManyWithoutUserNestedInput
+  refreshTokens?: Prisma.RefreshTokenUncheckedUpdateManyWithoutUserNestedInput
+  authActionTokens?: Prisma.AuthActionTokenUncheckedUpdateManyWithoutUserNestedInput
+  stockSales?: Prisma.StockSaleUncheckedUpdateManyWithoutSoldByNestedInput
+}
+
+export type UserCreateWithoutRefreshTokensInput = {
+  id?: string
+  email: string
+  password: string
+  username: string
+  isActive?: boolean
+  phoneNumber?: number | null
+  countryCode?: string | null
+  isPhoneVerified?: boolean
+  isEmailVerified?: boolean
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  deletedAt?: Date | string | null
+  accessHistories?: Prisma.AccessHistoryCreateNestedManyWithoutUserInput
+  audits?: Prisma.AuditCreateNestedManyWithoutUserInput
+  loginHistories?: Prisma.LoginHistoryCreateNestedManyWithoutUserInput
+  Person?: Prisma.PersonCreateNestedManyWithoutUserInput
+  Appointment?: Prisma.AppointmentCreateNestedManyWithoutDoctorInput
+  appointments?: Prisma.AppointmentCreateNestedManyWithoutUserInput
+  clinicProccesses?: Prisma.ClinicProccessCreateNestedManyWithoutDoctorInput
+  Consult?: Prisma.ConsultCreateNestedManyWithoutDoctorInput
+  diagnostics?: Prisma.DiagnosticCreateNestedManyWithoutDoctorInput
+  doctorProfile?: Prisma.DoctorProfileCreateNestedOneWithoutUserInput
+  conversationsStarted?: Prisma.ChatConversationCreateNestedManyWithoutStarterInput
+  conversationsReceived?: Prisma.ChatConversationCreateNestedManyWithoutRecipientInput
+  chatMessages?: Prisma.ChatMessageCreateNestedManyWithoutAuthorInput
+  treatmentPlans?: Prisma.TreatmentPlanCreateNestedManyWithoutDoctorInput
+  patientPrescriptions?: Prisma.PatientPrescriptionCreateNestedManyWithoutDoctorInput
+  xrayAnalyses?: Prisma.XRayAnalysisCreateNestedManyWithoutAnalyzedByInput
+  UserBranch?: Prisma.UserBranchCreateNestedManyWithoutUserInput
+  UserRole?: Prisma.UserRoleCreateNestedManyWithoutUserInput
+  UserPermission?: Prisma.UserPermissionCreateNestedManyWithoutUserInput
+  authActionTokens?: Prisma.AuthActionTokenCreateNestedManyWithoutUserInput
+  stockSales?: Prisma.StockSaleCreateNestedManyWithoutSoldByInput
+  Address?: Prisma.AddressCreateNestedOneWithoutUserInput
+  branch: Prisma.BranchCreateNestedOneWithoutUserInput
+  Role?: Prisma.RoleCreateNestedOneWithoutUserInput
+}
+
+export type UserUncheckedCreateWithoutRefreshTokensInput = {
+  id?: string
+  email: string
+  password: string
+  username: string
+  branchId: string
+  addressId?: string | null
+  roleId?: string | null
+  isActive?: boolean
+  phoneNumber?: number | null
+  countryCode?: string | null
+  isPhoneVerified?: boolean
+  isEmailVerified?: boolean
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  deletedAt?: Date | string | null
+  accessHistories?: Prisma.AccessHistoryUncheckedCreateNestedManyWithoutUserInput
+  audits?: Prisma.AuditUncheckedCreateNestedManyWithoutUserInput
+  loginHistories?: Prisma.LoginHistoryUncheckedCreateNestedManyWithoutUserInput
+  Person?: Prisma.PersonUncheckedCreateNestedManyWithoutUserInput
+  Appointment?: Prisma.AppointmentUncheckedCreateNestedManyWithoutDoctorInput
+  appointments?: Prisma.AppointmentUncheckedCreateNestedManyWithoutUserInput
+  clinicProccesses?: Prisma.ClinicProccessUncheckedCreateNestedManyWithoutDoctorInput
+  Consult?: Prisma.ConsultUncheckedCreateNestedManyWithoutDoctorInput
+  diagnostics?: Prisma.DiagnosticUncheckedCreateNestedManyWithoutDoctorInput
+  doctorProfile?: Prisma.DoctorProfileUncheckedCreateNestedOneWithoutUserInput
+  conversationsStarted?: Prisma.ChatConversationUncheckedCreateNestedManyWithoutStarterInput
+  conversationsReceived?: Prisma.ChatConversationUncheckedCreateNestedManyWithoutRecipientInput
+  chatMessages?: Prisma.ChatMessageUncheckedCreateNestedManyWithoutAuthorInput
+  treatmentPlans?: Prisma.TreatmentPlanUncheckedCreateNestedManyWithoutDoctorInput
+  patientPrescriptions?: Prisma.PatientPrescriptionUncheckedCreateNestedManyWithoutDoctorInput
+  xrayAnalyses?: Prisma.XRayAnalysisUncheckedCreateNestedManyWithoutAnalyzedByInput
+  UserBranch?: Prisma.UserBranchUncheckedCreateNestedManyWithoutUserInput
+  UserRole?: Prisma.UserRoleUncheckedCreateNestedManyWithoutUserInput
+  UserPermission?: Prisma.UserPermissionUncheckedCreateNestedManyWithoutUserInput
+  authActionTokens?: Prisma.AuthActionTokenUncheckedCreateNestedManyWithoutUserInput
+  stockSales?: Prisma.StockSaleUncheckedCreateNestedManyWithoutSoldByInput
+}
+
+export type UserCreateOrConnectWithoutRefreshTokensInput = {
+  where: Prisma.UserWhereUniqueInput
+  create: Prisma.XOR<Prisma.UserCreateWithoutRefreshTokensInput, Prisma.UserUncheckedCreateWithoutRefreshTokensInput>
+}
+
+export type UserUpsertWithoutRefreshTokensInput = {
+  update: Prisma.XOR<Prisma.UserUpdateWithoutRefreshTokensInput, Prisma.UserUncheckedUpdateWithoutRefreshTokensInput>
+  create: Prisma.XOR<Prisma.UserCreateWithoutRefreshTokensInput, Prisma.UserUncheckedCreateWithoutRefreshTokensInput>
+  where?: Prisma.UserWhereInput
+}
+
+export type UserUpdateToOneWithWhereWithoutRefreshTokensInput = {
+  where?: Prisma.UserWhereInput
+  data: Prisma.XOR<Prisma.UserUpdateWithoutRefreshTokensInput, Prisma.UserUncheckedUpdateWithoutRefreshTokensInput>
+}
+
+export type UserUpdateWithoutRefreshTokensInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  email?: Prisma.StringFieldUpdateOperationsInput | string
+  password?: Prisma.StringFieldUpdateOperationsInput | string
+  username?: Prisma.StringFieldUpdateOperationsInput | string
+  isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  phoneNumber?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  countryCode?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  isPhoneVerified?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  isEmailVerified?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  deletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  accessHistories?: Prisma.AccessHistoryUpdateManyWithoutUserNestedInput
+  audits?: Prisma.AuditUpdateManyWithoutUserNestedInput
+  loginHistories?: Prisma.LoginHistoryUpdateManyWithoutUserNestedInput
+  Person?: Prisma.PersonUpdateManyWithoutUserNestedInput
+  Appointment?: Prisma.AppointmentUpdateManyWithoutDoctorNestedInput
+  appointments?: Prisma.AppointmentUpdateManyWithoutUserNestedInput
+  clinicProccesses?: Prisma.ClinicProccessUpdateManyWithoutDoctorNestedInput
+  Consult?: Prisma.ConsultUpdateManyWithoutDoctorNestedInput
+  diagnostics?: Prisma.DiagnosticUpdateManyWithoutDoctorNestedInput
+  doctorProfile?: Prisma.DoctorProfileUpdateOneWithoutUserNestedInput
+  conversationsStarted?: Prisma.ChatConversationUpdateManyWithoutStarterNestedInput
+  conversationsReceived?: Prisma.ChatConversationUpdateManyWithoutRecipientNestedInput
+  chatMessages?: Prisma.ChatMessageUpdateManyWithoutAuthorNestedInput
+  treatmentPlans?: Prisma.TreatmentPlanUpdateManyWithoutDoctorNestedInput
+  patientPrescriptions?: Prisma.PatientPrescriptionUpdateManyWithoutDoctorNestedInput
+  xrayAnalyses?: Prisma.XRayAnalysisUpdateManyWithoutAnalyzedByNestedInput
+  UserBranch?: Prisma.UserBranchUpdateManyWithoutUserNestedInput
+  UserRole?: Prisma.UserRoleUpdateManyWithoutUserNestedInput
+  UserPermission?: Prisma.UserPermissionUpdateManyWithoutUserNestedInput
+  authActionTokens?: Prisma.AuthActionTokenUpdateManyWithoutUserNestedInput
+  stockSales?: Prisma.StockSaleUpdateManyWithoutSoldByNestedInput
+  Address?: Prisma.AddressUpdateOneWithoutUserNestedInput
+  branch?: Prisma.BranchUpdateOneRequiredWithoutUserNestedInput
+  Role?: Prisma.RoleUpdateOneWithoutUserNestedInput
+}
+
+export type UserUncheckedUpdateWithoutRefreshTokensInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  email?: Prisma.StringFieldUpdateOperationsInput | string
+  password?: Prisma.StringFieldUpdateOperationsInput | string
+  username?: Prisma.StringFieldUpdateOperationsInput | string
+  branchId?: Prisma.StringFieldUpdateOperationsInput | string
+  addressId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  roleId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  phoneNumber?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  countryCode?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  isPhoneVerified?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  isEmailVerified?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  deletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  accessHistories?: Prisma.AccessHistoryUncheckedUpdateManyWithoutUserNestedInput
+  audits?: Prisma.AuditUncheckedUpdateManyWithoutUserNestedInput
+  loginHistories?: Prisma.LoginHistoryUncheckedUpdateManyWithoutUserNestedInput
+  Person?: Prisma.PersonUncheckedUpdateManyWithoutUserNestedInput
+  Appointment?: Prisma.AppointmentUncheckedUpdateManyWithoutDoctorNestedInput
+  appointments?: Prisma.AppointmentUncheckedUpdateManyWithoutUserNestedInput
+  clinicProccesses?: Prisma.ClinicProccessUncheckedUpdateManyWithoutDoctorNestedInput
+  Consult?: Prisma.ConsultUncheckedUpdateManyWithoutDoctorNestedInput
+  diagnostics?: Prisma.DiagnosticUncheckedUpdateManyWithoutDoctorNestedInput
+  doctorProfile?: Prisma.DoctorProfileUncheckedUpdateOneWithoutUserNestedInput
+  conversationsStarted?: Prisma.ChatConversationUncheckedUpdateManyWithoutStarterNestedInput
+  conversationsReceived?: Prisma.ChatConversationUncheckedUpdateManyWithoutRecipientNestedInput
+  chatMessages?: Prisma.ChatMessageUncheckedUpdateManyWithoutAuthorNestedInput
+  treatmentPlans?: Prisma.TreatmentPlanUncheckedUpdateManyWithoutDoctorNestedInput
+  patientPrescriptions?: Prisma.PatientPrescriptionUncheckedUpdateManyWithoutDoctorNestedInput
+  xrayAnalyses?: Prisma.XRayAnalysisUncheckedUpdateManyWithoutAnalyzedByNestedInput
+  UserBranch?: Prisma.UserBranchUncheckedUpdateManyWithoutUserNestedInput
+  UserRole?: Prisma.UserRoleUncheckedUpdateManyWithoutUserNestedInput
+  UserPermission?: Prisma.UserPermissionUncheckedUpdateManyWithoutUserNestedInput
+  authActionTokens?: Prisma.AuthActionTokenUncheckedUpdateManyWithoutUserNestedInput
+  stockSales?: Prisma.StockSaleUncheckedUpdateManyWithoutSoldByNestedInput
+}
+
+export type UserCreateWithoutAuthActionTokensInput = {
+  id?: string
+  email: string
+  password: string
+  username: string
+  isActive?: boolean
+  phoneNumber?: number | null
+  countryCode?: string | null
+  isPhoneVerified?: boolean
+  isEmailVerified?: boolean
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  deletedAt?: Date | string | null
+  accessHistories?: Prisma.AccessHistoryCreateNestedManyWithoutUserInput
+  audits?: Prisma.AuditCreateNestedManyWithoutUserInput
+  loginHistories?: Prisma.LoginHistoryCreateNestedManyWithoutUserInput
+  Person?: Prisma.PersonCreateNestedManyWithoutUserInput
+  Appointment?: Prisma.AppointmentCreateNestedManyWithoutDoctorInput
+  appointments?: Prisma.AppointmentCreateNestedManyWithoutUserInput
+  clinicProccesses?: Prisma.ClinicProccessCreateNestedManyWithoutDoctorInput
+  Consult?: Prisma.ConsultCreateNestedManyWithoutDoctorInput
+  diagnostics?: Prisma.DiagnosticCreateNestedManyWithoutDoctorInput
+  doctorProfile?: Prisma.DoctorProfileCreateNestedOneWithoutUserInput
+  conversationsStarted?: Prisma.ChatConversationCreateNestedManyWithoutStarterInput
+  conversationsReceived?: Prisma.ChatConversationCreateNestedManyWithoutRecipientInput
+  chatMessages?: Prisma.ChatMessageCreateNestedManyWithoutAuthorInput
+  treatmentPlans?: Prisma.TreatmentPlanCreateNestedManyWithoutDoctorInput
+  patientPrescriptions?: Prisma.PatientPrescriptionCreateNestedManyWithoutDoctorInput
+  xrayAnalyses?: Prisma.XRayAnalysisCreateNestedManyWithoutAnalyzedByInput
+  UserBranch?: Prisma.UserBranchCreateNestedManyWithoutUserInput
+  UserRole?: Prisma.UserRoleCreateNestedManyWithoutUserInput
+  UserPermission?: Prisma.UserPermissionCreateNestedManyWithoutUserInput
+  refreshTokens?: Prisma.RefreshTokenCreateNestedManyWithoutUserInput
+  stockSales?: Prisma.StockSaleCreateNestedManyWithoutSoldByInput
+  Address?: Prisma.AddressCreateNestedOneWithoutUserInput
+  branch: Prisma.BranchCreateNestedOneWithoutUserInput
+  Role?: Prisma.RoleCreateNestedOneWithoutUserInput
+}
+
+export type UserUncheckedCreateWithoutAuthActionTokensInput = {
+  id?: string
+  email: string
+  password: string
+  username: string
+  branchId: string
+  addressId?: string | null
+  roleId?: string | null
+  isActive?: boolean
+  phoneNumber?: number | null
+  countryCode?: string | null
+  isPhoneVerified?: boolean
+  isEmailVerified?: boolean
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  deletedAt?: Date | string | null
+  accessHistories?: Prisma.AccessHistoryUncheckedCreateNestedManyWithoutUserInput
+  audits?: Prisma.AuditUncheckedCreateNestedManyWithoutUserInput
+  loginHistories?: Prisma.LoginHistoryUncheckedCreateNestedManyWithoutUserInput
+  Person?: Prisma.PersonUncheckedCreateNestedManyWithoutUserInput
+  Appointment?: Prisma.AppointmentUncheckedCreateNestedManyWithoutDoctorInput
+  appointments?: Prisma.AppointmentUncheckedCreateNestedManyWithoutUserInput
+  clinicProccesses?: Prisma.ClinicProccessUncheckedCreateNestedManyWithoutDoctorInput
+  Consult?: Prisma.ConsultUncheckedCreateNestedManyWithoutDoctorInput
+  diagnostics?: Prisma.DiagnosticUncheckedCreateNestedManyWithoutDoctorInput
+  doctorProfile?: Prisma.DoctorProfileUncheckedCreateNestedOneWithoutUserInput
+  conversationsStarted?: Prisma.ChatConversationUncheckedCreateNestedManyWithoutStarterInput
+  conversationsReceived?: Prisma.ChatConversationUncheckedCreateNestedManyWithoutRecipientInput
+  chatMessages?: Prisma.ChatMessageUncheckedCreateNestedManyWithoutAuthorInput
+  treatmentPlans?: Prisma.TreatmentPlanUncheckedCreateNestedManyWithoutDoctorInput
+  patientPrescriptions?: Prisma.PatientPrescriptionUncheckedCreateNestedManyWithoutDoctorInput
+  xrayAnalyses?: Prisma.XRayAnalysisUncheckedCreateNestedManyWithoutAnalyzedByInput
+  UserBranch?: Prisma.UserBranchUncheckedCreateNestedManyWithoutUserInput
+  UserRole?: Prisma.UserRoleUncheckedCreateNestedManyWithoutUserInput
+  UserPermission?: Prisma.UserPermissionUncheckedCreateNestedManyWithoutUserInput
+  refreshTokens?: Prisma.RefreshTokenUncheckedCreateNestedManyWithoutUserInput
+  stockSales?: Prisma.StockSaleUncheckedCreateNestedManyWithoutSoldByInput
+}
+
+export type UserCreateOrConnectWithoutAuthActionTokensInput = {
+  where: Prisma.UserWhereUniqueInput
+  create: Prisma.XOR<Prisma.UserCreateWithoutAuthActionTokensInput, Prisma.UserUncheckedCreateWithoutAuthActionTokensInput>
+}
+
+export type UserUpsertWithoutAuthActionTokensInput = {
+  update: Prisma.XOR<Prisma.UserUpdateWithoutAuthActionTokensInput, Prisma.UserUncheckedUpdateWithoutAuthActionTokensInput>
+  create: Prisma.XOR<Prisma.UserCreateWithoutAuthActionTokensInput, Prisma.UserUncheckedCreateWithoutAuthActionTokensInput>
+  where?: Prisma.UserWhereInput
+}
+
+export type UserUpdateToOneWithWhereWithoutAuthActionTokensInput = {
+  where?: Prisma.UserWhereInput
+  data: Prisma.XOR<Prisma.UserUpdateWithoutAuthActionTokensInput, Prisma.UserUncheckedUpdateWithoutAuthActionTokensInput>
+}
+
+export type UserUpdateWithoutAuthActionTokensInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  email?: Prisma.StringFieldUpdateOperationsInput | string
+  password?: Prisma.StringFieldUpdateOperationsInput | string
+  username?: Prisma.StringFieldUpdateOperationsInput | string
+  isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  phoneNumber?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  countryCode?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  isPhoneVerified?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  isEmailVerified?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  deletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  accessHistories?: Prisma.AccessHistoryUpdateManyWithoutUserNestedInput
+  audits?: Prisma.AuditUpdateManyWithoutUserNestedInput
+  loginHistories?: Prisma.LoginHistoryUpdateManyWithoutUserNestedInput
+  Person?: Prisma.PersonUpdateManyWithoutUserNestedInput
+  Appointment?: Prisma.AppointmentUpdateManyWithoutDoctorNestedInput
+  appointments?: Prisma.AppointmentUpdateManyWithoutUserNestedInput
+  clinicProccesses?: Prisma.ClinicProccessUpdateManyWithoutDoctorNestedInput
+  Consult?: Prisma.ConsultUpdateManyWithoutDoctorNestedInput
+  diagnostics?: Prisma.DiagnosticUpdateManyWithoutDoctorNestedInput
+  doctorProfile?: Prisma.DoctorProfileUpdateOneWithoutUserNestedInput
+  conversationsStarted?: Prisma.ChatConversationUpdateManyWithoutStarterNestedInput
+  conversationsReceived?: Prisma.ChatConversationUpdateManyWithoutRecipientNestedInput
+  chatMessages?: Prisma.ChatMessageUpdateManyWithoutAuthorNestedInput
+  treatmentPlans?: Prisma.TreatmentPlanUpdateManyWithoutDoctorNestedInput
+  patientPrescriptions?: Prisma.PatientPrescriptionUpdateManyWithoutDoctorNestedInput
+  xrayAnalyses?: Prisma.XRayAnalysisUpdateManyWithoutAnalyzedByNestedInput
+  UserBranch?: Prisma.UserBranchUpdateManyWithoutUserNestedInput
+  UserRole?: Prisma.UserRoleUpdateManyWithoutUserNestedInput
+  UserPermission?: Prisma.UserPermissionUpdateManyWithoutUserNestedInput
+  refreshTokens?: Prisma.RefreshTokenUpdateManyWithoutUserNestedInput
+  stockSales?: Prisma.StockSaleUpdateManyWithoutSoldByNestedInput
+  Address?: Prisma.AddressUpdateOneWithoutUserNestedInput
+  branch?: Prisma.BranchUpdateOneRequiredWithoutUserNestedInput
+  Role?: Prisma.RoleUpdateOneWithoutUserNestedInput
+}
+
+export type UserUncheckedUpdateWithoutAuthActionTokensInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  email?: Prisma.StringFieldUpdateOperationsInput | string
+  password?: Prisma.StringFieldUpdateOperationsInput | string
+  username?: Prisma.StringFieldUpdateOperationsInput | string
+  branchId?: Prisma.StringFieldUpdateOperationsInput | string
+  addressId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  roleId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  phoneNumber?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  countryCode?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  isPhoneVerified?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  isEmailVerified?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  deletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  accessHistories?: Prisma.AccessHistoryUncheckedUpdateManyWithoutUserNestedInput
+  audits?: Prisma.AuditUncheckedUpdateManyWithoutUserNestedInput
+  loginHistories?: Prisma.LoginHistoryUncheckedUpdateManyWithoutUserNestedInput
+  Person?: Prisma.PersonUncheckedUpdateManyWithoutUserNestedInput
+  Appointment?: Prisma.AppointmentUncheckedUpdateManyWithoutDoctorNestedInput
+  appointments?: Prisma.AppointmentUncheckedUpdateManyWithoutUserNestedInput
+  clinicProccesses?: Prisma.ClinicProccessUncheckedUpdateManyWithoutDoctorNestedInput
+  Consult?: Prisma.ConsultUncheckedUpdateManyWithoutDoctorNestedInput
+  diagnostics?: Prisma.DiagnosticUncheckedUpdateManyWithoutDoctorNestedInput
+  doctorProfile?: Prisma.DoctorProfileUncheckedUpdateOneWithoutUserNestedInput
+  conversationsStarted?: Prisma.ChatConversationUncheckedUpdateManyWithoutStarterNestedInput
+  conversationsReceived?: Prisma.ChatConversationUncheckedUpdateManyWithoutRecipientNestedInput
+  chatMessages?: Prisma.ChatMessageUncheckedUpdateManyWithoutAuthorNestedInput
+  treatmentPlans?: Prisma.TreatmentPlanUncheckedUpdateManyWithoutDoctorNestedInput
+  patientPrescriptions?: Prisma.PatientPrescriptionUncheckedUpdateManyWithoutDoctorNestedInput
+  xrayAnalyses?: Prisma.XRayAnalysisUncheckedUpdateManyWithoutAnalyzedByNestedInput
+  UserBranch?: Prisma.UserBranchUncheckedUpdateManyWithoutUserNestedInput
+  UserRole?: Prisma.UserRoleUncheckedUpdateManyWithoutUserNestedInput
+  UserPermission?: Prisma.UserPermissionUncheckedUpdateManyWithoutUserNestedInput
+  refreshTokens?: Prisma.RefreshTokenUncheckedUpdateManyWithoutUserNestedInput
   stockSales?: Prisma.StockSaleUncheckedUpdateManyWithoutSoldByNestedInput
 }
 
@@ -3467,6 +3961,8 @@ export type UserCreateWithoutConsultInput = {
   UserBranch?: Prisma.UserBranchCreateNestedManyWithoutUserInput
   UserRole?: Prisma.UserRoleCreateNestedManyWithoutUserInput
   UserPermission?: Prisma.UserPermissionCreateNestedManyWithoutUserInput
+  refreshTokens?: Prisma.RefreshTokenCreateNestedManyWithoutUserInput
+  authActionTokens?: Prisma.AuthActionTokenCreateNestedManyWithoutUserInput
   stockSales?: Prisma.StockSaleCreateNestedManyWithoutSoldByInput
   Address?: Prisma.AddressCreateNestedOneWithoutUserInput
   branch: Prisma.BranchCreateNestedOneWithoutUserInput
@@ -3507,6 +4003,8 @@ export type UserUncheckedCreateWithoutConsultInput = {
   UserBranch?: Prisma.UserBranchUncheckedCreateNestedManyWithoutUserInput
   UserRole?: Prisma.UserRoleUncheckedCreateNestedManyWithoutUserInput
   UserPermission?: Prisma.UserPermissionUncheckedCreateNestedManyWithoutUserInput
+  refreshTokens?: Prisma.RefreshTokenUncheckedCreateNestedManyWithoutUserInput
+  authActionTokens?: Prisma.AuthActionTokenUncheckedCreateNestedManyWithoutUserInput
   stockSales?: Prisma.StockSaleUncheckedCreateNestedManyWithoutSoldByInput
 }
 
@@ -3557,6 +4055,8 @@ export type UserUpdateWithoutConsultInput = {
   UserBranch?: Prisma.UserBranchUpdateManyWithoutUserNestedInput
   UserRole?: Prisma.UserRoleUpdateManyWithoutUserNestedInput
   UserPermission?: Prisma.UserPermissionUpdateManyWithoutUserNestedInput
+  refreshTokens?: Prisma.RefreshTokenUpdateManyWithoutUserNestedInput
+  authActionTokens?: Prisma.AuthActionTokenUpdateManyWithoutUserNestedInput
   stockSales?: Prisma.StockSaleUpdateManyWithoutSoldByNestedInput
   Address?: Prisma.AddressUpdateOneWithoutUserNestedInput
   branch?: Prisma.BranchUpdateOneRequiredWithoutUserNestedInput
@@ -3597,6 +4097,8 @@ export type UserUncheckedUpdateWithoutConsultInput = {
   UserBranch?: Prisma.UserBranchUncheckedUpdateManyWithoutUserNestedInput
   UserRole?: Prisma.UserRoleUncheckedUpdateManyWithoutUserNestedInput
   UserPermission?: Prisma.UserPermissionUncheckedUpdateManyWithoutUserNestedInput
+  refreshTokens?: Prisma.RefreshTokenUncheckedUpdateManyWithoutUserNestedInput
+  authActionTokens?: Prisma.AuthActionTokenUncheckedUpdateManyWithoutUserNestedInput
   stockSales?: Prisma.StockSaleUncheckedUpdateManyWithoutSoldByNestedInput
 }
 
@@ -3631,6 +4133,8 @@ export type UserCreateWithoutClinicProccessesInput = {
   UserBranch?: Prisma.UserBranchCreateNestedManyWithoutUserInput
   UserRole?: Prisma.UserRoleCreateNestedManyWithoutUserInput
   UserPermission?: Prisma.UserPermissionCreateNestedManyWithoutUserInput
+  refreshTokens?: Prisma.RefreshTokenCreateNestedManyWithoutUserInput
+  authActionTokens?: Prisma.AuthActionTokenCreateNestedManyWithoutUserInput
   stockSales?: Prisma.StockSaleCreateNestedManyWithoutSoldByInput
   Address?: Prisma.AddressCreateNestedOneWithoutUserInput
   branch: Prisma.BranchCreateNestedOneWithoutUserInput
@@ -3671,6 +4175,8 @@ export type UserUncheckedCreateWithoutClinicProccessesInput = {
   UserBranch?: Prisma.UserBranchUncheckedCreateNestedManyWithoutUserInput
   UserRole?: Prisma.UserRoleUncheckedCreateNestedManyWithoutUserInput
   UserPermission?: Prisma.UserPermissionUncheckedCreateNestedManyWithoutUserInput
+  refreshTokens?: Prisma.RefreshTokenUncheckedCreateNestedManyWithoutUserInput
+  authActionTokens?: Prisma.AuthActionTokenUncheckedCreateNestedManyWithoutUserInput
   stockSales?: Prisma.StockSaleUncheckedCreateNestedManyWithoutSoldByInput
 }
 
@@ -3721,6 +4227,8 @@ export type UserUpdateWithoutClinicProccessesInput = {
   UserBranch?: Prisma.UserBranchUpdateManyWithoutUserNestedInput
   UserRole?: Prisma.UserRoleUpdateManyWithoutUserNestedInput
   UserPermission?: Prisma.UserPermissionUpdateManyWithoutUserNestedInput
+  refreshTokens?: Prisma.RefreshTokenUpdateManyWithoutUserNestedInput
+  authActionTokens?: Prisma.AuthActionTokenUpdateManyWithoutUserNestedInput
   stockSales?: Prisma.StockSaleUpdateManyWithoutSoldByNestedInput
   Address?: Prisma.AddressUpdateOneWithoutUserNestedInput
   branch?: Prisma.BranchUpdateOneRequiredWithoutUserNestedInput
@@ -3761,6 +4269,8 @@ export type UserUncheckedUpdateWithoutClinicProccessesInput = {
   UserBranch?: Prisma.UserBranchUncheckedUpdateManyWithoutUserNestedInput
   UserRole?: Prisma.UserRoleUncheckedUpdateManyWithoutUserNestedInput
   UserPermission?: Prisma.UserPermissionUncheckedUpdateManyWithoutUserNestedInput
+  refreshTokens?: Prisma.RefreshTokenUncheckedUpdateManyWithoutUserNestedInput
+  authActionTokens?: Prisma.AuthActionTokenUncheckedUpdateManyWithoutUserNestedInput
   stockSales?: Prisma.StockSaleUncheckedUpdateManyWithoutSoldByNestedInput
 }
 
@@ -3795,6 +4305,8 @@ export type UserCreateWithoutDiagnosticsInput = {
   UserBranch?: Prisma.UserBranchCreateNestedManyWithoutUserInput
   UserRole?: Prisma.UserRoleCreateNestedManyWithoutUserInput
   UserPermission?: Prisma.UserPermissionCreateNestedManyWithoutUserInput
+  refreshTokens?: Prisma.RefreshTokenCreateNestedManyWithoutUserInput
+  authActionTokens?: Prisma.AuthActionTokenCreateNestedManyWithoutUserInput
   stockSales?: Prisma.StockSaleCreateNestedManyWithoutSoldByInput
   Address?: Prisma.AddressCreateNestedOneWithoutUserInput
   branch: Prisma.BranchCreateNestedOneWithoutUserInput
@@ -3835,6 +4347,8 @@ export type UserUncheckedCreateWithoutDiagnosticsInput = {
   UserBranch?: Prisma.UserBranchUncheckedCreateNestedManyWithoutUserInput
   UserRole?: Prisma.UserRoleUncheckedCreateNestedManyWithoutUserInput
   UserPermission?: Prisma.UserPermissionUncheckedCreateNestedManyWithoutUserInput
+  refreshTokens?: Prisma.RefreshTokenUncheckedCreateNestedManyWithoutUserInput
+  authActionTokens?: Prisma.AuthActionTokenUncheckedCreateNestedManyWithoutUserInput
   stockSales?: Prisma.StockSaleUncheckedCreateNestedManyWithoutSoldByInput
 }
 
@@ -3885,6 +4399,8 @@ export type UserUpdateWithoutDiagnosticsInput = {
   UserBranch?: Prisma.UserBranchUpdateManyWithoutUserNestedInput
   UserRole?: Prisma.UserRoleUpdateManyWithoutUserNestedInput
   UserPermission?: Prisma.UserPermissionUpdateManyWithoutUserNestedInput
+  refreshTokens?: Prisma.RefreshTokenUpdateManyWithoutUserNestedInput
+  authActionTokens?: Prisma.AuthActionTokenUpdateManyWithoutUserNestedInput
   stockSales?: Prisma.StockSaleUpdateManyWithoutSoldByNestedInput
   Address?: Prisma.AddressUpdateOneWithoutUserNestedInput
   branch?: Prisma.BranchUpdateOneRequiredWithoutUserNestedInput
@@ -3925,6 +4441,8 @@ export type UserUncheckedUpdateWithoutDiagnosticsInput = {
   UserBranch?: Prisma.UserBranchUncheckedUpdateManyWithoutUserNestedInput
   UserRole?: Prisma.UserRoleUncheckedUpdateManyWithoutUserNestedInput
   UserPermission?: Prisma.UserPermissionUncheckedUpdateManyWithoutUserNestedInput
+  refreshTokens?: Prisma.RefreshTokenUncheckedUpdateManyWithoutUserNestedInput
+  authActionTokens?: Prisma.AuthActionTokenUncheckedUpdateManyWithoutUserNestedInput
   stockSales?: Prisma.StockSaleUncheckedUpdateManyWithoutSoldByNestedInput
 }
 
@@ -3959,6 +4477,8 @@ export type UserCreateWithoutPatientPrescriptionsInput = {
   UserBranch?: Prisma.UserBranchCreateNestedManyWithoutUserInput
   UserRole?: Prisma.UserRoleCreateNestedManyWithoutUserInput
   UserPermission?: Prisma.UserPermissionCreateNestedManyWithoutUserInput
+  refreshTokens?: Prisma.RefreshTokenCreateNestedManyWithoutUserInput
+  authActionTokens?: Prisma.AuthActionTokenCreateNestedManyWithoutUserInput
   stockSales?: Prisma.StockSaleCreateNestedManyWithoutSoldByInput
   Address?: Prisma.AddressCreateNestedOneWithoutUserInput
   branch: Prisma.BranchCreateNestedOneWithoutUserInput
@@ -3999,6 +4519,8 @@ export type UserUncheckedCreateWithoutPatientPrescriptionsInput = {
   UserBranch?: Prisma.UserBranchUncheckedCreateNestedManyWithoutUserInput
   UserRole?: Prisma.UserRoleUncheckedCreateNestedManyWithoutUserInput
   UserPermission?: Prisma.UserPermissionUncheckedCreateNestedManyWithoutUserInput
+  refreshTokens?: Prisma.RefreshTokenUncheckedCreateNestedManyWithoutUserInput
+  authActionTokens?: Prisma.AuthActionTokenUncheckedCreateNestedManyWithoutUserInput
   stockSales?: Prisma.StockSaleUncheckedCreateNestedManyWithoutSoldByInput
 }
 
@@ -4049,6 +4571,8 @@ export type UserUpdateWithoutPatientPrescriptionsInput = {
   UserBranch?: Prisma.UserBranchUpdateManyWithoutUserNestedInput
   UserRole?: Prisma.UserRoleUpdateManyWithoutUserNestedInput
   UserPermission?: Prisma.UserPermissionUpdateManyWithoutUserNestedInput
+  refreshTokens?: Prisma.RefreshTokenUpdateManyWithoutUserNestedInput
+  authActionTokens?: Prisma.AuthActionTokenUpdateManyWithoutUserNestedInput
   stockSales?: Prisma.StockSaleUpdateManyWithoutSoldByNestedInput
   Address?: Prisma.AddressUpdateOneWithoutUserNestedInput
   branch?: Prisma.BranchUpdateOneRequiredWithoutUserNestedInput
@@ -4089,6 +4613,8 @@ export type UserUncheckedUpdateWithoutPatientPrescriptionsInput = {
   UserBranch?: Prisma.UserBranchUncheckedUpdateManyWithoutUserNestedInput
   UserRole?: Prisma.UserRoleUncheckedUpdateManyWithoutUserNestedInput
   UserPermission?: Prisma.UserPermissionUncheckedUpdateManyWithoutUserNestedInput
+  refreshTokens?: Prisma.RefreshTokenUncheckedUpdateManyWithoutUserNestedInput
+  authActionTokens?: Prisma.AuthActionTokenUncheckedUpdateManyWithoutUserNestedInput
   stockSales?: Prisma.StockSaleUncheckedUpdateManyWithoutSoldByNestedInput
 }
 
@@ -4123,6 +4649,8 @@ export type UserCreateWithoutXrayAnalysesInput = {
   UserBranch?: Prisma.UserBranchCreateNestedManyWithoutUserInput
   UserRole?: Prisma.UserRoleCreateNestedManyWithoutUserInput
   UserPermission?: Prisma.UserPermissionCreateNestedManyWithoutUserInput
+  refreshTokens?: Prisma.RefreshTokenCreateNestedManyWithoutUserInput
+  authActionTokens?: Prisma.AuthActionTokenCreateNestedManyWithoutUserInput
   stockSales?: Prisma.StockSaleCreateNestedManyWithoutSoldByInput
   Address?: Prisma.AddressCreateNestedOneWithoutUserInput
   branch: Prisma.BranchCreateNestedOneWithoutUserInput
@@ -4163,6 +4691,8 @@ export type UserUncheckedCreateWithoutXrayAnalysesInput = {
   UserBranch?: Prisma.UserBranchUncheckedCreateNestedManyWithoutUserInput
   UserRole?: Prisma.UserRoleUncheckedCreateNestedManyWithoutUserInput
   UserPermission?: Prisma.UserPermissionUncheckedCreateNestedManyWithoutUserInput
+  refreshTokens?: Prisma.RefreshTokenUncheckedCreateNestedManyWithoutUserInput
+  authActionTokens?: Prisma.AuthActionTokenUncheckedCreateNestedManyWithoutUserInput
   stockSales?: Prisma.StockSaleUncheckedCreateNestedManyWithoutSoldByInput
 }
 
@@ -4213,6 +4743,8 @@ export type UserUpdateWithoutXrayAnalysesInput = {
   UserBranch?: Prisma.UserBranchUpdateManyWithoutUserNestedInput
   UserRole?: Prisma.UserRoleUpdateManyWithoutUserNestedInput
   UserPermission?: Prisma.UserPermissionUpdateManyWithoutUserNestedInput
+  refreshTokens?: Prisma.RefreshTokenUpdateManyWithoutUserNestedInput
+  authActionTokens?: Prisma.AuthActionTokenUpdateManyWithoutUserNestedInput
   stockSales?: Prisma.StockSaleUpdateManyWithoutSoldByNestedInput
   Address?: Prisma.AddressUpdateOneWithoutUserNestedInput
   branch?: Prisma.BranchUpdateOneRequiredWithoutUserNestedInput
@@ -4253,6 +4785,8 @@ export type UserUncheckedUpdateWithoutXrayAnalysesInput = {
   UserBranch?: Prisma.UserBranchUncheckedUpdateManyWithoutUserNestedInput
   UserRole?: Prisma.UserRoleUncheckedUpdateManyWithoutUserNestedInput
   UserPermission?: Prisma.UserPermissionUncheckedUpdateManyWithoutUserNestedInput
+  refreshTokens?: Prisma.RefreshTokenUncheckedUpdateManyWithoutUserNestedInput
+  authActionTokens?: Prisma.AuthActionTokenUncheckedUpdateManyWithoutUserNestedInput
   stockSales?: Prisma.StockSaleUncheckedUpdateManyWithoutSoldByNestedInput
 }
 
@@ -4287,6 +4821,8 @@ export type UserCreateWithoutAuditsInput = {
   UserBranch?: Prisma.UserBranchCreateNestedManyWithoutUserInput
   UserRole?: Prisma.UserRoleCreateNestedManyWithoutUserInput
   UserPermission?: Prisma.UserPermissionCreateNestedManyWithoutUserInput
+  refreshTokens?: Prisma.RefreshTokenCreateNestedManyWithoutUserInput
+  authActionTokens?: Prisma.AuthActionTokenCreateNestedManyWithoutUserInput
   stockSales?: Prisma.StockSaleCreateNestedManyWithoutSoldByInput
   Address?: Prisma.AddressCreateNestedOneWithoutUserInput
   branch: Prisma.BranchCreateNestedOneWithoutUserInput
@@ -4327,6 +4863,8 @@ export type UserUncheckedCreateWithoutAuditsInput = {
   UserBranch?: Prisma.UserBranchUncheckedCreateNestedManyWithoutUserInput
   UserRole?: Prisma.UserRoleUncheckedCreateNestedManyWithoutUserInput
   UserPermission?: Prisma.UserPermissionUncheckedCreateNestedManyWithoutUserInput
+  refreshTokens?: Prisma.RefreshTokenUncheckedCreateNestedManyWithoutUserInput
+  authActionTokens?: Prisma.AuthActionTokenUncheckedCreateNestedManyWithoutUserInput
   stockSales?: Prisma.StockSaleUncheckedCreateNestedManyWithoutSoldByInput
 }
 
@@ -4377,6 +4915,8 @@ export type UserUpdateWithoutAuditsInput = {
   UserBranch?: Prisma.UserBranchUpdateManyWithoutUserNestedInput
   UserRole?: Prisma.UserRoleUpdateManyWithoutUserNestedInput
   UserPermission?: Prisma.UserPermissionUpdateManyWithoutUserNestedInput
+  refreshTokens?: Prisma.RefreshTokenUpdateManyWithoutUserNestedInput
+  authActionTokens?: Prisma.AuthActionTokenUpdateManyWithoutUserNestedInput
   stockSales?: Prisma.StockSaleUpdateManyWithoutSoldByNestedInput
   Address?: Prisma.AddressUpdateOneWithoutUserNestedInput
   branch?: Prisma.BranchUpdateOneRequiredWithoutUserNestedInput
@@ -4417,6 +4957,8 @@ export type UserUncheckedUpdateWithoutAuditsInput = {
   UserBranch?: Prisma.UserBranchUncheckedUpdateManyWithoutUserNestedInput
   UserRole?: Prisma.UserRoleUncheckedUpdateManyWithoutUserNestedInput
   UserPermission?: Prisma.UserPermissionUncheckedUpdateManyWithoutUserNestedInput
+  refreshTokens?: Prisma.RefreshTokenUncheckedUpdateManyWithoutUserNestedInput
+  authActionTokens?: Prisma.AuthActionTokenUncheckedUpdateManyWithoutUserNestedInput
   stockSales?: Prisma.StockSaleUncheckedUpdateManyWithoutSoldByNestedInput
 }
 
@@ -4451,6 +4993,8 @@ export type UserCreateWithoutLoginHistoriesInput = {
   UserBranch?: Prisma.UserBranchCreateNestedManyWithoutUserInput
   UserRole?: Prisma.UserRoleCreateNestedManyWithoutUserInput
   UserPermission?: Prisma.UserPermissionCreateNestedManyWithoutUserInput
+  refreshTokens?: Prisma.RefreshTokenCreateNestedManyWithoutUserInput
+  authActionTokens?: Prisma.AuthActionTokenCreateNestedManyWithoutUserInput
   stockSales?: Prisma.StockSaleCreateNestedManyWithoutSoldByInput
   Address?: Prisma.AddressCreateNestedOneWithoutUserInput
   branch: Prisma.BranchCreateNestedOneWithoutUserInput
@@ -4491,6 +5035,8 @@ export type UserUncheckedCreateWithoutLoginHistoriesInput = {
   UserBranch?: Prisma.UserBranchUncheckedCreateNestedManyWithoutUserInput
   UserRole?: Prisma.UserRoleUncheckedCreateNestedManyWithoutUserInput
   UserPermission?: Prisma.UserPermissionUncheckedCreateNestedManyWithoutUserInput
+  refreshTokens?: Prisma.RefreshTokenUncheckedCreateNestedManyWithoutUserInput
+  authActionTokens?: Prisma.AuthActionTokenUncheckedCreateNestedManyWithoutUserInput
   stockSales?: Prisma.StockSaleUncheckedCreateNestedManyWithoutSoldByInput
 }
 
@@ -4541,6 +5087,8 @@ export type UserUpdateWithoutLoginHistoriesInput = {
   UserBranch?: Prisma.UserBranchUpdateManyWithoutUserNestedInput
   UserRole?: Prisma.UserRoleUpdateManyWithoutUserNestedInput
   UserPermission?: Prisma.UserPermissionUpdateManyWithoutUserNestedInput
+  refreshTokens?: Prisma.RefreshTokenUpdateManyWithoutUserNestedInput
+  authActionTokens?: Prisma.AuthActionTokenUpdateManyWithoutUserNestedInput
   stockSales?: Prisma.StockSaleUpdateManyWithoutSoldByNestedInput
   Address?: Prisma.AddressUpdateOneWithoutUserNestedInput
   branch?: Prisma.BranchUpdateOneRequiredWithoutUserNestedInput
@@ -4581,6 +5129,8 @@ export type UserUncheckedUpdateWithoutLoginHistoriesInput = {
   UserBranch?: Prisma.UserBranchUncheckedUpdateManyWithoutUserNestedInput
   UserRole?: Prisma.UserRoleUncheckedUpdateManyWithoutUserNestedInput
   UserPermission?: Prisma.UserPermissionUncheckedUpdateManyWithoutUserNestedInput
+  refreshTokens?: Prisma.RefreshTokenUncheckedUpdateManyWithoutUserNestedInput
+  authActionTokens?: Prisma.AuthActionTokenUncheckedUpdateManyWithoutUserNestedInput
   stockSales?: Prisma.StockSaleUncheckedUpdateManyWithoutSoldByNestedInput
 }
 
@@ -4615,6 +5165,8 @@ export type UserCreateWithoutAccessHistoriesInput = {
   UserBranch?: Prisma.UserBranchCreateNestedManyWithoutUserInput
   UserRole?: Prisma.UserRoleCreateNestedManyWithoutUserInput
   UserPermission?: Prisma.UserPermissionCreateNestedManyWithoutUserInput
+  refreshTokens?: Prisma.RefreshTokenCreateNestedManyWithoutUserInput
+  authActionTokens?: Prisma.AuthActionTokenCreateNestedManyWithoutUserInput
   stockSales?: Prisma.StockSaleCreateNestedManyWithoutSoldByInput
   Address?: Prisma.AddressCreateNestedOneWithoutUserInput
   branch: Prisma.BranchCreateNestedOneWithoutUserInput
@@ -4655,6 +5207,8 @@ export type UserUncheckedCreateWithoutAccessHistoriesInput = {
   UserBranch?: Prisma.UserBranchUncheckedCreateNestedManyWithoutUserInput
   UserRole?: Prisma.UserRoleUncheckedCreateNestedManyWithoutUserInput
   UserPermission?: Prisma.UserPermissionUncheckedCreateNestedManyWithoutUserInput
+  refreshTokens?: Prisma.RefreshTokenUncheckedCreateNestedManyWithoutUserInput
+  authActionTokens?: Prisma.AuthActionTokenUncheckedCreateNestedManyWithoutUserInput
   stockSales?: Prisma.StockSaleUncheckedCreateNestedManyWithoutSoldByInput
 }
 
@@ -4705,6 +5259,8 @@ export type UserUpdateWithoutAccessHistoriesInput = {
   UserBranch?: Prisma.UserBranchUpdateManyWithoutUserNestedInput
   UserRole?: Prisma.UserRoleUpdateManyWithoutUserNestedInput
   UserPermission?: Prisma.UserPermissionUpdateManyWithoutUserNestedInput
+  refreshTokens?: Prisma.RefreshTokenUpdateManyWithoutUserNestedInput
+  authActionTokens?: Prisma.AuthActionTokenUpdateManyWithoutUserNestedInput
   stockSales?: Prisma.StockSaleUpdateManyWithoutSoldByNestedInput
   Address?: Prisma.AddressUpdateOneWithoutUserNestedInput
   branch?: Prisma.BranchUpdateOneRequiredWithoutUserNestedInput
@@ -4745,6 +5301,8 @@ export type UserUncheckedUpdateWithoutAccessHistoriesInput = {
   UserBranch?: Prisma.UserBranchUncheckedUpdateManyWithoutUserNestedInput
   UserRole?: Prisma.UserRoleUncheckedUpdateManyWithoutUserNestedInput
   UserPermission?: Prisma.UserPermissionUncheckedUpdateManyWithoutUserNestedInput
+  refreshTokens?: Prisma.RefreshTokenUncheckedUpdateManyWithoutUserNestedInput
+  authActionTokens?: Prisma.AuthActionTokenUncheckedUpdateManyWithoutUserNestedInput
   stockSales?: Prisma.StockSaleUncheckedUpdateManyWithoutSoldByNestedInput
 }
 
@@ -4797,6 +5355,8 @@ export type UserUpdateWithoutAddressInput = {
   UserBranch?: Prisma.UserBranchUpdateManyWithoutUserNestedInput
   UserRole?: Prisma.UserRoleUpdateManyWithoutUserNestedInput
   UserPermission?: Prisma.UserPermissionUpdateManyWithoutUserNestedInput
+  refreshTokens?: Prisma.RefreshTokenUpdateManyWithoutUserNestedInput
+  authActionTokens?: Prisma.AuthActionTokenUpdateManyWithoutUserNestedInput
   stockSales?: Prisma.StockSaleUpdateManyWithoutSoldByNestedInput
   branch?: Prisma.BranchUpdateOneRequiredWithoutUserNestedInput
   Role?: Prisma.RoleUpdateOneWithoutUserNestedInput
@@ -4836,6 +5396,8 @@ export type UserUncheckedUpdateWithoutAddressInput = {
   UserBranch?: Prisma.UserBranchUncheckedUpdateManyWithoutUserNestedInput
   UserRole?: Prisma.UserRoleUncheckedUpdateManyWithoutUserNestedInput
   UserPermission?: Prisma.UserPermissionUncheckedUpdateManyWithoutUserNestedInput
+  refreshTokens?: Prisma.RefreshTokenUncheckedUpdateManyWithoutUserNestedInput
+  authActionTokens?: Prisma.AuthActionTokenUncheckedUpdateManyWithoutUserNestedInput
   stockSales?: Prisma.StockSaleUncheckedUpdateManyWithoutSoldByNestedInput
 }
 
@@ -4905,6 +5467,8 @@ export type UserUpdateWithoutBranchInput = {
   UserBranch?: Prisma.UserBranchUpdateManyWithoutUserNestedInput
   UserRole?: Prisma.UserRoleUpdateManyWithoutUserNestedInput
   UserPermission?: Prisma.UserPermissionUpdateManyWithoutUserNestedInput
+  refreshTokens?: Prisma.RefreshTokenUpdateManyWithoutUserNestedInput
+  authActionTokens?: Prisma.AuthActionTokenUpdateManyWithoutUserNestedInput
   stockSales?: Prisma.StockSaleUpdateManyWithoutSoldByNestedInput
   Address?: Prisma.AddressUpdateOneWithoutUserNestedInput
   Role?: Prisma.RoleUpdateOneWithoutUserNestedInput
@@ -4944,6 +5508,8 @@ export type UserUncheckedUpdateWithoutBranchInput = {
   UserBranch?: Prisma.UserBranchUncheckedUpdateManyWithoutUserNestedInput
   UserRole?: Prisma.UserRoleUncheckedUpdateManyWithoutUserNestedInput
   UserPermission?: Prisma.UserPermissionUncheckedUpdateManyWithoutUserNestedInput
+  refreshTokens?: Prisma.RefreshTokenUncheckedUpdateManyWithoutUserNestedInput
+  authActionTokens?: Prisma.AuthActionTokenUncheckedUpdateManyWithoutUserNestedInput
   stockSales?: Prisma.StockSaleUncheckedUpdateManyWithoutSoldByNestedInput
 }
 
@@ -5013,6 +5579,8 @@ export type UserUpdateWithoutRoleInput = {
   UserBranch?: Prisma.UserBranchUpdateManyWithoutUserNestedInput
   UserRole?: Prisma.UserRoleUpdateManyWithoutUserNestedInput
   UserPermission?: Prisma.UserPermissionUpdateManyWithoutUserNestedInput
+  refreshTokens?: Prisma.RefreshTokenUpdateManyWithoutUserNestedInput
+  authActionTokens?: Prisma.AuthActionTokenUpdateManyWithoutUserNestedInput
   stockSales?: Prisma.StockSaleUpdateManyWithoutSoldByNestedInput
   Address?: Prisma.AddressUpdateOneWithoutUserNestedInput
   branch?: Prisma.BranchUpdateOneRequiredWithoutUserNestedInput
@@ -5052,6 +5620,8 @@ export type UserUncheckedUpdateWithoutRoleInput = {
   UserBranch?: Prisma.UserBranchUncheckedUpdateManyWithoutUserNestedInput
   UserRole?: Prisma.UserRoleUncheckedUpdateManyWithoutUserNestedInput
   UserPermission?: Prisma.UserPermissionUncheckedUpdateManyWithoutUserNestedInput
+  refreshTokens?: Prisma.RefreshTokenUncheckedUpdateManyWithoutUserNestedInput
+  authActionTokens?: Prisma.AuthActionTokenUncheckedUpdateManyWithoutUserNestedInput
   stockSales?: Prisma.StockSaleUncheckedUpdateManyWithoutSoldByNestedInput
 }
 
@@ -5096,6 +5666,8 @@ export type UserCountOutputType = {
   UserBranch: number
   UserRole: number
   UserPermission: number
+  refreshTokens: number
+  authActionTokens: number
   stockSales: number
 }
 
@@ -5118,6 +5690,8 @@ export type UserCountOutputTypeSelect<ExtArgs extends runtime.Types.Extensions.I
   UserBranch?: boolean | UserCountOutputTypeCountUserBranchArgs
   UserRole?: boolean | UserCountOutputTypeCountUserRoleArgs
   UserPermission?: boolean | UserCountOutputTypeCountUserPermissionArgs
+  refreshTokens?: boolean | UserCountOutputTypeCountRefreshTokensArgs
+  authActionTokens?: boolean | UserCountOutputTypeCountAuthActionTokensArgs
   stockSales?: boolean | UserCountOutputTypeCountStockSalesArgs
 }
 
@@ -5260,6 +5834,20 @@ export type UserCountOutputTypeCountUserPermissionArgs<ExtArgs extends runtime.T
 /**
  * UserCountOutputType without action
  */
+export type UserCountOutputTypeCountRefreshTokensArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  where?: Prisma.RefreshTokenWhereInput
+}
+
+/**
+ * UserCountOutputType without action
+ */
+export type UserCountOutputTypeCountAuthActionTokensArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  where?: Prisma.AuthActionTokenWhereInput
+}
+
+/**
+ * UserCountOutputType without action
+ */
 export type UserCountOutputTypeCountStockSalesArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   where?: Prisma.StockSaleWhereInput
 }
@@ -5300,6 +5888,8 @@ export type UserSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = r
   UserBranch?: boolean | Prisma.User$UserBranchArgs<ExtArgs>
   UserRole?: boolean | Prisma.User$UserRoleArgs<ExtArgs>
   UserPermission?: boolean | Prisma.User$UserPermissionArgs<ExtArgs>
+  refreshTokens?: boolean | Prisma.User$refreshTokensArgs<ExtArgs>
+  authActionTokens?: boolean | Prisma.User$authActionTokensArgs<ExtArgs>
   stockSales?: boolean | Prisma.User$stockSalesArgs<ExtArgs>
   Address?: boolean | Prisma.User$AddressArgs<ExtArgs>
   branch?: boolean | Prisma.BranchDefaultArgs<ExtArgs>
@@ -5388,6 +5978,8 @@ export type UserInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = 
   UserBranch?: boolean | Prisma.User$UserBranchArgs<ExtArgs>
   UserRole?: boolean | Prisma.User$UserRoleArgs<ExtArgs>
   UserPermission?: boolean | Prisma.User$UserPermissionArgs<ExtArgs>
+  refreshTokens?: boolean | Prisma.User$refreshTokensArgs<ExtArgs>
+  authActionTokens?: boolean | Prisma.User$authActionTokensArgs<ExtArgs>
   stockSales?: boolean | Prisma.User$stockSalesArgs<ExtArgs>
   Address?: boolean | Prisma.User$AddressArgs<ExtArgs>
   branch?: boolean | Prisma.BranchDefaultArgs<ExtArgs>
@@ -5427,6 +6019,8 @@ export type $UserPayload<ExtArgs extends runtime.Types.Extensions.InternalArgs =
     UserBranch: Prisma.$UserBranchPayload<ExtArgs>[]
     UserRole: Prisma.$UserRolePayload<ExtArgs>[]
     UserPermission: Prisma.$UserPermissionPayload<ExtArgs>[]
+    refreshTokens: Prisma.$RefreshTokenPayload<ExtArgs>[]
+    authActionTokens: Prisma.$AuthActionTokenPayload<ExtArgs>[]
     stockSales: Prisma.$StockSalePayload<ExtArgs>[]
     Address: Prisma.$AddressPayload<ExtArgs> | null
     branch: Prisma.$BranchPayload<ExtArgs>
@@ -5861,6 +6455,8 @@ export interface Prisma__UserClient<T, Null = never, ExtArgs extends runtime.Typ
   UserBranch<T extends Prisma.User$UserBranchArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.User$UserBranchArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$UserBranchPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   UserRole<T extends Prisma.User$UserRoleArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.User$UserRoleArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$UserRolePayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   UserPermission<T extends Prisma.User$UserPermissionArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.User$UserPermissionArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$UserPermissionPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+  refreshTokens<T extends Prisma.User$refreshTokensArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.User$refreshTokensArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$RefreshTokenPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+  authActionTokens<T extends Prisma.User$authActionTokensArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.User$authActionTokensArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$AuthActionTokenPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   stockSales<T extends Prisma.User$stockSalesArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.User$stockSalesArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$StockSalePayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   Address<T extends Prisma.User$AddressArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.User$AddressArgs<ExtArgs>>): Prisma.Prisma__AddressClient<runtime.Types.Result.GetResult<Prisma.$AddressPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
   branch<T extends Prisma.BranchDefaultArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.BranchDefaultArgs<ExtArgs>>): Prisma.Prisma__BranchClient<runtime.Types.Result.GetResult<Prisma.$BranchPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
@@ -6753,6 +7349,54 @@ export type User$UserPermissionArgs<ExtArgs extends runtime.Types.Extensions.Int
   take?: number
   skip?: number
   distinct?: Prisma.UserPermissionScalarFieldEnum | Prisma.UserPermissionScalarFieldEnum[]
+}
+
+/**
+ * User.refreshTokens
+ */
+export type User$refreshTokensArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the RefreshToken
+   */
+  select?: Prisma.RefreshTokenSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the RefreshToken
+   */
+  omit?: Prisma.RefreshTokenOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.RefreshTokenInclude<ExtArgs> | null
+  where?: Prisma.RefreshTokenWhereInput
+  orderBy?: Prisma.RefreshTokenOrderByWithRelationInput | Prisma.RefreshTokenOrderByWithRelationInput[]
+  cursor?: Prisma.RefreshTokenWhereUniqueInput
+  take?: number
+  skip?: number
+  distinct?: Prisma.RefreshTokenScalarFieldEnum | Prisma.RefreshTokenScalarFieldEnum[]
+}
+
+/**
+ * User.authActionTokens
+ */
+export type User$authActionTokensArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the AuthActionToken
+   */
+  select?: Prisma.AuthActionTokenSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the AuthActionToken
+   */
+  omit?: Prisma.AuthActionTokenOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.AuthActionTokenInclude<ExtArgs> | null
+  where?: Prisma.AuthActionTokenWhereInput
+  orderBy?: Prisma.AuthActionTokenOrderByWithRelationInput | Prisma.AuthActionTokenOrderByWithRelationInput[]
+  cursor?: Prisma.AuthActionTokenWhereUniqueInput
+  take?: number
+  skip?: number
+  distinct?: Prisma.AuthActionTokenScalarFieldEnum | Prisma.AuthActionTokenScalarFieldEnum[]
 }
 
 /**

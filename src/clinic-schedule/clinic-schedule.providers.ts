@@ -1,5 +1,8 @@
 import { PrismaService } from '../shared/infra/db/prisma/prisma.service';
-import { ClinicScheduleUseCases } from './application/useCases/clinic-schedule.use-cases';
+import {
+  GetClinicScheduleUseCase,
+  UpdateClinicScheduleUseCase,
+} from './application/useCases';
 import { IClinicScheduleRepository } from './domain/clinic-schedule.repository';
 import { ClinicSchedulePrismaRepository } from './infra/db/prisma/clinic-schedule-prisma.repository';
 
@@ -17,10 +20,16 @@ const REPOSITORIES = {
 };
 
 const USE_CASES = {
-  CLINIC_SCHEDULE_USE_CASES: {
-    provide: ClinicScheduleUseCases,
+  GET_CLINIC_SCHEDULE_USE_CASE: {
+    provide: GetClinicScheduleUseCase,
     useFactory: (repository: IClinicScheduleRepository) =>
-      new ClinicScheduleUseCases(repository),
+      new GetClinicScheduleUseCase(repository),
+    inject: [REPOSITORIES.CLINIC_SCHEDULE_REPOSITORY.provide],
+  },
+  UPDATE_CLINIC_SCHEDULE_USE_CASE: {
+    provide: UpdateClinicScheduleUseCase,
+    useFactory: (repository: IClinicScheduleRepository) =>
+      new UpdateClinicScheduleUseCase(repository),
     inject: [REPOSITORIES.CLINIC_SCHEDULE_REPOSITORY.provide],
   },
 };

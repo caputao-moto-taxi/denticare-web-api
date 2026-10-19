@@ -41,6 +41,7 @@ export type PersonMinAggregateOutputType = {
   birthDate: Date | null
   email: string | null
   phoneNumber: string | null
+  avatar: string | null
   medicalNotes: string | null
   idNumber: string | null
   nif: string | null
@@ -71,6 +72,7 @@ export type PersonMaxAggregateOutputType = {
   birthDate: Date | null
   email: string | null
   phoneNumber: string | null
+  avatar: string | null
   medicalNotes: string | null
   idNumber: string | null
   nif: string | null
@@ -101,6 +103,7 @@ export type PersonCountAggregateOutputType = {
   birthDate: number
   email: number
   phoneNumber: number
+  avatar: number
   medicalNotes: number
   idNumber: number
   nif: number
@@ -144,6 +147,7 @@ export type PersonMinAggregateInputType = {
   birthDate?: true
   email?: true
   phoneNumber?: true
+  avatar?: true
   medicalNotes?: true
   idNumber?: true
   nif?: true
@@ -174,6 +178,7 @@ export type PersonMaxAggregateInputType = {
   birthDate?: true
   email?: true
   phoneNumber?: true
+  avatar?: true
   medicalNotes?: true
   idNumber?: true
   nif?: true
@@ -204,6 +209,7 @@ export type PersonCountAggregateInputType = {
   birthDate?: true
   email?: true
   phoneNumber?: true
+  avatar?: true
   medicalNotes?: true
   idNumber?: true
   nif?: true
@@ -324,6 +330,7 @@ export type PersonGroupByOutputType = {
   birthDate: Date | null
   email: string | null
   phoneNumber: string | null
+  avatar: string | null
   medicalNotes: string | null
   idNumber: string | null
   nif: string | null
@@ -380,6 +387,7 @@ export type PersonWhereInput = {
   birthDate?: Prisma.DateTimeNullableFilter<"Person"> | Date | string | null
   email?: Prisma.StringNullableFilter<"Person"> | string | null
   phoneNumber?: Prisma.StringNullableFilter<"Person"> | string | null
+  avatar?: Prisma.StringNullableFilter<"Person"> | string | null
   medicalNotes?: Prisma.StringNullableFilter<"Person"> | string | null
   idNumber?: Prisma.StringNullableFilter<"Person"> | string | null
   nif?: Prisma.StringNullableFilter<"Person"> | string | null
@@ -428,6 +436,7 @@ export type PersonOrderByWithRelationInput = {
   birthDate?: Prisma.SortOrderInput | Prisma.SortOrder
   email?: Prisma.SortOrderInput | Prisma.SortOrder
   phoneNumber?: Prisma.SortOrderInput | Prisma.SortOrder
+  avatar?: Prisma.SortOrderInput | Prisma.SortOrder
   medicalNotes?: Prisma.SortOrderInput | Prisma.SortOrder
   idNumber?: Prisma.SortOrderInput | Prisma.SortOrder
   nif?: Prisma.SortOrderInput | Prisma.SortOrder
@@ -479,6 +488,7 @@ export type PersonWhereUniqueInput = Prisma.AtLeast<{
   lastName?: Prisma.StringFilter<"Person"> | string
   birthDate?: Prisma.DateTimeNullableFilter<"Person"> | Date | string | null
   phoneNumber?: Prisma.StringNullableFilter<"Person"> | string | null
+  avatar?: Prisma.StringNullableFilter<"Person"> | string | null
   medicalNotes?: Prisma.StringNullableFilter<"Person"> | string | null
   idNumber?: Prisma.StringNullableFilter<"Person"> | string | null
   nif?: Prisma.StringNullableFilter<"Person"> | string | null
@@ -527,6 +537,7 @@ export type PersonOrderByWithAggregationInput = {
   birthDate?: Prisma.SortOrderInput | Prisma.SortOrder
   email?: Prisma.SortOrderInput | Prisma.SortOrder
   phoneNumber?: Prisma.SortOrderInput | Prisma.SortOrder
+  avatar?: Prisma.SortOrderInput | Prisma.SortOrder
   medicalNotes?: Prisma.SortOrderInput | Prisma.SortOrder
   idNumber?: Prisma.SortOrderInput | Prisma.SortOrder
   nif?: Prisma.SortOrderInput | Prisma.SortOrder
@@ -568,6 +579,7 @@ export type PersonScalarWhereWithAggregatesInput = {
   birthDate?: Prisma.DateTimeNullableWithAggregatesFilter<"Person"> | Date | string | null
   email?: Prisma.StringNullableWithAggregatesFilter<"Person"> | string | null
   phoneNumber?: Prisma.StringNullableWithAggregatesFilter<"Person"> | string | null
+  avatar?: Prisma.StringNullableWithAggregatesFilter<"Person"> | string | null
   medicalNotes?: Prisma.StringNullableWithAggregatesFilter<"Person"> | string | null
   idNumber?: Prisma.StringNullableWithAggregatesFilter<"Person"> | string | null
   nif?: Prisma.StringNullableWithAggregatesFilter<"Person"> | string | null
@@ -601,6 +613,7 @@ export type PersonCreateInput = {
   birthDate?: Date | string | null
   email?: string | null
   phoneNumber?: string | null
+  avatar?: string | null
   medicalNotes?: string | null
   idNumber?: string | null
   nif?: string | null
@@ -645,6 +658,7 @@ export type PersonUncheckedCreateInput = {
   birthDate?: Date | string | null
   email?: string | null
   phoneNumber?: string | null
+  avatar?: string | null
   medicalNotes?: string | null
   idNumber?: string | null
   nif?: string | null
@@ -689,6 +703,7 @@ export type PersonUpdateInput = {
   birthDate?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   email?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   phoneNumber?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  avatar?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   medicalNotes?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   idNumber?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   nif?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -733,6 +748,7 @@ export type PersonUncheckedUpdateInput = {
   birthDate?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   email?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   phoneNumber?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  avatar?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   medicalNotes?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   idNumber?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   nif?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -777,6 +793,7 @@ export type PersonCreateManyInput = {
   birthDate?: Date | string | null
   email?: string | null
   phoneNumber?: string | null
+  avatar?: string | null
   medicalNotes?: string | null
   idNumber?: string | null
   nif?: string | null
@@ -810,6 +827,7 @@ export type PersonUpdateManyMutationInput = {
   birthDate?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   email?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   phoneNumber?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  avatar?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   medicalNotes?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   idNumber?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   nif?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -839,6 +857,7 @@ export type PersonUncheckedUpdateManyInput = {
   birthDate?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   email?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   phoneNumber?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  avatar?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   medicalNotes?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   idNumber?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   nif?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -882,6 +901,7 @@ export type PersonCountOrderByAggregateInput = {
   birthDate?: Prisma.SortOrder
   email?: Prisma.SortOrder
   phoneNumber?: Prisma.SortOrder
+  avatar?: Prisma.SortOrder
   medicalNotes?: Prisma.SortOrder
   idNumber?: Prisma.SortOrder
   nif?: Prisma.SortOrder
@@ -919,6 +939,7 @@ export type PersonMaxOrderByAggregateInput = {
   birthDate?: Prisma.SortOrder
   email?: Prisma.SortOrder
   phoneNumber?: Prisma.SortOrder
+  avatar?: Prisma.SortOrder
   medicalNotes?: Prisma.SortOrder
   idNumber?: Prisma.SortOrder
   nif?: Prisma.SortOrder
@@ -949,6 +970,7 @@ export type PersonMinOrderByAggregateInput = {
   birthDate?: Prisma.SortOrder
   email?: Prisma.SortOrder
   phoneNumber?: Prisma.SortOrder
+  avatar?: Prisma.SortOrder
   medicalNotes?: Prisma.SortOrder
   idNumber?: Prisma.SortOrder
   nif?: Prisma.SortOrder
@@ -1348,6 +1370,7 @@ export type PersonCreateWithoutAddressInput = {
   birthDate?: Date | string | null
   email?: string | null
   phoneNumber?: string | null
+  avatar?: string | null
   medicalNotes?: string | null
   idNumber?: string | null
   nif?: string | null
@@ -1391,6 +1414,7 @@ export type PersonUncheckedCreateWithoutAddressInput = {
   birthDate?: Date | string | null
   email?: string | null
   phoneNumber?: string | null
+  avatar?: string | null
   medicalNotes?: string | null
   idNumber?: string | null
   nif?: string | null
@@ -1463,6 +1487,7 @@ export type PersonScalarWhereInput = {
   birthDate?: Prisma.DateTimeNullableFilter<"Person"> | Date | string | null
   email?: Prisma.StringNullableFilter<"Person"> | string | null
   phoneNumber?: Prisma.StringNullableFilter<"Person"> | string | null
+  avatar?: Prisma.StringNullableFilter<"Person"> | string | null
   medicalNotes?: Prisma.StringNullableFilter<"Person"> | string | null
   idNumber?: Prisma.StringNullableFilter<"Person"> | string | null
   nif?: Prisma.StringNullableFilter<"Person"> | string | null
@@ -1496,6 +1521,7 @@ export type PersonCreateWithoutBranchInput = {
   birthDate?: Date | string | null
   email?: string | null
   phoneNumber?: string | null
+  avatar?: string | null
   medicalNotes?: string | null
   idNumber?: string | null
   nif?: string | null
@@ -1539,6 +1565,7 @@ export type PersonUncheckedCreateWithoutBranchInput = {
   birthDate?: Date | string | null
   email?: string | null
   phoneNumber?: string | null
+  avatar?: string | null
   medicalNotes?: string | null
   idNumber?: string | null
   nif?: string | null
@@ -1608,6 +1635,7 @@ export type PersonCreateWithoutUserInput = {
   birthDate?: Date | string | null
   email?: string | null
   phoneNumber?: string | null
+  avatar?: string | null
   medicalNotes?: string | null
   idNumber?: string | null
   nif?: string | null
@@ -1651,6 +1679,7 @@ export type PersonUncheckedCreateWithoutUserInput = {
   birthDate?: Date | string | null
   email?: string | null
   phoneNumber?: string | null
+  avatar?: string | null
   medicalNotes?: string | null
   idNumber?: string | null
   nif?: string | null
@@ -1720,6 +1749,7 @@ export type PersonCreateWithoutRoleInput = {
   birthDate?: Date | string | null
   email?: string | null
   phoneNumber?: string | null
+  avatar?: string | null
   medicalNotes?: string | null
   idNumber?: string | null
   nif?: string | null
@@ -1763,6 +1793,7 @@ export type PersonUncheckedCreateWithoutRoleInput = {
   birthDate?: Date | string | null
   email?: string | null
   phoneNumber?: string | null
+  avatar?: string | null
   medicalNotes?: string | null
   idNumber?: string | null
   nif?: string | null
@@ -1832,6 +1863,7 @@ export type PersonCreateWithoutAppointmentInput = {
   birthDate?: Date | string | null
   email?: string | null
   phoneNumber?: string | null
+  avatar?: string | null
   medicalNotes?: string | null
   idNumber?: string | null
   nif?: string | null
@@ -1875,6 +1907,7 @@ export type PersonUncheckedCreateWithoutAppointmentInput = {
   birthDate?: Date | string | null
   email?: string | null
   phoneNumber?: string | null
+  avatar?: string | null
   medicalNotes?: string | null
   idNumber?: string | null
   nif?: string | null
@@ -1923,6 +1956,7 @@ export type PersonCreateWithoutAppointmentsInput = {
   birthDate?: Date | string | null
   email?: string | null
   phoneNumber?: string | null
+  avatar?: string | null
   medicalNotes?: string | null
   idNumber?: string | null
   nif?: string | null
@@ -1966,6 +2000,7 @@ export type PersonUncheckedCreateWithoutAppointmentsInput = {
   birthDate?: Date | string | null
   email?: string | null
   phoneNumber?: string | null
+  avatar?: string | null
   medicalNotes?: string | null
   idNumber?: string | null
   nif?: string | null
@@ -2025,6 +2060,7 @@ export type PersonUpdateWithoutAppointmentInput = {
   birthDate?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   email?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   phoneNumber?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  avatar?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   medicalNotes?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   idNumber?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   nif?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -2068,6 +2104,7 @@ export type PersonUncheckedUpdateWithoutAppointmentInput = {
   birthDate?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   email?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   phoneNumber?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  avatar?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   medicalNotes?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   idNumber?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   nif?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -2122,6 +2159,7 @@ export type PersonUpdateWithoutAppointmentsInput = {
   birthDate?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   email?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   phoneNumber?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  avatar?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   medicalNotes?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   idNumber?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   nif?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -2165,6 +2203,7 @@ export type PersonUncheckedUpdateWithoutAppointmentsInput = {
   birthDate?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   email?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   phoneNumber?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  avatar?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   medicalNotes?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   idNumber?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   nif?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -2208,6 +2247,7 @@ export type PersonCreateWithoutTreatmentPlansInput = {
   birthDate?: Date | string | null
   email?: string | null
   phoneNumber?: string | null
+  avatar?: string | null
   medicalNotes?: string | null
   idNumber?: string | null
   nif?: string | null
@@ -2251,6 +2291,7 @@ export type PersonUncheckedCreateWithoutTreatmentPlansInput = {
   birthDate?: Date | string | null
   email?: string | null
   phoneNumber?: string | null
+  avatar?: string | null
   medicalNotes?: string | null
   idNumber?: string | null
   nif?: string | null
@@ -2310,6 +2351,7 @@ export type PersonUpdateWithoutTreatmentPlansInput = {
   birthDate?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   email?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   phoneNumber?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  avatar?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   medicalNotes?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   idNumber?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   nif?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -2353,6 +2395,7 @@ export type PersonUncheckedUpdateWithoutTreatmentPlansInput = {
   birthDate?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   email?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   phoneNumber?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  avatar?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   medicalNotes?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   idNumber?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   nif?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -2396,6 +2439,7 @@ export type PersonCreateWithoutConsultsInput = {
   birthDate?: Date | string | null
   email?: string | null
   phoneNumber?: string | null
+  avatar?: string | null
   medicalNotes?: string | null
   idNumber?: string | null
   nif?: string | null
@@ -2439,6 +2483,7 @@ export type PersonUncheckedCreateWithoutConsultsInput = {
   birthDate?: Date | string | null
   email?: string | null
   phoneNumber?: string | null
+  avatar?: string | null
   medicalNotes?: string | null
   idNumber?: string | null
   nif?: string | null
@@ -2498,6 +2543,7 @@ export type PersonUpdateWithoutConsultsInput = {
   birthDate?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   email?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   phoneNumber?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  avatar?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   medicalNotes?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   idNumber?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   nif?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -2541,6 +2587,7 @@ export type PersonUncheckedUpdateWithoutConsultsInput = {
   birthDate?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   email?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   phoneNumber?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  avatar?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   medicalNotes?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   idNumber?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   nif?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -2584,6 +2631,7 @@ export type PersonCreateWithoutClinicProccessesInput = {
   birthDate?: Date | string | null
   email?: string | null
   phoneNumber?: string | null
+  avatar?: string | null
   medicalNotes?: string | null
   idNumber?: string | null
   nif?: string | null
@@ -2627,6 +2675,7 @@ export type PersonUncheckedCreateWithoutClinicProccessesInput = {
   birthDate?: Date | string | null
   email?: string | null
   phoneNumber?: string | null
+  avatar?: string | null
   medicalNotes?: string | null
   idNumber?: string | null
   nif?: string | null
@@ -2686,6 +2735,7 @@ export type PersonUpdateWithoutClinicProccessesInput = {
   birthDate?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   email?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   phoneNumber?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  avatar?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   medicalNotes?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   idNumber?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   nif?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -2729,6 +2779,7 @@ export type PersonUncheckedUpdateWithoutClinicProccessesInput = {
   birthDate?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   email?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   phoneNumber?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  avatar?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   medicalNotes?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   idNumber?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   nif?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -2772,6 +2823,7 @@ export type PersonCreateWithoutDiagnosticsInput = {
   birthDate?: Date | string | null
   email?: string | null
   phoneNumber?: string | null
+  avatar?: string | null
   medicalNotes?: string | null
   idNumber?: string | null
   nif?: string | null
@@ -2815,6 +2867,7 @@ export type PersonUncheckedCreateWithoutDiagnosticsInput = {
   birthDate?: Date | string | null
   email?: string | null
   phoneNumber?: string | null
+  avatar?: string | null
   medicalNotes?: string | null
   idNumber?: string | null
   nif?: string | null
@@ -2874,6 +2927,7 @@ export type PersonUpdateWithoutDiagnosticsInput = {
   birthDate?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   email?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   phoneNumber?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  avatar?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   medicalNotes?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   idNumber?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   nif?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -2917,6 +2971,7 @@ export type PersonUncheckedUpdateWithoutDiagnosticsInput = {
   birthDate?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   email?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   phoneNumber?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  avatar?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   medicalNotes?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   idNumber?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   nif?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -2960,6 +3015,7 @@ export type PersonCreateWithoutOdontogramInput = {
   birthDate?: Date | string | null
   email?: string | null
   phoneNumber?: string | null
+  avatar?: string | null
   medicalNotes?: string | null
   idNumber?: string | null
   nif?: string | null
@@ -3003,6 +3059,7 @@ export type PersonUncheckedCreateWithoutOdontogramInput = {
   birthDate?: Date | string | null
   email?: string | null
   phoneNumber?: string | null
+  avatar?: string | null
   medicalNotes?: string | null
   idNumber?: string | null
   nif?: string | null
@@ -3062,6 +3119,7 @@ export type PersonUpdateWithoutOdontogramInput = {
   birthDate?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   email?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   phoneNumber?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  avatar?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   medicalNotes?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   idNumber?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   nif?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -3105,6 +3163,7 @@ export type PersonUncheckedUpdateWithoutOdontogramInput = {
   birthDate?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   email?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   phoneNumber?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  avatar?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   medicalNotes?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   idNumber?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   nif?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -3148,6 +3207,7 @@ export type PersonCreateWithoutPatientPrescriptionsInput = {
   birthDate?: Date | string | null
   email?: string | null
   phoneNumber?: string | null
+  avatar?: string | null
   medicalNotes?: string | null
   idNumber?: string | null
   nif?: string | null
@@ -3191,6 +3251,7 @@ export type PersonUncheckedCreateWithoutPatientPrescriptionsInput = {
   birthDate?: Date | string | null
   email?: string | null
   phoneNumber?: string | null
+  avatar?: string | null
   medicalNotes?: string | null
   idNumber?: string | null
   nif?: string | null
@@ -3250,6 +3311,7 @@ export type PersonUpdateWithoutPatientPrescriptionsInput = {
   birthDate?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   email?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   phoneNumber?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  avatar?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   medicalNotes?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   idNumber?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   nif?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -3293,6 +3355,7 @@ export type PersonUncheckedUpdateWithoutPatientPrescriptionsInput = {
   birthDate?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   email?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   phoneNumber?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  avatar?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   medicalNotes?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   idNumber?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   nif?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -3336,6 +3399,7 @@ export type PersonCreateWithoutFinancialEntriesInput = {
   birthDate?: Date | string | null
   email?: string | null
   phoneNumber?: string | null
+  avatar?: string | null
   medicalNotes?: string | null
   idNumber?: string | null
   nif?: string | null
@@ -3379,6 +3443,7 @@ export type PersonUncheckedCreateWithoutFinancialEntriesInput = {
   birthDate?: Date | string | null
   email?: string | null
   phoneNumber?: string | null
+  avatar?: string | null
   medicalNotes?: string | null
   idNumber?: string | null
   nif?: string | null
@@ -3438,6 +3503,7 @@ export type PersonUpdateWithoutFinancialEntriesInput = {
   birthDate?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   email?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   phoneNumber?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  avatar?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   medicalNotes?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   idNumber?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   nif?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -3481,6 +3547,7 @@ export type PersonUncheckedUpdateWithoutFinancialEntriesInput = {
   birthDate?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   email?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   phoneNumber?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  avatar?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   medicalNotes?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   idNumber?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   nif?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -3524,6 +3591,7 @@ export type PersonCreateWithoutXrayAnalysesInput = {
   birthDate?: Date | string | null
   email?: string | null
   phoneNumber?: string | null
+  avatar?: string | null
   medicalNotes?: string | null
   idNumber?: string | null
   nif?: string | null
@@ -3567,6 +3635,7 @@ export type PersonUncheckedCreateWithoutXrayAnalysesInput = {
   birthDate?: Date | string | null
   email?: string | null
   phoneNumber?: string | null
+  avatar?: string | null
   medicalNotes?: string | null
   idNumber?: string | null
   nif?: string | null
@@ -3626,6 +3695,7 @@ export type PersonUpdateWithoutXrayAnalysesInput = {
   birthDate?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   email?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   phoneNumber?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  avatar?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   medicalNotes?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   idNumber?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   nif?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -3669,6 +3739,7 @@ export type PersonUncheckedUpdateWithoutXrayAnalysesInput = {
   birthDate?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   email?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   phoneNumber?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  avatar?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   medicalNotes?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   idNumber?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   nif?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -3712,6 +3783,7 @@ export type PersonCreateWithoutExamsInput = {
   birthDate?: Date | string | null
   email?: string | null
   phoneNumber?: string | null
+  avatar?: string | null
   medicalNotes?: string | null
   idNumber?: string | null
   nif?: string | null
@@ -3755,6 +3827,7 @@ export type PersonUncheckedCreateWithoutExamsInput = {
   birthDate?: Date | string | null
   email?: string | null
   phoneNumber?: string | null
+  avatar?: string | null
   medicalNotes?: string | null
   idNumber?: string | null
   nif?: string | null
@@ -3814,6 +3887,7 @@ export type PersonUpdateWithoutExamsInput = {
   birthDate?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   email?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   phoneNumber?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  avatar?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   medicalNotes?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   idNumber?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   nif?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -3857,6 +3931,7 @@ export type PersonUncheckedUpdateWithoutExamsInput = {
   birthDate?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   email?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   phoneNumber?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  avatar?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   medicalNotes?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   idNumber?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   nif?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -3900,6 +3975,7 @@ export type PersonCreateManyAddressInput = {
   birthDate?: Date | string | null
   email?: string | null
   phoneNumber?: string | null
+  avatar?: string | null
   medicalNotes?: string | null
   idNumber?: string | null
   nif?: string | null
@@ -3932,6 +4008,7 @@ export type PersonUpdateWithoutAddressInput = {
   birthDate?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   email?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   phoneNumber?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  avatar?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   medicalNotes?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   idNumber?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   nif?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -3975,6 +4052,7 @@ export type PersonUncheckedUpdateWithoutAddressInput = {
   birthDate?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   email?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   phoneNumber?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  avatar?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   medicalNotes?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   idNumber?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   nif?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -4018,6 +4096,7 @@ export type PersonUncheckedUpdateManyWithoutAddressInput = {
   birthDate?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   email?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   phoneNumber?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  avatar?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   medicalNotes?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   idNumber?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   nif?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -4050,6 +4129,7 @@ export type PersonCreateManyBranchInput = {
   birthDate?: Date | string | null
   email?: string | null
   phoneNumber?: string | null
+  avatar?: string | null
   medicalNotes?: string | null
   idNumber?: string | null
   nif?: string | null
@@ -4082,6 +4162,7 @@ export type PersonUpdateWithoutBranchInput = {
   birthDate?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   email?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   phoneNumber?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  avatar?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   medicalNotes?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   idNumber?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   nif?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -4125,6 +4206,7 @@ export type PersonUncheckedUpdateWithoutBranchInput = {
   birthDate?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   email?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   phoneNumber?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  avatar?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   medicalNotes?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   idNumber?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   nif?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -4168,6 +4250,7 @@ export type PersonUncheckedUpdateManyWithoutBranchInput = {
   birthDate?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   email?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   phoneNumber?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  avatar?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   medicalNotes?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   idNumber?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   nif?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -4200,6 +4283,7 @@ export type PersonCreateManyUserInput = {
   birthDate?: Date | string | null
   email?: string | null
   phoneNumber?: string | null
+  avatar?: string | null
   medicalNotes?: string | null
   idNumber?: string | null
   nif?: string | null
@@ -4232,6 +4316,7 @@ export type PersonUpdateWithoutUserInput = {
   birthDate?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   email?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   phoneNumber?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  avatar?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   medicalNotes?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   idNumber?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   nif?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -4275,6 +4360,7 @@ export type PersonUncheckedUpdateWithoutUserInput = {
   birthDate?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   email?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   phoneNumber?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  avatar?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   medicalNotes?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   idNumber?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   nif?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -4318,6 +4404,7 @@ export type PersonUncheckedUpdateManyWithoutUserInput = {
   birthDate?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   email?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   phoneNumber?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  avatar?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   medicalNotes?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   idNumber?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   nif?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -4350,6 +4437,7 @@ export type PersonCreateManyRoleInput = {
   birthDate?: Date | string | null
   email?: string | null
   phoneNumber?: string | null
+  avatar?: string | null
   medicalNotes?: string | null
   idNumber?: string | null
   nif?: string | null
@@ -4382,6 +4470,7 @@ export type PersonUpdateWithoutRoleInput = {
   birthDate?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   email?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   phoneNumber?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  avatar?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   medicalNotes?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   idNumber?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   nif?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -4425,6 +4514,7 @@ export type PersonUncheckedUpdateWithoutRoleInput = {
   birthDate?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   email?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   phoneNumber?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  avatar?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   medicalNotes?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   idNumber?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   nif?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -4468,6 +4558,7 @@ export type PersonUncheckedUpdateManyWithoutRoleInput = {
   birthDate?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   email?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   phoneNumber?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  avatar?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   medicalNotes?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   idNumber?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   nif?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -4621,6 +4712,7 @@ export type PersonSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs =
   birthDate?: boolean
   email?: boolean
   phoneNumber?: boolean
+  avatar?: boolean
   medicalNotes?: boolean
   idNumber?: boolean
   nif?: boolean
@@ -4670,6 +4762,7 @@ export type PersonSelectCreateManyAndReturn<ExtArgs extends runtime.Types.Extens
   birthDate?: boolean
   email?: boolean
   phoneNumber?: boolean
+  avatar?: boolean
   medicalNotes?: boolean
   idNumber?: boolean
   nif?: boolean
@@ -4707,6 +4800,7 @@ export type PersonSelectUpdateManyAndReturn<ExtArgs extends runtime.Types.Extens
   birthDate?: boolean
   email?: boolean
   phoneNumber?: boolean
+  avatar?: boolean
   medicalNotes?: boolean
   idNumber?: boolean
   nif?: boolean
@@ -4744,6 +4838,7 @@ export type PersonSelectScalar = {
   birthDate?: boolean
   email?: boolean
   phoneNumber?: boolean
+  avatar?: boolean
   medicalNotes?: boolean
   idNumber?: boolean
   nif?: boolean
@@ -4770,7 +4865,7 @@ export type PersonSelectScalar = {
   deletedAt?: boolean
 }
 
-export type PersonOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "firstName" | "lastName" | "birthDate" | "email" | "phoneNumber" | "medicalNotes" | "idNumber" | "nif" | "profession" | "bloodType" | "insuranceProvider" | "insurancePlan" | "insurancePolicyNumber" | "insuranceCoveragePercent" | "emergencyContactName" | "emergencyContactRelationship" | "emergencyContactPhone" | "allergies" | "medicalConditions" | "medications" | "gender" | "isActive" | "branchId" | "addressId" | "userId" | "roleId" | "createdAt" | "updatedAt" | "deletedAt", ExtArgs["result"]["person"]>
+export type PersonOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "firstName" | "lastName" | "birthDate" | "email" | "phoneNumber" | "avatar" | "medicalNotes" | "idNumber" | "nif" | "profession" | "bloodType" | "insuranceProvider" | "insurancePlan" | "insurancePolicyNumber" | "insuranceCoveragePercent" | "emergencyContactName" | "emergencyContactRelationship" | "emergencyContactPhone" | "allergies" | "medicalConditions" | "medications" | "gender" | "isActive" | "branchId" | "addressId" | "userId" | "roleId" | "createdAt" | "updatedAt" | "deletedAt", ExtArgs["result"]["person"]>
 export type PersonInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   address?: boolean | Prisma.AddressDefaultArgs<ExtArgs>
   branch?: boolean | Prisma.BranchDefaultArgs<ExtArgs>
@@ -4828,6 +4923,7 @@ export type $PersonPayload<ExtArgs extends runtime.Types.Extensions.InternalArgs
     birthDate: Date | null
     email: string | null
     phoneNumber: string | null
+    avatar: string | null
     medicalNotes: string | null
     idNumber: string | null
     nif: string | null
@@ -5296,6 +5392,7 @@ export interface PersonFieldRefs {
   readonly birthDate: Prisma.FieldRef<"Person", 'DateTime'>
   readonly email: Prisma.FieldRef<"Person", 'String'>
   readonly phoneNumber: Prisma.FieldRef<"Person", 'String'>
+  readonly avatar: Prisma.FieldRef<"Person", 'String'>
   readonly medicalNotes: Prisma.FieldRef<"Person", 'String'>
   readonly idNumber: Prisma.FieldRef<"Person", 'String'>
   readonly nif: Prisma.FieldRef<"Person", 'String'>

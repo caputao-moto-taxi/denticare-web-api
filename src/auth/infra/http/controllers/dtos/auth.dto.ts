@@ -5,6 +5,7 @@ import {
   Matches,
   MaxLength,
   MinLength,
+  ValidateIf,
 } from 'class-validator';
 
 export class LoginDto {
@@ -15,6 +16,36 @@ export class LoginDto {
   @IsString()
   @MinLength(8)
   @MaxLength(128)
+  password: string;
+}
+
+export class RefreshTokenDto {
+  @IsString()
+  @MinLength(1)
+  @MaxLength(4096)
+  refreshToken: string;
+}
+
+export class EmailActionDto {
+  @IsEmail()
+  @MaxLength(254)
+  email: string;
+}
+
+export class AuthActionTokenDto {
+  @IsString()
+  @MinLength(32)
+  @MaxLength(128)
+  token: string;
+}
+
+export class ResetPasswordDto extends AuthActionTokenDto {
+  @IsString()
+  @MinLength(8)
+  @MaxLength(128)
+  @Matches(/^(?=.*[A-Z])(?=.*\d).+$/, {
+    message: 'password must contain an uppercase letter and a number',
+  })
   password: string;
 }
 
@@ -79,8 +110,24 @@ export class UpdateProfileDto {
   name?: string;
 
   @IsOptional()
+  @ValidateIf((_input, value) => value !== '')
   @IsString()
   @MinLength(3)
   @MaxLength(32)
   phone?: string;
+
+  @ValidateIf((input: UpdateProfileDto) => input.newPassword !== undefined)
+  @IsString()
+  @MinLength(8)
+  @MaxLength(128)
+  currentPassword?: string;
+
+  @IsOptional()
+  @IsString()
+  @MinLength(8)
+  @MaxLength(128)
+  @Matches(/^(?=.*[A-Z])(?=.*\d).+$/, {
+    message: 'newPassword must contain an uppercase letter and a number',
+  })
+  newPassword?: string;
 }

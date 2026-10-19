@@ -7,6 +7,7 @@ import {
   PatientFinancialPdfData,
   PatientPrescriptionPdfData,
 } from '../../domain/patient.repository';
+import { IPatientPdfGenerator } from '../../application/interfaces/patient-pdf-generator.interface';
 
 const PAGE_MARGIN = 48;
 const PAGE_BOTTOM_MARGIN = 54;
@@ -20,7 +21,7 @@ const COLORS = {
 };
 
 @Injectable()
-export class PatientPdfService {
+export class PatientPdfService implements IPatientPdfGenerator {
   createPrescription(data: PatientPrescriptionPdfData) {
     return this.createPdf('Prescrição clínica', (document) => {
       this.drawHeader(document, 'Prescrição clínica');

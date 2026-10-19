@@ -23,13 +23,18 @@ export class CreateConversationDto {
 }
 
 export class SendMessageDto {
+  @IsOptional()
+  @IsString()
+  @MaxLength(5000)
+  content?: string;
+}
+
+export class SocketSendMessageDto {
   @IsString()
   @MinLength(1)
   @MaxLength(5000)
   content: string;
-}
 
-export class SocketSendMessageDto extends SendMessageDto {
   @IsString()
   @MinLength(1)
   conversationId: string;

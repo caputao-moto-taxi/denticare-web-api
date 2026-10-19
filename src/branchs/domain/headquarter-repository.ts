@@ -1,5 +1,3 @@
-
-
 export abstract class IHeadquarterRepository {
   abstract create(headquarter: any): Promise<any>;
   abstract show(id: string): Promise<any>;

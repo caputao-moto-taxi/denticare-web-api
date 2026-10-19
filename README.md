@@ -31,8 +31,12 @@ HTTP não devem ser usados como contratos internos de domínio.
 
 ## Desenvolvimento local
 
-Configure `DATABASE_URL` com a ligação PostgreSQL e `JWT_SECRET` com um segredo
-forte no ambiente local. Não inclua esses valores no controlo de versões.
+Configure `DATABASE_URL` com a ligação PostgreSQL, `JWT_SECRET` e
+`JWT_REFRESH_SECRET` com segredos fortes e distintos no ambiente local. Não
+inclua esses valores no controlo de versões. Para uploads, configure
+`R2_ENDPOINT`, `R2_BUCKET`, `R2_ACCESS_KEY_ID` e `R2_SECRET_ACCESS_KEY`. Os
+nomes `CLOUDFLARE_*` antigos continuam aceites como fallback. O bucket R2 deve
+permanecer privado; a API serve os ficheiros após validar a autorização.
 
 ```bash
 pnpm install
@@ -40,6 +44,10 @@ pnpm exec prisma migrate deploy
 pnpm db:seed
 pnpm start:dev
 ```
+
+Para testar a ligação real ao R2, execute
+`RUN_R2_INTEGRATION_TESTS=true pnpm exec jest src/shared/infra/storage/__tests__/aws-s3.storage.int.spec.ts --runInBand`.
+O teste usa uma chave aleatória e tenta remover o objeto no fim.
 
 A API escuta em `http://localhost:3000` por padrão (`PORT` pode alterar a porta).
 O Swagger está disponível em `/api/doc`. No frontend, `VITE_API_URL` define a
@@ -53,6 +61,10 @@ O Swagger documenta os DTOs e os restantes endpoints.
 
 - `GET /patients` e `POST /patients` consultam e criam pacientes no âmbito da
   clínica/filial do utilizador autenticado.
+- `POST /patients/:id/avatar`, `POST /doctors/:id/avatar` e
+  `POST /chat/conversations/:id/messages` recebem multipart com o campo `file`
+  ou `files`; os ficheiros clínicos, anexos do chat e avatares são guardados no
+  R2. Os downloads exigem autenticação e autorização do recurso.
 - `GET /doctors` e `POST /doctors` consultam e criam médicos. A disponibilidade
   de agendamento depende dos dias e horários definidos no perfil do médico.
 - `GET /appointments` e `POST /appointments` consultam e criam agendamentos.

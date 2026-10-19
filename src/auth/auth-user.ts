@@ -11,6 +11,7 @@ export interface AuthenticatedRequest {
   authToken: {
     jti: string;
     expiresAt: Date;
+    sessionId?: string;
   };
   headers: {
     authorization?: string;

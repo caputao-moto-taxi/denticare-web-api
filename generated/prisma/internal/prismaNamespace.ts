@@ -404,10 +404,13 @@ export const ModelName = {
   ChatConversation: 'ChatConversation',
   ChatMessage: 'ChatMessage',
   StockItem: 'StockItem',
+  StockCatalogEntry: 'StockCatalogEntry',
   StockSale: 'StockSale',
   StockSaleItem: 'StockSaleItem',
   TreatmentPlan: 'TreatmentPlan',
   RevokedToken: 'RevokedToken',
+  RefreshToken: 'RefreshToken',
+  AuthActionToken: 'AuthActionToken',
   Consult: 'Consult',
   ConsultTreatment: 'ConsultTreatment',
   Treatment: 'Treatment',
@@ -446,7 +449,7 @@ export type TypeMap<ExtArgs extends runtime.Types.Extensions.InternalArgs = runt
     omit: GlobalOmitOptions
   }
   meta: {
-    modelProps: "currency" | "plan" | "benefit" | "planBenefit" | "headquarter" | "address" | "branch" | "user" | "person" | "role" | "permission" | "userBranch" | "rolePermission" | "userPermission" | "userRole" | "appointment" | "doctorProfile" | "chatConversation" | "chatMessage" | "stockItem" | "stockSale" | "stockSaleItem" | "treatmentPlan" | "revokedToken" | "consult" | "consultTreatment" | "treatment" | "treatmentPrice" | "product" | "sale" | "saleItem" | "prescription" | "prescriptionItem" | "clinicProccess" | "diagnostic" | "diagnosticAttachment" | "patientTooth" | "patientPrescription" | "patientFinancialEntry" | "xRayAnalysis" | "patientExam" | "newLatter" | "message" | "audit" | "log" | "loginHistory" | "accessHistory"
+    modelProps: "currency" | "plan" | "benefit" | "planBenefit" | "headquarter" | "address" | "branch" | "user" | "person" | "role" | "permission" | "userBranch" | "rolePermission" | "userPermission" | "userRole" | "appointment" | "doctorProfile" | "chatConversation" | "chatMessage" | "stockItem" | "stockCatalogEntry" | "stockSale" | "stockSaleItem" | "treatmentPlan" | "revokedToken" | "refreshToken" | "authActionToken" | "consult" | "consultTreatment" | "treatment" | "treatmentPrice" | "product" | "sale" | "saleItem" | "prescription" | "prescriptionItem" | "clinicProccess" | "diagnostic" | "diagnosticAttachment" | "patientTooth" | "patientPrescription" | "patientFinancialEntry" | "xRayAnalysis" | "patientExam" | "newLatter" | "message" | "audit" | "log" | "loginHistory" | "accessHistory"
     txIsolationLevel: TransactionIsolationLevel
   }
   model: {
@@ -1930,6 +1933,80 @@ export type TypeMap<ExtArgs extends runtime.Types.Extensions.InternalArgs = runt
         }
       }
     }
+    StockCatalogEntry: {
+      payload: Prisma.$StockCatalogEntryPayload<ExtArgs>
+      fields: Prisma.StockCatalogEntryFieldRefs
+      operations: {
+        findUnique: {
+          args: Prisma.StockCatalogEntryFindUniqueArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$StockCatalogEntryPayload> | null
+        }
+        findUniqueOrThrow: {
+          args: Prisma.StockCatalogEntryFindUniqueOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$StockCatalogEntryPayload>
+        }
+        findFirst: {
+          args: Prisma.StockCatalogEntryFindFirstArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$StockCatalogEntryPayload> | null
+        }
+        findFirstOrThrow: {
+          args: Prisma.StockCatalogEntryFindFirstOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$StockCatalogEntryPayload>
+        }
+        findMany: {
+          args: Prisma.StockCatalogEntryFindManyArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$StockCatalogEntryPayload>[]
+        }
+        create: {
+          args: Prisma.StockCatalogEntryCreateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$StockCatalogEntryPayload>
+        }
+        createMany: {
+          args: Prisma.StockCatalogEntryCreateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        createManyAndReturn: {
+          args: Prisma.StockCatalogEntryCreateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$StockCatalogEntryPayload>[]
+        }
+        delete: {
+          args: Prisma.StockCatalogEntryDeleteArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$StockCatalogEntryPayload>
+        }
+        update: {
+          args: Prisma.StockCatalogEntryUpdateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$StockCatalogEntryPayload>
+        }
+        deleteMany: {
+          args: Prisma.StockCatalogEntryDeleteManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateMany: {
+          args: Prisma.StockCatalogEntryUpdateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateManyAndReturn: {
+          args: Prisma.StockCatalogEntryUpdateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$StockCatalogEntryPayload>[]
+        }
+        upsert: {
+          args: Prisma.StockCatalogEntryUpsertArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$StockCatalogEntryPayload>
+        }
+        aggregate: {
+          args: Prisma.StockCatalogEntryAggregateArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.AggregateStockCatalogEntry>
+        }
+        groupBy: {
+          args: Prisma.StockCatalogEntryGroupByArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.StockCatalogEntryGroupByOutputType>[]
+        }
+        count: {
+          args: Prisma.StockCatalogEntryCountArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.StockCatalogEntryCountAggregateOutputType> | number
+        }
+      }
+    }
     StockSale: {
       payload: Prisma.$StockSalePayload<ExtArgs>
       fields: Prisma.StockSaleFieldRefs
@@ -2223,6 +2300,154 @@ export type TypeMap<ExtArgs extends runtime.Types.Extensions.InternalArgs = runt
         count: {
           args: Prisma.RevokedTokenCountArgs<ExtArgs>
           result: runtime.Types.Utils.Optional<Prisma.RevokedTokenCountAggregateOutputType> | number
+        }
+      }
+    }
+    RefreshToken: {
+      payload: Prisma.$RefreshTokenPayload<ExtArgs>
+      fields: Prisma.RefreshTokenFieldRefs
+      operations: {
+        findUnique: {
+          args: Prisma.RefreshTokenFindUniqueArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$RefreshTokenPayload> | null
+        }
+        findUniqueOrThrow: {
+          args: Prisma.RefreshTokenFindUniqueOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$RefreshTokenPayload>
+        }
+        findFirst: {
+          args: Prisma.RefreshTokenFindFirstArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$RefreshTokenPayload> | null
+        }
+        findFirstOrThrow: {
+          args: Prisma.RefreshTokenFindFirstOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$RefreshTokenPayload>
+        }
+        findMany: {
+          args: Prisma.RefreshTokenFindManyArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$RefreshTokenPayload>[]
+        }
+        create: {
+          args: Prisma.RefreshTokenCreateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$RefreshTokenPayload>
+        }
+        createMany: {
+          args: Prisma.RefreshTokenCreateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        createManyAndReturn: {
+          args: Prisma.RefreshTokenCreateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$RefreshTokenPayload>[]
+        }
+        delete: {
+          args: Prisma.RefreshTokenDeleteArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$RefreshTokenPayload>
+        }
+        update: {
+          args: Prisma.RefreshTokenUpdateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$RefreshTokenPayload>
+        }
+        deleteMany: {
+          args: Prisma.RefreshTokenDeleteManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateMany: {
+          args: Prisma.RefreshTokenUpdateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateManyAndReturn: {
+          args: Prisma.RefreshTokenUpdateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$RefreshTokenPayload>[]
+        }
+        upsert: {
+          args: Prisma.RefreshTokenUpsertArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$RefreshTokenPayload>
+        }
+        aggregate: {
+          args: Prisma.RefreshTokenAggregateArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.AggregateRefreshToken>
+        }
+        groupBy: {
+          args: Prisma.RefreshTokenGroupByArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.RefreshTokenGroupByOutputType>[]
+        }
+        count: {
+          args: Prisma.RefreshTokenCountArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.RefreshTokenCountAggregateOutputType> | number
+        }
+      }
+    }
+    AuthActionToken: {
+      payload: Prisma.$AuthActionTokenPayload<ExtArgs>
+      fields: Prisma.AuthActionTokenFieldRefs
+      operations: {
+        findUnique: {
+          args: Prisma.AuthActionTokenFindUniqueArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$AuthActionTokenPayload> | null
+        }
+        findUniqueOrThrow: {
+          args: Prisma.AuthActionTokenFindUniqueOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$AuthActionTokenPayload>
+        }
+        findFirst: {
+          args: Prisma.AuthActionTokenFindFirstArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$AuthActionTokenPayload> | null
+        }
+        findFirstOrThrow: {
+          args: Prisma.AuthActionTokenFindFirstOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$AuthActionTokenPayload>
+        }
+        findMany: {
+          args: Prisma.AuthActionTokenFindManyArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$AuthActionTokenPayload>[]
+        }
+        create: {
+          args: Prisma.AuthActionTokenCreateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$AuthActionTokenPayload>
+        }
+        createMany: {
+          args: Prisma.AuthActionTokenCreateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        createManyAndReturn: {
+          args: Prisma.AuthActionTokenCreateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$AuthActionTokenPayload>[]
+        }
+        delete: {
+          args: Prisma.AuthActionTokenDeleteArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$AuthActionTokenPayload>
+        }
+        update: {
+          args: Prisma.AuthActionTokenUpdateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$AuthActionTokenPayload>
+        }
+        deleteMany: {
+          args: Prisma.AuthActionTokenDeleteManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateMany: {
+          args: Prisma.AuthActionTokenUpdateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateManyAndReturn: {
+          args: Prisma.AuthActionTokenUpdateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$AuthActionTokenPayload>[]
+        }
+        upsert: {
+          args: Prisma.AuthActionTokenUpsertArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$AuthActionTokenPayload>
+        }
+        aggregate: {
+          args: Prisma.AuthActionTokenAggregateArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.AggregateAuthActionToken>
+        }
+        groupBy: {
+          args: Prisma.AuthActionTokenGroupByArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.AuthActionTokenGroupByOutputType>[]
+        }
+        count: {
+          args: Prisma.AuthActionTokenCountArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.AuthActionTokenCountAggregateOutputType> | number
         }
       }
     }
@@ -4103,6 +4328,7 @@ export const PersonScalarFieldEnum = {
   birthDate: 'birthDate',
   email: 'email',
   phoneNumber: 'phoneNumber',
+  avatar: 'avatar',
   medicalNotes: 'medicalNotes',
   idNumber: 'idNumber',
   nif: 'nif',
@@ -4296,6 +4522,17 @@ export const StockItemScalarFieldEnum = {
 export type StockItemScalarFieldEnum = (typeof StockItemScalarFieldEnum)[keyof typeof StockItemScalarFieldEnum]
 
 
+export const StockCatalogEntryScalarFieldEnum = {
+  id: 'id',
+  branchId: 'branchId',
+  kind: 'kind',
+  name: 'name',
+  createdAt: 'createdAt'
+} as const
+
+export type StockCatalogEntryScalarFieldEnum = (typeof StockCatalogEntryScalarFieldEnum)[keyof typeof StockCatalogEntryScalarFieldEnum]
+
+
 export const StockSaleScalarFieldEnum = {
   id: 'id',
   branchId: 'branchId',
@@ -4351,6 +4588,30 @@ export const RevokedTokenScalarFieldEnum = {
 } as const
 
 export type RevokedTokenScalarFieldEnum = (typeof RevokedTokenScalarFieldEnum)[keyof typeof RevokedTokenScalarFieldEnum]
+
+
+export const RefreshTokenScalarFieldEnum = {
+  jti: 'jti',
+  userId: 'userId',
+  expiresAt: 'expiresAt',
+  revokedAt: 'revokedAt',
+  createdAt: 'createdAt'
+} as const
+
+export type RefreshTokenScalarFieldEnum = (typeof RefreshTokenScalarFieldEnum)[keyof typeof RefreshTokenScalarFieldEnum]
+
+
+export const AuthActionTokenScalarFieldEnum = {
+  id: 'id',
+  userId: 'userId',
+  tokenHash: 'tokenHash',
+  type: 'type',
+  expiresAt: 'expiresAt',
+  usedAt: 'usedAt',
+  createdAt: 'createdAt'
+} as const
+
+export type AuthActionTokenScalarFieldEnum = (typeof AuthActionTokenScalarFieldEnum)[keyof typeof AuthActionTokenScalarFieldEnum]
 
 
 export const ConsultScalarFieldEnum = {
@@ -5006,10 +5267,13 @@ export type GlobalOmitConfig = {
   chatConversation?: Prisma.ChatConversationOmit
   chatMessage?: Prisma.ChatMessageOmit
   stockItem?: Prisma.StockItemOmit
+  stockCatalogEntry?: Prisma.StockCatalogEntryOmit
   stockSale?: Prisma.StockSaleOmit
   stockSaleItem?: Prisma.StockSaleItemOmit
   treatmentPlan?: Prisma.TreatmentPlanOmit
   revokedToken?: Prisma.RevokedTokenOmit
+  refreshToken?: Prisma.RefreshTokenOmit
+  authActionToken?: Prisma.AuthActionTokenOmit
   consult?: Prisma.ConsultOmit
   consultTreatment?: Prisma.ConsultTreatmentOmit
   treatment?: Prisma.TreatmentOmit

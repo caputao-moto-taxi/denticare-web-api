@@ -27,19 +27,37 @@ import { RequirePermissions } from '../../../../auth/permissions';
 import { ListQueryDto } from '../../../../shared/infra/http/list-query.dto';
 import {
   CreatePatientDto,
-  UpdatePatientDto,
-  UpdatePatientStatusDto,
-} from './dtos/patient.dto';
-import {
   CreatePatientDiagnosisDto,
   CreatePatientExamDto,
   CreatePatientFinancialEntryDto,
   CreatePatientPrescriptionDto,
-  UpdatePatientToothDto,
   UpdatePatientDiagnosisDto,
-} from './dtos/patient-details.dto';
-import { PatientsUseCases } from '../../../application/useCases/patients.use-cases';
-import { PatientPdfService } from '../../pdf/patient-pdf.service';
+  UpdatePatientDto,
+  UpdatePatientStatusDto,
+  UpdatePatientToothDto,
+} from './dtos';
+import {
+  AddPatientDiagnosisAttachmentsUseCase,
+  ManagePatientAvatarUseCase,
+  AddPatientDiagnosisUseCase,
+  AddPatientExamUseCase,
+  AddPatientFinancialEntryUseCase,
+  AddPatientPrescriptionUseCase,
+  CreatePatientUseCase,
+  DeletePatientUseCase,
+  GetPatientChartPdfUseCase,
+  GetPatientDetailsUseCase,
+  GetPatientDiagnosisAttachmentUseCase,
+  GetPatientExamFileUseCase,
+  GetPatientFinancialPdfUseCase,
+  GetPatientPrescriptionPdfUseCase,
+  GetPatientUseCase,
+  ListPatientsUseCase,
+  SetPatientStatusUseCase,
+  UpdatePatientDiagnosisUseCase,
+  UpdatePatientToothUseCase,
+  UpdatePatientUseCase,
+} from '../../../application/useCases';
 
 const EXAM_FILE_LIMIT = 100 * 1024 * 1024;
 const DIAGNOSIS_ATTACHMENT_FILE_LIMIT = 20 * 1024 * 1024;
@@ -67,14 +85,32 @@ type ExamUpload = {
 @Controller('patients')
 export class PatientsController {
   constructor(
-    private readonly patientsService: PatientsUseCases,
-    private readonly patientPdfService: PatientPdfService,
+    private readonly listPatientsUseCase: ListPatientsUseCase,
+    private readonly getPatientUseCase: GetPatientUseCase,
+    private readonly getPatientDetailsUseCase: GetPatientDetailsUseCase,
+    private readonly getPatientChartPdfUseCase: GetPatientChartPdfUseCase,
+    private readonly getPatientPrescriptionPdfUseCase: GetPatientPrescriptionPdfUseCase,
+    private readonly getPatientFinancialPdfUseCase: GetPatientFinancialPdfUseCase,
+    private readonly updatePatientToothUseCase: UpdatePatientToothUseCase,
+    private readonly addPatientDiagnosisUseCase: AddPatientDiagnosisUseCase,
+    private readonly updatePatientDiagnosisUseCase: UpdatePatientDiagnosisUseCase,
+    private readonly addPatientDiagnosisAttachmentsUseCase: AddPatientDiagnosisAttachmentsUseCase,
+    private readonly getPatientDiagnosisAttachmentUseCase: GetPatientDiagnosisAttachmentUseCase,
+    private readonly addPatientPrescriptionUseCase: AddPatientPrescriptionUseCase,
+    private readonly addPatientFinancialEntryUseCase: AddPatientFinancialEntryUseCase,
+    private readonly addPatientExamUseCase: AddPatientExamUseCase,
+    private readonly getPatientExamFileUseCase: GetPatientExamFileUseCase,
+    private readonly createPatientUseCase: CreatePatientUseCase,
+    private readonly updatePatientUseCase: UpdatePatientUseCase,
+    private readonly setPatientStatusUseCase: SetPatientStatusUseCase,
+    private readonly deletePatientUseCase: DeletePatientUseCase,
+    private readonly managePatientAvatar: ManagePatientAvatarUseCase,
   ) {}
 
   @Get()
   @RequirePermissions('patients.read')
   list(@CurrentUser() user: AuthUser, @Query() query: ListQueryDto) {
-    return this.patientsService.list(user, query);
+    return this.listPatientsUseCase.execute({ user, query });
   }
 
   @Get(':id')
@@ -83,7 +119,7 @@ export class PatientsController {
     @CurrentUser() user: AuthUser,
     @Param('id', ParseUUIDPipe) id: string,
   ) {
-    return this.patientsService.findOne(user, id);
+    return this.getPatientUseCase.execute({ user, id });
   }
 
   @Get(':id/details')
@@ -92,7 +128,44 @@ export class PatientsController {
     @CurrentUser() user: AuthUser,
     @Param('id', ParseUUIDPipe) id: string,
   ) {
-    return this.patientsService.details(user, id);
+    return this.getPatientDetailsUseCase.execute({ user, id });
+  }
+
+  @Get(':id/avatar')
+  @RequirePermissions('patients.read')
+  async getAvatar(
+    @CurrentUser() user: AuthUser,
+    @Param('id', ParseUUIDPipe) id: string,
+    @Res() response: Response,
+  ) {
+    const file = await this.managePatientAvatar.get(user, id);
+    response.setHeader('Content-Type', file.mimeType);
+    response.setHeader('X-Content-Type-Options', 'nosniff');
+    response.setHeader('X-Content-Type-Options', 'nosniff');
+    response.setHeader('Content-Disposition', 'inline');
+    response.setHeader('Content-Length', file.data.byteLength);
+    return response.send(file.data);
+  }
+
+  @Post(':id/avatar')
+  @RequirePermissions('patients.manage')
+  @UseInterceptors(
+    FileInterceptor('file', { limits: { fileSize: 5 * 1024 * 1024 } }),
+  )
+  uploadAvatar(
+    @CurrentUser() user: AuthUser,
+    @Param('id', ParseUUIDPipe) id: string,
+    @UploadedFile() file?: ExamUpload,
+  ) {
+    if (
+      !file?.size ||
+      !['image/jpeg', 'image/png', 'image/webp'].includes(file.mimetype)
+    ) {
+      throw new BadRequestException(
+        'A non-empty JPEG, PNG, or WebP avatar is required',
+      );
+    }
+    return this.managePatientAvatar.upload(user, id, file);
   }
 
   @Get(':id/chart/pdf')
@@ -102,8 +175,7 @@ export class PatientsController {
     @Param('id', ParseUUIDPipe) id: string,
     @Res() response: Response,
   ) {
-    const data = await this.patientsService.getPatientChartPdfData(user, id);
-    const pdf = await this.patientPdfService.createPatientChart(data);
+    const pdf = await this.getPatientChartPdfUseCase.execute({ user, id });
     return this.sendPdf(response, pdf, `patient-chart-${id}.pdf`);
   }
 
@@ -115,12 +187,11 @@ export class PatientsController {
     @Param('prescriptionId', ParseUUIDPipe) prescriptionId: string,
     @Res() response: Response,
   ) {
-    const data = await this.patientsService.getPrescriptionPdfData(
+    const pdf = await this.getPatientPrescriptionPdfUseCase.execute({
       user,
       id,
       prescriptionId,
-    );
-    const pdf = await this.patientPdfService.createPrescription(data);
+    });
     return this.sendPdf(response, pdf, `prescription-${prescriptionId}.pdf`);
   }
 
@@ -132,12 +203,11 @@ export class PatientsController {
     @Param('financialId', ParseUUIDPipe) financialId: string,
     @Res() response: Response,
   ) {
-    const data = await this.patientsService.getFinancialPdfData(
+    const pdf = await this.getPatientFinancialPdfUseCase.execute({
       user,
       id,
       financialId,
-    );
-    const pdf = await this.patientPdfService.createFinancialReceipt(data);
+    });
     return this.sendPdf(response, pdf, `financial-${financialId}.pdf`);
   }
 
@@ -148,7 +218,11 @@ export class PatientsController {
     @Param('id', ParseUUIDPipe) id: string,
     @Body() input: UpdatePatientToothDto,
   ) {
-    return this.patientsService.updateTooth(user, id, input);
+    return this.updatePatientToothUseCase.execute({
+      user,
+      id,
+      tooth: input,
+    });
   }
 
   @Post(':id/diagnoses')
@@ -158,7 +232,11 @@ export class PatientsController {
     @Param('id', ParseUUIDPipe) id: string,
     @Body() input: CreatePatientDiagnosisDto,
   ) {
-    return this.patientsService.addDiagnosis(user, id, input);
+    return this.addPatientDiagnosisUseCase.execute({
+      user,
+      id,
+      diagnosis: input,
+    });
   }
 
   @Patch(':id/diagnoses/:diagnosisId')
@@ -169,7 +247,12 @@ export class PatientsController {
     @Param('diagnosisId', ParseUUIDPipe) diagnosisId: string,
     @Body() input: UpdatePatientDiagnosisDto,
   ) {
-    return this.patientsService.updateDiagnosis(user, id, diagnosisId, input);
+    return this.updatePatientDiagnosisUseCase.execute({
+      user,
+      id,
+      diagnosisId,
+      diagnosis: input,
+    });
   }
 
   @Post(':id/diagnoses/:diagnosisId/attachments')
@@ -209,12 +292,12 @@ export class PatientsController {
       }
       return { ...file, originalname: basename(file.originalname) };
     });
-    return this.patientsService.addDiagnosisAttachments(
+    return this.addPatientDiagnosisAttachmentsUseCase.execute({
       user,
       id,
       diagnosisId,
-      attachments,
-    );
+      files: attachments,
+    });
   }
 
   @Get(':id/diagnoses/:diagnosisId/attachments/:attachmentId/file')
@@ -226,12 +309,12 @@ export class PatientsController {
     @Param('attachmentId', ParseUUIDPipe) attachmentId: string,
     @Res() response: Response,
   ) {
-    const file = await this.patientsService.getDiagnosisAttachment(
+    const file = await this.getPatientDiagnosisAttachmentUseCase.execute({
       user,
       id,
       diagnosisId,
       attachmentId,
-    );
+    });
     response.setHeader('Content-Type', file.mimeType);
     response.setHeader(
       'Content-Disposition',
@@ -248,7 +331,11 @@ export class PatientsController {
     @Param('id', ParseUUIDPipe) id: string,
     @Body() input: CreatePatientPrescriptionDto,
   ) {
-    return this.patientsService.addPrescription(user, id, input);
+    return this.addPatientPrescriptionUseCase.execute({
+      user,
+      id,
+      prescription: input,
+    });
   }
 
   @Post(':id/financials')
@@ -258,7 +345,11 @@ export class PatientsController {
     @Param('id', ParseUUIDPipe) id: string,
     @Body() input: CreatePatientFinancialEntryDto,
   ) {
-    return this.patientsService.addFinancialEntry(user, id, input);
+    return this.addPatientFinancialEntryUseCase.execute({
+      user,
+      id,
+      financialEntry: input,
+    });
   }
 
   @Post(':id/exams')
@@ -287,10 +378,14 @@ export class PatientsController {
         'Unsupported exam file; upload a DICOM, PNG, JPG, PDF, or STL file',
       );
     }
-    return this.patientsService.addExam(user, id, {
-      ...input,
-      doctorName: user.email,
-      file: { ...file, originalname: basename(file.originalname) },
+    return this.addPatientExamUseCase.execute({
+      user,
+      id,
+      exam: {
+        ...input,
+        doctorName: user.email,
+        file: { ...file, originalname: basename(file.originalname) },
+      },
     });
   }
 
@@ -302,7 +397,11 @@ export class PatientsController {
     @Param('examId', ParseUUIDPipe) examId: string,
     @Res() response: Response,
   ) {
-    const file = await this.patientsService.getExamFile(user, id, examId);
+    const file = await this.getPatientExamFileUseCase.execute({
+      user,
+      id,
+      examId,
+    });
     response.setHeader('Content-Type', file.mimeType);
     response.setHeader(
       'Content-Disposition',
@@ -315,7 +414,7 @@ export class PatientsController {
   @Post()
   @RequirePermissions('patients.manage')
   create(@CurrentUser() user: AuthUser, @Body() input: CreatePatientDto) {
-    return this.patientsService.create(user, input);
+    return this.createPatientUseCase.execute({ user, patient: input });
   }
 
   @Patch(':id')
@@ -325,7 +424,7 @@ export class PatientsController {
     @Param('id', ParseUUIDPipe) id: string,
     @Body() input: UpdatePatientDto,
   ) {
-    return this.patientsService.update(user, id, input);
+    return this.updatePatientUseCase.execute({ user, id, changes: input });
   }
 
   @Patch(':id/status')
@@ -335,7 +434,7 @@ export class PatientsController {
     @Param('id', ParseUUIDPipe) id: string,
     @Body() input: UpdatePatientStatusDto,
   ) {
-    return this.patientsService.setStatus(user, id, input);
+    return this.setPatientStatusUseCase.execute({ user, id, status: input });
   }
 
   private sendPdf(response: Response, pdf: Buffer, fileName: string) {
@@ -351,6 +450,6 @@ export class PatientsController {
     @CurrentUser() user: AuthUser,
     @Param('id', ParseUUIDPipe) id: string,
   ) {
-    return this.patientsService.remove(user, id);
+    return this.deletePatientUseCase.execute({ user, id });
   }
 }

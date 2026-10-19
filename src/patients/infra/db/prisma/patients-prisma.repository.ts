@@ -1073,6 +1073,19 @@ export class PatientsPrismaRepository implements IPatientRepository {
     );
   }
 
+  async getAvatarStorageKey(user: AuthUser, id: string) {
+    const patient = await this.findScopedRecord(user, id);
+    return patient.avatar;
+  }
+
+  async updateAvatarStorageKey(user: AuthUser, id: string, storageKey: string) {
+    await this.findScopedRecord(user, id);
+    await this.prisma.person.update({
+      where: { id },
+      data: { avatar: storageKey },
+    });
+  }
+
   async setStatus(user: AuthUser, id: string, input: PatientStatusCommand) {
     this.requireStaff(user);
     await this.findScopedRecord(user, id);
@@ -1180,6 +1193,7 @@ export class PatientsPrismaRepository implements IPatientRepository {
   private toPatient(
     patient: {
       id: string;
+      avatar?: string | null;
       firstName: string;
       lastName: string;
       email: string | null;
@@ -1205,7 +1219,7 @@ export class PatientsPrismaRepository implements IPatientRepository {
       gender: patient.gender.toLowerCase(),
       birthDate: patient.birthDate?.toISOString() ?? '',
       medicalNotes: includeMedicalNotes ? (patient.medicalNotes ?? '') : '',
-      avatar: '',
+      avatar: patient.avatar ? `/patients/${patient.id}/avatar` : '',
     };
   }
 }

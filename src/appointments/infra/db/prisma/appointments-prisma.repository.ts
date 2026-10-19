@@ -64,16 +64,17 @@ export class AppointmentsPrismaRepository implements IAppointmentRepository {
     const canReadAll =
       hasPermission(user, 'appointments.read.all') ||
       hasPermission(user, 'appointments.manage');
-    const canReadAssigned = hasPermission(
-      user,
-      'appointments.read.assigned',
-    );
+    const canReadAssigned = hasPermission(user, 'appointments.read.assigned');
     const patient =
       user.role === 'patient'
         ? await this.prisma.person.findFirst({
-          where: { userId: user.id, branchId: user.branchId, deletedAt: null },
-          select: { id: true },
-        })
+            where: {
+              userId: user.id,
+              branchId: user.branchId,
+              deletedAt: null,
+            },
+            select: { id: true },
+          })
         : null;
     if (user.role !== 'patient' && !canReadAll && !canReadAssigned) {
       throw new ForbiddenException('Appointment read access is required');

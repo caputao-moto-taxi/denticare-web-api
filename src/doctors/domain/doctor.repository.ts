@@ -12,9 +12,12 @@ export type DoctorCreateCommand = {
   workingDays?: string[];
   workingHours?: Record<string, unknown>;
   daysOffNotes?: string;
+  passwordHash: string;
 };
 
-export type DoctorUpdateCommand = Partial<DoctorCreateCommand>;
+export type DoctorUpdateCommand = Partial<
+  Omit<DoctorCreateCommand, 'passwordHash'>
+>;
 
 export abstract class IDoctorRepository {
   abstract list(user: AuthUser, query?: ListQuery): Promise<unknown>;
@@ -25,5 +28,14 @@ export abstract class IDoctorRepository {
     id: string,
     input: DoctorUpdateCommand,
   ): Promise<unknown>;
+  abstract getAvatarStorageKey(
+    user: AuthUser,
+    id: string,
+  ): Promise<string | null>;
+  abstract updateAvatarStorageKey(
+    user: AuthUser,
+    id: string,
+    storageKey: string,
+  ): Promise<void>;
   abstract remove(user: AuthUser, id: string): Promise<unknown>;
 }

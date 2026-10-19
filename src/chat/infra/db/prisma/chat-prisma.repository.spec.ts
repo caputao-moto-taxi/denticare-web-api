@@ -43,7 +43,7 @@ describe('ChatPrismaRepository', () => {
     update: jest.fn(),
     count: jest.fn(),
   };
-  const chatMessage = { create: jest.fn() };
+  const chatMessage = { create: jest.fn(), findFirst: jest.fn() };
   const user = { findMany: jest.fn(), count: jest.fn() };
   const queryRaw = jest.fn();
   const prisma = {
@@ -123,6 +123,61 @@ describe('ChatPrismaRepository', () => {
       where: { id: 'conversation-1' },
       data: { updatedAt: expect.any(Date), starterLastReadAt: createdAt },
     });
+  });
+
+  it('returns an attachment only after confirming conversation participation', async () => {
+    chatConversation.findFirst.mockResolvedValue({
+      id: 'conversation-1',
+      starterId: 'me',
+      recipientId: 'other',
+    });
+    chatMessage.findFirst.mockResolvedValue({
+      attachments: [
+        {
+          id: 'attachment-1',
+          storageKey: 'chat/private-key',
+          name: 'scan.png',
+          mimeType: 'image/png',
+          size: 10,
+        },
+      ],
+    });
+
+    await expect(
+      repository.getAttachment(
+        me,
+        'conversation-1',
+        'message-1',
+        'attachment-1',
+      ),
+    ).resolves.toEqual({
+      storageKey: 'chat/private-key',
+      name: 'scan.png',
+      mimeType: 'image/png',
+    });
+    expect(chatConversation.findFirst).toHaveBeenCalledWith(
+      expect.objectContaining({
+        where: expect.objectContaining({
+          id: 'conversation-1',
+          branchId: 'branch-1',
+          OR: [{ starterId: 'me' }, { recipientId: 'me' }],
+        }),
+      }),
+    );
+  });
+
+  it('does not look up files for users outside the conversation', async () => {
+    chatConversation.findFirst.mockResolvedValue(null);
+
+    await expect(
+      repository.getAttachment(
+        me,
+        'conversation-1',
+        'message-1',
+        'attachment-1',
+      ),
+    ).rejects.toThrow('Conversation not found');
+    expect(chatMessage.findFirst).not.toHaveBeenCalled();
   });
 
   it('lists only active users of the same branch as contacts', async () => {

@@ -13,13 +13,27 @@ export interface ListQuery {
   dateTo?: string;
 }
 
+export interface PaginatedResult<T> {
+  data: T[];
+  meta: {
+    page: number;
+    pageSize: number;
+    total: number;
+    totalPages: number;
+  };
+}
+
 export function pageWindow(query: ListQuery) {
   const page = query.page ?? 1;
   const pageSize = query.pageSize ?? 10;
   return { skip: (page - 1) * pageSize, take: pageSize };
 }
 
-export function paginated<T>(data: T[], total: number, query: ListQuery) {
+export function paginated<T>(
+  data: T[],
+  total: number,
+  query: ListQuery,
+): PaginatedResult<T> {
   const pageSize = query.pageSize ?? 10;
   return {
     data,

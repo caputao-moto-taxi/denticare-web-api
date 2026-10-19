@@ -12,6 +12,7 @@ import { resolvePermissions } from './permissions';
 interface AccessTokenPayload {
   sub: string;
   jti: string;
+  sid?: string;
   exp: number;
 }
 
@@ -50,6 +51,21 @@ export class JwtAuthGuard implements CanActivate {
       throw new UnauthorizedException('Access token has been revoked');
     }
 
+    if (payload.sid) {
+      const session = await this.prisma.refreshToken.findFirst({
+        where: {
+          jti: payload.sid,
+          userId: payload.sub,
+          revokedAt: null,
+          expiresAt: { gt: new Date() },
+        },
+        select: { jti: true },
+      });
+      if (!session) {
+        throw new UnauthorizedException('Authentication session has ended');
+      }
+    }
+
     const user = await this.prisma.user.findFirst({
       where: {
         id: payload.sub,
@@ -82,8 +98,9 @@ export class JwtAuthGuard implements CanActivate {
       branchId: user.branchId,
       permissions: resolvePermissions(
         user.Role?.slug ?? 'staff',
-        user.Role?.RolePermission.map((assignment) => assignment.permission.slug) ??
-          [],
+        user.Role?.RolePermission.map(
+          (assignment) => assignment.permission.slug,
+        ) ?? [],
         user.UserPermission.map((override) => ({
           slug: override.permission.slug,
           granted: override.granted,
@@ -93,6 +110,7 @@ export class JwtAuthGuard implements CanActivate {
     request.authToken = {
       jti: payload.jti,
       expiresAt: new Date(payload.exp * 1000),
+      sessionId: payload.sid,
     };
 
     return true;

@@ -20,7 +20,7 @@ export class ListQueryDto implements ListQuery {
   page = 1;
 
   @Type(() => Number)
-  @IsIn([10, 25, 50])
+  @IsIn([10, 25, 50, 100])
   pageSize = 10;
 
   @IsOptional()

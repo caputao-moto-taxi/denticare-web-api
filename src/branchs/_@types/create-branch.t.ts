@@ -1,4 +1,3 @@
-
 export type ICreateBranchWithHeadquarterCommand = {
   name: string;
   description: string;
@@ -10,4 +9,4 @@ export type ICreateBranchWithHeadquarterCommand = {
   province: string;
   country: string;
   zipCode?: string;
-}
+};

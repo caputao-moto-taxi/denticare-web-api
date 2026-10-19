@@ -16,7 +16,6 @@ import {
   ValidateNested,
 } from 'class-validator';
 
-const CATEGORIES = ['protection', 'anesthesia', 'instruments', 'materials'];
 const UNITS = ['box', 'unit', 'pack', 'bottle'];
 const MAX_QUANTITY = 100_000;
 
@@ -26,8 +25,10 @@ export class CreateStockItemDto {
   @MaxLength(120)
   name: string;
 
-  @IsIn(CATEGORIES)
-  category: 'protection' | 'anesthesia' | 'instruments' | 'materials';
+  @IsString()
+  @MinLength(2)
+  @MaxLength(120)
+  category: string;
 
   @IsIn(UNITS)
   unit: 'box' | 'unit' | 'pack' | 'bottle';
@@ -86,6 +87,13 @@ export class CreateStockSaleItemDto {
   quantity: number;
 }
 
+export class CreateStockCatalogEntryDto {
+  @IsString()
+  @MinLength(2)
+  @MaxLength(120)
+  name: string;
+}
+
 export class CreateStockSaleDto {
   @IsOptional()
   @IsString()
@@ -95,6 +103,15 @@ export class CreateStockSaleDto {
   @IsIn(['cash', 'card', 'transfer', 'other'])
   paymentMethod: 'cash' | 'card' | 'transfer' | 'other';
 
+  @IsArray()
+  @ArrayMinSize(1)
+  @ArrayUnique((item: CreateStockSaleItemDto) => item.stockItemId)
+  @ValidateNested({ each: true })
+  @Type(() => CreateStockSaleItemDto)
+  items: CreateStockSaleItemDto[];
+}
+
+export class UpdateStockSaleDto {
   @IsArray()
   @ArrayMinSize(1)
   @ArrayUnique((item: CreateStockSaleItemDto) => item.stockItemId)

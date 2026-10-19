@@ -71,10 +71,13 @@ export const ModelName = {
   ChatConversation: 'ChatConversation',
   ChatMessage: 'ChatMessage',
   StockItem: 'StockItem',
+  StockCatalogEntry: 'StockCatalogEntry',
   StockSale: 'StockSale',
   StockSaleItem: 'StockSaleItem',
   TreatmentPlan: 'TreatmentPlan',
   RevokedToken: 'RevokedToken',
+  RefreshToken: 'RefreshToken',
+  AuthActionToken: 'AuthActionToken',
   Consult: 'Consult',
   ConsultTreatment: 'ConsultTreatment',
   Treatment: 'Treatment',
@@ -252,6 +255,7 @@ export const PersonScalarFieldEnum = {
   birthDate: 'birthDate',
   email: 'email',
   phoneNumber: 'phoneNumber',
+  avatar: 'avatar',
   medicalNotes: 'medicalNotes',
   idNumber: 'idNumber',
   nif: 'nif',
@@ -445,6 +449,17 @@ export const StockItemScalarFieldEnum = {
 export type StockItemScalarFieldEnum = (typeof StockItemScalarFieldEnum)[keyof typeof StockItemScalarFieldEnum]
 
 
+export const StockCatalogEntryScalarFieldEnum = {
+  id: 'id',
+  branchId: 'branchId',
+  kind: 'kind',
+  name: 'name',
+  createdAt: 'createdAt'
+} as const
+
+export type StockCatalogEntryScalarFieldEnum = (typeof StockCatalogEntryScalarFieldEnum)[keyof typeof StockCatalogEntryScalarFieldEnum]
+
+
 export const StockSaleScalarFieldEnum = {
   id: 'id',
   branchId: 'branchId',
@@ -500,6 +515,30 @@ export const RevokedTokenScalarFieldEnum = {
 } as const
 
 export type RevokedTokenScalarFieldEnum = (typeof RevokedTokenScalarFieldEnum)[keyof typeof RevokedTokenScalarFieldEnum]
+
+
+export const RefreshTokenScalarFieldEnum = {
+  jti: 'jti',
+  userId: 'userId',
+  expiresAt: 'expiresAt',
+  revokedAt: 'revokedAt',
+  createdAt: 'createdAt'
+} as const
+
+export type RefreshTokenScalarFieldEnum = (typeof RefreshTokenScalarFieldEnum)[keyof typeof RefreshTokenScalarFieldEnum]
+
+
+export const AuthActionTokenScalarFieldEnum = {
+  id: 'id',
+  userId: 'userId',
+  tokenHash: 'tokenHash',
+  type: 'type',
+  expiresAt: 'expiresAt',
+  usedAt: 'usedAt',
+  createdAt: 'createdAt'
+} as const
+
+export type AuthActionTokenScalarFieldEnum = (typeof AuthActionTokenScalarFieldEnum)[keyof typeof AuthActionTokenScalarFieldEnum]
 
 
 export const ConsultScalarFieldEnum = {

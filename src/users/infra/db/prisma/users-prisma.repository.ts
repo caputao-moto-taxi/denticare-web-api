@@ -17,16 +17,17 @@ import {
   personSearch,
   validateListFilters,
 } from '../../../../shared/helpers/list-filters';
-import { IHashService } from '../../../../shared/application/interfaces/IHash';
-import { joinName, splitName } from '../../../../shared/helpers/staff';
+import { splitName } from '../../../../shared/helpers/staff';
 import { PrismaService } from '../../../../shared/infra/db/prisma/prisma.service';
 import {
   IUserRepository,
   StaffRole,
   UserCreateCommand,
+  UserRemovalResult,
   UserStatusCommand,
   UserUpdateCommand,
 } from '../../../domain/user.repository';
+import { UserModelMapper, USER_INCLUDE } from './user-model.mapper';
 
 const ROLE_NAMES: Record<StaffRole, string> = {
   admin: 'Administrator',
@@ -35,27 +36,11 @@ const ROLE_NAMES: Record<StaffRole, string> = {
   secretary: 'Secretary',
 };
 
-const USER_INCLUDE = {
-  Role: { select: { slug: true } },
-  Person: {
-    where: { deletedAt: null },
-    select: { id: true, firstName: true, lastName: true, phoneNumber: true },
-    take: 1,
-  },
-  doctorProfile: { select: { avatar: true } },
-} satisfies Prisma.UserInclude;
-
-type UserRow = Prisma.UserGetPayload<{ include: typeof USER_INCLUDE }>;
-
 @Injectable()
 export class UsersPrismaRepository implements IUserRepository {
-  constructor(
-    private readonly prisma: PrismaService,
-    private readonly hashService: IHashService,
-  ) {}
+  constructor(private readonly prisma: PrismaService) {}
 
   async list(user: AuthUser, query: ListQuery = {}) {
-    this.requireAdmin(user);
     validateListFilters(query, {
       status: ['active', 'inactive'],
       role: [
@@ -90,19 +75,17 @@ export class UsersPrismaRepository implements IUserRepository {
       this.prisma.user.count({ where }),
     ]);
     return paginated(
-      users.map((item) => this.toSystemUser(item)),
+      users.map((item) => UserModelMapper.toEntity(item)),
       total,
       query,
     );
   }
 
   async findOne(user: AuthUser, id: string) {
-    this.requireAdmin(user);
-    return this.toSystemUser(await this.findScoped(user, id));
+    return UserModelMapper.toEntity(await this.findScoped(user, id));
   }
 
   async getPermissions(user: AuthUser, id: string) {
-    this.requireAdmin(user);
     const [target, permissions] = await Promise.all([
       this.findPermissionTarget(user, id),
       this.prisma.permission.findMany({
@@ -151,7 +134,6 @@ export class UsersPrismaRepository implements IUserRepository {
     id: string,
     input: { permissions: string[] },
   ) {
-    this.requireAdmin(user);
     const [target, permissions] = await Promise.all([
       this.findPermissionTarget(user, id),
       this.prisma.permission.findMany({
@@ -200,7 +182,6 @@ export class UsersPrismaRepository implements IUserRepository {
   }
 
   async create(user: AuthUser, input: UserCreateCommand) {
-    this.requireAdmin(user);
     const email = input.email.trim().toLowerCase();
     const duplicate = await this.prisma.user.findFirst({
       where: { email },
@@ -211,7 +192,6 @@ export class UsersPrismaRepository implements IUserRepository {
     }
 
     const name = splitName(input.name);
-    const password = await this.hashService.hashPassword(input.password);
 
     try {
       const created = await this.prisma.$transaction(async (transaction) => {
@@ -227,7 +207,7 @@ export class UsersPrismaRepository implements IUserRepository {
           data: {
             email,
             username: email,
-            password,
+            password: input.passwordHash,
             branchId: user.branchId,
             addressId: address.id,
             roleId: role.id,
@@ -257,7 +237,7 @@ export class UsersPrismaRepository implements IUserRepository {
           include: USER_INCLUDE,
         });
       });
-      return this.toSystemUser(created);
+      return UserModelMapper.toEntity(created);
     } catch (error) {
       if (
         error instanceof Prisma.PrismaClientKnownRequestError &&
@@ -272,7 +252,6 @@ export class UsersPrismaRepository implements IUserRepository {
   }
 
   async update(user: AuthUser, id: string, input: UserUpdateCommand) {
-    this.requireAdmin(user);
     const current = await this.findScoped(user, id);
     const currentRole = current.Role?.slug;
     const changesRole = input.role !== undefined && input.role !== currentRole;
@@ -326,14 +305,10 @@ export class UsersPrismaRepository implements IUserRepository {
         include: USER_INCLUDE,
       });
     });
-    return this.toSystemUser(updated);
+    return UserModelMapper.toEntity(updated);
   }
 
   async setStatus(user: AuthUser, id: string, input: UserStatusCommand) {
-    this.requireAdmin(user);
-    if (id === user.id) {
-      throw new ForbiddenException('You cannot change your own status');
-    }
     const current = await this.findScoped(user, id);
 
     const updated = await this.prisma.$transaction(async (transaction) => {
@@ -346,14 +321,10 @@ export class UsersPrismaRepository implements IUserRepository {
         include: USER_INCLUDE,
       });
     });
-    return this.toSystemUser(updated);
+    return UserModelMapper.toEntity(updated);
   }
 
-  async remove(user: AuthUser, id: string) {
-    this.requireAdmin(user);
-    if (id === user.id) {
-      throw new ForbiddenException('You cannot remove your own account');
-    }
+  async remove(user: AuthUser, id: string): Promise<UserRemovalResult> {
     const current = await this.findScoped(user, id);
 
     await this.prisma.$transaction(async (transaction) => {
@@ -435,31 +406,5 @@ export class UsersPrismaRepository implements IUserRepository {
         'The clinic must keep at least one active administrator',
       );
     }
-  }
-
-  private requireAdmin(user: AuthUser) {
-    if (user.role !== 'admin') {
-      throw new ForbiddenException(
-        'Only clinic administrators can manage users',
-      );
-    }
-  }
-
-  private toSystemUser(user: UserRow) {
-    const slug = user.Role?.slug;
-    return {
-      id: user.id,
-      name: joinName(user.Person[0], user.email),
-      email: user.email,
-      phone: user.Person[0]?.phoneNumber ?? '',
-      role:
-        slug === 'administrator' || slug === 'admin'
-          ? 'admin'
-          : slug === 'doctor' || slug === 'nurse'
-            ? slug
-            : 'secretary',
-      active: user.isActive,
-      avatar: user.doctorProfile?.avatar ?? '',
-    };
   }
 }

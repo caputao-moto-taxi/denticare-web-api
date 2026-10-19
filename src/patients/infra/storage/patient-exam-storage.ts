@@ -29,13 +29,28 @@ export class PatientExamStorage {
   private getStorage() {
     if (this.storage) return this.storage;
 
+    const endpoint = this.config.get<string>('R2_ENDPOINT');
     const accountId = this.config.get<string>('CLOUDFLARE_ACCOUNT_ID');
-    const accessKeyId = this.config.get<string>('CLOUDFLARE_AWS_ACCESS_KEY_ID');
-    const secretAccessKey = this.config.get<string>(
+    const accessKeyId =
+      this.config.get<string>('R2_ACCESS_KEY_ID') ??
+      this.config.get<string>('CLOUDFLARE_AWS_ACCESS_KEY_ID');
+    const secretAccessKey = this.config.get<string>('R2_SECRET_ACCESS_KEY');
+    const legacySecretAccessKey = this.config.get<string>(
       'CLOUDFLARE_AWS_SECRET_ACCESS_KEY',
     );
-    const bucketName = this.config.get<string>('CLOUDFLARE_AWS_BUCKET_NAME');
-    if (!accountId || !accessKeyId || !secretAccessKey || !bucketName) {
+    const bucketName =
+      this.config.get<string>('R2_BUCKET') ??
+      this.config.get<string>('CLOUDFLARE_AWS_BUCKET_NAME');
+    const resolvedEndpoint =
+      endpoint ??
+      (accountId ? `https://${accountId}.r2.cloudflarestorage.com` : undefined);
+    const resolvedSecretAccessKey = secretAccessKey ?? legacySecretAccessKey;
+    if (
+      !resolvedEndpoint ||
+      !accessKeyId ||
+      !resolvedSecretAccessKey ||
+      !bucketName
+    ) {
       throw new ServiceUnavailableException(
         'Patient exam storage is not configured',
       );
@@ -43,9 +58,12 @@ export class PatientExamStorage {
 
     this.storage = new AwsS3Storage(
       new S3Client({
-        endpoint: `https://${accountId}.r2.cloudflarestorage.com`,
+        endpoint: resolvedEndpoint,
         region: 'auto',
-        credentials: { accessKeyId, secretAccessKey },
+        credentials: {
+          accessKeyId,
+          secretAccessKey: resolvedSecretAccessKey,
+        },
       }),
       bucketName,
     );
