@@ -2,6 +2,7 @@ import { Module } from '@nestjs/common';
 import { JwtModule } from '@nestjs/jwt';
 import { HashModule } from '../shared/application/hash.module';
 import { AuthController } from './infra/http/controllers/auth.controller';
+import { AuthEmailService } from './domain/auth-email.service';
 import { JwtAuthGuard } from './jwt-auth.guard';
 import { PermissionsGuard } from './permissions.guard';
 import { AUTH_PROVIDERS } from './auth.providers';
@@ -35,6 +36,6 @@ import { PatientExamStorage } from '../patients/infra/storage/patient-exam-stora
     JwtAuthGuard,
     PermissionsGuard,
   ],
-  exports: [JwtAuthGuard, PermissionsGuard, JwtModule],
+  exports: [JwtAuthGuard, PermissionsGuard, JwtModule, AuthEmailService],
 })
 export class AuthModule {}

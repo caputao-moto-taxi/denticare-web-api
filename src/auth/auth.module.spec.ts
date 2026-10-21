@@ -7,6 +7,7 @@ import { ChatModule } from '../chat/chat.module';
 import { DoctorsModule } from '../doctors/doctors.module';
 import { PatientsModule } from '../patients/patients.module';
 import { PrismaService } from '../shared/infra/db/prisma/prisma.service';
+import { CommunicationsModule } from '../communications/communications.module';
 import { JwtAuthGuard } from './jwt-auth.guard';
 
 @Global()
@@ -41,7 +42,13 @@ describe('AuthModule dependency visibility', () => {
     }
   });
 
-  it.each([PatientsModule, DoctorsModule, AppointmentsModule, ChatModule])(
+  it.each([
+    PatientsModule,
+    DoctorsModule,
+    AppointmentsModule,
+    ChatModule,
+    CommunicationsModule,
+  ])(
     'resolves the JWT guard in %p',
     async (featureModule) => {
       const module = await Test.createTestingModule({

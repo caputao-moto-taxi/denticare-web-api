@@ -73,6 +73,7 @@ export const ModelName = {
   StockItem: 'StockItem',
   StockCatalogEntry: 'StockCatalogEntry',
   StockSale: 'StockSale',
+  CommunicationCampaign: 'CommunicationCampaign',
   StockSaleItem: 'StockSaleItem',
   TreatmentPlan: 'TreatmentPlan',
   RevokedToken: 'RevokedToken',
@@ -83,6 +84,7 @@ export const ModelName = {
   Treatment: 'Treatment',
   TreatmentPrice: 'TreatmentPrice',
   Product: 'Product',
+  ClinicService: 'ClinicService',
   Sale: 'Sale',
   SaleItem: 'SaleItem',
   Prescription: 'Prescription',
@@ -255,6 +257,10 @@ export const PersonScalarFieldEnum = {
   birthDate: 'birthDate',
   email: 'email',
   phoneNumber: 'phoneNumber',
+  marketingEmailConsent: 'marketingEmailConsent',
+  marketingEmailConsentUpdatedAt: 'marketingEmailConsentUpdatedAt',
+  marketingSmsConsent: 'marketingSmsConsent',
+  marketingSmsConsentUpdatedAt: 'marketingSmsConsentUpdatedAt',
   avatar: 'avatar',
   medicalNotes: 'medicalNotes',
   idNumber: 'idNumber',
@@ -473,6 +479,26 @@ export const StockSaleScalarFieldEnum = {
 export type StockSaleScalarFieldEnum = (typeof StockSaleScalarFieldEnum)[keyof typeof StockSaleScalarFieldEnum]
 
 
+export const CommunicationCampaignScalarFieldEnum = {
+  id: 'id',
+  branchId: 'branchId',
+  createdById: 'createdById',
+  name: 'name',
+  channel: 'channel',
+  subject: 'subject',
+  body: 'body',
+  status: 'status',
+  recipientCount: 'recipientCount',
+  sentCount: 'sentCount',
+  failedCount: 'failedCount',
+  sentAt: 'sentAt',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+} as const
+
+export type CommunicationCampaignScalarFieldEnum = (typeof CommunicationCampaignScalarFieldEnum)[keyof typeof CommunicationCampaignScalarFieldEnum]
+
+
 export const StockSaleItemScalarFieldEnum = {
   id: 'id',
   saleId: 'saleId',
@@ -614,6 +640,21 @@ export const ProductScalarFieldEnum = {
 } as const
 
 export type ProductScalarFieldEnum = (typeof ProductScalarFieldEnum)[keyof typeof ProductScalarFieldEnum]
+
+
+export const ClinicServiceScalarFieldEnum = {
+  id: 'id',
+  branchId: 'branchId',
+  name: 'name',
+  description: 'description',
+  price: 'price',
+  durationMinutes: 'durationMinutes',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt',
+  deletedAt: 'deletedAt'
+} as const
+
+export type ClinicServiceScalarFieldEnum = (typeof ClinicServiceScalarFieldEnum)[keyof typeof ClinicServiceScalarFieldEnum]
 
 
 export const SaleScalarFieldEnum = {

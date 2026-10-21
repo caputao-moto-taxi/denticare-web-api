@@ -148,6 +148,11 @@ export type StockCatalogEntry = Prisma.StockCatalogEntryModel
  */
 export type StockSale = Prisma.StockSaleModel
 /**
+ * Model CommunicationCampaign
+ * 
+ */
+export type CommunicationCampaign = Prisma.CommunicationCampaignModel
+/**
  * Model StockSaleItem
  * 
  */
@@ -197,6 +202,11 @@ export type TreatmentPrice = Prisma.TreatmentPriceModel
  * 
  */
 export type Product = Prisma.ProductModel
+/**
+ * Model ClinicService
+ * 
+ */
+export type ClinicService = Prisma.ClinicServiceModel
 /**
  * Model Sale
  * 

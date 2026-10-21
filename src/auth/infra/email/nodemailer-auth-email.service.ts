@@ -1,10 +1,15 @@
-import { Injectable, ServiceUnavailableException } from '@nestjs/common';
+import {
+  Injectable,
+  Logger,
+  ServiceUnavailableException,
+} from '@nestjs/common';
 import nodemailer, { Transporter } from 'nodemailer';
 import { AuthActionEmail } from '../../domain/auth.repository';
 import { AuthEmailService } from '../../domain/auth-email.service';
 
 @Injectable()
 export class NodemailerAuthEmailService implements AuthEmailService {
+  private readonly logger = new Logger(NodemailerAuthEmailService.name);
   private readonly user = process.env.GMAIL_USER?.trim();
   private readonly appPassword = process.env.GMAIL_APP_PASSWORD?.replace(
     /\s/g,
@@ -50,11 +55,25 @@ export class NodemailerAuthEmailService implements AuthEmailService {
     });
   }
 
+  async sendCampaignEmail(
+    recipients: string[],
+    subject: string,
+    body: string,
+  ) {
+    await this.send({
+      to: this.user!,
+      bcc: recipients,
+      subject,
+      text: body,
+    });
+  }
+
   private async send(message: {
     to: string;
+    bcc?: string[];
     subject: string;
     text: string;
-    html: string;
+    html?: string;
   }) {
     this.assertConfigured();
     try {
@@ -62,7 +81,22 @@ export class NodemailerAuthEmailService implements AuthEmailService {
         from: `DentCare <${this.user}>`,
         ...message,
       });
-    } catch {
+    } catch (error) {
+      const details = error as {
+        code?: unknown;
+        command?: unknown;
+        responseCode?: unknown;
+      };
+      const code = typeof details.code === 'string' ? details.code : 'unknown';
+      const command =
+        typeof details.command === 'string' ? details.command : 'unknown';
+      const responseCode =
+        typeof details.responseCode === 'number'
+          ? details.responseCode
+          : 'none';
+      this.logger.error(
+        `Email delivery failed (code=${code}, smtp=${responseCode}, command=${command})`,
+      );
       throw new ServiceUnavailableException('Email could not be delivered');
     }
   }

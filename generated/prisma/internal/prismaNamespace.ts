@@ -406,6 +406,7 @@ export const ModelName = {
   StockItem: 'StockItem',
   StockCatalogEntry: 'StockCatalogEntry',
   StockSale: 'StockSale',
+  CommunicationCampaign: 'CommunicationCampaign',
   StockSaleItem: 'StockSaleItem',
   TreatmentPlan: 'TreatmentPlan',
   RevokedToken: 'RevokedToken',
@@ -416,6 +417,7 @@ export const ModelName = {
   Treatment: 'Treatment',
   TreatmentPrice: 'TreatmentPrice',
   Product: 'Product',
+  ClinicService: 'ClinicService',
   Sale: 'Sale',
   SaleItem: 'SaleItem',
   Prescription: 'Prescription',
@@ -449,7 +451,7 @@ export type TypeMap<ExtArgs extends runtime.Types.Extensions.InternalArgs = runt
     omit: GlobalOmitOptions
   }
   meta: {
-    modelProps: "currency" | "plan" | "benefit" | "planBenefit" | "headquarter" | "address" | "branch" | "user" | "person" | "role" | "permission" | "userBranch" | "rolePermission" | "userPermission" | "userRole" | "appointment" | "doctorProfile" | "chatConversation" | "chatMessage" | "stockItem" | "stockCatalogEntry" | "stockSale" | "stockSaleItem" | "treatmentPlan" | "revokedToken" | "refreshToken" | "authActionToken" | "consult" | "consultTreatment" | "treatment" | "treatmentPrice" | "product" | "sale" | "saleItem" | "prescription" | "prescriptionItem" | "clinicProccess" | "diagnostic" | "diagnosticAttachment" | "patientTooth" | "patientPrescription" | "patientFinancialEntry" | "xRayAnalysis" | "patientExam" | "newLatter" | "message" | "audit" | "log" | "loginHistory" | "accessHistory"
+    modelProps: "currency" | "plan" | "benefit" | "planBenefit" | "headquarter" | "address" | "branch" | "user" | "person" | "role" | "permission" | "userBranch" | "rolePermission" | "userPermission" | "userRole" | "appointment" | "doctorProfile" | "chatConversation" | "chatMessage" | "stockItem" | "stockCatalogEntry" | "stockSale" | "communicationCampaign" | "stockSaleItem" | "treatmentPlan" | "revokedToken" | "refreshToken" | "authActionToken" | "consult" | "consultTreatment" | "treatment" | "treatmentPrice" | "product" | "clinicService" | "sale" | "saleItem" | "prescription" | "prescriptionItem" | "clinicProccess" | "diagnostic" | "diagnosticAttachment" | "patientTooth" | "patientPrescription" | "patientFinancialEntry" | "xRayAnalysis" | "patientExam" | "newLatter" | "message" | "audit" | "log" | "loginHistory" | "accessHistory"
     txIsolationLevel: TransactionIsolationLevel
   }
   model: {
@@ -2081,6 +2083,80 @@ export type TypeMap<ExtArgs extends runtime.Types.Extensions.InternalArgs = runt
         }
       }
     }
+    CommunicationCampaign: {
+      payload: Prisma.$CommunicationCampaignPayload<ExtArgs>
+      fields: Prisma.CommunicationCampaignFieldRefs
+      operations: {
+        findUnique: {
+          args: Prisma.CommunicationCampaignFindUniqueArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$CommunicationCampaignPayload> | null
+        }
+        findUniqueOrThrow: {
+          args: Prisma.CommunicationCampaignFindUniqueOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$CommunicationCampaignPayload>
+        }
+        findFirst: {
+          args: Prisma.CommunicationCampaignFindFirstArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$CommunicationCampaignPayload> | null
+        }
+        findFirstOrThrow: {
+          args: Prisma.CommunicationCampaignFindFirstOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$CommunicationCampaignPayload>
+        }
+        findMany: {
+          args: Prisma.CommunicationCampaignFindManyArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$CommunicationCampaignPayload>[]
+        }
+        create: {
+          args: Prisma.CommunicationCampaignCreateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$CommunicationCampaignPayload>
+        }
+        createMany: {
+          args: Prisma.CommunicationCampaignCreateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        createManyAndReturn: {
+          args: Prisma.CommunicationCampaignCreateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$CommunicationCampaignPayload>[]
+        }
+        delete: {
+          args: Prisma.CommunicationCampaignDeleteArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$CommunicationCampaignPayload>
+        }
+        update: {
+          args: Prisma.CommunicationCampaignUpdateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$CommunicationCampaignPayload>
+        }
+        deleteMany: {
+          args: Prisma.CommunicationCampaignDeleteManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateMany: {
+          args: Prisma.CommunicationCampaignUpdateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateManyAndReturn: {
+          args: Prisma.CommunicationCampaignUpdateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$CommunicationCampaignPayload>[]
+        }
+        upsert: {
+          args: Prisma.CommunicationCampaignUpsertArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$CommunicationCampaignPayload>
+        }
+        aggregate: {
+          args: Prisma.CommunicationCampaignAggregateArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.AggregateCommunicationCampaign>
+        }
+        groupBy: {
+          args: Prisma.CommunicationCampaignGroupByArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.CommunicationCampaignGroupByOutputType>[]
+        }
+        count: {
+          args: Prisma.CommunicationCampaignCountArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.CommunicationCampaignCountAggregateOutputType> | number
+        }
+      }
+    }
     StockSaleItem: {
       payload: Prisma.$StockSaleItemPayload<ExtArgs>
       fields: Prisma.StockSaleItemFieldRefs
@@ -2818,6 +2894,80 @@ export type TypeMap<ExtArgs extends runtime.Types.Extensions.InternalArgs = runt
         count: {
           args: Prisma.ProductCountArgs<ExtArgs>
           result: runtime.Types.Utils.Optional<Prisma.ProductCountAggregateOutputType> | number
+        }
+      }
+    }
+    ClinicService: {
+      payload: Prisma.$ClinicServicePayload<ExtArgs>
+      fields: Prisma.ClinicServiceFieldRefs
+      operations: {
+        findUnique: {
+          args: Prisma.ClinicServiceFindUniqueArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$ClinicServicePayload> | null
+        }
+        findUniqueOrThrow: {
+          args: Prisma.ClinicServiceFindUniqueOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$ClinicServicePayload>
+        }
+        findFirst: {
+          args: Prisma.ClinicServiceFindFirstArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$ClinicServicePayload> | null
+        }
+        findFirstOrThrow: {
+          args: Prisma.ClinicServiceFindFirstOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$ClinicServicePayload>
+        }
+        findMany: {
+          args: Prisma.ClinicServiceFindManyArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$ClinicServicePayload>[]
+        }
+        create: {
+          args: Prisma.ClinicServiceCreateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$ClinicServicePayload>
+        }
+        createMany: {
+          args: Prisma.ClinicServiceCreateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        createManyAndReturn: {
+          args: Prisma.ClinicServiceCreateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$ClinicServicePayload>[]
+        }
+        delete: {
+          args: Prisma.ClinicServiceDeleteArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$ClinicServicePayload>
+        }
+        update: {
+          args: Prisma.ClinicServiceUpdateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$ClinicServicePayload>
+        }
+        deleteMany: {
+          args: Prisma.ClinicServiceDeleteManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateMany: {
+          args: Prisma.ClinicServiceUpdateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateManyAndReturn: {
+          args: Prisma.ClinicServiceUpdateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$ClinicServicePayload>[]
+        }
+        upsert: {
+          args: Prisma.ClinicServiceUpsertArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$ClinicServicePayload>
+        }
+        aggregate: {
+          args: Prisma.ClinicServiceAggregateArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.AggregateClinicService>
+        }
+        groupBy: {
+          args: Prisma.ClinicServiceGroupByArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.ClinicServiceGroupByOutputType>[]
+        }
+        count: {
+          args: Prisma.ClinicServiceCountArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.ClinicServiceCountAggregateOutputType> | number
         }
       }
     }
@@ -4328,6 +4478,10 @@ export const PersonScalarFieldEnum = {
   birthDate: 'birthDate',
   email: 'email',
   phoneNumber: 'phoneNumber',
+  marketingEmailConsent: 'marketingEmailConsent',
+  marketingEmailConsentUpdatedAt: 'marketingEmailConsentUpdatedAt',
+  marketingSmsConsent: 'marketingSmsConsent',
+  marketingSmsConsentUpdatedAt: 'marketingSmsConsentUpdatedAt',
   avatar: 'avatar',
   medicalNotes: 'medicalNotes',
   idNumber: 'idNumber',
@@ -4546,6 +4700,26 @@ export const StockSaleScalarFieldEnum = {
 export type StockSaleScalarFieldEnum = (typeof StockSaleScalarFieldEnum)[keyof typeof StockSaleScalarFieldEnum]
 
 
+export const CommunicationCampaignScalarFieldEnum = {
+  id: 'id',
+  branchId: 'branchId',
+  createdById: 'createdById',
+  name: 'name',
+  channel: 'channel',
+  subject: 'subject',
+  body: 'body',
+  status: 'status',
+  recipientCount: 'recipientCount',
+  sentCount: 'sentCount',
+  failedCount: 'failedCount',
+  sentAt: 'sentAt',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+} as const
+
+export type CommunicationCampaignScalarFieldEnum = (typeof CommunicationCampaignScalarFieldEnum)[keyof typeof CommunicationCampaignScalarFieldEnum]
+
+
 export const StockSaleItemScalarFieldEnum = {
   id: 'id',
   saleId: 'saleId',
@@ -4687,6 +4861,21 @@ export const ProductScalarFieldEnum = {
 } as const
 
 export type ProductScalarFieldEnum = (typeof ProductScalarFieldEnum)[keyof typeof ProductScalarFieldEnum]
+
+
+export const ClinicServiceScalarFieldEnum = {
+  id: 'id',
+  branchId: 'branchId',
+  name: 'name',
+  description: 'description',
+  price: 'price',
+  durationMinutes: 'durationMinutes',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt',
+  deletedAt: 'deletedAt'
+} as const
+
+export type ClinicServiceScalarFieldEnum = (typeof ClinicServiceScalarFieldEnum)[keyof typeof ClinicServiceScalarFieldEnum]
 
 
 export const SaleScalarFieldEnum = {
@@ -5269,6 +5458,7 @@ export type GlobalOmitConfig = {
   stockItem?: Prisma.StockItemOmit
   stockCatalogEntry?: Prisma.StockCatalogEntryOmit
   stockSale?: Prisma.StockSaleOmit
+  communicationCampaign?: Prisma.CommunicationCampaignOmit
   stockSaleItem?: Prisma.StockSaleItemOmit
   treatmentPlan?: Prisma.TreatmentPlanOmit
   revokedToken?: Prisma.RevokedTokenOmit
@@ -5279,6 +5469,7 @@ export type GlobalOmitConfig = {
   treatment?: Prisma.TreatmentOmit
   treatmentPrice?: Prisma.TreatmentPriceOmit
   product?: Prisma.ProductOmit
+  clinicService?: Prisma.ClinicServiceOmit
   sale?: Prisma.SaleOmit
   saleItem?: Prisma.SaleItemOmit
   prescription?: Prisma.PrescriptionOmit
