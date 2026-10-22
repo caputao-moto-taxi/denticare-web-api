@@ -11,6 +11,8 @@ const createTransportMock = nodemailer.createTransport as jest.Mock;
 
 describe('NodemailerAuthEmailService', () => {
   const originalEnvironment = {
+    smtpUser: process.env.SMTP_USER,
+    smtpPassword: process.env.SMTP_PASSWORD,
     user: process.env.GMAIL_USER,
     appPassword: process.env.GMAIL_APP_PASSWORD,
     frontendUrl: process.env.FRONTEND_URL,
@@ -20,8 +22,8 @@ describe('NodemailerAuthEmailService', () => {
 
   beforeEach(() => {
     jest.clearAllMocks();
-    process.env.GMAIL_USER = 'mailer@example.test';
-    process.env.GMAIL_APP_PASSWORD = 'abcdefghijklmnop';
+    process.env.SMTP_USER = 'mailer@example.test';
+    process.env.SMTP_PASSWORD = 'mailbox-password';
     process.env.FRONTEND_URL = 'https://dentcare.example';
     delete process.env.SMTP_TLS_CA_CERT;
     sendMailMock = jest.fn().mockResolvedValue({});
@@ -29,6 +31,16 @@ describe('NodemailerAuthEmailService', () => {
   });
 
   afterAll(() => {
+    if (originalEnvironment.smtpUser === undefined) {
+      delete process.env.SMTP_USER;
+    } else {
+      process.env.SMTP_USER = originalEnvironment.smtpUser;
+    }
+    if (originalEnvironment.smtpPassword === undefined) {
+      delete process.env.SMTP_PASSWORD;
+    } else {
+      process.env.SMTP_PASSWORD = originalEnvironment.smtpPassword;
+    }
     if (originalEnvironment.user === undefined) {
       delete process.env.GMAIL_USER;
     } else {
@@ -61,10 +73,10 @@ describe('NodemailerAuthEmailService', () => {
     });
 
     expect(createTransportMock).toHaveBeenCalledWith({
-      host: 'smtp.gmail.com',
+      host: 'mail.aquatecnica.ao',
       port: 465,
       secure: true,
-      auth: { user: 'mailer@example.test', pass: 'abcdefghijklmnop' },
+      auth: { user: 'mailer@example.test', pass: 'mailbox-password' },
     });
     expect(sendMailMock).toHaveBeenCalledWith(
       expect.objectContaining({
@@ -77,15 +89,10 @@ describe('NodemailerAuthEmailService', () => {
     );
   });
 
-  it('rejects a malformed Gmail app password before sending', async () => {
-    process.env.GMAIL_APP_PASSWORD = 'invalid-password';
+  it('accepts the mailbox password configured for the SMTP provider', async () => {
     const service = new NodemailerAuthEmailService();
 
-    expect(() => service.assertConfigured()).toThrow(
-      new ServiceUnavailableException(
-        'Email delivery requires a valid 16-character Gmail app password',
-      ),
-    );
+    expect(() => service.assertConfigured()).not.toThrow();
     expect(sendMailMock).not.toHaveBeenCalled();
   });
 
@@ -123,6 +130,60 @@ describe('NodemailerAuthEmailService', () => {
     ).rejects.toThrow(ServiceUnavailableException);
     expect(loggerError).toHaveBeenCalledWith(
       'Email delivery failed (code=EAUTH, smtp=none, command=unknown)',
+    );
+    loggerError.mockRestore();
+  });
+
+  it('logs actionable guidance and returns a service error on SMTP timeout', async () => {
+    const loggerError = jest
+      .spyOn(Logger.prototype, 'error')
+      .mockImplementation();
+    sendMailMock.mockRejectedValue(
+      Object.assign(new Error('connection timed out'), {
+        code: 'ETIMEDOUT',
+        command: 'CONN',
+      }),
+    );
+    const service = new NodemailerAuthEmailService();
+
+    await expect(
+      service.sendActivationEmail({
+        email: 'patient@example.test',
+        displayName: 'Ana',
+        token: 'token',
+      }),
+    ).rejects.toThrow(ServiceUnavailableException);
+    expect(loggerError).toHaveBeenCalledWith(
+      'Email delivery failed (code=ETIMEDOUT, smtp=none, command=CONN); verify SMTP host and outbound network access on port 465',
+    );
+    loggerError.mockRestore();
+  });
+
+  it('logs the original network details when Nodemailer wraps a timeout', async () => {
+    const loggerError = jest
+      .spyOn(Logger.prototype, 'error')
+      .mockImplementation();
+    sendMailMock.mockRejectedValue(
+      Object.assign(new Error('connect ETIMEDOUT'), {
+        code: 'ESOCKET',
+        originalCode: 'ETIMEDOUT',
+        syscall: 'connect',
+        address: '65.108.145.65',
+        port: 465,
+        command: 'CONN',
+      }),
+    );
+    const service = new NodemailerAuthEmailService();
+
+    await expect(
+      service.sendActivationEmail({
+        email: 'patient@example.test',
+        displayName: 'Ana',
+        token: 'token',
+      }),
+    ).rejects.toThrow(ServiceUnavailableException);
+    expect(loggerError).toHaveBeenCalledWith(
+      'Email delivery failed (code=ETIMEDOUT, transport=ESOCKET, smtp=none, command=CONN, syscall=connect, address=65.108.145.65, port=465); verify SMTP host and outbound network access on port 465',
     );
     loggerError.mockRestore();
   });

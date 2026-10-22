@@ -43,11 +43,13 @@ escapando as quebras de linha como `\n`. A configuração adiciona essa CA às
 raízes TLS predefinidas do Node e mantém a validação do certificado e hostname.
 Não use certificados de servidor nem desactive a validação.
 
-Para email por Gmail, configure `GMAIL_USER` e `GMAIL_APP_PASSWORD` com uma
-palavra-passe de aplicação de 16 caracteres. Em redes que inspeccionem TLS,
-configure opcionalmente `SMTP_TLS_CA_CERT` com o certificado PEM da CA raiz
-confiável, escapando as quebras de linha como `\n`. A verificação TLS mantém-se
-activa; não use certificados de servidor nem desactive a validação.
+Para email, configure `SMTP_USER` e `SMTP_PASSWORD` com as credenciais da caixa
+postal. O servidor de saída é `mail.aquatecnica.ao`, na porta 465 com SSL/TLS.
+As variáveis antigas `GMAIL_USER` e `GMAIL_APP_PASSWORD` continuam aceites como
+fallback. Em redes que inspeccionem TLS, configure opcionalmente
+`SMTP_TLS_CA_CERT` com o certificado PEM da CA raiz confiável, escapando as
+quebras de linha como `\n`. A verificação TLS mantém-se activa; não use
+certificados de servidor nem desactive a validação.
 
 ```bash
 pnpm install

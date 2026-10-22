@@ -11,12 +11,8 @@ export class RequestPasswordResetUseCase {
     this.emailService.assertConfigured();
     const request = await this.repository.createPasswordResetRequest(email);
     if (request) {
-      const response = await this.emailService.sendPasswordResetEmail(request);
-      console.log("teste", response);
-      return response;
+      await this.emailService.sendPasswordResetEmail(request);
     };
-    return {
-      message: 'If the account exists, a recovery link has been sent.',
-    };
+    return { message: 'If the account exists, a recovery link has been sent.' };
   }
 }

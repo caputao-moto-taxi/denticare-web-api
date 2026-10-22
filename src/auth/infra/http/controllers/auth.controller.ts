@@ -79,10 +79,8 @@ export class AuthController {
 
   @Post('password/forgot')
   @HttpCode(HttpStatus.OK)
-  async requestPasswordReset(@Body() input: EmailActionDto) {
-    const response = await this.requestPasswordResetUseCase.execute(input.email);
-    console.log('Password reset request response:', response);
-    return response;
+  requestPasswordReset(@Body() input: EmailActionDto) {
+    return this.requestPasswordResetUseCase.execute(input.email);
   }
 
   @Post('password/reset')

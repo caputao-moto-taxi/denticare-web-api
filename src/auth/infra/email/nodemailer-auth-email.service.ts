@@ -10,38 +10,34 @@ import { AuthEmailService } from '../../domain/auth-email.service';
 @Injectable()
 export class NodemailerAuthEmailService implements AuthEmailService {
   private readonly logger = new Logger(NodemailerAuthEmailService.name);
-  private readonly user = process.env.GMAIL_USER?.trim();
-  private readonly appPassword = process.env.GMAIL_APP_PASSWORD?.replace(
-    /\s/g,
-    '',
-  );
+  private readonly user = (
+    process.env.SMTP_USER ?? process.env.GMAIL_USER
+  )?.trim();
+  private readonly password = (
+    process.env.SMTP_PASSWORD ?? process.env.GMAIL_APP_PASSWORD
+  )?.trim();
   private readonly smtpTlsCa = process.env.SMTP_TLS_CA_CERT?.replace(
     /\\n/g,
     '\n',
-  ).trim();
+  );
 
   private readonly frontendUrl = (
     process.env.FRONTEND_URL || 'http://localhost:5173'
   ).replace(/\/$/, '');
   private readonly transporter: Transporter | null =
-    this.user && this.appPassword
+    this.user && this.password
       ? nodemailer.createTransport({
-          host: 'smtp.gmail.com',
+          host: 'mail.aquatecnica.ao',
           port: 465,
           secure: true,
-          auth: { user: this.user, pass: this.appPassword },
+          auth: { user: this.user, pass: this.password },
           ...(this.smtpTlsCa ? { tls: { ca: this.smtpTlsCa } } : {}),
         })
       : null;
 
   assertConfigured() {
-    if (!this.transporter || !this.user || !this.appPassword) {
+    if (!this.transporter || !this.user || !this.password) {
       throw new ServiceUnavailableException('Email delivery is not configured');
-    }
-    if (!/^[a-zA-Z0-9]{16}$/.test(this.appPassword)) {
-      throw new ServiceUnavailableException(
-        'Email delivery requires a valid 16-character Gmail app password',
-      );
     }
   }
 
@@ -93,27 +89,48 @@ export class NodemailerAuthEmailService implements AuthEmailService {
     } catch (error) {
       const details = error as {
         code?: unknown;
+        originalCode?: unknown;
         command?: unknown;
         responseCode?: unknown;
+        syscall?: unknown;
+        address?: unknown;
+        port?: unknown;
       };
-      const code = typeof details.code === 'string' ? details.code : 'unknown';
-      const command =
-        typeof details.command === 'string' ? details.command : 'unknown';
-      const responseCode =
+      const wrapperCode =
+        typeof details.code === 'string' ? details.code : undefined;
+      const code =
+        typeof details.originalCode === 'string'
+          ? details.originalCode
+          : wrapperCode || 'unknown';
+      const smtp =
         typeof details.responseCode === 'number'
           ? details.responseCode
           : 'none';
-      const certificateError = [
-        'SELF_SIGNED_CERT_IN_CHAIN',
-        'UNABLE_TO_VERIFY_LEAF_SIGNATURE',
-        'CERT_HAS_EXPIRED',
-      ].includes(code);
+      const command =
+        typeof details.command === 'string' ? details.command : 'unknown';
+      const transport =
+        wrapperCode && wrapperCode !== code ? `, transport=${wrapperCode}` : '';
+      const networkDetails = [
+        typeof details.syscall === 'string'
+          ? `syscall=${details.syscall}`
+          : undefined,
+        typeof details.address === 'string'
+          ? `address=${details.address}`
+          : undefined,
+        typeof details.port === 'number' ? `port=${details.port}` : undefined,
+      ]
+        .filter(Boolean)
+        .join(', ');
+      const guidance =
+        code === 'ETIMEDOUT'
+          ? '; verify SMTP host and outbound network access on port 465'
+          : code === 'SELF_SIGNED_CERT_IN_CHAIN'
+            ? '; configure SMTP_TLS_CA_CERT with the trusted CA certificate'
+            : '';
       this.logger.error(
-        certificateError
-          ? `Email TLS verification failed (code=${code}); configure SMTP_TLS_CA_CERT with the trusted CA certificate. TLS verification remains enabled.`
-          : `Email delivery failed (code=${code}, smtp=${responseCode}, command=${command})`,
+        `Email delivery failed (code=${code}${transport}, smtp=${smtp}, command=${command}${networkDetails ? `, ${networkDetails}` : ''})${guidance}`,
       );
-      throw new ServiceUnavailableException('Email could not be delivered');
+      throw new ServiceUnavailableException('Email delivery failed');
     }
   }
 
