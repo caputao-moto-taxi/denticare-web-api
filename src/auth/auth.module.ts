@@ -22,7 +22,7 @@ import { PatientExamStorage } from '../patients/infra/storage/patient-exam-stora
         }
         return {
           secret,
-          signOptions: { expiresIn: '1h' },
+          signOptions: { expiresIn: '7d' },
         };
       },
     }),

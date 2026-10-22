@@ -50,7 +50,7 @@ export class PatientsPrismaRepository implements IPatientRepository {
   constructor(
     private readonly prisma: PrismaService,
     private readonly examStorage: PatientExamStorage,
-  ) {}
+  ) { }
 
   async list(user: AuthUser, query: ListQuery = {}) {
     validateListFilters(query, { status: ['active', 'inactive'] });
@@ -129,7 +129,7 @@ export class PatientsPrismaRepository implements IPatientRepository {
           where: {
             deletedAt: null,
             ...(hasPermission(user, 'appointments.read.all') ||
-            hasPermission(user, 'appointments.manage')
+              hasPermission(user, 'appointments.manage')
               ? {}
               : hasPermission(user, 'appointments.read.assigned')
                 ? { doctorId: user.id }
@@ -314,50 +314,50 @@ export class PatientsPrismaRepository implements IPatientRepository {
     }
     const prescriptions = canReadClinical
       ? [
-          ...[...patientPrescriptionGroups.entries()].map(
-            ([groupId, items]) => ({
-              id: groupId,
-              items: items.map((item) => ({
-                medication: item.medication,
-                dosage: item.dosage,
-                instructions: item.instructions,
-                duration: item.duration,
-              })),
-              prescribedBy: joinName(items[0].doctor.Person[0], 'Profissional'),
-              date: items[0].createdAt.toISOString(),
-              status: items.some((item) => item.status === 'active')
-                ? 'active'
-                : 'completed',
-            }),
-          ),
-          ...patient.consults.flatMap((consult) =>
-            consult.prescriptions.map((prescription) => ({
-              id: prescription.id,
-              items: prescription.prescriptionItems.map((item) => ({
-                medication: item.product.name,
-                dosage: item.details ?? '',
-                instructions: prescription.recommendations ?? '',
-                duration: `${prescription.duration} ${prescription.period.toLowerCase()}`,
-              })),
-              prescribedBy: joinName(consult.doctor.Person[0], 'Profissional'),
-              date: prescription.createdAt.toISOString(),
-              status: 'active',
+        ...[...patientPrescriptionGroups.entries()].map(
+          ([groupId, items]) => ({
+            id: groupId,
+            items: items.map((item) => ({
+              medication: item.medication,
+              dosage: item.dosage,
+              instructions: item.instructions,
+              duration: item.duration,
             })),
-          ),
-        ].sort((left, right) => right.date.localeCompare(left.date))
+            prescribedBy: joinName(items[0].doctor.Person[0], 'Profissional'),
+            date: items[0].createdAt.toISOString(),
+            status: items.some((item) => item.status === 'active')
+              ? 'active'
+              : 'completed',
+          }),
+        ),
+        ...patient.consults.flatMap((consult) =>
+          consult.prescriptions.map((prescription) => ({
+            id: prescription.id,
+            items: prescription.prescriptionItems.map((item) => ({
+              medication: item.product.name,
+              dosage: item.details ?? '',
+              instructions: prescription.recommendations ?? '',
+              duration: `${prescription.duration} ${prescription.period.toLowerCase()}`,
+            })),
+            prescribedBy: joinName(consult.doctor.Person[0], 'Profissional'),
+            date: prescription.createdAt.toISOString(),
+            status: 'active',
+          })),
+        ),
+      ].sort((left, right) => right.date.localeCompare(left.date))
       : [];
 
     return {
       ...this.toPatient(patient, canReadClinical, canReadContacts),
       address: canReadContacts
         ? [
-            patient.address?.street,
-            patient.address?.city,
-            patient.address?.province,
-            patient.address?.country,
-          ]
-            .filter(Boolean)
-            .join(', ') || ''
+          patient.address?.street,
+          patient.address?.city,
+          patient.address?.province,
+          patient.address?.country,
+        ]
+          .filter(Boolean)
+          .join(', ') || ''
         : '',
       addressStreet: canReadContacts ? (patient.address?.street ?? '') : '',
       recordNumber: `#PAC-${patient.createdAt.getFullYear()}-${patient.id
@@ -386,39 +386,39 @@ export class PatientsPrismaRepository implements IPatientRepository {
       medications: canReadClinical ? patient.medications : [],
       currentTreatment: canReadClinical
         ? {
-            title: currentTreatment?.diagnosis ?? '',
-            startedAt: currentTreatment
-              ? currentTreatment.startDate.toISOString()
-              : '',
-            estimatedCompletion:
-              currentTreatment?.estimatedCompletion?.toISOString() ?? '',
-            progress: currentTreatment?.totalSteps
-              ? Math.min(
-                  100,
-                  Math.round(
-                    (currentTreatment.completedSteps /
-                      currentTreatment.totalSteps) *
-                      100,
-                  ),
-                )
-              : 0,
-            doctorName: currentTreatment
-              ? joinName(currentTreatment.doctor.Person[0], 'Profissional')
-              : '',
-            specialty:
-              currentTreatment?.doctor.doctorProfile?.specialties[0] ?? '',
-            activePhase:
-              currentTreatment?.activePhase ?? currentTreatment?.notes ?? '',
-          }
+          title: currentTreatment?.diagnosis ?? '',
+          startedAt: currentTreatment
+            ? currentTreatment.startDate.toISOString()
+            : '',
+          estimatedCompletion:
+            currentTreatment?.estimatedCompletion?.toISOString() ?? '',
+          progress: currentTreatment?.totalSteps
+            ? Math.min(
+              100,
+              Math.round(
+                (currentTreatment.completedSteps /
+                  currentTreatment.totalSteps) *
+                100,
+              ),
+            )
+            : 0,
+          doctorName: currentTreatment
+            ? joinName(currentTreatment.doctor.Person[0], 'Profissional')
+            : '',
+          specialty:
+            currentTreatment?.doctor.doctorProfile?.specialties[0] ?? '',
+          activePhase:
+            currentTreatment?.activePhase ?? currentTreatment?.notes ?? '',
+        }
         : {
-            title: '',
-            startedAt: '',
-            estimatedCompletion: '',
-            progress: 0,
-            doctorName: '',
-            specialty: '',
-            activePhase: '',
-          },
+          title: '',
+          startedAt: '',
+          estimatedCompletion: '',
+          progress: 0,
+          doctorName: '',
+          specialty: '',
+          activePhase: '',
+        },
       metrics: {
         totalAppointments: appointments.length,
         completedProcedures: appointments.filter(
@@ -446,55 +446,55 @@ export class PatientsPrismaRepository implements IPatientRepository {
       prescriptions,
       diagnoses: canReadClinical
         ? patient.diagnostics.map((diagnosis) => ({
-            id: diagnosis.id,
-            code: diagnosis.code ?? '',
-            title: diagnosis.designation,
-            affectedTeeth: diagnosis.affectedTeeth,
-            diagnosedAt: diagnosis.createdAt.toISOString(),
-            doctorName: joinName(diagnosis.doctor.Person[0], 'Profissional'),
-            severity: diagnosis.severity,
-            status: diagnosis.status,
-            description: diagnosis.description ?? '',
-            attachments: diagnosis.attachments.map((attachment) => ({
-              id: attachment.id,
-              fileName: attachment.fileName,
-              mimeType: attachment.mimeType,
-              fileSize: attachment.fileSize,
-            })),
-          }))
+          id: diagnosis.id,
+          code: diagnosis.code ?? '',
+          title: diagnosis.designation,
+          affectedTeeth: diagnosis.affectedTeeth,
+          diagnosedAt: diagnosis.createdAt.toISOString(),
+          doctorName: joinName(diagnosis.doctor.Person[0], 'Profissional'),
+          severity: diagnosis.severity,
+          status: diagnosis.status,
+          description: diagnosis.description ?? '',
+          attachments: diagnosis.attachments.map((attachment) => ({
+            id: attachment.id,
+            fileName: attachment.fileName,
+            mimeType: attachment.mimeType,
+            fileSize: attachment.fileSize,
+          })),
+        }))
         : [],
       odontogram: canReadClinical
         ? patient.odontogram.map((tooth) => ({
-            number: tooth.number,
-            state: tooth.state,
-            procedureDone: tooth.procedureDone ?? '',
-            notes: tooth.notes ?? '',
-          }))
+          number: tooth.number,
+          state: tooth.state,
+          procedureDone: tooth.procedureDone ?? '',
+          notes: tooth.notes ?? '',
+        }))
         : [],
       financials: hasPermission(user, 'patients.financial.read')
         ? financials.map(
-            ({ id, reference, description, amount, method, date, status }) => ({
-              id,
-              reference,
-              description,
-              amount,
-              method,
-              date,
-              status,
-            }),
-          )
+          ({ id, reference, description, amount, method, date, status }) => ({
+            id,
+            reference,
+            description,
+            amount,
+            method,
+            date,
+            status,
+          }),
+        )
         : [],
       exams: canReadClinical
         ? patient.exams.map((exam) => ({
-            id: exam.id,
-            title: exam.title,
-            type: exam.type,
-            date: exam.createdAt.toISOString(),
-            doctorName: exam.doctorName,
-            fileName: exam.fileName,
-            mimeType: exam.mimeType,
-            fileSize: `${(exam.fileSize / (1024 * 1024)).toFixed(1)} MB`,
-          }))
+          id: exam.id,
+          title: exam.title,
+          type: exam.type,
+          date: exam.createdAt.toISOString(),
+          doctorName: exam.doctorName,
+          fileName: exam.fileName,
+          mimeType: exam.mimeType,
+          fileSize: `${(exam.fileSize / (1024 * 1024)).toFixed(1)} MB`,
+        }))
         : [],
     };
   }
@@ -941,6 +941,10 @@ export class PatientsPrismaRepository implements IPatientRepository {
           birthDate: input.birthDate ? new Date(input.birthDate) : undefined,
           gender: input.gender,
           medicalNotes: input.medicalNotes?.trim(),
+          dataProcessingConsent: input.dataProcessingConsent ?? false,
+          dataProcessingConsentUpdatedAt: input.dataProcessingConsent
+            ? new Date()
+            : undefined,
           idNumber: input.idNumber?.trim(),
           nif: input.nif?.trim(),
           profession: input.profession?.trim(),
@@ -1013,6 +1017,27 @@ export class PatientsPrismaRepository implements IPatientRepository {
           ...(input.gender !== undefined && { gender: input.gender }),
           ...(input.medicalNotes !== undefined && {
             medicalNotes: input.medicalNotes.trim(),
+          }),
+          ...(input.dataProcessingConsent !== undefined && {
+            dataProcessingConsent: input.dataProcessingConsent,
+            dataProcessingConsentUpdatedAt:
+              input.dataProcessingConsent !== existing.dataProcessingConsent
+                ? new Date()
+                : existing.dataProcessingConsentUpdatedAt,
+          }),
+          ...(input.marketingEmailConsent !== undefined && {
+            marketingEmailConsent: input.marketingEmailConsent,
+            marketingEmailConsentUpdatedAt:
+              input.marketingEmailConsent !== existing.marketingEmailConsent
+                ? new Date()
+                : existing.marketingEmailConsentUpdatedAt,
+          }),
+          ...(input.marketingSmsConsent !== undefined && {
+            marketingSmsConsent: input.marketingSmsConsent,
+            marketingSmsConsentUpdatedAt:
+              input.marketingSmsConsent !== existing.marketingSmsConsent
+                ? new Date()
+                : existing.marketingSmsConsentUpdatedAt,
           }),
           ...(input.idNumber !== undefined && {
             idNumber: input.idNumber.trim(),
@@ -1201,6 +1226,12 @@ export class PatientsPrismaRepository implements IPatientRepository {
       birthDate: Date | null;
       gender: string;
       medicalNotes: string | null;
+      dataProcessingConsent: boolean;
+      dataProcessingConsentUpdatedAt: Date | null;
+      marketingEmailConsent: boolean;
+      marketingEmailConsentUpdatedAt: Date | null;
+      marketingSmsConsent: boolean;
+      marketingSmsConsentUpdatedAt: Date | null;
       isActive: boolean;
       createdAt: Date;
       address: { street: string } | null;
@@ -1219,6 +1250,15 @@ export class PatientsPrismaRepository implements IPatientRepository {
       gender: patient.gender.toLowerCase(),
       birthDate: patient.birthDate?.toISOString() ?? '',
       medicalNotes: includeMedicalNotes ? (patient.medicalNotes ?? '') : '',
+      dataProcessingConsent: patient.dataProcessingConsent,
+      dataProcessingConsentUpdatedAt:
+        patient.dataProcessingConsentUpdatedAt?.toISOString() ?? null,
+      marketingEmailConsent: patient.marketingEmailConsent,
+      marketingEmailConsentUpdatedAt:
+        patient.marketingEmailConsentUpdatedAt?.toISOString() ?? null,
+      marketingSmsConsent: patient.marketingSmsConsent,
+      marketingSmsConsentUpdatedAt:
+        patient.marketingSmsConsentUpdatedAt?.toISOString() ?? null,
       avatar: patient.avatar ? `/patients/${patient.id}/avatar` : '',
     };
   }

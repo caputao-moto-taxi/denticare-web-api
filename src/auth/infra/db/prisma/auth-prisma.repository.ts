@@ -63,7 +63,7 @@ export class AuthPrismaRepository implements IAuthRepository {
     private readonly prisma: PrismaService,
     private readonly jwtService: JwtService,
     private readonly hashService: IHashService,
-  ) {}
+  ) { }
 
   async register(input: RegisterCommand): Promise<AuthActionEmail> {
     const email = input.adminEmail.trim().toLowerCase();
@@ -237,7 +237,7 @@ export class AuthPrismaRepository implements IAuthRepository {
   ): Promise<AuthActionEmail | null> {
     const account = await this.prisma.user.findFirst({
       where: {
-        email: email.trim().toLowerCase(),
+        email: email.trim(),
         deletedAt: null,
         isActive: true,
         isEmailVerified: true,
@@ -252,6 +252,7 @@ export class AuthPrismaRepository implements IAuthRepository {
         },
       },
     });
+
     if (!account) return null;
 
     const token = await this.prisma.$transaction((transaction) =>

@@ -57,7 +57,7 @@ export class AuthController {
     private readonly requestPasswordResetUseCase: RequestPasswordResetUseCase,
     private readonly resetPasswordUseCase: ResetPasswordUseCase,
     private readonly resendActivationUseCase: ResendActivationUseCase,
-  ) {}
+  ) { }
 
   @Post('register')
   @HttpCode(HttpStatus.CREATED)
@@ -79,8 +79,10 @@ export class AuthController {
 
   @Post('password/forgot')
   @HttpCode(HttpStatus.OK)
-  requestPasswordReset(@Body() input: EmailActionDto) {
-    return this.requestPasswordResetUseCase.execute(input.email);
+  async requestPasswordReset(@Body() input: EmailActionDto) {
+    const response = await this.requestPasswordResetUseCase.execute(input.email);
+    console.log('Password reset request response:', response);
+    return response;
   }
 
   @Post('password/reset')

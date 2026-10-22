@@ -10,24 +10,24 @@ import { AuthEmailService } from '../../domain/auth-email.service';
 @Injectable()
 export class NodemailerAuthEmailService implements AuthEmailService {
   private readonly logger = new Logger(NodemailerAuthEmailService.name);
-  private readonly user = process.env.GMAIL_USER?.trim();
-  private readonly appPassword = process.env.GMAIL_APP_PASSWORD?.replace(
-    /\s/g,
-    '',
-  );
+  private readonly user = 'luisafonsocaputo@gmail.com'; //process.env.GMAIL_USER?.trim()
+  private readonly appPassword = 'Luanda20.04.2002'; //process.env.GMAIL_APP_PASSWORD?.replace(/\s/g,'',);
+
   private readonly frontendUrl = (
     process.env.FRONTEND_URL || 'http://localhost:5173'
   ).replace(/\/$/, '');
   private readonly transporter: Transporter | null =
     this.user && this.appPassword
       ? nodemailer.createTransport({
-          service: 'gmail',
-          auth: { user: this.user, pass: this.appPassword },
-        })
+        host: 'smtp.gmail.com',
+        port: 465,
+        secure: true,
+        auth: { user: 'luiscaputo.dev@gmail.com', pass: 'luanda20.04.2002' },
+      })
       : null;
 
   assertConfigured() {
-    if (!this.transporter || !this.user) {
+    if (!this.transporter || !this.user || !this.appPassword) {
       throw new ServiceUnavailableException('Email delivery is not configured');
     }
   }
@@ -55,11 +55,7 @@ export class NodemailerAuthEmailService implements AuthEmailService {
     });
   }
 
-  async sendCampaignEmail(
-    recipients: string[],
-    subject: string,
-    body: string,
-  ) {
+  async sendCampaignEmail(recipients: string[], subject: string, body: string) {
     await this.send({
       to: this.user!,
       bcc: recipients,
@@ -87,6 +83,7 @@ export class NodemailerAuthEmailService implements AuthEmailService {
         command?: unknown;
         responseCode?: unknown;
       };
+      console.log(error);
       const code = typeof details.code === 'string' ? details.code : 'unknown';
       const command =
         typeof details.command === 'string' ? details.command : 'unknown';

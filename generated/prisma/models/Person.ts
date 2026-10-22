@@ -41,6 +41,8 @@ export type PersonMinAggregateOutputType = {
   birthDate: Date | null
   email: string | null
   phoneNumber: string | null
+  dataProcessingConsent: boolean | null
+  dataProcessingConsentUpdatedAt: Date | null
   marketingEmailConsent: boolean | null
   marketingEmailConsentUpdatedAt: Date | null
   marketingSmsConsent: boolean | null
@@ -76,6 +78,8 @@ export type PersonMaxAggregateOutputType = {
   birthDate: Date | null
   email: string | null
   phoneNumber: string | null
+  dataProcessingConsent: boolean | null
+  dataProcessingConsentUpdatedAt: Date | null
   marketingEmailConsent: boolean | null
   marketingEmailConsentUpdatedAt: Date | null
   marketingSmsConsent: boolean | null
@@ -111,6 +115,8 @@ export type PersonCountAggregateOutputType = {
   birthDate: number
   email: number
   phoneNumber: number
+  dataProcessingConsent: number
+  dataProcessingConsentUpdatedAt: number
   marketingEmailConsent: number
   marketingEmailConsentUpdatedAt: number
   marketingSmsConsent: number
@@ -159,6 +165,8 @@ export type PersonMinAggregateInputType = {
   birthDate?: true
   email?: true
   phoneNumber?: true
+  dataProcessingConsent?: true
+  dataProcessingConsentUpdatedAt?: true
   marketingEmailConsent?: true
   marketingEmailConsentUpdatedAt?: true
   marketingSmsConsent?: true
@@ -194,6 +202,8 @@ export type PersonMaxAggregateInputType = {
   birthDate?: true
   email?: true
   phoneNumber?: true
+  dataProcessingConsent?: true
+  dataProcessingConsentUpdatedAt?: true
   marketingEmailConsent?: true
   marketingEmailConsentUpdatedAt?: true
   marketingSmsConsent?: true
@@ -229,6 +239,8 @@ export type PersonCountAggregateInputType = {
   birthDate?: true
   email?: true
   phoneNumber?: true
+  dataProcessingConsent?: true
+  dataProcessingConsentUpdatedAt?: true
   marketingEmailConsent?: true
   marketingEmailConsentUpdatedAt?: true
   marketingSmsConsent?: true
@@ -354,6 +366,8 @@ export type PersonGroupByOutputType = {
   birthDate: Date | null
   email: string | null
   phoneNumber: string | null
+  dataProcessingConsent: boolean
+  dataProcessingConsentUpdatedAt: Date | null
   marketingEmailConsent: boolean
   marketingEmailConsentUpdatedAt: Date | null
   marketingSmsConsent: boolean
@@ -415,6 +429,8 @@ export type PersonWhereInput = {
   birthDate?: Prisma.DateTimeNullableFilter<"Person"> | Date | string | null
   email?: Prisma.StringNullableFilter<"Person"> | string | null
   phoneNumber?: Prisma.StringNullableFilter<"Person"> | string | null
+  dataProcessingConsent?: Prisma.BoolFilter<"Person"> | boolean
+  dataProcessingConsentUpdatedAt?: Prisma.DateTimeNullableFilter<"Person"> | Date | string | null
   marketingEmailConsent?: Prisma.BoolFilter<"Person"> | boolean
   marketingEmailConsentUpdatedAt?: Prisma.DateTimeNullableFilter<"Person"> | Date | string | null
   marketingSmsConsent?: Prisma.BoolFilter<"Person"> | boolean
@@ -468,6 +484,8 @@ export type PersonOrderByWithRelationInput = {
   birthDate?: Prisma.SortOrderInput | Prisma.SortOrder
   email?: Prisma.SortOrderInput | Prisma.SortOrder
   phoneNumber?: Prisma.SortOrderInput | Prisma.SortOrder
+  dataProcessingConsent?: Prisma.SortOrder
+  dataProcessingConsentUpdatedAt?: Prisma.SortOrderInput | Prisma.SortOrder
   marketingEmailConsent?: Prisma.SortOrder
   marketingEmailConsentUpdatedAt?: Prisma.SortOrderInput | Prisma.SortOrder
   marketingSmsConsent?: Prisma.SortOrder
@@ -524,6 +542,8 @@ export type PersonWhereUniqueInput = Prisma.AtLeast<{
   lastName?: Prisma.StringFilter<"Person"> | string
   birthDate?: Prisma.DateTimeNullableFilter<"Person"> | Date | string | null
   phoneNumber?: Prisma.StringNullableFilter<"Person"> | string | null
+  dataProcessingConsent?: Prisma.BoolFilter<"Person"> | boolean
+  dataProcessingConsentUpdatedAt?: Prisma.DateTimeNullableFilter<"Person"> | Date | string | null
   marketingEmailConsent?: Prisma.BoolFilter<"Person"> | boolean
   marketingEmailConsentUpdatedAt?: Prisma.DateTimeNullableFilter<"Person"> | Date | string | null
   marketingSmsConsent?: Prisma.BoolFilter<"Person"> | boolean
@@ -577,6 +597,8 @@ export type PersonOrderByWithAggregationInput = {
   birthDate?: Prisma.SortOrderInput | Prisma.SortOrder
   email?: Prisma.SortOrderInput | Prisma.SortOrder
   phoneNumber?: Prisma.SortOrderInput | Prisma.SortOrder
+  dataProcessingConsent?: Prisma.SortOrder
+  dataProcessingConsentUpdatedAt?: Prisma.SortOrderInput | Prisma.SortOrder
   marketingEmailConsent?: Prisma.SortOrder
   marketingEmailConsentUpdatedAt?: Prisma.SortOrderInput | Prisma.SortOrder
   marketingSmsConsent?: Prisma.SortOrder
@@ -623,6 +645,8 @@ export type PersonScalarWhereWithAggregatesInput = {
   birthDate?: Prisma.DateTimeNullableWithAggregatesFilter<"Person"> | Date | string | null
   email?: Prisma.StringNullableWithAggregatesFilter<"Person"> | string | null
   phoneNumber?: Prisma.StringNullableWithAggregatesFilter<"Person"> | string | null
+  dataProcessingConsent?: Prisma.BoolWithAggregatesFilter<"Person"> | boolean
+  dataProcessingConsentUpdatedAt?: Prisma.DateTimeNullableWithAggregatesFilter<"Person"> | Date | string | null
   marketingEmailConsent?: Prisma.BoolWithAggregatesFilter<"Person"> | boolean
   marketingEmailConsentUpdatedAt?: Prisma.DateTimeNullableWithAggregatesFilter<"Person"> | Date | string | null
   marketingSmsConsent?: Prisma.BoolWithAggregatesFilter<"Person"> | boolean
@@ -661,6 +685,8 @@ export type PersonCreateInput = {
   birthDate?: Date | string | null
   email?: string | null
   phoneNumber?: string | null
+  dataProcessingConsent?: boolean
+  dataProcessingConsentUpdatedAt?: Date | string | null
   marketingEmailConsent?: boolean
   marketingEmailConsentUpdatedAt?: Date | string | null
   marketingSmsConsent?: boolean
@@ -710,6 +736,8 @@ export type PersonUncheckedCreateInput = {
   birthDate?: Date | string | null
   email?: string | null
   phoneNumber?: string | null
+  dataProcessingConsent?: boolean
+  dataProcessingConsentUpdatedAt?: Date | string | null
   marketingEmailConsent?: boolean
   marketingEmailConsentUpdatedAt?: Date | string | null
   marketingSmsConsent?: boolean
@@ -759,6 +787,8 @@ export type PersonUpdateInput = {
   birthDate?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   email?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   phoneNumber?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  dataProcessingConsent?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  dataProcessingConsentUpdatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   marketingEmailConsent?: Prisma.BoolFieldUpdateOperationsInput | boolean
   marketingEmailConsentUpdatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   marketingSmsConsent?: Prisma.BoolFieldUpdateOperationsInput | boolean
@@ -808,6 +838,8 @@ export type PersonUncheckedUpdateInput = {
   birthDate?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   email?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   phoneNumber?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  dataProcessingConsent?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  dataProcessingConsentUpdatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   marketingEmailConsent?: Prisma.BoolFieldUpdateOperationsInput | boolean
   marketingEmailConsentUpdatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   marketingSmsConsent?: Prisma.BoolFieldUpdateOperationsInput | boolean
@@ -857,6 +889,8 @@ export type PersonCreateManyInput = {
   birthDate?: Date | string | null
   email?: string | null
   phoneNumber?: string | null
+  dataProcessingConsent?: boolean
+  dataProcessingConsentUpdatedAt?: Date | string | null
   marketingEmailConsent?: boolean
   marketingEmailConsentUpdatedAt?: Date | string | null
   marketingSmsConsent?: boolean
@@ -895,6 +929,8 @@ export type PersonUpdateManyMutationInput = {
   birthDate?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   email?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   phoneNumber?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  dataProcessingConsent?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  dataProcessingConsentUpdatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   marketingEmailConsent?: Prisma.BoolFieldUpdateOperationsInput | boolean
   marketingEmailConsentUpdatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   marketingSmsConsent?: Prisma.BoolFieldUpdateOperationsInput | boolean
@@ -929,6 +965,8 @@ export type PersonUncheckedUpdateManyInput = {
   birthDate?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   email?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   phoneNumber?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  dataProcessingConsent?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  dataProcessingConsentUpdatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   marketingEmailConsent?: Prisma.BoolFieldUpdateOperationsInput | boolean
   marketingEmailConsentUpdatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   marketingSmsConsent?: Prisma.BoolFieldUpdateOperationsInput | boolean
@@ -977,6 +1015,8 @@ export type PersonCountOrderByAggregateInput = {
   birthDate?: Prisma.SortOrder
   email?: Prisma.SortOrder
   phoneNumber?: Prisma.SortOrder
+  dataProcessingConsent?: Prisma.SortOrder
+  dataProcessingConsentUpdatedAt?: Prisma.SortOrder
   marketingEmailConsent?: Prisma.SortOrder
   marketingEmailConsentUpdatedAt?: Prisma.SortOrder
   marketingSmsConsent?: Prisma.SortOrder
@@ -1019,6 +1059,8 @@ export type PersonMaxOrderByAggregateInput = {
   birthDate?: Prisma.SortOrder
   email?: Prisma.SortOrder
   phoneNumber?: Prisma.SortOrder
+  dataProcessingConsent?: Prisma.SortOrder
+  dataProcessingConsentUpdatedAt?: Prisma.SortOrder
   marketingEmailConsent?: Prisma.SortOrder
   marketingEmailConsentUpdatedAt?: Prisma.SortOrder
   marketingSmsConsent?: Prisma.SortOrder
@@ -1054,6 +1096,8 @@ export type PersonMinOrderByAggregateInput = {
   birthDate?: Prisma.SortOrder
   email?: Prisma.SortOrder
   phoneNumber?: Prisma.SortOrder
+  dataProcessingConsent?: Prisma.SortOrder
+  dataProcessingConsentUpdatedAt?: Prisma.SortOrder
   marketingEmailConsent?: Prisma.SortOrder
   marketingEmailConsentUpdatedAt?: Prisma.SortOrder
   marketingSmsConsent?: Prisma.SortOrder
@@ -1458,6 +1502,8 @@ export type PersonCreateWithoutAddressInput = {
   birthDate?: Date | string | null
   email?: string | null
   phoneNumber?: string | null
+  dataProcessingConsent?: boolean
+  dataProcessingConsentUpdatedAt?: Date | string | null
   marketingEmailConsent?: boolean
   marketingEmailConsentUpdatedAt?: Date | string | null
   marketingSmsConsent?: boolean
@@ -1506,6 +1552,8 @@ export type PersonUncheckedCreateWithoutAddressInput = {
   birthDate?: Date | string | null
   email?: string | null
   phoneNumber?: string | null
+  dataProcessingConsent?: boolean
+  dataProcessingConsentUpdatedAt?: Date | string | null
   marketingEmailConsent?: boolean
   marketingEmailConsentUpdatedAt?: Date | string | null
   marketingSmsConsent?: boolean
@@ -1583,6 +1631,8 @@ export type PersonScalarWhereInput = {
   birthDate?: Prisma.DateTimeNullableFilter<"Person"> | Date | string | null
   email?: Prisma.StringNullableFilter<"Person"> | string | null
   phoneNumber?: Prisma.StringNullableFilter<"Person"> | string | null
+  dataProcessingConsent?: Prisma.BoolFilter<"Person"> | boolean
+  dataProcessingConsentUpdatedAt?: Prisma.DateTimeNullableFilter<"Person"> | Date | string | null
   marketingEmailConsent?: Prisma.BoolFilter<"Person"> | boolean
   marketingEmailConsentUpdatedAt?: Prisma.DateTimeNullableFilter<"Person"> | Date | string | null
   marketingSmsConsent?: Prisma.BoolFilter<"Person"> | boolean
@@ -1621,6 +1671,8 @@ export type PersonCreateWithoutBranchInput = {
   birthDate?: Date | string | null
   email?: string | null
   phoneNumber?: string | null
+  dataProcessingConsent?: boolean
+  dataProcessingConsentUpdatedAt?: Date | string | null
   marketingEmailConsent?: boolean
   marketingEmailConsentUpdatedAt?: Date | string | null
   marketingSmsConsent?: boolean
@@ -1669,6 +1721,8 @@ export type PersonUncheckedCreateWithoutBranchInput = {
   birthDate?: Date | string | null
   email?: string | null
   phoneNumber?: string | null
+  dataProcessingConsent?: boolean
+  dataProcessingConsentUpdatedAt?: Date | string | null
   marketingEmailConsent?: boolean
   marketingEmailConsentUpdatedAt?: Date | string | null
   marketingSmsConsent?: boolean
@@ -1743,6 +1797,8 @@ export type PersonCreateWithoutUserInput = {
   birthDate?: Date | string | null
   email?: string | null
   phoneNumber?: string | null
+  dataProcessingConsent?: boolean
+  dataProcessingConsentUpdatedAt?: Date | string | null
   marketingEmailConsent?: boolean
   marketingEmailConsentUpdatedAt?: Date | string | null
   marketingSmsConsent?: boolean
@@ -1791,6 +1847,8 @@ export type PersonUncheckedCreateWithoutUserInput = {
   birthDate?: Date | string | null
   email?: string | null
   phoneNumber?: string | null
+  dataProcessingConsent?: boolean
+  dataProcessingConsentUpdatedAt?: Date | string | null
   marketingEmailConsent?: boolean
   marketingEmailConsentUpdatedAt?: Date | string | null
   marketingSmsConsent?: boolean
@@ -1865,6 +1923,8 @@ export type PersonCreateWithoutRoleInput = {
   birthDate?: Date | string | null
   email?: string | null
   phoneNumber?: string | null
+  dataProcessingConsent?: boolean
+  dataProcessingConsentUpdatedAt?: Date | string | null
   marketingEmailConsent?: boolean
   marketingEmailConsentUpdatedAt?: Date | string | null
   marketingSmsConsent?: boolean
@@ -1913,6 +1973,8 @@ export type PersonUncheckedCreateWithoutRoleInput = {
   birthDate?: Date | string | null
   email?: string | null
   phoneNumber?: string | null
+  dataProcessingConsent?: boolean
+  dataProcessingConsentUpdatedAt?: Date | string | null
   marketingEmailConsent?: boolean
   marketingEmailConsentUpdatedAt?: Date | string | null
   marketingSmsConsent?: boolean
@@ -1987,6 +2049,8 @@ export type PersonCreateWithoutAppointmentInput = {
   birthDate?: Date | string | null
   email?: string | null
   phoneNumber?: string | null
+  dataProcessingConsent?: boolean
+  dataProcessingConsentUpdatedAt?: Date | string | null
   marketingEmailConsent?: boolean
   marketingEmailConsentUpdatedAt?: Date | string | null
   marketingSmsConsent?: boolean
@@ -2035,6 +2099,8 @@ export type PersonUncheckedCreateWithoutAppointmentInput = {
   birthDate?: Date | string | null
   email?: string | null
   phoneNumber?: string | null
+  dataProcessingConsent?: boolean
+  dataProcessingConsentUpdatedAt?: Date | string | null
   marketingEmailConsent?: boolean
   marketingEmailConsentUpdatedAt?: Date | string | null
   marketingSmsConsent?: boolean
@@ -2088,6 +2154,8 @@ export type PersonCreateWithoutAppointmentsInput = {
   birthDate?: Date | string | null
   email?: string | null
   phoneNumber?: string | null
+  dataProcessingConsent?: boolean
+  dataProcessingConsentUpdatedAt?: Date | string | null
   marketingEmailConsent?: boolean
   marketingEmailConsentUpdatedAt?: Date | string | null
   marketingSmsConsent?: boolean
@@ -2136,6 +2204,8 @@ export type PersonUncheckedCreateWithoutAppointmentsInput = {
   birthDate?: Date | string | null
   email?: string | null
   phoneNumber?: string | null
+  dataProcessingConsent?: boolean
+  dataProcessingConsentUpdatedAt?: Date | string | null
   marketingEmailConsent?: boolean
   marketingEmailConsentUpdatedAt?: Date | string | null
   marketingSmsConsent?: boolean
@@ -2200,6 +2270,8 @@ export type PersonUpdateWithoutAppointmentInput = {
   birthDate?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   email?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   phoneNumber?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  dataProcessingConsent?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  dataProcessingConsentUpdatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   marketingEmailConsent?: Prisma.BoolFieldUpdateOperationsInput | boolean
   marketingEmailConsentUpdatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   marketingSmsConsent?: Prisma.BoolFieldUpdateOperationsInput | boolean
@@ -2248,6 +2320,8 @@ export type PersonUncheckedUpdateWithoutAppointmentInput = {
   birthDate?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   email?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   phoneNumber?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  dataProcessingConsent?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  dataProcessingConsentUpdatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   marketingEmailConsent?: Prisma.BoolFieldUpdateOperationsInput | boolean
   marketingEmailConsentUpdatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   marketingSmsConsent?: Prisma.BoolFieldUpdateOperationsInput | boolean
@@ -2307,6 +2381,8 @@ export type PersonUpdateWithoutAppointmentsInput = {
   birthDate?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   email?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   phoneNumber?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  dataProcessingConsent?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  dataProcessingConsentUpdatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   marketingEmailConsent?: Prisma.BoolFieldUpdateOperationsInput | boolean
   marketingEmailConsentUpdatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   marketingSmsConsent?: Prisma.BoolFieldUpdateOperationsInput | boolean
@@ -2355,6 +2431,8 @@ export type PersonUncheckedUpdateWithoutAppointmentsInput = {
   birthDate?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   email?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   phoneNumber?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  dataProcessingConsent?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  dataProcessingConsentUpdatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   marketingEmailConsent?: Prisma.BoolFieldUpdateOperationsInput | boolean
   marketingEmailConsentUpdatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   marketingSmsConsent?: Prisma.BoolFieldUpdateOperationsInput | boolean
@@ -2403,6 +2481,8 @@ export type PersonCreateWithoutTreatmentPlansInput = {
   birthDate?: Date | string | null
   email?: string | null
   phoneNumber?: string | null
+  dataProcessingConsent?: boolean
+  dataProcessingConsentUpdatedAt?: Date | string | null
   marketingEmailConsent?: boolean
   marketingEmailConsentUpdatedAt?: Date | string | null
   marketingSmsConsent?: boolean
@@ -2451,6 +2531,8 @@ export type PersonUncheckedCreateWithoutTreatmentPlansInput = {
   birthDate?: Date | string | null
   email?: string | null
   phoneNumber?: string | null
+  dataProcessingConsent?: boolean
+  dataProcessingConsentUpdatedAt?: Date | string | null
   marketingEmailConsent?: boolean
   marketingEmailConsentUpdatedAt?: Date | string | null
   marketingSmsConsent?: boolean
@@ -2515,6 +2597,8 @@ export type PersonUpdateWithoutTreatmentPlansInput = {
   birthDate?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   email?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   phoneNumber?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  dataProcessingConsent?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  dataProcessingConsentUpdatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   marketingEmailConsent?: Prisma.BoolFieldUpdateOperationsInput | boolean
   marketingEmailConsentUpdatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   marketingSmsConsent?: Prisma.BoolFieldUpdateOperationsInput | boolean
@@ -2563,6 +2647,8 @@ export type PersonUncheckedUpdateWithoutTreatmentPlansInput = {
   birthDate?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   email?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   phoneNumber?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  dataProcessingConsent?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  dataProcessingConsentUpdatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   marketingEmailConsent?: Prisma.BoolFieldUpdateOperationsInput | boolean
   marketingEmailConsentUpdatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   marketingSmsConsent?: Prisma.BoolFieldUpdateOperationsInput | boolean
@@ -2611,6 +2697,8 @@ export type PersonCreateWithoutConsultsInput = {
   birthDate?: Date | string | null
   email?: string | null
   phoneNumber?: string | null
+  dataProcessingConsent?: boolean
+  dataProcessingConsentUpdatedAt?: Date | string | null
   marketingEmailConsent?: boolean
   marketingEmailConsentUpdatedAt?: Date | string | null
   marketingSmsConsent?: boolean
@@ -2659,6 +2747,8 @@ export type PersonUncheckedCreateWithoutConsultsInput = {
   birthDate?: Date | string | null
   email?: string | null
   phoneNumber?: string | null
+  dataProcessingConsent?: boolean
+  dataProcessingConsentUpdatedAt?: Date | string | null
   marketingEmailConsent?: boolean
   marketingEmailConsentUpdatedAt?: Date | string | null
   marketingSmsConsent?: boolean
@@ -2723,6 +2813,8 @@ export type PersonUpdateWithoutConsultsInput = {
   birthDate?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   email?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   phoneNumber?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  dataProcessingConsent?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  dataProcessingConsentUpdatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   marketingEmailConsent?: Prisma.BoolFieldUpdateOperationsInput | boolean
   marketingEmailConsentUpdatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   marketingSmsConsent?: Prisma.BoolFieldUpdateOperationsInput | boolean
@@ -2771,6 +2863,8 @@ export type PersonUncheckedUpdateWithoutConsultsInput = {
   birthDate?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   email?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   phoneNumber?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  dataProcessingConsent?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  dataProcessingConsentUpdatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   marketingEmailConsent?: Prisma.BoolFieldUpdateOperationsInput | boolean
   marketingEmailConsentUpdatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   marketingSmsConsent?: Prisma.BoolFieldUpdateOperationsInput | boolean
@@ -2819,6 +2913,8 @@ export type PersonCreateWithoutClinicProccessesInput = {
   birthDate?: Date | string | null
   email?: string | null
   phoneNumber?: string | null
+  dataProcessingConsent?: boolean
+  dataProcessingConsentUpdatedAt?: Date | string | null
   marketingEmailConsent?: boolean
   marketingEmailConsentUpdatedAt?: Date | string | null
   marketingSmsConsent?: boolean
@@ -2867,6 +2963,8 @@ export type PersonUncheckedCreateWithoutClinicProccessesInput = {
   birthDate?: Date | string | null
   email?: string | null
   phoneNumber?: string | null
+  dataProcessingConsent?: boolean
+  dataProcessingConsentUpdatedAt?: Date | string | null
   marketingEmailConsent?: boolean
   marketingEmailConsentUpdatedAt?: Date | string | null
   marketingSmsConsent?: boolean
@@ -2931,6 +3029,8 @@ export type PersonUpdateWithoutClinicProccessesInput = {
   birthDate?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   email?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   phoneNumber?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  dataProcessingConsent?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  dataProcessingConsentUpdatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   marketingEmailConsent?: Prisma.BoolFieldUpdateOperationsInput | boolean
   marketingEmailConsentUpdatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   marketingSmsConsent?: Prisma.BoolFieldUpdateOperationsInput | boolean
@@ -2979,6 +3079,8 @@ export type PersonUncheckedUpdateWithoutClinicProccessesInput = {
   birthDate?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   email?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   phoneNumber?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  dataProcessingConsent?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  dataProcessingConsentUpdatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   marketingEmailConsent?: Prisma.BoolFieldUpdateOperationsInput | boolean
   marketingEmailConsentUpdatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   marketingSmsConsent?: Prisma.BoolFieldUpdateOperationsInput | boolean
@@ -3027,6 +3129,8 @@ export type PersonCreateWithoutDiagnosticsInput = {
   birthDate?: Date | string | null
   email?: string | null
   phoneNumber?: string | null
+  dataProcessingConsent?: boolean
+  dataProcessingConsentUpdatedAt?: Date | string | null
   marketingEmailConsent?: boolean
   marketingEmailConsentUpdatedAt?: Date | string | null
   marketingSmsConsent?: boolean
@@ -3075,6 +3179,8 @@ export type PersonUncheckedCreateWithoutDiagnosticsInput = {
   birthDate?: Date | string | null
   email?: string | null
   phoneNumber?: string | null
+  dataProcessingConsent?: boolean
+  dataProcessingConsentUpdatedAt?: Date | string | null
   marketingEmailConsent?: boolean
   marketingEmailConsentUpdatedAt?: Date | string | null
   marketingSmsConsent?: boolean
@@ -3139,6 +3245,8 @@ export type PersonUpdateWithoutDiagnosticsInput = {
   birthDate?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   email?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   phoneNumber?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  dataProcessingConsent?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  dataProcessingConsentUpdatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   marketingEmailConsent?: Prisma.BoolFieldUpdateOperationsInput | boolean
   marketingEmailConsentUpdatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   marketingSmsConsent?: Prisma.BoolFieldUpdateOperationsInput | boolean
@@ -3187,6 +3295,8 @@ export type PersonUncheckedUpdateWithoutDiagnosticsInput = {
   birthDate?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   email?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   phoneNumber?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  dataProcessingConsent?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  dataProcessingConsentUpdatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   marketingEmailConsent?: Prisma.BoolFieldUpdateOperationsInput | boolean
   marketingEmailConsentUpdatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   marketingSmsConsent?: Prisma.BoolFieldUpdateOperationsInput | boolean
@@ -3235,6 +3345,8 @@ export type PersonCreateWithoutOdontogramInput = {
   birthDate?: Date | string | null
   email?: string | null
   phoneNumber?: string | null
+  dataProcessingConsent?: boolean
+  dataProcessingConsentUpdatedAt?: Date | string | null
   marketingEmailConsent?: boolean
   marketingEmailConsentUpdatedAt?: Date | string | null
   marketingSmsConsent?: boolean
@@ -3283,6 +3395,8 @@ export type PersonUncheckedCreateWithoutOdontogramInput = {
   birthDate?: Date | string | null
   email?: string | null
   phoneNumber?: string | null
+  dataProcessingConsent?: boolean
+  dataProcessingConsentUpdatedAt?: Date | string | null
   marketingEmailConsent?: boolean
   marketingEmailConsentUpdatedAt?: Date | string | null
   marketingSmsConsent?: boolean
@@ -3347,6 +3461,8 @@ export type PersonUpdateWithoutOdontogramInput = {
   birthDate?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   email?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   phoneNumber?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  dataProcessingConsent?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  dataProcessingConsentUpdatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   marketingEmailConsent?: Prisma.BoolFieldUpdateOperationsInput | boolean
   marketingEmailConsentUpdatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   marketingSmsConsent?: Prisma.BoolFieldUpdateOperationsInput | boolean
@@ -3395,6 +3511,8 @@ export type PersonUncheckedUpdateWithoutOdontogramInput = {
   birthDate?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   email?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   phoneNumber?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  dataProcessingConsent?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  dataProcessingConsentUpdatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   marketingEmailConsent?: Prisma.BoolFieldUpdateOperationsInput | boolean
   marketingEmailConsentUpdatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   marketingSmsConsent?: Prisma.BoolFieldUpdateOperationsInput | boolean
@@ -3443,6 +3561,8 @@ export type PersonCreateWithoutPatientPrescriptionsInput = {
   birthDate?: Date | string | null
   email?: string | null
   phoneNumber?: string | null
+  dataProcessingConsent?: boolean
+  dataProcessingConsentUpdatedAt?: Date | string | null
   marketingEmailConsent?: boolean
   marketingEmailConsentUpdatedAt?: Date | string | null
   marketingSmsConsent?: boolean
@@ -3491,6 +3611,8 @@ export type PersonUncheckedCreateWithoutPatientPrescriptionsInput = {
   birthDate?: Date | string | null
   email?: string | null
   phoneNumber?: string | null
+  dataProcessingConsent?: boolean
+  dataProcessingConsentUpdatedAt?: Date | string | null
   marketingEmailConsent?: boolean
   marketingEmailConsentUpdatedAt?: Date | string | null
   marketingSmsConsent?: boolean
@@ -3555,6 +3677,8 @@ export type PersonUpdateWithoutPatientPrescriptionsInput = {
   birthDate?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   email?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   phoneNumber?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  dataProcessingConsent?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  dataProcessingConsentUpdatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   marketingEmailConsent?: Prisma.BoolFieldUpdateOperationsInput | boolean
   marketingEmailConsentUpdatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   marketingSmsConsent?: Prisma.BoolFieldUpdateOperationsInput | boolean
@@ -3603,6 +3727,8 @@ export type PersonUncheckedUpdateWithoutPatientPrescriptionsInput = {
   birthDate?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   email?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   phoneNumber?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  dataProcessingConsent?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  dataProcessingConsentUpdatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   marketingEmailConsent?: Prisma.BoolFieldUpdateOperationsInput | boolean
   marketingEmailConsentUpdatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   marketingSmsConsent?: Prisma.BoolFieldUpdateOperationsInput | boolean
@@ -3651,6 +3777,8 @@ export type PersonCreateWithoutFinancialEntriesInput = {
   birthDate?: Date | string | null
   email?: string | null
   phoneNumber?: string | null
+  dataProcessingConsent?: boolean
+  dataProcessingConsentUpdatedAt?: Date | string | null
   marketingEmailConsent?: boolean
   marketingEmailConsentUpdatedAt?: Date | string | null
   marketingSmsConsent?: boolean
@@ -3699,6 +3827,8 @@ export type PersonUncheckedCreateWithoutFinancialEntriesInput = {
   birthDate?: Date | string | null
   email?: string | null
   phoneNumber?: string | null
+  dataProcessingConsent?: boolean
+  dataProcessingConsentUpdatedAt?: Date | string | null
   marketingEmailConsent?: boolean
   marketingEmailConsentUpdatedAt?: Date | string | null
   marketingSmsConsent?: boolean
@@ -3763,6 +3893,8 @@ export type PersonUpdateWithoutFinancialEntriesInput = {
   birthDate?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   email?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   phoneNumber?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  dataProcessingConsent?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  dataProcessingConsentUpdatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   marketingEmailConsent?: Prisma.BoolFieldUpdateOperationsInput | boolean
   marketingEmailConsentUpdatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   marketingSmsConsent?: Prisma.BoolFieldUpdateOperationsInput | boolean
@@ -3811,6 +3943,8 @@ export type PersonUncheckedUpdateWithoutFinancialEntriesInput = {
   birthDate?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   email?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   phoneNumber?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  dataProcessingConsent?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  dataProcessingConsentUpdatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   marketingEmailConsent?: Prisma.BoolFieldUpdateOperationsInput | boolean
   marketingEmailConsentUpdatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   marketingSmsConsent?: Prisma.BoolFieldUpdateOperationsInput | boolean
@@ -3859,6 +3993,8 @@ export type PersonCreateWithoutXrayAnalysesInput = {
   birthDate?: Date | string | null
   email?: string | null
   phoneNumber?: string | null
+  dataProcessingConsent?: boolean
+  dataProcessingConsentUpdatedAt?: Date | string | null
   marketingEmailConsent?: boolean
   marketingEmailConsentUpdatedAt?: Date | string | null
   marketingSmsConsent?: boolean
@@ -3907,6 +4043,8 @@ export type PersonUncheckedCreateWithoutXrayAnalysesInput = {
   birthDate?: Date | string | null
   email?: string | null
   phoneNumber?: string | null
+  dataProcessingConsent?: boolean
+  dataProcessingConsentUpdatedAt?: Date | string | null
   marketingEmailConsent?: boolean
   marketingEmailConsentUpdatedAt?: Date | string | null
   marketingSmsConsent?: boolean
@@ -3971,6 +4109,8 @@ export type PersonUpdateWithoutXrayAnalysesInput = {
   birthDate?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   email?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   phoneNumber?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  dataProcessingConsent?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  dataProcessingConsentUpdatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   marketingEmailConsent?: Prisma.BoolFieldUpdateOperationsInput | boolean
   marketingEmailConsentUpdatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   marketingSmsConsent?: Prisma.BoolFieldUpdateOperationsInput | boolean
@@ -4019,6 +4159,8 @@ export type PersonUncheckedUpdateWithoutXrayAnalysesInput = {
   birthDate?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   email?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   phoneNumber?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  dataProcessingConsent?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  dataProcessingConsentUpdatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   marketingEmailConsent?: Prisma.BoolFieldUpdateOperationsInput | boolean
   marketingEmailConsentUpdatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   marketingSmsConsent?: Prisma.BoolFieldUpdateOperationsInput | boolean
@@ -4067,6 +4209,8 @@ export type PersonCreateWithoutExamsInput = {
   birthDate?: Date | string | null
   email?: string | null
   phoneNumber?: string | null
+  dataProcessingConsent?: boolean
+  dataProcessingConsentUpdatedAt?: Date | string | null
   marketingEmailConsent?: boolean
   marketingEmailConsentUpdatedAt?: Date | string | null
   marketingSmsConsent?: boolean
@@ -4115,6 +4259,8 @@ export type PersonUncheckedCreateWithoutExamsInput = {
   birthDate?: Date | string | null
   email?: string | null
   phoneNumber?: string | null
+  dataProcessingConsent?: boolean
+  dataProcessingConsentUpdatedAt?: Date | string | null
   marketingEmailConsent?: boolean
   marketingEmailConsentUpdatedAt?: Date | string | null
   marketingSmsConsent?: boolean
@@ -4179,6 +4325,8 @@ export type PersonUpdateWithoutExamsInput = {
   birthDate?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   email?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   phoneNumber?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  dataProcessingConsent?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  dataProcessingConsentUpdatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   marketingEmailConsent?: Prisma.BoolFieldUpdateOperationsInput | boolean
   marketingEmailConsentUpdatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   marketingSmsConsent?: Prisma.BoolFieldUpdateOperationsInput | boolean
@@ -4227,6 +4375,8 @@ export type PersonUncheckedUpdateWithoutExamsInput = {
   birthDate?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   email?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   phoneNumber?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  dataProcessingConsent?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  dataProcessingConsentUpdatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   marketingEmailConsent?: Prisma.BoolFieldUpdateOperationsInput | boolean
   marketingEmailConsentUpdatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   marketingSmsConsent?: Prisma.BoolFieldUpdateOperationsInput | boolean
@@ -4275,6 +4425,8 @@ export type PersonCreateManyAddressInput = {
   birthDate?: Date | string | null
   email?: string | null
   phoneNumber?: string | null
+  dataProcessingConsent?: boolean
+  dataProcessingConsentUpdatedAt?: Date | string | null
   marketingEmailConsent?: boolean
   marketingEmailConsentUpdatedAt?: Date | string | null
   marketingSmsConsent?: boolean
@@ -4312,6 +4464,8 @@ export type PersonUpdateWithoutAddressInput = {
   birthDate?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   email?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   phoneNumber?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  dataProcessingConsent?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  dataProcessingConsentUpdatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   marketingEmailConsent?: Prisma.BoolFieldUpdateOperationsInput | boolean
   marketingEmailConsentUpdatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   marketingSmsConsent?: Prisma.BoolFieldUpdateOperationsInput | boolean
@@ -4360,6 +4514,8 @@ export type PersonUncheckedUpdateWithoutAddressInput = {
   birthDate?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   email?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   phoneNumber?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  dataProcessingConsent?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  dataProcessingConsentUpdatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   marketingEmailConsent?: Prisma.BoolFieldUpdateOperationsInput | boolean
   marketingEmailConsentUpdatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   marketingSmsConsent?: Prisma.BoolFieldUpdateOperationsInput | boolean
@@ -4408,6 +4564,8 @@ export type PersonUncheckedUpdateManyWithoutAddressInput = {
   birthDate?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   email?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   phoneNumber?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  dataProcessingConsent?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  dataProcessingConsentUpdatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   marketingEmailConsent?: Prisma.BoolFieldUpdateOperationsInput | boolean
   marketingEmailConsentUpdatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   marketingSmsConsent?: Prisma.BoolFieldUpdateOperationsInput | boolean
@@ -4445,6 +4603,8 @@ export type PersonCreateManyBranchInput = {
   birthDate?: Date | string | null
   email?: string | null
   phoneNumber?: string | null
+  dataProcessingConsent?: boolean
+  dataProcessingConsentUpdatedAt?: Date | string | null
   marketingEmailConsent?: boolean
   marketingEmailConsentUpdatedAt?: Date | string | null
   marketingSmsConsent?: boolean
@@ -4482,6 +4642,8 @@ export type PersonUpdateWithoutBranchInput = {
   birthDate?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   email?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   phoneNumber?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  dataProcessingConsent?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  dataProcessingConsentUpdatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   marketingEmailConsent?: Prisma.BoolFieldUpdateOperationsInput | boolean
   marketingEmailConsentUpdatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   marketingSmsConsent?: Prisma.BoolFieldUpdateOperationsInput | boolean
@@ -4530,6 +4692,8 @@ export type PersonUncheckedUpdateWithoutBranchInput = {
   birthDate?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   email?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   phoneNumber?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  dataProcessingConsent?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  dataProcessingConsentUpdatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   marketingEmailConsent?: Prisma.BoolFieldUpdateOperationsInput | boolean
   marketingEmailConsentUpdatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   marketingSmsConsent?: Prisma.BoolFieldUpdateOperationsInput | boolean
@@ -4578,6 +4742,8 @@ export type PersonUncheckedUpdateManyWithoutBranchInput = {
   birthDate?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   email?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   phoneNumber?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  dataProcessingConsent?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  dataProcessingConsentUpdatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   marketingEmailConsent?: Prisma.BoolFieldUpdateOperationsInput | boolean
   marketingEmailConsentUpdatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   marketingSmsConsent?: Prisma.BoolFieldUpdateOperationsInput | boolean
@@ -4615,6 +4781,8 @@ export type PersonCreateManyUserInput = {
   birthDate?: Date | string | null
   email?: string | null
   phoneNumber?: string | null
+  dataProcessingConsent?: boolean
+  dataProcessingConsentUpdatedAt?: Date | string | null
   marketingEmailConsent?: boolean
   marketingEmailConsentUpdatedAt?: Date | string | null
   marketingSmsConsent?: boolean
@@ -4652,6 +4820,8 @@ export type PersonUpdateWithoutUserInput = {
   birthDate?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   email?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   phoneNumber?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  dataProcessingConsent?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  dataProcessingConsentUpdatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   marketingEmailConsent?: Prisma.BoolFieldUpdateOperationsInput | boolean
   marketingEmailConsentUpdatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   marketingSmsConsent?: Prisma.BoolFieldUpdateOperationsInput | boolean
@@ -4700,6 +4870,8 @@ export type PersonUncheckedUpdateWithoutUserInput = {
   birthDate?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   email?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   phoneNumber?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  dataProcessingConsent?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  dataProcessingConsentUpdatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   marketingEmailConsent?: Prisma.BoolFieldUpdateOperationsInput | boolean
   marketingEmailConsentUpdatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   marketingSmsConsent?: Prisma.BoolFieldUpdateOperationsInput | boolean
@@ -4748,6 +4920,8 @@ export type PersonUncheckedUpdateManyWithoutUserInput = {
   birthDate?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   email?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   phoneNumber?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  dataProcessingConsent?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  dataProcessingConsentUpdatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   marketingEmailConsent?: Prisma.BoolFieldUpdateOperationsInput | boolean
   marketingEmailConsentUpdatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   marketingSmsConsent?: Prisma.BoolFieldUpdateOperationsInput | boolean
@@ -4785,6 +4959,8 @@ export type PersonCreateManyRoleInput = {
   birthDate?: Date | string | null
   email?: string | null
   phoneNumber?: string | null
+  dataProcessingConsent?: boolean
+  dataProcessingConsentUpdatedAt?: Date | string | null
   marketingEmailConsent?: boolean
   marketingEmailConsentUpdatedAt?: Date | string | null
   marketingSmsConsent?: boolean
@@ -4822,6 +4998,8 @@ export type PersonUpdateWithoutRoleInput = {
   birthDate?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   email?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   phoneNumber?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  dataProcessingConsent?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  dataProcessingConsentUpdatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   marketingEmailConsent?: Prisma.BoolFieldUpdateOperationsInput | boolean
   marketingEmailConsentUpdatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   marketingSmsConsent?: Prisma.BoolFieldUpdateOperationsInput | boolean
@@ -4870,6 +5048,8 @@ export type PersonUncheckedUpdateWithoutRoleInput = {
   birthDate?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   email?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   phoneNumber?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  dataProcessingConsent?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  dataProcessingConsentUpdatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   marketingEmailConsent?: Prisma.BoolFieldUpdateOperationsInput | boolean
   marketingEmailConsentUpdatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   marketingSmsConsent?: Prisma.BoolFieldUpdateOperationsInput | boolean
@@ -4918,6 +5098,8 @@ export type PersonUncheckedUpdateManyWithoutRoleInput = {
   birthDate?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   email?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   phoneNumber?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  dataProcessingConsent?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  dataProcessingConsentUpdatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   marketingEmailConsent?: Prisma.BoolFieldUpdateOperationsInput | boolean
   marketingEmailConsentUpdatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   marketingSmsConsent?: Prisma.BoolFieldUpdateOperationsInput | boolean
@@ -5076,6 +5258,8 @@ export type PersonSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs =
   birthDate?: boolean
   email?: boolean
   phoneNumber?: boolean
+  dataProcessingConsent?: boolean
+  dataProcessingConsentUpdatedAt?: boolean
   marketingEmailConsent?: boolean
   marketingEmailConsentUpdatedAt?: boolean
   marketingSmsConsent?: boolean
@@ -5130,6 +5314,8 @@ export type PersonSelectCreateManyAndReturn<ExtArgs extends runtime.Types.Extens
   birthDate?: boolean
   email?: boolean
   phoneNumber?: boolean
+  dataProcessingConsent?: boolean
+  dataProcessingConsentUpdatedAt?: boolean
   marketingEmailConsent?: boolean
   marketingEmailConsentUpdatedAt?: boolean
   marketingSmsConsent?: boolean
@@ -5172,6 +5358,8 @@ export type PersonSelectUpdateManyAndReturn<ExtArgs extends runtime.Types.Extens
   birthDate?: boolean
   email?: boolean
   phoneNumber?: boolean
+  dataProcessingConsent?: boolean
+  dataProcessingConsentUpdatedAt?: boolean
   marketingEmailConsent?: boolean
   marketingEmailConsentUpdatedAt?: boolean
   marketingSmsConsent?: boolean
@@ -5214,6 +5402,8 @@ export type PersonSelectScalar = {
   birthDate?: boolean
   email?: boolean
   phoneNumber?: boolean
+  dataProcessingConsent?: boolean
+  dataProcessingConsentUpdatedAt?: boolean
   marketingEmailConsent?: boolean
   marketingEmailConsentUpdatedAt?: boolean
   marketingSmsConsent?: boolean
@@ -5245,7 +5435,7 @@ export type PersonSelectScalar = {
   deletedAt?: boolean
 }
 
-export type PersonOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "firstName" | "lastName" | "birthDate" | "email" | "phoneNumber" | "marketingEmailConsent" | "marketingEmailConsentUpdatedAt" | "marketingSmsConsent" | "marketingSmsConsentUpdatedAt" | "avatar" | "medicalNotes" | "idNumber" | "nif" | "profession" | "bloodType" | "insuranceProvider" | "insurancePlan" | "insurancePolicyNumber" | "insuranceCoveragePercent" | "emergencyContactName" | "emergencyContactRelationship" | "emergencyContactPhone" | "allergies" | "medicalConditions" | "medications" | "gender" | "isActive" | "branchId" | "addressId" | "userId" | "roleId" | "createdAt" | "updatedAt" | "deletedAt", ExtArgs["result"]["person"]>
+export type PersonOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "firstName" | "lastName" | "birthDate" | "email" | "phoneNumber" | "dataProcessingConsent" | "dataProcessingConsentUpdatedAt" | "marketingEmailConsent" | "marketingEmailConsentUpdatedAt" | "marketingSmsConsent" | "marketingSmsConsentUpdatedAt" | "avatar" | "medicalNotes" | "idNumber" | "nif" | "profession" | "bloodType" | "insuranceProvider" | "insurancePlan" | "insurancePolicyNumber" | "insuranceCoveragePercent" | "emergencyContactName" | "emergencyContactRelationship" | "emergencyContactPhone" | "allergies" | "medicalConditions" | "medications" | "gender" | "isActive" | "branchId" | "addressId" | "userId" | "roleId" | "createdAt" | "updatedAt" | "deletedAt", ExtArgs["result"]["person"]>
 export type PersonInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   address?: boolean | Prisma.AddressDefaultArgs<ExtArgs>
   branch?: boolean | Prisma.BranchDefaultArgs<ExtArgs>
@@ -5303,6 +5493,8 @@ export type $PersonPayload<ExtArgs extends runtime.Types.Extensions.InternalArgs
     birthDate: Date | null
     email: string | null
     phoneNumber: string | null
+    dataProcessingConsent: boolean
+    dataProcessingConsentUpdatedAt: Date | null
     marketingEmailConsent: boolean
     marketingEmailConsentUpdatedAt: Date | null
     marketingSmsConsent: boolean
@@ -5776,6 +5968,8 @@ export interface PersonFieldRefs {
   readonly birthDate: Prisma.FieldRef<"Person", 'DateTime'>
   readonly email: Prisma.FieldRef<"Person", 'String'>
   readonly phoneNumber: Prisma.FieldRef<"Person", 'String'>
+  readonly dataProcessingConsent: Prisma.FieldRef<"Person", 'Boolean'>
+  readonly dataProcessingConsentUpdatedAt: Prisma.FieldRef<"Person", 'DateTime'>
   readonly marketingEmailConsent: Prisma.FieldRef<"Person", 'Boolean'>
   readonly marketingEmailConsentUpdatedAt: Prisma.FieldRef<"Person", 'DateTime'>
   readonly marketingSmsConsent: Prisma.FieldRef<"Person", 'Boolean'>

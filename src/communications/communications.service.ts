@@ -20,7 +20,7 @@ export class CommunicationsService {
   constructor(
     private readonly prisma: PrismaService,
     private readonly delivery: CommunicationDeliveryService,
-  ) {}
+  ) { }
 
   async listCampaigns(user: AuthUser) {
     this.ensureAdmin(user);
@@ -52,8 +52,8 @@ export class CommunicationsService {
         isActive: true,
         Role: { slug: 'patient' },
         ...(channel === 'EMAIL'
-          ? { marketingEmailConsent: true }
-          : { marketingSmsConsent: true }),
+          ? { marketingEmailConsent: false }
+          : { marketingSmsConsent: false }),
         ...(search?.trim() && {
           OR: [
             { firstName: { contains: search.trim(), mode: 'insensitive' } },
@@ -116,8 +116,8 @@ export class CommunicationsService {
         isActive: true,
         Role: { slug: 'patient' },
         ...(input.channel === 'EMAIL'
-          ? { marketingEmailConsent: true }
-          : { marketingSmsConsent: true }),
+          ? { marketingEmailConsent: false }
+          : { marketingSmsConsent: false }),
       },
       select: {
         id: true,
@@ -221,7 +221,7 @@ export class CommunicationsService {
   async getMyMarketingConsent(user: AuthUser) {
     const patient = await this.findPatientConsentRecord(user);
     return {
-      marketingEmailConsent: patient.marketingEmailConsent,
+      marketingEmailConsent: patient.marketingSmsConsent,
       marketingEmailConsentUpdatedAt: patient.marketingEmailConsentUpdatedAt,
       marketingSmsConsent: patient.marketingSmsConsent,
       marketingSmsConsentUpdatedAt: patient.marketingSmsConsentUpdatedAt,
@@ -238,7 +238,7 @@ export class CommunicationsService {
       where: { id: patient.id },
       data: {
         marketingEmailConsent: input.marketingEmailConsent,
-        ...(input.marketingEmailConsent !== patient.marketingEmailConsent && {
+        ...(input.marketingEmailConsent !== patient.marketingSmsConsent && {
           marketingEmailConsentUpdatedAt: changedAt,
         }),
         marketingSmsConsent: input.marketingSmsConsent,
@@ -268,7 +268,7 @@ export class CommunicationsService {
       },
       select: {
         id: true,
-        marketingEmailConsent: true,
+        marketingEmailConsent: false,
         marketingEmailConsentUpdatedAt: true,
         marketingSmsConsent: true,
         marketingSmsConsentUpdatedAt: true,

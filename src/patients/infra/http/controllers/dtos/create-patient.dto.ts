@@ -2,6 +2,7 @@ import {
   ArrayMaxSize,
   ArrayUnique,
   IsArray,
+  IsBoolean,
   IsDateString,
   IsEmail,
   IsEnum,
@@ -54,6 +55,10 @@ export class CreatePatientDto {
   @IsString()
   @MaxLength(4000)
   medicalNotes?: string;
+
+  @IsOptional()
+  @IsBoolean()
+  dataProcessingConsent?: boolean;
 
   @IsOptional()
   @IsString()

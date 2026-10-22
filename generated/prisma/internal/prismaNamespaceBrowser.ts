@@ -257,6 +257,8 @@ export const PersonScalarFieldEnum = {
   birthDate: 'birthDate',
   email: 'email',
   phoneNumber: 'phoneNumber',
+  dataProcessingConsent: 'dataProcessingConsent',
+  dataProcessingConsentUpdatedAt: 'dataProcessingConsentUpdatedAt',
   marketingEmailConsent: 'marketingEmailConsent',
   marketingEmailConsentUpdatedAt: 'marketingEmailConsentUpdatedAt',
   marketingSmsConsent: 'marketingSmsConsent',

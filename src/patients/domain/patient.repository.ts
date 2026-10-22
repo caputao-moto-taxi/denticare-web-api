@@ -9,6 +9,7 @@ export type PatientCreateCommand = {
   gender?: 'MALE' | 'FEMALE' | 'OTHER' | null;
   address: string;
   medicalNotes?: string;
+  dataProcessingConsent?: boolean;
   idNumber?: string;
   nif?: string;
   profession?: string;
@@ -25,7 +26,10 @@ export type PatientCreateCommand = {
   medications?: string[];
 };
 
-export type PatientUpdateCommand = Partial<PatientCreateCommand>;
+export type PatientUpdateCommand = Partial<PatientCreateCommand> & {
+  marketingEmailConsent?: boolean;
+  marketingSmsConsent?: boolean;
+};
 
 export type PatientStatusCommand = { active: boolean };
 

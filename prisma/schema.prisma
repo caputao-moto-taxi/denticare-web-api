@@ -192,6 +192,8 @@ model Person {
   birthDate                    DateTime?
   email                        String?                 @unique
   phoneNumber                  String?
+  dataProcessingConsent        Boolean                 @default(false)
+  dataProcessingConsentUpdatedAt DateTime?
   marketingEmailConsent        Boolean                 @default(false)
   marketingEmailConsentUpdatedAt DateTime?
   marketingSmsConsent          Boolean                 @default(false)
