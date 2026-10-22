@@ -268,6 +268,11 @@ export type XRayAnalysis = Prisma.XRayAnalysisModel
  */
 export type PatientExam = Prisma.PatientExamModel
 /**
+ * Model PatientDocument
+ * 
+ */
+export type PatientDocument = Prisma.PatientDocumentModel
+/**
  * Model NewLatter
  * 
  */

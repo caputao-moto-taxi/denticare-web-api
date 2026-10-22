@@ -14,6 +14,7 @@ describe('NodemailerAuthEmailService', () => {
     user: process.env.GMAIL_USER,
     appPassword: process.env.GMAIL_APP_PASSWORD,
     frontendUrl: process.env.FRONTEND_URL,
+    smtpTlsCa: process.env.SMTP_TLS_CA_CERT,
   };
   let sendMailMock: jest.Mock;
 
@@ -22,6 +23,7 @@ describe('NodemailerAuthEmailService', () => {
     process.env.GMAIL_USER = 'mailer@example.test';
     process.env.GMAIL_APP_PASSWORD = 'abcdefghijklmnop';
     process.env.FRONTEND_URL = 'https://dentcare.example';
+    delete process.env.SMTP_TLS_CA_CERT;
     sendMailMock = jest.fn().mockResolvedValue({});
     createTransportMock.mockReturnValue({ sendMail: sendMailMock });
   });
@@ -41,6 +43,11 @@ describe('NodemailerAuthEmailService', () => {
       delete process.env.FRONTEND_URL;
     } else {
       process.env.FRONTEND_URL = originalEnvironment.frontendUrl;
+    }
+    if (originalEnvironment.smtpTlsCa === undefined) {
+      delete process.env.SMTP_TLS_CA_CERT;
+    } else {
+      process.env.SMTP_TLS_CA_CERT = originalEnvironment.smtpTlsCa;
     }
   });
 
@@ -82,6 +89,22 @@ describe('NodemailerAuthEmailService', () => {
     expect(sendMailMock).not.toHaveBeenCalled();
   });
 
+  it('adds an explicitly configured trusted CA without disabling TLS checks', async () => {
+    process.env.SMTP_TLS_CA_CERT =
+      '-----BEGIN CERTIFICATE-----\\ntrusted-ca\\n-----END CERTIFICATE-----';
+    const service = new NodemailerAuthEmailService();
+
+    service.assertConfigured();
+
+    expect(createTransportMock).toHaveBeenCalledWith(
+      expect.objectContaining({
+        tls: {
+          ca: '-----BEGIN CERTIFICATE-----\ntrusted-ca\n-----END CERTIFICATE-----',
+        },
+      }),
+    );
+  });
+
   it('converts SMTP authentication failures to a safe service error', async () => {
     const loggerError = jest
       .spyOn(Logger.prototype, 'error')
@@ -100,6 +123,30 @@ describe('NodemailerAuthEmailService', () => {
     ).rejects.toThrow(ServiceUnavailableException);
     expect(loggerError).toHaveBeenCalledWith(
       'Email delivery failed (code=EAUTH, smtp=none, command=unknown)',
+    );
+    loggerError.mockRestore();
+  });
+
+  it('logs actionable guidance for SMTP certificate verification failures', async () => {
+    const loggerError = jest
+      .spyOn(Logger.prototype, 'error')
+      .mockImplementation();
+    sendMailMock.mockRejectedValue(
+      Object.assign(new Error('certificate rejected'), {
+        code: 'SELF_SIGNED_CERT_IN_CHAIN',
+      }),
+    );
+    const service = new NodemailerAuthEmailService();
+
+    await expect(
+      service.sendActivationEmail({
+        email: 'patient@example.test',
+        displayName: 'Ana',
+        token: 'token',
+      }),
+    ).rejects.toThrow(ServiceUnavailableException);
+    expect(loggerError).toHaveBeenCalledWith(
+      expect.stringContaining('configure SMTP_TLS_CA_CERT'),
     );
     loggerError.mockRestore();
   });

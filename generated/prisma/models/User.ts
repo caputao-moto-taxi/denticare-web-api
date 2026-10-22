@@ -312,6 +312,7 @@ export type UserWhereInput = {
   treatmentPlans?: Prisma.TreatmentPlanListRelationFilter
   patientPrescriptions?: Prisma.PatientPrescriptionListRelationFilter
   xrayAnalyses?: Prisma.XRayAnalysisListRelationFilter
+  authoredPatientDocuments?: Prisma.PatientDocumentListRelationFilter
   UserBranch?: Prisma.UserBranchListRelationFilter
   UserRole?: Prisma.UserRoleListRelationFilter
   UserPermission?: Prisma.UserPermissionListRelationFilter
@@ -356,6 +357,7 @@ export type UserOrderByWithRelationInput = {
   treatmentPlans?: Prisma.TreatmentPlanOrderByRelationAggregateInput
   patientPrescriptions?: Prisma.PatientPrescriptionOrderByRelationAggregateInput
   xrayAnalyses?: Prisma.XRayAnalysisOrderByRelationAggregateInput
+  authoredPatientDocuments?: Prisma.PatientDocumentOrderByRelationAggregateInput
   UserBranch?: Prisma.UserBranchOrderByRelationAggregateInput
   UserRole?: Prisma.UserRoleOrderByRelationAggregateInput
   UserPermission?: Prisma.UserPermissionOrderByRelationAggregateInput
@@ -403,6 +405,7 @@ export type UserWhereUniqueInput = Prisma.AtLeast<{
   treatmentPlans?: Prisma.TreatmentPlanListRelationFilter
   patientPrescriptions?: Prisma.PatientPrescriptionListRelationFilter
   xrayAnalyses?: Prisma.XRayAnalysisListRelationFilter
+  authoredPatientDocuments?: Prisma.PatientDocumentListRelationFilter
   UserBranch?: Prisma.UserBranchListRelationFilter
   UserRole?: Prisma.UserRoleListRelationFilter
   UserPermission?: Prisma.UserPermissionListRelationFilter
@@ -488,6 +491,7 @@ export type UserCreateInput = {
   treatmentPlans?: Prisma.TreatmentPlanCreateNestedManyWithoutDoctorInput
   patientPrescriptions?: Prisma.PatientPrescriptionCreateNestedManyWithoutDoctorInput
   xrayAnalyses?: Prisma.XRayAnalysisCreateNestedManyWithoutAnalyzedByInput
+  authoredPatientDocuments?: Prisma.PatientDocumentCreateNestedManyWithoutAuthorInput
   UserBranch?: Prisma.UserBranchCreateNestedManyWithoutUserInput
   UserRole?: Prisma.UserRoleCreateNestedManyWithoutUserInput
   UserPermission?: Prisma.UserPermissionCreateNestedManyWithoutUserInput
@@ -532,6 +536,7 @@ export type UserUncheckedCreateInput = {
   treatmentPlans?: Prisma.TreatmentPlanUncheckedCreateNestedManyWithoutDoctorInput
   patientPrescriptions?: Prisma.PatientPrescriptionUncheckedCreateNestedManyWithoutDoctorInput
   xrayAnalyses?: Prisma.XRayAnalysisUncheckedCreateNestedManyWithoutAnalyzedByInput
+  authoredPatientDocuments?: Prisma.PatientDocumentUncheckedCreateNestedManyWithoutAuthorInput
   UserBranch?: Prisma.UserBranchUncheckedCreateNestedManyWithoutUserInput
   UserRole?: Prisma.UserRoleUncheckedCreateNestedManyWithoutUserInput
   UserPermission?: Prisma.UserPermissionUncheckedCreateNestedManyWithoutUserInput
@@ -570,6 +575,7 @@ export type UserUpdateInput = {
   treatmentPlans?: Prisma.TreatmentPlanUpdateManyWithoutDoctorNestedInput
   patientPrescriptions?: Prisma.PatientPrescriptionUpdateManyWithoutDoctorNestedInput
   xrayAnalyses?: Prisma.XRayAnalysisUpdateManyWithoutAnalyzedByNestedInput
+  authoredPatientDocuments?: Prisma.PatientDocumentUpdateManyWithoutAuthorNestedInput
   UserBranch?: Prisma.UserBranchUpdateManyWithoutUserNestedInput
   UserRole?: Prisma.UserRoleUpdateManyWithoutUserNestedInput
   UserPermission?: Prisma.UserPermissionUpdateManyWithoutUserNestedInput
@@ -614,6 +620,7 @@ export type UserUncheckedUpdateInput = {
   treatmentPlans?: Prisma.TreatmentPlanUncheckedUpdateManyWithoutDoctorNestedInput
   patientPrescriptions?: Prisma.PatientPrescriptionUncheckedUpdateManyWithoutDoctorNestedInput
   xrayAnalyses?: Prisma.XRayAnalysisUncheckedUpdateManyWithoutAnalyzedByNestedInput
+  authoredPatientDocuments?: Prisma.PatientDocumentUncheckedUpdateManyWithoutAuthorNestedInput
   UserBranch?: Prisma.UserBranchUncheckedUpdateManyWithoutUserNestedInput
   UserRole?: Prisma.UserRoleUncheckedUpdateManyWithoutUserNestedInput
   UserPermission?: Prisma.UserPermissionUncheckedUpdateManyWithoutUserNestedInput
@@ -1166,6 +1173,20 @@ export type UserUpdateOneRequiredWithoutXrayAnalysesNestedInput = {
   update?: Prisma.XOR<Prisma.XOR<Prisma.UserUpdateToOneWithWhereWithoutXrayAnalysesInput, Prisma.UserUpdateWithoutXrayAnalysesInput>, Prisma.UserUncheckedUpdateWithoutXrayAnalysesInput>
 }
 
+export type UserCreateNestedOneWithoutAuthoredPatientDocumentsInput = {
+  create?: Prisma.XOR<Prisma.UserCreateWithoutAuthoredPatientDocumentsInput, Prisma.UserUncheckedCreateWithoutAuthoredPatientDocumentsInput>
+  connectOrCreate?: Prisma.UserCreateOrConnectWithoutAuthoredPatientDocumentsInput
+  connect?: Prisma.UserWhereUniqueInput
+}
+
+export type UserUpdateOneRequiredWithoutAuthoredPatientDocumentsNestedInput = {
+  create?: Prisma.XOR<Prisma.UserCreateWithoutAuthoredPatientDocumentsInput, Prisma.UserUncheckedCreateWithoutAuthoredPatientDocumentsInput>
+  connectOrCreate?: Prisma.UserCreateOrConnectWithoutAuthoredPatientDocumentsInput
+  upsert?: Prisma.UserUpsertWithoutAuthoredPatientDocumentsInput
+  connect?: Prisma.UserWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.UserUpdateToOneWithWhereWithoutAuthoredPatientDocumentsInput, Prisma.UserUpdateWithoutAuthoredPatientDocumentsInput>, Prisma.UserUncheckedUpdateWithoutAuthoredPatientDocumentsInput>
+}
+
 export type UserCreateNestedOneWithoutAuditsInput = {
   create?: Prisma.XOR<Prisma.UserCreateWithoutAuditsInput, Prisma.UserUncheckedCreateWithoutAuditsInput>
   connectOrCreate?: Prisma.UserCreateOrConnectWithoutAuditsInput
@@ -1239,6 +1260,7 @@ export type UserCreateWithoutAddressInput = {
   treatmentPlans?: Prisma.TreatmentPlanCreateNestedManyWithoutDoctorInput
   patientPrescriptions?: Prisma.PatientPrescriptionCreateNestedManyWithoutDoctorInput
   xrayAnalyses?: Prisma.XRayAnalysisCreateNestedManyWithoutAnalyzedByInput
+  authoredPatientDocuments?: Prisma.PatientDocumentCreateNestedManyWithoutAuthorInput
   UserBranch?: Prisma.UserBranchCreateNestedManyWithoutUserInput
   UserRole?: Prisma.UserRoleCreateNestedManyWithoutUserInput
   UserPermission?: Prisma.UserPermissionCreateNestedManyWithoutUserInput
@@ -1281,6 +1303,7 @@ export type UserUncheckedCreateWithoutAddressInput = {
   treatmentPlans?: Prisma.TreatmentPlanUncheckedCreateNestedManyWithoutDoctorInput
   patientPrescriptions?: Prisma.PatientPrescriptionUncheckedCreateNestedManyWithoutDoctorInput
   xrayAnalyses?: Prisma.XRayAnalysisUncheckedCreateNestedManyWithoutAnalyzedByInput
+  authoredPatientDocuments?: Prisma.PatientDocumentUncheckedCreateNestedManyWithoutAuthorInput
   UserBranch?: Prisma.UserBranchUncheckedCreateNestedManyWithoutUserInput
   UserRole?: Prisma.UserRoleUncheckedCreateNestedManyWithoutUserInput
   UserPermission?: Prisma.UserPermissionUncheckedCreateNestedManyWithoutUserInput
@@ -1366,6 +1389,7 @@ export type UserCreateWithoutBranchInput = {
   treatmentPlans?: Prisma.TreatmentPlanCreateNestedManyWithoutDoctorInput
   patientPrescriptions?: Prisma.PatientPrescriptionCreateNestedManyWithoutDoctorInput
   xrayAnalyses?: Prisma.XRayAnalysisCreateNestedManyWithoutAnalyzedByInput
+  authoredPatientDocuments?: Prisma.PatientDocumentCreateNestedManyWithoutAuthorInput
   UserBranch?: Prisma.UserBranchCreateNestedManyWithoutUserInput
   UserRole?: Prisma.UserRoleCreateNestedManyWithoutUserInput
   UserPermission?: Prisma.UserPermissionCreateNestedManyWithoutUserInput
@@ -1408,6 +1432,7 @@ export type UserUncheckedCreateWithoutBranchInput = {
   treatmentPlans?: Prisma.TreatmentPlanUncheckedCreateNestedManyWithoutDoctorInput
   patientPrescriptions?: Prisma.PatientPrescriptionUncheckedCreateNestedManyWithoutDoctorInput
   xrayAnalyses?: Prisma.XRayAnalysisUncheckedCreateNestedManyWithoutAnalyzedByInput
+  authoredPatientDocuments?: Prisma.PatientDocumentUncheckedCreateNestedManyWithoutAuthorInput
   UserBranch?: Prisma.UserBranchUncheckedCreateNestedManyWithoutUserInput
   UserRole?: Prisma.UserRoleUncheckedCreateNestedManyWithoutUserInput
   UserPermission?: Prisma.UserPermissionUncheckedCreateNestedManyWithoutUserInput
@@ -1471,6 +1496,7 @@ export type UserCreateWithoutPersonInput = {
   treatmentPlans?: Prisma.TreatmentPlanCreateNestedManyWithoutDoctorInput
   patientPrescriptions?: Prisma.PatientPrescriptionCreateNestedManyWithoutDoctorInput
   xrayAnalyses?: Prisma.XRayAnalysisCreateNestedManyWithoutAnalyzedByInput
+  authoredPatientDocuments?: Prisma.PatientDocumentCreateNestedManyWithoutAuthorInput
   UserBranch?: Prisma.UserBranchCreateNestedManyWithoutUserInput
   UserRole?: Prisma.UserRoleCreateNestedManyWithoutUserInput
   UserPermission?: Prisma.UserPermissionCreateNestedManyWithoutUserInput
@@ -1514,6 +1540,7 @@ export type UserUncheckedCreateWithoutPersonInput = {
   treatmentPlans?: Prisma.TreatmentPlanUncheckedCreateNestedManyWithoutDoctorInput
   patientPrescriptions?: Prisma.PatientPrescriptionUncheckedCreateNestedManyWithoutDoctorInput
   xrayAnalyses?: Prisma.XRayAnalysisUncheckedCreateNestedManyWithoutAnalyzedByInput
+  authoredPatientDocuments?: Prisma.PatientDocumentUncheckedCreateNestedManyWithoutAuthorInput
   UserBranch?: Prisma.UserBranchUncheckedCreateNestedManyWithoutUserInput
   UserRole?: Prisma.UserRoleUncheckedCreateNestedManyWithoutUserInput
   UserPermission?: Prisma.UserPermissionUncheckedCreateNestedManyWithoutUserInput
@@ -1567,6 +1594,7 @@ export type UserUpdateWithoutPersonInput = {
   treatmentPlans?: Prisma.TreatmentPlanUpdateManyWithoutDoctorNestedInput
   patientPrescriptions?: Prisma.PatientPrescriptionUpdateManyWithoutDoctorNestedInput
   xrayAnalyses?: Prisma.XRayAnalysisUpdateManyWithoutAnalyzedByNestedInput
+  authoredPatientDocuments?: Prisma.PatientDocumentUpdateManyWithoutAuthorNestedInput
   UserBranch?: Prisma.UserBranchUpdateManyWithoutUserNestedInput
   UserRole?: Prisma.UserRoleUpdateManyWithoutUserNestedInput
   UserPermission?: Prisma.UserPermissionUpdateManyWithoutUserNestedInput
@@ -1610,6 +1638,7 @@ export type UserUncheckedUpdateWithoutPersonInput = {
   treatmentPlans?: Prisma.TreatmentPlanUncheckedUpdateManyWithoutDoctorNestedInput
   patientPrescriptions?: Prisma.PatientPrescriptionUncheckedUpdateManyWithoutDoctorNestedInput
   xrayAnalyses?: Prisma.XRayAnalysisUncheckedUpdateManyWithoutAnalyzedByNestedInput
+  authoredPatientDocuments?: Prisma.PatientDocumentUncheckedUpdateManyWithoutAuthorNestedInput
   UserBranch?: Prisma.UserBranchUncheckedUpdateManyWithoutUserNestedInput
   UserRole?: Prisma.UserRoleUncheckedUpdateManyWithoutUserNestedInput
   UserPermission?: Prisma.UserPermissionUncheckedUpdateManyWithoutUserNestedInput
@@ -1648,6 +1677,7 @@ export type UserCreateWithoutRoleInput = {
   treatmentPlans?: Prisma.TreatmentPlanCreateNestedManyWithoutDoctorInput
   patientPrescriptions?: Prisma.PatientPrescriptionCreateNestedManyWithoutDoctorInput
   xrayAnalyses?: Prisma.XRayAnalysisCreateNestedManyWithoutAnalyzedByInput
+  authoredPatientDocuments?: Prisma.PatientDocumentCreateNestedManyWithoutAuthorInput
   UserBranch?: Prisma.UserBranchCreateNestedManyWithoutUserInput
   UserRole?: Prisma.UserRoleCreateNestedManyWithoutUserInput
   UserPermission?: Prisma.UserPermissionCreateNestedManyWithoutUserInput
@@ -1690,6 +1720,7 @@ export type UserUncheckedCreateWithoutRoleInput = {
   treatmentPlans?: Prisma.TreatmentPlanUncheckedCreateNestedManyWithoutDoctorInput
   patientPrescriptions?: Prisma.PatientPrescriptionUncheckedCreateNestedManyWithoutDoctorInput
   xrayAnalyses?: Prisma.XRayAnalysisUncheckedCreateNestedManyWithoutAnalyzedByInput
+  authoredPatientDocuments?: Prisma.PatientDocumentUncheckedCreateNestedManyWithoutAuthorInput
   UserBranch?: Prisma.UserBranchUncheckedCreateNestedManyWithoutUserInput
   UserRole?: Prisma.UserRoleUncheckedCreateNestedManyWithoutUserInput
   UserPermission?: Prisma.UserPermissionUncheckedCreateNestedManyWithoutUserInput
@@ -1754,6 +1785,7 @@ export type UserCreateWithoutUserBranchInput = {
   treatmentPlans?: Prisma.TreatmentPlanCreateNestedManyWithoutDoctorInput
   patientPrescriptions?: Prisma.PatientPrescriptionCreateNestedManyWithoutDoctorInput
   xrayAnalyses?: Prisma.XRayAnalysisCreateNestedManyWithoutAnalyzedByInput
+  authoredPatientDocuments?: Prisma.PatientDocumentCreateNestedManyWithoutAuthorInput
   UserRole?: Prisma.UserRoleCreateNestedManyWithoutUserInput
   UserPermission?: Prisma.UserPermissionCreateNestedManyWithoutUserInput
   refreshTokens?: Prisma.RefreshTokenCreateNestedManyWithoutUserInput
@@ -1797,6 +1829,7 @@ export type UserUncheckedCreateWithoutUserBranchInput = {
   treatmentPlans?: Prisma.TreatmentPlanUncheckedCreateNestedManyWithoutDoctorInput
   patientPrescriptions?: Prisma.PatientPrescriptionUncheckedCreateNestedManyWithoutDoctorInput
   xrayAnalyses?: Prisma.XRayAnalysisUncheckedCreateNestedManyWithoutAnalyzedByInput
+  authoredPatientDocuments?: Prisma.PatientDocumentUncheckedCreateNestedManyWithoutAuthorInput
   UserRole?: Prisma.UserRoleUncheckedCreateNestedManyWithoutUserInput
   UserPermission?: Prisma.UserPermissionUncheckedCreateNestedManyWithoutUserInput
   refreshTokens?: Prisma.RefreshTokenUncheckedCreateNestedManyWithoutUserInput
@@ -1850,6 +1883,7 @@ export type UserUpdateWithoutUserBranchInput = {
   treatmentPlans?: Prisma.TreatmentPlanUpdateManyWithoutDoctorNestedInput
   patientPrescriptions?: Prisma.PatientPrescriptionUpdateManyWithoutDoctorNestedInput
   xrayAnalyses?: Prisma.XRayAnalysisUpdateManyWithoutAnalyzedByNestedInput
+  authoredPatientDocuments?: Prisma.PatientDocumentUpdateManyWithoutAuthorNestedInput
   UserRole?: Prisma.UserRoleUpdateManyWithoutUserNestedInput
   UserPermission?: Prisma.UserPermissionUpdateManyWithoutUserNestedInput
   refreshTokens?: Prisma.RefreshTokenUpdateManyWithoutUserNestedInput
@@ -1893,6 +1927,7 @@ export type UserUncheckedUpdateWithoutUserBranchInput = {
   treatmentPlans?: Prisma.TreatmentPlanUncheckedUpdateManyWithoutDoctorNestedInput
   patientPrescriptions?: Prisma.PatientPrescriptionUncheckedUpdateManyWithoutDoctorNestedInput
   xrayAnalyses?: Prisma.XRayAnalysisUncheckedUpdateManyWithoutAnalyzedByNestedInput
+  authoredPatientDocuments?: Prisma.PatientDocumentUncheckedUpdateManyWithoutAuthorNestedInput
   UserRole?: Prisma.UserRoleUncheckedUpdateManyWithoutUserNestedInput
   UserPermission?: Prisma.UserPermissionUncheckedUpdateManyWithoutUserNestedInput
   refreshTokens?: Prisma.RefreshTokenUncheckedUpdateManyWithoutUserNestedInput
@@ -1930,6 +1965,7 @@ export type UserCreateWithoutUserPermissionInput = {
   treatmentPlans?: Prisma.TreatmentPlanCreateNestedManyWithoutDoctorInput
   patientPrescriptions?: Prisma.PatientPrescriptionCreateNestedManyWithoutDoctorInput
   xrayAnalyses?: Prisma.XRayAnalysisCreateNestedManyWithoutAnalyzedByInput
+  authoredPatientDocuments?: Prisma.PatientDocumentCreateNestedManyWithoutAuthorInput
   UserBranch?: Prisma.UserBranchCreateNestedManyWithoutUserInput
   UserRole?: Prisma.UserRoleCreateNestedManyWithoutUserInput
   refreshTokens?: Prisma.RefreshTokenCreateNestedManyWithoutUserInput
@@ -1973,6 +2009,7 @@ export type UserUncheckedCreateWithoutUserPermissionInput = {
   treatmentPlans?: Prisma.TreatmentPlanUncheckedCreateNestedManyWithoutDoctorInput
   patientPrescriptions?: Prisma.PatientPrescriptionUncheckedCreateNestedManyWithoutDoctorInput
   xrayAnalyses?: Prisma.XRayAnalysisUncheckedCreateNestedManyWithoutAnalyzedByInput
+  authoredPatientDocuments?: Prisma.PatientDocumentUncheckedCreateNestedManyWithoutAuthorInput
   UserBranch?: Prisma.UserBranchUncheckedCreateNestedManyWithoutUserInput
   UserRole?: Prisma.UserRoleUncheckedCreateNestedManyWithoutUserInput
   refreshTokens?: Prisma.RefreshTokenUncheckedCreateNestedManyWithoutUserInput
@@ -2026,6 +2063,7 @@ export type UserUpdateWithoutUserPermissionInput = {
   treatmentPlans?: Prisma.TreatmentPlanUpdateManyWithoutDoctorNestedInput
   patientPrescriptions?: Prisma.PatientPrescriptionUpdateManyWithoutDoctorNestedInput
   xrayAnalyses?: Prisma.XRayAnalysisUpdateManyWithoutAnalyzedByNestedInput
+  authoredPatientDocuments?: Prisma.PatientDocumentUpdateManyWithoutAuthorNestedInput
   UserBranch?: Prisma.UserBranchUpdateManyWithoutUserNestedInput
   UserRole?: Prisma.UserRoleUpdateManyWithoutUserNestedInput
   refreshTokens?: Prisma.RefreshTokenUpdateManyWithoutUserNestedInput
@@ -2069,6 +2107,7 @@ export type UserUncheckedUpdateWithoutUserPermissionInput = {
   treatmentPlans?: Prisma.TreatmentPlanUncheckedUpdateManyWithoutDoctorNestedInput
   patientPrescriptions?: Prisma.PatientPrescriptionUncheckedUpdateManyWithoutDoctorNestedInput
   xrayAnalyses?: Prisma.XRayAnalysisUncheckedUpdateManyWithoutAnalyzedByNestedInput
+  authoredPatientDocuments?: Prisma.PatientDocumentUncheckedUpdateManyWithoutAuthorNestedInput
   UserBranch?: Prisma.UserBranchUncheckedUpdateManyWithoutUserNestedInput
   UserRole?: Prisma.UserRoleUncheckedUpdateManyWithoutUserNestedInput
   refreshTokens?: Prisma.RefreshTokenUncheckedUpdateManyWithoutUserNestedInput
@@ -2106,6 +2145,7 @@ export type UserCreateWithoutUserRoleInput = {
   treatmentPlans?: Prisma.TreatmentPlanCreateNestedManyWithoutDoctorInput
   patientPrescriptions?: Prisma.PatientPrescriptionCreateNestedManyWithoutDoctorInput
   xrayAnalyses?: Prisma.XRayAnalysisCreateNestedManyWithoutAnalyzedByInput
+  authoredPatientDocuments?: Prisma.PatientDocumentCreateNestedManyWithoutAuthorInput
   UserBranch?: Prisma.UserBranchCreateNestedManyWithoutUserInput
   UserPermission?: Prisma.UserPermissionCreateNestedManyWithoutUserInput
   refreshTokens?: Prisma.RefreshTokenCreateNestedManyWithoutUserInput
@@ -2149,6 +2189,7 @@ export type UserUncheckedCreateWithoutUserRoleInput = {
   treatmentPlans?: Prisma.TreatmentPlanUncheckedCreateNestedManyWithoutDoctorInput
   patientPrescriptions?: Prisma.PatientPrescriptionUncheckedCreateNestedManyWithoutDoctorInput
   xrayAnalyses?: Prisma.XRayAnalysisUncheckedCreateNestedManyWithoutAnalyzedByInput
+  authoredPatientDocuments?: Prisma.PatientDocumentUncheckedCreateNestedManyWithoutAuthorInput
   UserBranch?: Prisma.UserBranchUncheckedCreateNestedManyWithoutUserInput
   UserPermission?: Prisma.UserPermissionUncheckedCreateNestedManyWithoutUserInput
   refreshTokens?: Prisma.RefreshTokenUncheckedCreateNestedManyWithoutUserInput
@@ -2202,6 +2243,7 @@ export type UserUpdateWithoutUserRoleInput = {
   treatmentPlans?: Prisma.TreatmentPlanUpdateManyWithoutDoctorNestedInput
   patientPrescriptions?: Prisma.PatientPrescriptionUpdateManyWithoutDoctorNestedInput
   xrayAnalyses?: Prisma.XRayAnalysisUpdateManyWithoutAnalyzedByNestedInput
+  authoredPatientDocuments?: Prisma.PatientDocumentUpdateManyWithoutAuthorNestedInput
   UserBranch?: Prisma.UserBranchUpdateManyWithoutUserNestedInput
   UserPermission?: Prisma.UserPermissionUpdateManyWithoutUserNestedInput
   refreshTokens?: Prisma.RefreshTokenUpdateManyWithoutUserNestedInput
@@ -2245,6 +2287,7 @@ export type UserUncheckedUpdateWithoutUserRoleInput = {
   treatmentPlans?: Prisma.TreatmentPlanUncheckedUpdateManyWithoutDoctorNestedInput
   patientPrescriptions?: Prisma.PatientPrescriptionUncheckedUpdateManyWithoutDoctorNestedInput
   xrayAnalyses?: Prisma.XRayAnalysisUncheckedUpdateManyWithoutAnalyzedByNestedInput
+  authoredPatientDocuments?: Prisma.PatientDocumentUncheckedUpdateManyWithoutAuthorNestedInput
   UserBranch?: Prisma.UserBranchUncheckedUpdateManyWithoutUserNestedInput
   UserPermission?: Prisma.UserPermissionUncheckedUpdateManyWithoutUserNestedInput
   refreshTokens?: Prisma.RefreshTokenUncheckedUpdateManyWithoutUserNestedInput
@@ -2281,6 +2324,7 @@ export type UserCreateWithoutAppointmentInput = {
   treatmentPlans?: Prisma.TreatmentPlanCreateNestedManyWithoutDoctorInput
   patientPrescriptions?: Prisma.PatientPrescriptionCreateNestedManyWithoutDoctorInput
   xrayAnalyses?: Prisma.XRayAnalysisCreateNestedManyWithoutAnalyzedByInput
+  authoredPatientDocuments?: Prisma.PatientDocumentCreateNestedManyWithoutAuthorInput
   UserBranch?: Prisma.UserBranchCreateNestedManyWithoutUserInput
   UserRole?: Prisma.UserRoleCreateNestedManyWithoutUserInput
   UserPermission?: Prisma.UserPermissionCreateNestedManyWithoutUserInput
@@ -2324,6 +2368,7 @@ export type UserUncheckedCreateWithoutAppointmentInput = {
   treatmentPlans?: Prisma.TreatmentPlanUncheckedCreateNestedManyWithoutDoctorInput
   patientPrescriptions?: Prisma.PatientPrescriptionUncheckedCreateNestedManyWithoutDoctorInput
   xrayAnalyses?: Prisma.XRayAnalysisUncheckedCreateNestedManyWithoutAnalyzedByInput
+  authoredPatientDocuments?: Prisma.PatientDocumentUncheckedCreateNestedManyWithoutAuthorInput
   UserBranch?: Prisma.UserBranchUncheckedCreateNestedManyWithoutUserInput
   UserRole?: Prisma.UserRoleUncheckedCreateNestedManyWithoutUserInput
   UserPermission?: Prisma.UserPermissionUncheckedCreateNestedManyWithoutUserInput
@@ -2366,6 +2411,7 @@ export type UserCreateWithoutAppointmentsInput = {
   treatmentPlans?: Prisma.TreatmentPlanCreateNestedManyWithoutDoctorInput
   patientPrescriptions?: Prisma.PatientPrescriptionCreateNestedManyWithoutDoctorInput
   xrayAnalyses?: Prisma.XRayAnalysisCreateNestedManyWithoutAnalyzedByInput
+  authoredPatientDocuments?: Prisma.PatientDocumentCreateNestedManyWithoutAuthorInput
   UserBranch?: Prisma.UserBranchCreateNestedManyWithoutUserInput
   UserRole?: Prisma.UserRoleCreateNestedManyWithoutUserInput
   UserPermission?: Prisma.UserPermissionCreateNestedManyWithoutUserInput
@@ -2409,6 +2455,7 @@ export type UserUncheckedCreateWithoutAppointmentsInput = {
   treatmentPlans?: Prisma.TreatmentPlanUncheckedCreateNestedManyWithoutDoctorInput
   patientPrescriptions?: Prisma.PatientPrescriptionUncheckedCreateNestedManyWithoutDoctorInput
   xrayAnalyses?: Prisma.XRayAnalysisUncheckedCreateNestedManyWithoutAnalyzedByInput
+  authoredPatientDocuments?: Prisma.PatientDocumentUncheckedCreateNestedManyWithoutAuthorInput
   UserBranch?: Prisma.UserBranchUncheckedCreateNestedManyWithoutUserInput
   UserRole?: Prisma.UserRoleUncheckedCreateNestedManyWithoutUserInput
   UserPermission?: Prisma.UserPermissionUncheckedCreateNestedManyWithoutUserInput
@@ -2462,6 +2509,7 @@ export type UserUpdateWithoutAppointmentInput = {
   treatmentPlans?: Prisma.TreatmentPlanUpdateManyWithoutDoctorNestedInput
   patientPrescriptions?: Prisma.PatientPrescriptionUpdateManyWithoutDoctorNestedInput
   xrayAnalyses?: Prisma.XRayAnalysisUpdateManyWithoutAnalyzedByNestedInput
+  authoredPatientDocuments?: Prisma.PatientDocumentUpdateManyWithoutAuthorNestedInput
   UserBranch?: Prisma.UserBranchUpdateManyWithoutUserNestedInput
   UserRole?: Prisma.UserRoleUpdateManyWithoutUserNestedInput
   UserPermission?: Prisma.UserPermissionUpdateManyWithoutUserNestedInput
@@ -2505,6 +2553,7 @@ export type UserUncheckedUpdateWithoutAppointmentInput = {
   treatmentPlans?: Prisma.TreatmentPlanUncheckedUpdateManyWithoutDoctorNestedInput
   patientPrescriptions?: Prisma.PatientPrescriptionUncheckedUpdateManyWithoutDoctorNestedInput
   xrayAnalyses?: Prisma.XRayAnalysisUncheckedUpdateManyWithoutAnalyzedByNestedInput
+  authoredPatientDocuments?: Prisma.PatientDocumentUncheckedUpdateManyWithoutAuthorNestedInput
   UserBranch?: Prisma.UserBranchUncheckedUpdateManyWithoutUserNestedInput
   UserRole?: Prisma.UserRoleUncheckedUpdateManyWithoutUserNestedInput
   UserPermission?: Prisma.UserPermissionUncheckedUpdateManyWithoutUserNestedInput
@@ -2553,6 +2602,7 @@ export type UserUpdateWithoutAppointmentsInput = {
   treatmentPlans?: Prisma.TreatmentPlanUpdateManyWithoutDoctorNestedInput
   patientPrescriptions?: Prisma.PatientPrescriptionUpdateManyWithoutDoctorNestedInput
   xrayAnalyses?: Prisma.XRayAnalysisUpdateManyWithoutAnalyzedByNestedInput
+  authoredPatientDocuments?: Prisma.PatientDocumentUpdateManyWithoutAuthorNestedInput
   UserBranch?: Prisma.UserBranchUpdateManyWithoutUserNestedInput
   UserRole?: Prisma.UserRoleUpdateManyWithoutUserNestedInput
   UserPermission?: Prisma.UserPermissionUpdateManyWithoutUserNestedInput
@@ -2596,6 +2646,7 @@ export type UserUncheckedUpdateWithoutAppointmentsInput = {
   treatmentPlans?: Prisma.TreatmentPlanUncheckedUpdateManyWithoutDoctorNestedInput
   patientPrescriptions?: Prisma.PatientPrescriptionUncheckedUpdateManyWithoutDoctorNestedInput
   xrayAnalyses?: Prisma.XRayAnalysisUncheckedUpdateManyWithoutAnalyzedByNestedInput
+  authoredPatientDocuments?: Prisma.PatientDocumentUncheckedUpdateManyWithoutAuthorNestedInput
   UserBranch?: Prisma.UserBranchUncheckedUpdateManyWithoutUserNestedInput
   UserRole?: Prisma.UserRoleUncheckedUpdateManyWithoutUserNestedInput
   UserPermission?: Prisma.UserPermissionUncheckedUpdateManyWithoutUserNestedInput
@@ -2633,6 +2684,7 @@ export type UserCreateWithoutDoctorProfileInput = {
   treatmentPlans?: Prisma.TreatmentPlanCreateNestedManyWithoutDoctorInput
   patientPrescriptions?: Prisma.PatientPrescriptionCreateNestedManyWithoutDoctorInput
   xrayAnalyses?: Prisma.XRayAnalysisCreateNestedManyWithoutAnalyzedByInput
+  authoredPatientDocuments?: Prisma.PatientDocumentCreateNestedManyWithoutAuthorInput
   UserBranch?: Prisma.UserBranchCreateNestedManyWithoutUserInput
   UserRole?: Prisma.UserRoleCreateNestedManyWithoutUserInput
   UserPermission?: Prisma.UserPermissionCreateNestedManyWithoutUserInput
@@ -2676,6 +2728,7 @@ export type UserUncheckedCreateWithoutDoctorProfileInput = {
   treatmentPlans?: Prisma.TreatmentPlanUncheckedCreateNestedManyWithoutDoctorInput
   patientPrescriptions?: Prisma.PatientPrescriptionUncheckedCreateNestedManyWithoutDoctorInput
   xrayAnalyses?: Prisma.XRayAnalysisUncheckedCreateNestedManyWithoutAnalyzedByInput
+  authoredPatientDocuments?: Prisma.PatientDocumentUncheckedCreateNestedManyWithoutAuthorInput
   UserBranch?: Prisma.UserBranchUncheckedCreateNestedManyWithoutUserInput
   UserRole?: Prisma.UserRoleUncheckedCreateNestedManyWithoutUserInput
   UserPermission?: Prisma.UserPermissionUncheckedCreateNestedManyWithoutUserInput
@@ -2729,6 +2782,7 @@ export type UserUpdateWithoutDoctorProfileInput = {
   treatmentPlans?: Prisma.TreatmentPlanUpdateManyWithoutDoctorNestedInput
   patientPrescriptions?: Prisma.PatientPrescriptionUpdateManyWithoutDoctorNestedInput
   xrayAnalyses?: Prisma.XRayAnalysisUpdateManyWithoutAnalyzedByNestedInput
+  authoredPatientDocuments?: Prisma.PatientDocumentUpdateManyWithoutAuthorNestedInput
   UserBranch?: Prisma.UserBranchUpdateManyWithoutUserNestedInput
   UserRole?: Prisma.UserRoleUpdateManyWithoutUserNestedInput
   UserPermission?: Prisma.UserPermissionUpdateManyWithoutUserNestedInput
@@ -2772,6 +2826,7 @@ export type UserUncheckedUpdateWithoutDoctorProfileInput = {
   treatmentPlans?: Prisma.TreatmentPlanUncheckedUpdateManyWithoutDoctorNestedInput
   patientPrescriptions?: Prisma.PatientPrescriptionUncheckedUpdateManyWithoutDoctorNestedInput
   xrayAnalyses?: Prisma.XRayAnalysisUncheckedUpdateManyWithoutAnalyzedByNestedInput
+  authoredPatientDocuments?: Prisma.PatientDocumentUncheckedUpdateManyWithoutAuthorNestedInput
   UserBranch?: Prisma.UserBranchUncheckedUpdateManyWithoutUserNestedInput
   UserRole?: Prisma.UserRoleUncheckedUpdateManyWithoutUserNestedInput
   UserPermission?: Prisma.UserPermissionUncheckedUpdateManyWithoutUserNestedInput
@@ -2809,6 +2864,7 @@ export type UserCreateWithoutConversationsStartedInput = {
   treatmentPlans?: Prisma.TreatmentPlanCreateNestedManyWithoutDoctorInput
   patientPrescriptions?: Prisma.PatientPrescriptionCreateNestedManyWithoutDoctorInput
   xrayAnalyses?: Prisma.XRayAnalysisCreateNestedManyWithoutAnalyzedByInput
+  authoredPatientDocuments?: Prisma.PatientDocumentCreateNestedManyWithoutAuthorInput
   UserBranch?: Prisma.UserBranchCreateNestedManyWithoutUserInput
   UserRole?: Prisma.UserRoleCreateNestedManyWithoutUserInput
   UserPermission?: Prisma.UserPermissionCreateNestedManyWithoutUserInput
@@ -2852,6 +2908,7 @@ export type UserUncheckedCreateWithoutConversationsStartedInput = {
   treatmentPlans?: Prisma.TreatmentPlanUncheckedCreateNestedManyWithoutDoctorInput
   patientPrescriptions?: Prisma.PatientPrescriptionUncheckedCreateNestedManyWithoutDoctorInput
   xrayAnalyses?: Prisma.XRayAnalysisUncheckedCreateNestedManyWithoutAnalyzedByInput
+  authoredPatientDocuments?: Prisma.PatientDocumentUncheckedCreateNestedManyWithoutAuthorInput
   UserBranch?: Prisma.UserBranchUncheckedCreateNestedManyWithoutUserInput
   UserRole?: Prisma.UserRoleUncheckedCreateNestedManyWithoutUserInput
   UserPermission?: Prisma.UserPermissionUncheckedCreateNestedManyWithoutUserInput
@@ -2894,6 +2951,7 @@ export type UserCreateWithoutConversationsReceivedInput = {
   treatmentPlans?: Prisma.TreatmentPlanCreateNestedManyWithoutDoctorInput
   patientPrescriptions?: Prisma.PatientPrescriptionCreateNestedManyWithoutDoctorInput
   xrayAnalyses?: Prisma.XRayAnalysisCreateNestedManyWithoutAnalyzedByInput
+  authoredPatientDocuments?: Prisma.PatientDocumentCreateNestedManyWithoutAuthorInput
   UserBranch?: Prisma.UserBranchCreateNestedManyWithoutUserInput
   UserRole?: Prisma.UserRoleCreateNestedManyWithoutUserInput
   UserPermission?: Prisma.UserPermissionCreateNestedManyWithoutUserInput
@@ -2937,6 +2995,7 @@ export type UserUncheckedCreateWithoutConversationsReceivedInput = {
   treatmentPlans?: Prisma.TreatmentPlanUncheckedCreateNestedManyWithoutDoctorInput
   patientPrescriptions?: Prisma.PatientPrescriptionUncheckedCreateNestedManyWithoutDoctorInput
   xrayAnalyses?: Prisma.XRayAnalysisUncheckedCreateNestedManyWithoutAnalyzedByInput
+  authoredPatientDocuments?: Prisma.PatientDocumentUncheckedCreateNestedManyWithoutAuthorInput
   UserBranch?: Prisma.UserBranchUncheckedCreateNestedManyWithoutUserInput
   UserRole?: Prisma.UserRoleUncheckedCreateNestedManyWithoutUserInput
   UserPermission?: Prisma.UserPermissionUncheckedCreateNestedManyWithoutUserInput
@@ -2990,6 +3049,7 @@ export type UserUpdateWithoutConversationsStartedInput = {
   treatmentPlans?: Prisma.TreatmentPlanUpdateManyWithoutDoctorNestedInput
   patientPrescriptions?: Prisma.PatientPrescriptionUpdateManyWithoutDoctorNestedInput
   xrayAnalyses?: Prisma.XRayAnalysisUpdateManyWithoutAnalyzedByNestedInput
+  authoredPatientDocuments?: Prisma.PatientDocumentUpdateManyWithoutAuthorNestedInput
   UserBranch?: Prisma.UserBranchUpdateManyWithoutUserNestedInput
   UserRole?: Prisma.UserRoleUpdateManyWithoutUserNestedInput
   UserPermission?: Prisma.UserPermissionUpdateManyWithoutUserNestedInput
@@ -3033,6 +3093,7 @@ export type UserUncheckedUpdateWithoutConversationsStartedInput = {
   treatmentPlans?: Prisma.TreatmentPlanUncheckedUpdateManyWithoutDoctorNestedInput
   patientPrescriptions?: Prisma.PatientPrescriptionUncheckedUpdateManyWithoutDoctorNestedInput
   xrayAnalyses?: Prisma.XRayAnalysisUncheckedUpdateManyWithoutAnalyzedByNestedInput
+  authoredPatientDocuments?: Prisma.PatientDocumentUncheckedUpdateManyWithoutAuthorNestedInput
   UserBranch?: Prisma.UserBranchUncheckedUpdateManyWithoutUserNestedInput
   UserRole?: Prisma.UserRoleUncheckedUpdateManyWithoutUserNestedInput
   UserPermission?: Prisma.UserPermissionUncheckedUpdateManyWithoutUserNestedInput
@@ -3081,6 +3142,7 @@ export type UserUpdateWithoutConversationsReceivedInput = {
   treatmentPlans?: Prisma.TreatmentPlanUpdateManyWithoutDoctorNestedInput
   patientPrescriptions?: Prisma.PatientPrescriptionUpdateManyWithoutDoctorNestedInput
   xrayAnalyses?: Prisma.XRayAnalysisUpdateManyWithoutAnalyzedByNestedInput
+  authoredPatientDocuments?: Prisma.PatientDocumentUpdateManyWithoutAuthorNestedInput
   UserBranch?: Prisma.UserBranchUpdateManyWithoutUserNestedInput
   UserRole?: Prisma.UserRoleUpdateManyWithoutUserNestedInput
   UserPermission?: Prisma.UserPermissionUpdateManyWithoutUserNestedInput
@@ -3124,6 +3186,7 @@ export type UserUncheckedUpdateWithoutConversationsReceivedInput = {
   treatmentPlans?: Prisma.TreatmentPlanUncheckedUpdateManyWithoutDoctorNestedInput
   patientPrescriptions?: Prisma.PatientPrescriptionUncheckedUpdateManyWithoutDoctorNestedInput
   xrayAnalyses?: Prisma.XRayAnalysisUncheckedUpdateManyWithoutAnalyzedByNestedInput
+  authoredPatientDocuments?: Prisma.PatientDocumentUncheckedUpdateManyWithoutAuthorNestedInput
   UserBranch?: Prisma.UserBranchUncheckedUpdateManyWithoutUserNestedInput
   UserRole?: Prisma.UserRoleUncheckedUpdateManyWithoutUserNestedInput
   UserPermission?: Prisma.UserPermissionUncheckedUpdateManyWithoutUserNestedInput
@@ -3161,6 +3224,7 @@ export type UserCreateWithoutChatMessagesInput = {
   treatmentPlans?: Prisma.TreatmentPlanCreateNestedManyWithoutDoctorInput
   patientPrescriptions?: Prisma.PatientPrescriptionCreateNestedManyWithoutDoctorInput
   xrayAnalyses?: Prisma.XRayAnalysisCreateNestedManyWithoutAnalyzedByInput
+  authoredPatientDocuments?: Prisma.PatientDocumentCreateNestedManyWithoutAuthorInput
   UserBranch?: Prisma.UserBranchCreateNestedManyWithoutUserInput
   UserRole?: Prisma.UserRoleCreateNestedManyWithoutUserInput
   UserPermission?: Prisma.UserPermissionCreateNestedManyWithoutUserInput
@@ -3204,6 +3268,7 @@ export type UserUncheckedCreateWithoutChatMessagesInput = {
   treatmentPlans?: Prisma.TreatmentPlanUncheckedCreateNestedManyWithoutDoctorInput
   patientPrescriptions?: Prisma.PatientPrescriptionUncheckedCreateNestedManyWithoutDoctorInput
   xrayAnalyses?: Prisma.XRayAnalysisUncheckedCreateNestedManyWithoutAnalyzedByInput
+  authoredPatientDocuments?: Prisma.PatientDocumentUncheckedCreateNestedManyWithoutAuthorInput
   UserBranch?: Prisma.UserBranchUncheckedCreateNestedManyWithoutUserInput
   UserRole?: Prisma.UserRoleUncheckedCreateNestedManyWithoutUserInput
   UserPermission?: Prisma.UserPermissionUncheckedCreateNestedManyWithoutUserInput
@@ -3257,6 +3322,7 @@ export type UserUpdateWithoutChatMessagesInput = {
   treatmentPlans?: Prisma.TreatmentPlanUpdateManyWithoutDoctorNestedInput
   patientPrescriptions?: Prisma.PatientPrescriptionUpdateManyWithoutDoctorNestedInput
   xrayAnalyses?: Prisma.XRayAnalysisUpdateManyWithoutAnalyzedByNestedInput
+  authoredPatientDocuments?: Prisma.PatientDocumentUpdateManyWithoutAuthorNestedInput
   UserBranch?: Prisma.UserBranchUpdateManyWithoutUserNestedInput
   UserRole?: Prisma.UserRoleUpdateManyWithoutUserNestedInput
   UserPermission?: Prisma.UserPermissionUpdateManyWithoutUserNestedInput
@@ -3300,6 +3366,7 @@ export type UserUncheckedUpdateWithoutChatMessagesInput = {
   treatmentPlans?: Prisma.TreatmentPlanUncheckedUpdateManyWithoutDoctorNestedInput
   patientPrescriptions?: Prisma.PatientPrescriptionUncheckedUpdateManyWithoutDoctorNestedInput
   xrayAnalyses?: Prisma.XRayAnalysisUncheckedUpdateManyWithoutAnalyzedByNestedInput
+  authoredPatientDocuments?: Prisma.PatientDocumentUncheckedUpdateManyWithoutAuthorNestedInput
   UserBranch?: Prisma.UserBranchUncheckedUpdateManyWithoutUserNestedInput
   UserRole?: Prisma.UserRoleUncheckedUpdateManyWithoutUserNestedInput
   UserPermission?: Prisma.UserPermissionUncheckedUpdateManyWithoutUserNestedInput
@@ -3338,6 +3405,7 @@ export type UserCreateWithoutStockSalesInput = {
   treatmentPlans?: Prisma.TreatmentPlanCreateNestedManyWithoutDoctorInput
   patientPrescriptions?: Prisma.PatientPrescriptionCreateNestedManyWithoutDoctorInput
   xrayAnalyses?: Prisma.XRayAnalysisCreateNestedManyWithoutAnalyzedByInput
+  authoredPatientDocuments?: Prisma.PatientDocumentCreateNestedManyWithoutAuthorInput
   UserBranch?: Prisma.UserBranchCreateNestedManyWithoutUserInput
   UserRole?: Prisma.UserRoleCreateNestedManyWithoutUserInput
   UserPermission?: Prisma.UserPermissionCreateNestedManyWithoutUserInput
@@ -3381,6 +3449,7 @@ export type UserUncheckedCreateWithoutStockSalesInput = {
   treatmentPlans?: Prisma.TreatmentPlanUncheckedCreateNestedManyWithoutDoctorInput
   patientPrescriptions?: Prisma.PatientPrescriptionUncheckedCreateNestedManyWithoutDoctorInput
   xrayAnalyses?: Prisma.XRayAnalysisUncheckedCreateNestedManyWithoutAnalyzedByInput
+  authoredPatientDocuments?: Prisma.PatientDocumentUncheckedCreateNestedManyWithoutAuthorInput
   UserBranch?: Prisma.UserBranchUncheckedCreateNestedManyWithoutUserInput
   UserRole?: Prisma.UserRoleUncheckedCreateNestedManyWithoutUserInput
   UserPermission?: Prisma.UserPermissionUncheckedCreateNestedManyWithoutUserInput
@@ -3434,6 +3503,7 @@ export type UserUpdateWithoutStockSalesInput = {
   treatmentPlans?: Prisma.TreatmentPlanUpdateManyWithoutDoctorNestedInput
   patientPrescriptions?: Prisma.PatientPrescriptionUpdateManyWithoutDoctorNestedInput
   xrayAnalyses?: Prisma.XRayAnalysisUpdateManyWithoutAnalyzedByNestedInput
+  authoredPatientDocuments?: Prisma.PatientDocumentUpdateManyWithoutAuthorNestedInput
   UserBranch?: Prisma.UserBranchUpdateManyWithoutUserNestedInput
   UserRole?: Prisma.UserRoleUpdateManyWithoutUserNestedInput
   UserPermission?: Prisma.UserPermissionUpdateManyWithoutUserNestedInput
@@ -3477,6 +3547,7 @@ export type UserUncheckedUpdateWithoutStockSalesInput = {
   treatmentPlans?: Prisma.TreatmentPlanUncheckedUpdateManyWithoutDoctorNestedInput
   patientPrescriptions?: Prisma.PatientPrescriptionUncheckedUpdateManyWithoutDoctorNestedInput
   xrayAnalyses?: Prisma.XRayAnalysisUncheckedUpdateManyWithoutAnalyzedByNestedInput
+  authoredPatientDocuments?: Prisma.PatientDocumentUncheckedUpdateManyWithoutAuthorNestedInput
   UserBranch?: Prisma.UserBranchUncheckedUpdateManyWithoutUserNestedInput
   UserRole?: Prisma.UserRoleUncheckedUpdateManyWithoutUserNestedInput
   UserPermission?: Prisma.UserPermissionUncheckedUpdateManyWithoutUserNestedInput
@@ -3514,6 +3585,7 @@ export type UserCreateWithoutCreatedCommunicationCampaignsInput = {
   treatmentPlans?: Prisma.TreatmentPlanCreateNestedManyWithoutDoctorInput
   patientPrescriptions?: Prisma.PatientPrescriptionCreateNestedManyWithoutDoctorInput
   xrayAnalyses?: Prisma.XRayAnalysisCreateNestedManyWithoutAnalyzedByInput
+  authoredPatientDocuments?: Prisma.PatientDocumentCreateNestedManyWithoutAuthorInput
   UserBranch?: Prisma.UserBranchCreateNestedManyWithoutUserInput
   UserRole?: Prisma.UserRoleCreateNestedManyWithoutUserInput
   UserPermission?: Prisma.UserPermissionCreateNestedManyWithoutUserInput
@@ -3557,6 +3629,7 @@ export type UserUncheckedCreateWithoutCreatedCommunicationCampaignsInput = {
   treatmentPlans?: Prisma.TreatmentPlanUncheckedCreateNestedManyWithoutDoctorInput
   patientPrescriptions?: Prisma.PatientPrescriptionUncheckedCreateNestedManyWithoutDoctorInput
   xrayAnalyses?: Prisma.XRayAnalysisUncheckedCreateNestedManyWithoutAnalyzedByInput
+  authoredPatientDocuments?: Prisma.PatientDocumentUncheckedCreateNestedManyWithoutAuthorInput
   UserBranch?: Prisma.UserBranchUncheckedCreateNestedManyWithoutUserInput
   UserRole?: Prisma.UserRoleUncheckedCreateNestedManyWithoutUserInput
   UserPermission?: Prisma.UserPermissionUncheckedCreateNestedManyWithoutUserInput
@@ -3610,6 +3683,7 @@ export type UserUpdateWithoutCreatedCommunicationCampaignsInput = {
   treatmentPlans?: Prisma.TreatmentPlanUpdateManyWithoutDoctorNestedInput
   patientPrescriptions?: Prisma.PatientPrescriptionUpdateManyWithoutDoctorNestedInput
   xrayAnalyses?: Prisma.XRayAnalysisUpdateManyWithoutAnalyzedByNestedInput
+  authoredPatientDocuments?: Prisma.PatientDocumentUpdateManyWithoutAuthorNestedInput
   UserBranch?: Prisma.UserBranchUpdateManyWithoutUserNestedInput
   UserRole?: Prisma.UserRoleUpdateManyWithoutUserNestedInput
   UserPermission?: Prisma.UserPermissionUpdateManyWithoutUserNestedInput
@@ -3653,6 +3727,7 @@ export type UserUncheckedUpdateWithoutCreatedCommunicationCampaignsInput = {
   treatmentPlans?: Prisma.TreatmentPlanUncheckedUpdateManyWithoutDoctorNestedInput
   patientPrescriptions?: Prisma.PatientPrescriptionUncheckedUpdateManyWithoutDoctorNestedInput
   xrayAnalyses?: Prisma.XRayAnalysisUncheckedUpdateManyWithoutAnalyzedByNestedInput
+  authoredPatientDocuments?: Prisma.PatientDocumentUncheckedUpdateManyWithoutAuthorNestedInput
   UserBranch?: Prisma.UserBranchUncheckedUpdateManyWithoutUserNestedInput
   UserRole?: Prisma.UserRoleUncheckedUpdateManyWithoutUserNestedInput
   UserPermission?: Prisma.UserPermissionUncheckedUpdateManyWithoutUserNestedInput
@@ -3689,6 +3764,7 @@ export type UserCreateWithoutTreatmentPlansInput = {
   chatMessages?: Prisma.ChatMessageCreateNestedManyWithoutAuthorInput
   patientPrescriptions?: Prisma.PatientPrescriptionCreateNestedManyWithoutDoctorInput
   xrayAnalyses?: Prisma.XRayAnalysisCreateNestedManyWithoutAnalyzedByInput
+  authoredPatientDocuments?: Prisma.PatientDocumentCreateNestedManyWithoutAuthorInput
   UserBranch?: Prisma.UserBranchCreateNestedManyWithoutUserInput
   UserRole?: Prisma.UserRoleCreateNestedManyWithoutUserInput
   UserPermission?: Prisma.UserPermissionCreateNestedManyWithoutUserInput
@@ -3732,6 +3808,7 @@ export type UserUncheckedCreateWithoutTreatmentPlansInput = {
   chatMessages?: Prisma.ChatMessageUncheckedCreateNestedManyWithoutAuthorInput
   patientPrescriptions?: Prisma.PatientPrescriptionUncheckedCreateNestedManyWithoutDoctorInput
   xrayAnalyses?: Prisma.XRayAnalysisUncheckedCreateNestedManyWithoutAnalyzedByInput
+  authoredPatientDocuments?: Prisma.PatientDocumentUncheckedCreateNestedManyWithoutAuthorInput
   UserBranch?: Prisma.UserBranchUncheckedCreateNestedManyWithoutUserInput
   UserRole?: Prisma.UserRoleUncheckedCreateNestedManyWithoutUserInput
   UserPermission?: Prisma.UserPermissionUncheckedCreateNestedManyWithoutUserInput
@@ -3785,6 +3862,7 @@ export type UserUpdateWithoutTreatmentPlansInput = {
   chatMessages?: Prisma.ChatMessageUpdateManyWithoutAuthorNestedInput
   patientPrescriptions?: Prisma.PatientPrescriptionUpdateManyWithoutDoctorNestedInput
   xrayAnalyses?: Prisma.XRayAnalysisUpdateManyWithoutAnalyzedByNestedInput
+  authoredPatientDocuments?: Prisma.PatientDocumentUpdateManyWithoutAuthorNestedInput
   UserBranch?: Prisma.UserBranchUpdateManyWithoutUserNestedInput
   UserRole?: Prisma.UserRoleUpdateManyWithoutUserNestedInput
   UserPermission?: Prisma.UserPermissionUpdateManyWithoutUserNestedInput
@@ -3828,6 +3906,7 @@ export type UserUncheckedUpdateWithoutTreatmentPlansInput = {
   chatMessages?: Prisma.ChatMessageUncheckedUpdateManyWithoutAuthorNestedInput
   patientPrescriptions?: Prisma.PatientPrescriptionUncheckedUpdateManyWithoutDoctorNestedInput
   xrayAnalyses?: Prisma.XRayAnalysisUncheckedUpdateManyWithoutAnalyzedByNestedInput
+  authoredPatientDocuments?: Prisma.PatientDocumentUncheckedUpdateManyWithoutAuthorNestedInput
   UserBranch?: Prisma.UserBranchUncheckedUpdateManyWithoutUserNestedInput
   UserRole?: Prisma.UserRoleUncheckedUpdateManyWithoutUserNestedInput
   UserPermission?: Prisma.UserPermissionUncheckedUpdateManyWithoutUserNestedInput
@@ -3866,6 +3945,7 @@ export type UserCreateWithoutRefreshTokensInput = {
   treatmentPlans?: Prisma.TreatmentPlanCreateNestedManyWithoutDoctorInput
   patientPrescriptions?: Prisma.PatientPrescriptionCreateNestedManyWithoutDoctorInput
   xrayAnalyses?: Prisma.XRayAnalysisCreateNestedManyWithoutAnalyzedByInput
+  authoredPatientDocuments?: Prisma.PatientDocumentCreateNestedManyWithoutAuthorInput
   UserBranch?: Prisma.UserBranchCreateNestedManyWithoutUserInput
   UserRole?: Prisma.UserRoleCreateNestedManyWithoutUserInput
   UserPermission?: Prisma.UserPermissionCreateNestedManyWithoutUserInput
@@ -3909,6 +3989,7 @@ export type UserUncheckedCreateWithoutRefreshTokensInput = {
   treatmentPlans?: Prisma.TreatmentPlanUncheckedCreateNestedManyWithoutDoctorInput
   patientPrescriptions?: Prisma.PatientPrescriptionUncheckedCreateNestedManyWithoutDoctorInput
   xrayAnalyses?: Prisma.XRayAnalysisUncheckedCreateNestedManyWithoutAnalyzedByInput
+  authoredPatientDocuments?: Prisma.PatientDocumentUncheckedCreateNestedManyWithoutAuthorInput
   UserBranch?: Prisma.UserBranchUncheckedCreateNestedManyWithoutUserInput
   UserRole?: Prisma.UserRoleUncheckedCreateNestedManyWithoutUserInput
   UserPermission?: Prisma.UserPermissionUncheckedCreateNestedManyWithoutUserInput
@@ -3962,6 +4043,7 @@ export type UserUpdateWithoutRefreshTokensInput = {
   treatmentPlans?: Prisma.TreatmentPlanUpdateManyWithoutDoctorNestedInput
   patientPrescriptions?: Prisma.PatientPrescriptionUpdateManyWithoutDoctorNestedInput
   xrayAnalyses?: Prisma.XRayAnalysisUpdateManyWithoutAnalyzedByNestedInput
+  authoredPatientDocuments?: Prisma.PatientDocumentUpdateManyWithoutAuthorNestedInput
   UserBranch?: Prisma.UserBranchUpdateManyWithoutUserNestedInput
   UserRole?: Prisma.UserRoleUpdateManyWithoutUserNestedInput
   UserPermission?: Prisma.UserPermissionUpdateManyWithoutUserNestedInput
@@ -4005,6 +4087,7 @@ export type UserUncheckedUpdateWithoutRefreshTokensInput = {
   treatmentPlans?: Prisma.TreatmentPlanUncheckedUpdateManyWithoutDoctorNestedInput
   patientPrescriptions?: Prisma.PatientPrescriptionUncheckedUpdateManyWithoutDoctorNestedInput
   xrayAnalyses?: Prisma.XRayAnalysisUncheckedUpdateManyWithoutAnalyzedByNestedInput
+  authoredPatientDocuments?: Prisma.PatientDocumentUncheckedUpdateManyWithoutAuthorNestedInput
   UserBranch?: Prisma.UserBranchUncheckedUpdateManyWithoutUserNestedInput
   UserRole?: Prisma.UserRoleUncheckedUpdateManyWithoutUserNestedInput
   UserPermission?: Prisma.UserPermissionUncheckedUpdateManyWithoutUserNestedInput
@@ -4042,6 +4125,7 @@ export type UserCreateWithoutAuthActionTokensInput = {
   treatmentPlans?: Prisma.TreatmentPlanCreateNestedManyWithoutDoctorInput
   patientPrescriptions?: Prisma.PatientPrescriptionCreateNestedManyWithoutDoctorInput
   xrayAnalyses?: Prisma.XRayAnalysisCreateNestedManyWithoutAnalyzedByInput
+  authoredPatientDocuments?: Prisma.PatientDocumentCreateNestedManyWithoutAuthorInput
   UserBranch?: Prisma.UserBranchCreateNestedManyWithoutUserInput
   UserRole?: Prisma.UserRoleCreateNestedManyWithoutUserInput
   UserPermission?: Prisma.UserPermissionCreateNestedManyWithoutUserInput
@@ -4085,6 +4169,7 @@ export type UserUncheckedCreateWithoutAuthActionTokensInput = {
   treatmentPlans?: Prisma.TreatmentPlanUncheckedCreateNestedManyWithoutDoctorInput
   patientPrescriptions?: Prisma.PatientPrescriptionUncheckedCreateNestedManyWithoutDoctorInput
   xrayAnalyses?: Prisma.XRayAnalysisUncheckedCreateNestedManyWithoutAnalyzedByInput
+  authoredPatientDocuments?: Prisma.PatientDocumentUncheckedCreateNestedManyWithoutAuthorInput
   UserBranch?: Prisma.UserBranchUncheckedCreateNestedManyWithoutUserInput
   UserRole?: Prisma.UserRoleUncheckedCreateNestedManyWithoutUserInput
   UserPermission?: Prisma.UserPermissionUncheckedCreateNestedManyWithoutUserInput
@@ -4138,6 +4223,7 @@ export type UserUpdateWithoutAuthActionTokensInput = {
   treatmentPlans?: Prisma.TreatmentPlanUpdateManyWithoutDoctorNestedInput
   patientPrescriptions?: Prisma.PatientPrescriptionUpdateManyWithoutDoctorNestedInput
   xrayAnalyses?: Prisma.XRayAnalysisUpdateManyWithoutAnalyzedByNestedInput
+  authoredPatientDocuments?: Prisma.PatientDocumentUpdateManyWithoutAuthorNestedInput
   UserBranch?: Prisma.UserBranchUpdateManyWithoutUserNestedInput
   UserRole?: Prisma.UserRoleUpdateManyWithoutUserNestedInput
   UserPermission?: Prisma.UserPermissionUpdateManyWithoutUserNestedInput
@@ -4181,6 +4267,7 @@ export type UserUncheckedUpdateWithoutAuthActionTokensInput = {
   treatmentPlans?: Prisma.TreatmentPlanUncheckedUpdateManyWithoutDoctorNestedInput
   patientPrescriptions?: Prisma.PatientPrescriptionUncheckedUpdateManyWithoutDoctorNestedInput
   xrayAnalyses?: Prisma.XRayAnalysisUncheckedUpdateManyWithoutAnalyzedByNestedInput
+  authoredPatientDocuments?: Prisma.PatientDocumentUncheckedUpdateManyWithoutAuthorNestedInput
   UserBranch?: Prisma.UserBranchUncheckedUpdateManyWithoutUserNestedInput
   UserRole?: Prisma.UserRoleUncheckedUpdateManyWithoutUserNestedInput
   UserPermission?: Prisma.UserPermissionUncheckedUpdateManyWithoutUserNestedInput
@@ -4217,6 +4304,7 @@ export type UserCreateWithoutConsultInput = {
   treatmentPlans?: Prisma.TreatmentPlanCreateNestedManyWithoutDoctorInput
   patientPrescriptions?: Prisma.PatientPrescriptionCreateNestedManyWithoutDoctorInput
   xrayAnalyses?: Prisma.XRayAnalysisCreateNestedManyWithoutAnalyzedByInput
+  authoredPatientDocuments?: Prisma.PatientDocumentCreateNestedManyWithoutAuthorInput
   UserBranch?: Prisma.UserBranchCreateNestedManyWithoutUserInput
   UserRole?: Prisma.UserRoleCreateNestedManyWithoutUserInput
   UserPermission?: Prisma.UserPermissionCreateNestedManyWithoutUserInput
@@ -4260,6 +4348,7 @@ export type UserUncheckedCreateWithoutConsultInput = {
   treatmentPlans?: Prisma.TreatmentPlanUncheckedCreateNestedManyWithoutDoctorInput
   patientPrescriptions?: Prisma.PatientPrescriptionUncheckedCreateNestedManyWithoutDoctorInput
   xrayAnalyses?: Prisma.XRayAnalysisUncheckedCreateNestedManyWithoutAnalyzedByInput
+  authoredPatientDocuments?: Prisma.PatientDocumentUncheckedCreateNestedManyWithoutAuthorInput
   UserBranch?: Prisma.UserBranchUncheckedCreateNestedManyWithoutUserInput
   UserRole?: Prisma.UserRoleUncheckedCreateNestedManyWithoutUserInput
   UserPermission?: Prisma.UserPermissionUncheckedCreateNestedManyWithoutUserInput
@@ -4313,6 +4402,7 @@ export type UserUpdateWithoutConsultInput = {
   treatmentPlans?: Prisma.TreatmentPlanUpdateManyWithoutDoctorNestedInput
   patientPrescriptions?: Prisma.PatientPrescriptionUpdateManyWithoutDoctorNestedInput
   xrayAnalyses?: Prisma.XRayAnalysisUpdateManyWithoutAnalyzedByNestedInput
+  authoredPatientDocuments?: Prisma.PatientDocumentUpdateManyWithoutAuthorNestedInput
   UserBranch?: Prisma.UserBranchUpdateManyWithoutUserNestedInput
   UserRole?: Prisma.UserRoleUpdateManyWithoutUserNestedInput
   UserPermission?: Prisma.UserPermissionUpdateManyWithoutUserNestedInput
@@ -4356,6 +4446,7 @@ export type UserUncheckedUpdateWithoutConsultInput = {
   treatmentPlans?: Prisma.TreatmentPlanUncheckedUpdateManyWithoutDoctorNestedInput
   patientPrescriptions?: Prisma.PatientPrescriptionUncheckedUpdateManyWithoutDoctorNestedInput
   xrayAnalyses?: Prisma.XRayAnalysisUncheckedUpdateManyWithoutAnalyzedByNestedInput
+  authoredPatientDocuments?: Prisma.PatientDocumentUncheckedUpdateManyWithoutAuthorNestedInput
   UserBranch?: Prisma.UserBranchUncheckedUpdateManyWithoutUserNestedInput
   UserRole?: Prisma.UserRoleUncheckedUpdateManyWithoutUserNestedInput
   UserPermission?: Prisma.UserPermissionUncheckedUpdateManyWithoutUserNestedInput
@@ -4393,6 +4484,7 @@ export type UserCreateWithoutClinicProccessesInput = {
   treatmentPlans?: Prisma.TreatmentPlanCreateNestedManyWithoutDoctorInput
   patientPrescriptions?: Prisma.PatientPrescriptionCreateNestedManyWithoutDoctorInput
   xrayAnalyses?: Prisma.XRayAnalysisCreateNestedManyWithoutAnalyzedByInput
+  authoredPatientDocuments?: Prisma.PatientDocumentCreateNestedManyWithoutAuthorInput
   UserBranch?: Prisma.UserBranchCreateNestedManyWithoutUserInput
   UserRole?: Prisma.UserRoleCreateNestedManyWithoutUserInput
   UserPermission?: Prisma.UserPermissionCreateNestedManyWithoutUserInput
@@ -4436,6 +4528,7 @@ export type UserUncheckedCreateWithoutClinicProccessesInput = {
   treatmentPlans?: Prisma.TreatmentPlanUncheckedCreateNestedManyWithoutDoctorInput
   patientPrescriptions?: Prisma.PatientPrescriptionUncheckedCreateNestedManyWithoutDoctorInput
   xrayAnalyses?: Prisma.XRayAnalysisUncheckedCreateNestedManyWithoutAnalyzedByInput
+  authoredPatientDocuments?: Prisma.PatientDocumentUncheckedCreateNestedManyWithoutAuthorInput
   UserBranch?: Prisma.UserBranchUncheckedCreateNestedManyWithoutUserInput
   UserRole?: Prisma.UserRoleUncheckedCreateNestedManyWithoutUserInput
   UserPermission?: Prisma.UserPermissionUncheckedCreateNestedManyWithoutUserInput
@@ -4489,6 +4582,7 @@ export type UserUpdateWithoutClinicProccessesInput = {
   treatmentPlans?: Prisma.TreatmentPlanUpdateManyWithoutDoctorNestedInput
   patientPrescriptions?: Prisma.PatientPrescriptionUpdateManyWithoutDoctorNestedInput
   xrayAnalyses?: Prisma.XRayAnalysisUpdateManyWithoutAnalyzedByNestedInput
+  authoredPatientDocuments?: Prisma.PatientDocumentUpdateManyWithoutAuthorNestedInput
   UserBranch?: Prisma.UserBranchUpdateManyWithoutUserNestedInput
   UserRole?: Prisma.UserRoleUpdateManyWithoutUserNestedInput
   UserPermission?: Prisma.UserPermissionUpdateManyWithoutUserNestedInput
@@ -4532,6 +4626,7 @@ export type UserUncheckedUpdateWithoutClinicProccessesInput = {
   treatmentPlans?: Prisma.TreatmentPlanUncheckedUpdateManyWithoutDoctorNestedInput
   patientPrescriptions?: Prisma.PatientPrescriptionUncheckedUpdateManyWithoutDoctorNestedInput
   xrayAnalyses?: Prisma.XRayAnalysisUncheckedUpdateManyWithoutAnalyzedByNestedInput
+  authoredPatientDocuments?: Prisma.PatientDocumentUncheckedUpdateManyWithoutAuthorNestedInput
   UserBranch?: Prisma.UserBranchUncheckedUpdateManyWithoutUserNestedInput
   UserRole?: Prisma.UserRoleUncheckedUpdateManyWithoutUserNestedInput
   UserPermission?: Prisma.UserPermissionUncheckedUpdateManyWithoutUserNestedInput
@@ -4569,6 +4664,7 @@ export type UserCreateWithoutDiagnosticsInput = {
   treatmentPlans?: Prisma.TreatmentPlanCreateNestedManyWithoutDoctorInput
   patientPrescriptions?: Prisma.PatientPrescriptionCreateNestedManyWithoutDoctorInput
   xrayAnalyses?: Prisma.XRayAnalysisCreateNestedManyWithoutAnalyzedByInput
+  authoredPatientDocuments?: Prisma.PatientDocumentCreateNestedManyWithoutAuthorInput
   UserBranch?: Prisma.UserBranchCreateNestedManyWithoutUserInput
   UserRole?: Prisma.UserRoleCreateNestedManyWithoutUserInput
   UserPermission?: Prisma.UserPermissionCreateNestedManyWithoutUserInput
@@ -4612,6 +4708,7 @@ export type UserUncheckedCreateWithoutDiagnosticsInput = {
   treatmentPlans?: Prisma.TreatmentPlanUncheckedCreateNestedManyWithoutDoctorInput
   patientPrescriptions?: Prisma.PatientPrescriptionUncheckedCreateNestedManyWithoutDoctorInput
   xrayAnalyses?: Prisma.XRayAnalysisUncheckedCreateNestedManyWithoutAnalyzedByInput
+  authoredPatientDocuments?: Prisma.PatientDocumentUncheckedCreateNestedManyWithoutAuthorInput
   UserBranch?: Prisma.UserBranchUncheckedCreateNestedManyWithoutUserInput
   UserRole?: Prisma.UserRoleUncheckedCreateNestedManyWithoutUserInput
   UserPermission?: Prisma.UserPermissionUncheckedCreateNestedManyWithoutUserInput
@@ -4665,6 +4762,7 @@ export type UserUpdateWithoutDiagnosticsInput = {
   treatmentPlans?: Prisma.TreatmentPlanUpdateManyWithoutDoctorNestedInput
   patientPrescriptions?: Prisma.PatientPrescriptionUpdateManyWithoutDoctorNestedInput
   xrayAnalyses?: Prisma.XRayAnalysisUpdateManyWithoutAnalyzedByNestedInput
+  authoredPatientDocuments?: Prisma.PatientDocumentUpdateManyWithoutAuthorNestedInput
   UserBranch?: Prisma.UserBranchUpdateManyWithoutUserNestedInput
   UserRole?: Prisma.UserRoleUpdateManyWithoutUserNestedInput
   UserPermission?: Prisma.UserPermissionUpdateManyWithoutUserNestedInput
@@ -4708,6 +4806,7 @@ export type UserUncheckedUpdateWithoutDiagnosticsInput = {
   treatmentPlans?: Prisma.TreatmentPlanUncheckedUpdateManyWithoutDoctorNestedInput
   patientPrescriptions?: Prisma.PatientPrescriptionUncheckedUpdateManyWithoutDoctorNestedInput
   xrayAnalyses?: Prisma.XRayAnalysisUncheckedUpdateManyWithoutAnalyzedByNestedInput
+  authoredPatientDocuments?: Prisma.PatientDocumentUncheckedUpdateManyWithoutAuthorNestedInput
   UserBranch?: Prisma.UserBranchUncheckedUpdateManyWithoutUserNestedInput
   UserRole?: Prisma.UserRoleUncheckedUpdateManyWithoutUserNestedInput
   UserPermission?: Prisma.UserPermissionUncheckedUpdateManyWithoutUserNestedInput
@@ -4745,6 +4844,7 @@ export type UserCreateWithoutPatientPrescriptionsInput = {
   chatMessages?: Prisma.ChatMessageCreateNestedManyWithoutAuthorInput
   treatmentPlans?: Prisma.TreatmentPlanCreateNestedManyWithoutDoctorInput
   xrayAnalyses?: Prisma.XRayAnalysisCreateNestedManyWithoutAnalyzedByInput
+  authoredPatientDocuments?: Prisma.PatientDocumentCreateNestedManyWithoutAuthorInput
   UserBranch?: Prisma.UserBranchCreateNestedManyWithoutUserInput
   UserRole?: Prisma.UserRoleCreateNestedManyWithoutUserInput
   UserPermission?: Prisma.UserPermissionCreateNestedManyWithoutUserInput
@@ -4788,6 +4888,7 @@ export type UserUncheckedCreateWithoutPatientPrescriptionsInput = {
   chatMessages?: Prisma.ChatMessageUncheckedCreateNestedManyWithoutAuthorInput
   treatmentPlans?: Prisma.TreatmentPlanUncheckedCreateNestedManyWithoutDoctorInput
   xrayAnalyses?: Prisma.XRayAnalysisUncheckedCreateNestedManyWithoutAnalyzedByInput
+  authoredPatientDocuments?: Prisma.PatientDocumentUncheckedCreateNestedManyWithoutAuthorInput
   UserBranch?: Prisma.UserBranchUncheckedCreateNestedManyWithoutUserInput
   UserRole?: Prisma.UserRoleUncheckedCreateNestedManyWithoutUserInput
   UserPermission?: Prisma.UserPermissionUncheckedCreateNestedManyWithoutUserInput
@@ -4841,6 +4942,7 @@ export type UserUpdateWithoutPatientPrescriptionsInput = {
   chatMessages?: Prisma.ChatMessageUpdateManyWithoutAuthorNestedInput
   treatmentPlans?: Prisma.TreatmentPlanUpdateManyWithoutDoctorNestedInput
   xrayAnalyses?: Prisma.XRayAnalysisUpdateManyWithoutAnalyzedByNestedInput
+  authoredPatientDocuments?: Prisma.PatientDocumentUpdateManyWithoutAuthorNestedInput
   UserBranch?: Prisma.UserBranchUpdateManyWithoutUserNestedInput
   UserRole?: Prisma.UserRoleUpdateManyWithoutUserNestedInput
   UserPermission?: Prisma.UserPermissionUpdateManyWithoutUserNestedInput
@@ -4884,6 +4986,7 @@ export type UserUncheckedUpdateWithoutPatientPrescriptionsInput = {
   chatMessages?: Prisma.ChatMessageUncheckedUpdateManyWithoutAuthorNestedInput
   treatmentPlans?: Prisma.TreatmentPlanUncheckedUpdateManyWithoutDoctorNestedInput
   xrayAnalyses?: Prisma.XRayAnalysisUncheckedUpdateManyWithoutAnalyzedByNestedInput
+  authoredPatientDocuments?: Prisma.PatientDocumentUncheckedUpdateManyWithoutAuthorNestedInput
   UserBranch?: Prisma.UserBranchUncheckedUpdateManyWithoutUserNestedInput
   UserRole?: Prisma.UserRoleUncheckedUpdateManyWithoutUserNestedInput
   UserPermission?: Prisma.UserPermissionUncheckedUpdateManyWithoutUserNestedInput
@@ -4921,6 +5024,7 @@ export type UserCreateWithoutXrayAnalysesInput = {
   chatMessages?: Prisma.ChatMessageCreateNestedManyWithoutAuthorInput
   treatmentPlans?: Prisma.TreatmentPlanCreateNestedManyWithoutDoctorInput
   patientPrescriptions?: Prisma.PatientPrescriptionCreateNestedManyWithoutDoctorInput
+  authoredPatientDocuments?: Prisma.PatientDocumentCreateNestedManyWithoutAuthorInput
   UserBranch?: Prisma.UserBranchCreateNestedManyWithoutUserInput
   UserRole?: Prisma.UserRoleCreateNestedManyWithoutUserInput
   UserPermission?: Prisma.UserPermissionCreateNestedManyWithoutUserInput
@@ -4964,6 +5068,7 @@ export type UserUncheckedCreateWithoutXrayAnalysesInput = {
   chatMessages?: Prisma.ChatMessageUncheckedCreateNestedManyWithoutAuthorInput
   treatmentPlans?: Prisma.TreatmentPlanUncheckedCreateNestedManyWithoutDoctorInput
   patientPrescriptions?: Prisma.PatientPrescriptionUncheckedCreateNestedManyWithoutDoctorInput
+  authoredPatientDocuments?: Prisma.PatientDocumentUncheckedCreateNestedManyWithoutAuthorInput
   UserBranch?: Prisma.UserBranchUncheckedCreateNestedManyWithoutUserInput
   UserRole?: Prisma.UserRoleUncheckedCreateNestedManyWithoutUserInput
   UserPermission?: Prisma.UserPermissionUncheckedCreateNestedManyWithoutUserInput
@@ -5017,6 +5122,7 @@ export type UserUpdateWithoutXrayAnalysesInput = {
   chatMessages?: Prisma.ChatMessageUpdateManyWithoutAuthorNestedInput
   treatmentPlans?: Prisma.TreatmentPlanUpdateManyWithoutDoctorNestedInput
   patientPrescriptions?: Prisma.PatientPrescriptionUpdateManyWithoutDoctorNestedInput
+  authoredPatientDocuments?: Prisma.PatientDocumentUpdateManyWithoutAuthorNestedInput
   UserBranch?: Prisma.UserBranchUpdateManyWithoutUserNestedInput
   UserRole?: Prisma.UserRoleUpdateManyWithoutUserNestedInput
   UserPermission?: Prisma.UserPermissionUpdateManyWithoutUserNestedInput
@@ -5060,6 +5166,187 @@ export type UserUncheckedUpdateWithoutXrayAnalysesInput = {
   chatMessages?: Prisma.ChatMessageUncheckedUpdateManyWithoutAuthorNestedInput
   treatmentPlans?: Prisma.TreatmentPlanUncheckedUpdateManyWithoutDoctorNestedInput
   patientPrescriptions?: Prisma.PatientPrescriptionUncheckedUpdateManyWithoutDoctorNestedInput
+  authoredPatientDocuments?: Prisma.PatientDocumentUncheckedUpdateManyWithoutAuthorNestedInput
+  UserBranch?: Prisma.UserBranchUncheckedUpdateManyWithoutUserNestedInput
+  UserRole?: Prisma.UserRoleUncheckedUpdateManyWithoutUserNestedInput
+  UserPermission?: Prisma.UserPermissionUncheckedUpdateManyWithoutUserNestedInput
+  refreshTokens?: Prisma.RefreshTokenUncheckedUpdateManyWithoutUserNestedInput
+  authActionTokens?: Prisma.AuthActionTokenUncheckedUpdateManyWithoutUserNestedInput
+  stockSales?: Prisma.StockSaleUncheckedUpdateManyWithoutSoldByNestedInput
+  createdCommunicationCampaigns?: Prisma.CommunicationCampaignUncheckedUpdateManyWithoutCreatedByNestedInput
+}
+
+export type UserCreateWithoutAuthoredPatientDocumentsInput = {
+  id?: string
+  email: string
+  password: string
+  username: string
+  isActive?: boolean
+  phoneNumber?: number | null
+  countryCode?: string | null
+  isPhoneVerified?: boolean
+  isEmailVerified?: boolean
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  deletedAt?: Date | string | null
+  accessHistories?: Prisma.AccessHistoryCreateNestedManyWithoutUserInput
+  audits?: Prisma.AuditCreateNestedManyWithoutUserInput
+  loginHistories?: Prisma.LoginHistoryCreateNestedManyWithoutUserInput
+  Person?: Prisma.PersonCreateNestedManyWithoutUserInput
+  Appointment?: Prisma.AppointmentCreateNestedManyWithoutDoctorInput
+  appointments?: Prisma.AppointmentCreateNestedManyWithoutUserInput
+  clinicProccesses?: Prisma.ClinicProccessCreateNestedManyWithoutDoctorInput
+  Consult?: Prisma.ConsultCreateNestedManyWithoutDoctorInput
+  diagnostics?: Prisma.DiagnosticCreateNestedManyWithoutDoctorInput
+  doctorProfile?: Prisma.DoctorProfileCreateNestedOneWithoutUserInput
+  conversationsStarted?: Prisma.ChatConversationCreateNestedManyWithoutStarterInput
+  conversationsReceived?: Prisma.ChatConversationCreateNestedManyWithoutRecipientInput
+  chatMessages?: Prisma.ChatMessageCreateNestedManyWithoutAuthorInput
+  treatmentPlans?: Prisma.TreatmentPlanCreateNestedManyWithoutDoctorInput
+  patientPrescriptions?: Prisma.PatientPrescriptionCreateNestedManyWithoutDoctorInput
+  xrayAnalyses?: Prisma.XRayAnalysisCreateNestedManyWithoutAnalyzedByInput
+  UserBranch?: Prisma.UserBranchCreateNestedManyWithoutUserInput
+  UserRole?: Prisma.UserRoleCreateNestedManyWithoutUserInput
+  UserPermission?: Prisma.UserPermissionCreateNestedManyWithoutUserInput
+  refreshTokens?: Prisma.RefreshTokenCreateNestedManyWithoutUserInput
+  authActionTokens?: Prisma.AuthActionTokenCreateNestedManyWithoutUserInput
+  stockSales?: Prisma.StockSaleCreateNestedManyWithoutSoldByInput
+  createdCommunicationCampaigns?: Prisma.CommunicationCampaignCreateNestedManyWithoutCreatedByInput
+  Address?: Prisma.AddressCreateNestedOneWithoutUserInput
+  branch: Prisma.BranchCreateNestedOneWithoutUserInput
+  Role?: Prisma.RoleCreateNestedOneWithoutUserInput
+}
+
+export type UserUncheckedCreateWithoutAuthoredPatientDocumentsInput = {
+  id?: string
+  email: string
+  password: string
+  username: string
+  branchId: string
+  addressId?: string | null
+  roleId?: string | null
+  isActive?: boolean
+  phoneNumber?: number | null
+  countryCode?: string | null
+  isPhoneVerified?: boolean
+  isEmailVerified?: boolean
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  deletedAt?: Date | string | null
+  accessHistories?: Prisma.AccessHistoryUncheckedCreateNestedManyWithoutUserInput
+  audits?: Prisma.AuditUncheckedCreateNestedManyWithoutUserInput
+  loginHistories?: Prisma.LoginHistoryUncheckedCreateNestedManyWithoutUserInput
+  Person?: Prisma.PersonUncheckedCreateNestedManyWithoutUserInput
+  Appointment?: Prisma.AppointmentUncheckedCreateNestedManyWithoutDoctorInput
+  appointments?: Prisma.AppointmentUncheckedCreateNestedManyWithoutUserInput
+  clinicProccesses?: Prisma.ClinicProccessUncheckedCreateNestedManyWithoutDoctorInput
+  Consult?: Prisma.ConsultUncheckedCreateNestedManyWithoutDoctorInput
+  diagnostics?: Prisma.DiagnosticUncheckedCreateNestedManyWithoutDoctorInput
+  doctorProfile?: Prisma.DoctorProfileUncheckedCreateNestedOneWithoutUserInput
+  conversationsStarted?: Prisma.ChatConversationUncheckedCreateNestedManyWithoutStarterInput
+  conversationsReceived?: Prisma.ChatConversationUncheckedCreateNestedManyWithoutRecipientInput
+  chatMessages?: Prisma.ChatMessageUncheckedCreateNestedManyWithoutAuthorInput
+  treatmentPlans?: Prisma.TreatmentPlanUncheckedCreateNestedManyWithoutDoctorInput
+  patientPrescriptions?: Prisma.PatientPrescriptionUncheckedCreateNestedManyWithoutDoctorInput
+  xrayAnalyses?: Prisma.XRayAnalysisUncheckedCreateNestedManyWithoutAnalyzedByInput
+  UserBranch?: Prisma.UserBranchUncheckedCreateNestedManyWithoutUserInput
+  UserRole?: Prisma.UserRoleUncheckedCreateNestedManyWithoutUserInput
+  UserPermission?: Prisma.UserPermissionUncheckedCreateNestedManyWithoutUserInput
+  refreshTokens?: Prisma.RefreshTokenUncheckedCreateNestedManyWithoutUserInput
+  authActionTokens?: Prisma.AuthActionTokenUncheckedCreateNestedManyWithoutUserInput
+  stockSales?: Prisma.StockSaleUncheckedCreateNestedManyWithoutSoldByInput
+  createdCommunicationCampaigns?: Prisma.CommunicationCampaignUncheckedCreateNestedManyWithoutCreatedByInput
+}
+
+export type UserCreateOrConnectWithoutAuthoredPatientDocumentsInput = {
+  where: Prisma.UserWhereUniqueInput
+  create: Prisma.XOR<Prisma.UserCreateWithoutAuthoredPatientDocumentsInput, Prisma.UserUncheckedCreateWithoutAuthoredPatientDocumentsInput>
+}
+
+export type UserUpsertWithoutAuthoredPatientDocumentsInput = {
+  update: Prisma.XOR<Prisma.UserUpdateWithoutAuthoredPatientDocumentsInput, Prisma.UserUncheckedUpdateWithoutAuthoredPatientDocumentsInput>
+  create: Prisma.XOR<Prisma.UserCreateWithoutAuthoredPatientDocumentsInput, Prisma.UserUncheckedCreateWithoutAuthoredPatientDocumentsInput>
+  where?: Prisma.UserWhereInput
+}
+
+export type UserUpdateToOneWithWhereWithoutAuthoredPatientDocumentsInput = {
+  where?: Prisma.UserWhereInput
+  data: Prisma.XOR<Prisma.UserUpdateWithoutAuthoredPatientDocumentsInput, Prisma.UserUncheckedUpdateWithoutAuthoredPatientDocumentsInput>
+}
+
+export type UserUpdateWithoutAuthoredPatientDocumentsInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  email?: Prisma.StringFieldUpdateOperationsInput | string
+  password?: Prisma.StringFieldUpdateOperationsInput | string
+  username?: Prisma.StringFieldUpdateOperationsInput | string
+  isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  phoneNumber?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  countryCode?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  isPhoneVerified?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  isEmailVerified?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  deletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  accessHistories?: Prisma.AccessHistoryUpdateManyWithoutUserNestedInput
+  audits?: Prisma.AuditUpdateManyWithoutUserNestedInput
+  loginHistories?: Prisma.LoginHistoryUpdateManyWithoutUserNestedInput
+  Person?: Prisma.PersonUpdateManyWithoutUserNestedInput
+  Appointment?: Prisma.AppointmentUpdateManyWithoutDoctorNestedInput
+  appointments?: Prisma.AppointmentUpdateManyWithoutUserNestedInput
+  clinicProccesses?: Prisma.ClinicProccessUpdateManyWithoutDoctorNestedInput
+  Consult?: Prisma.ConsultUpdateManyWithoutDoctorNestedInput
+  diagnostics?: Prisma.DiagnosticUpdateManyWithoutDoctorNestedInput
+  doctorProfile?: Prisma.DoctorProfileUpdateOneWithoutUserNestedInput
+  conversationsStarted?: Prisma.ChatConversationUpdateManyWithoutStarterNestedInput
+  conversationsReceived?: Prisma.ChatConversationUpdateManyWithoutRecipientNestedInput
+  chatMessages?: Prisma.ChatMessageUpdateManyWithoutAuthorNestedInput
+  treatmentPlans?: Prisma.TreatmentPlanUpdateManyWithoutDoctorNestedInput
+  patientPrescriptions?: Prisma.PatientPrescriptionUpdateManyWithoutDoctorNestedInput
+  xrayAnalyses?: Prisma.XRayAnalysisUpdateManyWithoutAnalyzedByNestedInput
+  UserBranch?: Prisma.UserBranchUpdateManyWithoutUserNestedInput
+  UserRole?: Prisma.UserRoleUpdateManyWithoutUserNestedInput
+  UserPermission?: Prisma.UserPermissionUpdateManyWithoutUserNestedInput
+  refreshTokens?: Prisma.RefreshTokenUpdateManyWithoutUserNestedInput
+  authActionTokens?: Prisma.AuthActionTokenUpdateManyWithoutUserNestedInput
+  stockSales?: Prisma.StockSaleUpdateManyWithoutSoldByNestedInput
+  createdCommunicationCampaigns?: Prisma.CommunicationCampaignUpdateManyWithoutCreatedByNestedInput
+  Address?: Prisma.AddressUpdateOneWithoutUserNestedInput
+  branch?: Prisma.BranchUpdateOneRequiredWithoutUserNestedInput
+  Role?: Prisma.RoleUpdateOneWithoutUserNestedInput
+}
+
+export type UserUncheckedUpdateWithoutAuthoredPatientDocumentsInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  email?: Prisma.StringFieldUpdateOperationsInput | string
+  password?: Prisma.StringFieldUpdateOperationsInput | string
+  username?: Prisma.StringFieldUpdateOperationsInput | string
+  branchId?: Prisma.StringFieldUpdateOperationsInput | string
+  addressId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  roleId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  phoneNumber?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  countryCode?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  isPhoneVerified?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  isEmailVerified?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  deletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  accessHistories?: Prisma.AccessHistoryUncheckedUpdateManyWithoutUserNestedInput
+  audits?: Prisma.AuditUncheckedUpdateManyWithoutUserNestedInput
+  loginHistories?: Prisma.LoginHistoryUncheckedUpdateManyWithoutUserNestedInput
+  Person?: Prisma.PersonUncheckedUpdateManyWithoutUserNestedInput
+  Appointment?: Prisma.AppointmentUncheckedUpdateManyWithoutDoctorNestedInput
+  appointments?: Prisma.AppointmentUncheckedUpdateManyWithoutUserNestedInput
+  clinicProccesses?: Prisma.ClinicProccessUncheckedUpdateManyWithoutDoctorNestedInput
+  Consult?: Prisma.ConsultUncheckedUpdateManyWithoutDoctorNestedInput
+  diagnostics?: Prisma.DiagnosticUncheckedUpdateManyWithoutDoctorNestedInput
+  doctorProfile?: Prisma.DoctorProfileUncheckedUpdateOneWithoutUserNestedInput
+  conversationsStarted?: Prisma.ChatConversationUncheckedUpdateManyWithoutStarterNestedInput
+  conversationsReceived?: Prisma.ChatConversationUncheckedUpdateManyWithoutRecipientNestedInput
+  chatMessages?: Prisma.ChatMessageUncheckedUpdateManyWithoutAuthorNestedInput
+  treatmentPlans?: Prisma.TreatmentPlanUncheckedUpdateManyWithoutDoctorNestedInput
+  patientPrescriptions?: Prisma.PatientPrescriptionUncheckedUpdateManyWithoutDoctorNestedInput
+  xrayAnalyses?: Prisma.XRayAnalysisUncheckedUpdateManyWithoutAnalyzedByNestedInput
   UserBranch?: Prisma.UserBranchUncheckedUpdateManyWithoutUserNestedInput
   UserRole?: Prisma.UserRoleUncheckedUpdateManyWithoutUserNestedInput
   UserPermission?: Prisma.UserPermissionUncheckedUpdateManyWithoutUserNestedInput
@@ -5097,6 +5384,7 @@ export type UserCreateWithoutAuditsInput = {
   treatmentPlans?: Prisma.TreatmentPlanCreateNestedManyWithoutDoctorInput
   patientPrescriptions?: Prisma.PatientPrescriptionCreateNestedManyWithoutDoctorInput
   xrayAnalyses?: Prisma.XRayAnalysisCreateNestedManyWithoutAnalyzedByInput
+  authoredPatientDocuments?: Prisma.PatientDocumentCreateNestedManyWithoutAuthorInput
   UserBranch?: Prisma.UserBranchCreateNestedManyWithoutUserInput
   UserRole?: Prisma.UserRoleCreateNestedManyWithoutUserInput
   UserPermission?: Prisma.UserPermissionCreateNestedManyWithoutUserInput
@@ -5140,6 +5428,7 @@ export type UserUncheckedCreateWithoutAuditsInput = {
   treatmentPlans?: Prisma.TreatmentPlanUncheckedCreateNestedManyWithoutDoctorInput
   patientPrescriptions?: Prisma.PatientPrescriptionUncheckedCreateNestedManyWithoutDoctorInput
   xrayAnalyses?: Prisma.XRayAnalysisUncheckedCreateNestedManyWithoutAnalyzedByInput
+  authoredPatientDocuments?: Prisma.PatientDocumentUncheckedCreateNestedManyWithoutAuthorInput
   UserBranch?: Prisma.UserBranchUncheckedCreateNestedManyWithoutUserInput
   UserRole?: Prisma.UserRoleUncheckedCreateNestedManyWithoutUserInput
   UserPermission?: Prisma.UserPermissionUncheckedCreateNestedManyWithoutUserInput
@@ -5193,6 +5482,7 @@ export type UserUpdateWithoutAuditsInput = {
   treatmentPlans?: Prisma.TreatmentPlanUpdateManyWithoutDoctorNestedInput
   patientPrescriptions?: Prisma.PatientPrescriptionUpdateManyWithoutDoctorNestedInput
   xrayAnalyses?: Prisma.XRayAnalysisUpdateManyWithoutAnalyzedByNestedInput
+  authoredPatientDocuments?: Prisma.PatientDocumentUpdateManyWithoutAuthorNestedInput
   UserBranch?: Prisma.UserBranchUpdateManyWithoutUserNestedInput
   UserRole?: Prisma.UserRoleUpdateManyWithoutUserNestedInput
   UserPermission?: Prisma.UserPermissionUpdateManyWithoutUserNestedInput
@@ -5236,6 +5526,7 @@ export type UserUncheckedUpdateWithoutAuditsInput = {
   treatmentPlans?: Prisma.TreatmentPlanUncheckedUpdateManyWithoutDoctorNestedInput
   patientPrescriptions?: Prisma.PatientPrescriptionUncheckedUpdateManyWithoutDoctorNestedInput
   xrayAnalyses?: Prisma.XRayAnalysisUncheckedUpdateManyWithoutAnalyzedByNestedInput
+  authoredPatientDocuments?: Prisma.PatientDocumentUncheckedUpdateManyWithoutAuthorNestedInput
   UserBranch?: Prisma.UserBranchUncheckedUpdateManyWithoutUserNestedInput
   UserRole?: Prisma.UserRoleUncheckedUpdateManyWithoutUserNestedInput
   UserPermission?: Prisma.UserPermissionUncheckedUpdateManyWithoutUserNestedInput
@@ -5273,6 +5564,7 @@ export type UserCreateWithoutLoginHistoriesInput = {
   treatmentPlans?: Prisma.TreatmentPlanCreateNestedManyWithoutDoctorInput
   patientPrescriptions?: Prisma.PatientPrescriptionCreateNestedManyWithoutDoctorInput
   xrayAnalyses?: Prisma.XRayAnalysisCreateNestedManyWithoutAnalyzedByInput
+  authoredPatientDocuments?: Prisma.PatientDocumentCreateNestedManyWithoutAuthorInput
   UserBranch?: Prisma.UserBranchCreateNestedManyWithoutUserInput
   UserRole?: Prisma.UserRoleCreateNestedManyWithoutUserInput
   UserPermission?: Prisma.UserPermissionCreateNestedManyWithoutUserInput
@@ -5316,6 +5608,7 @@ export type UserUncheckedCreateWithoutLoginHistoriesInput = {
   treatmentPlans?: Prisma.TreatmentPlanUncheckedCreateNestedManyWithoutDoctorInput
   patientPrescriptions?: Prisma.PatientPrescriptionUncheckedCreateNestedManyWithoutDoctorInput
   xrayAnalyses?: Prisma.XRayAnalysisUncheckedCreateNestedManyWithoutAnalyzedByInput
+  authoredPatientDocuments?: Prisma.PatientDocumentUncheckedCreateNestedManyWithoutAuthorInput
   UserBranch?: Prisma.UserBranchUncheckedCreateNestedManyWithoutUserInput
   UserRole?: Prisma.UserRoleUncheckedCreateNestedManyWithoutUserInput
   UserPermission?: Prisma.UserPermissionUncheckedCreateNestedManyWithoutUserInput
@@ -5369,6 +5662,7 @@ export type UserUpdateWithoutLoginHistoriesInput = {
   treatmentPlans?: Prisma.TreatmentPlanUpdateManyWithoutDoctorNestedInput
   patientPrescriptions?: Prisma.PatientPrescriptionUpdateManyWithoutDoctorNestedInput
   xrayAnalyses?: Prisma.XRayAnalysisUpdateManyWithoutAnalyzedByNestedInput
+  authoredPatientDocuments?: Prisma.PatientDocumentUpdateManyWithoutAuthorNestedInput
   UserBranch?: Prisma.UserBranchUpdateManyWithoutUserNestedInput
   UserRole?: Prisma.UserRoleUpdateManyWithoutUserNestedInput
   UserPermission?: Prisma.UserPermissionUpdateManyWithoutUserNestedInput
@@ -5412,6 +5706,7 @@ export type UserUncheckedUpdateWithoutLoginHistoriesInput = {
   treatmentPlans?: Prisma.TreatmentPlanUncheckedUpdateManyWithoutDoctorNestedInput
   patientPrescriptions?: Prisma.PatientPrescriptionUncheckedUpdateManyWithoutDoctorNestedInput
   xrayAnalyses?: Prisma.XRayAnalysisUncheckedUpdateManyWithoutAnalyzedByNestedInput
+  authoredPatientDocuments?: Prisma.PatientDocumentUncheckedUpdateManyWithoutAuthorNestedInput
   UserBranch?: Prisma.UserBranchUncheckedUpdateManyWithoutUserNestedInput
   UserRole?: Prisma.UserRoleUncheckedUpdateManyWithoutUserNestedInput
   UserPermission?: Prisma.UserPermissionUncheckedUpdateManyWithoutUserNestedInput
@@ -5449,6 +5744,7 @@ export type UserCreateWithoutAccessHistoriesInput = {
   treatmentPlans?: Prisma.TreatmentPlanCreateNestedManyWithoutDoctorInput
   patientPrescriptions?: Prisma.PatientPrescriptionCreateNestedManyWithoutDoctorInput
   xrayAnalyses?: Prisma.XRayAnalysisCreateNestedManyWithoutAnalyzedByInput
+  authoredPatientDocuments?: Prisma.PatientDocumentCreateNestedManyWithoutAuthorInput
   UserBranch?: Prisma.UserBranchCreateNestedManyWithoutUserInput
   UserRole?: Prisma.UserRoleCreateNestedManyWithoutUserInput
   UserPermission?: Prisma.UserPermissionCreateNestedManyWithoutUserInput
@@ -5492,6 +5788,7 @@ export type UserUncheckedCreateWithoutAccessHistoriesInput = {
   treatmentPlans?: Prisma.TreatmentPlanUncheckedCreateNestedManyWithoutDoctorInput
   patientPrescriptions?: Prisma.PatientPrescriptionUncheckedCreateNestedManyWithoutDoctorInput
   xrayAnalyses?: Prisma.XRayAnalysisUncheckedCreateNestedManyWithoutAnalyzedByInput
+  authoredPatientDocuments?: Prisma.PatientDocumentUncheckedCreateNestedManyWithoutAuthorInput
   UserBranch?: Prisma.UserBranchUncheckedCreateNestedManyWithoutUserInput
   UserRole?: Prisma.UserRoleUncheckedCreateNestedManyWithoutUserInput
   UserPermission?: Prisma.UserPermissionUncheckedCreateNestedManyWithoutUserInput
@@ -5545,6 +5842,7 @@ export type UserUpdateWithoutAccessHistoriesInput = {
   treatmentPlans?: Prisma.TreatmentPlanUpdateManyWithoutDoctorNestedInput
   patientPrescriptions?: Prisma.PatientPrescriptionUpdateManyWithoutDoctorNestedInput
   xrayAnalyses?: Prisma.XRayAnalysisUpdateManyWithoutAnalyzedByNestedInput
+  authoredPatientDocuments?: Prisma.PatientDocumentUpdateManyWithoutAuthorNestedInput
   UserBranch?: Prisma.UserBranchUpdateManyWithoutUserNestedInput
   UserRole?: Prisma.UserRoleUpdateManyWithoutUserNestedInput
   UserPermission?: Prisma.UserPermissionUpdateManyWithoutUserNestedInput
@@ -5588,6 +5886,7 @@ export type UserUncheckedUpdateWithoutAccessHistoriesInput = {
   treatmentPlans?: Prisma.TreatmentPlanUncheckedUpdateManyWithoutDoctorNestedInput
   patientPrescriptions?: Prisma.PatientPrescriptionUncheckedUpdateManyWithoutDoctorNestedInput
   xrayAnalyses?: Prisma.XRayAnalysisUncheckedUpdateManyWithoutAnalyzedByNestedInput
+  authoredPatientDocuments?: Prisma.PatientDocumentUncheckedUpdateManyWithoutAuthorNestedInput
   UserBranch?: Prisma.UserBranchUncheckedUpdateManyWithoutUserNestedInput
   UserRole?: Prisma.UserRoleUncheckedUpdateManyWithoutUserNestedInput
   UserPermission?: Prisma.UserPermissionUncheckedUpdateManyWithoutUserNestedInput
@@ -5643,6 +5942,7 @@ export type UserUpdateWithoutAddressInput = {
   treatmentPlans?: Prisma.TreatmentPlanUpdateManyWithoutDoctorNestedInput
   patientPrescriptions?: Prisma.PatientPrescriptionUpdateManyWithoutDoctorNestedInput
   xrayAnalyses?: Prisma.XRayAnalysisUpdateManyWithoutAnalyzedByNestedInput
+  authoredPatientDocuments?: Prisma.PatientDocumentUpdateManyWithoutAuthorNestedInput
   UserBranch?: Prisma.UserBranchUpdateManyWithoutUserNestedInput
   UserRole?: Prisma.UserRoleUpdateManyWithoutUserNestedInput
   UserPermission?: Prisma.UserPermissionUpdateManyWithoutUserNestedInput
@@ -5685,6 +5985,7 @@ export type UserUncheckedUpdateWithoutAddressInput = {
   treatmentPlans?: Prisma.TreatmentPlanUncheckedUpdateManyWithoutDoctorNestedInput
   patientPrescriptions?: Prisma.PatientPrescriptionUncheckedUpdateManyWithoutDoctorNestedInput
   xrayAnalyses?: Prisma.XRayAnalysisUncheckedUpdateManyWithoutAnalyzedByNestedInput
+  authoredPatientDocuments?: Prisma.PatientDocumentUncheckedUpdateManyWithoutAuthorNestedInput
   UserBranch?: Prisma.UserBranchUncheckedUpdateManyWithoutUserNestedInput
   UserRole?: Prisma.UserRoleUncheckedUpdateManyWithoutUserNestedInput
   UserPermission?: Prisma.UserPermissionUncheckedUpdateManyWithoutUserNestedInput
@@ -5757,6 +6058,7 @@ export type UserUpdateWithoutBranchInput = {
   treatmentPlans?: Prisma.TreatmentPlanUpdateManyWithoutDoctorNestedInput
   patientPrescriptions?: Prisma.PatientPrescriptionUpdateManyWithoutDoctorNestedInput
   xrayAnalyses?: Prisma.XRayAnalysisUpdateManyWithoutAnalyzedByNestedInput
+  authoredPatientDocuments?: Prisma.PatientDocumentUpdateManyWithoutAuthorNestedInput
   UserBranch?: Prisma.UserBranchUpdateManyWithoutUserNestedInput
   UserRole?: Prisma.UserRoleUpdateManyWithoutUserNestedInput
   UserPermission?: Prisma.UserPermissionUpdateManyWithoutUserNestedInput
@@ -5799,6 +6101,7 @@ export type UserUncheckedUpdateWithoutBranchInput = {
   treatmentPlans?: Prisma.TreatmentPlanUncheckedUpdateManyWithoutDoctorNestedInput
   patientPrescriptions?: Prisma.PatientPrescriptionUncheckedUpdateManyWithoutDoctorNestedInput
   xrayAnalyses?: Prisma.XRayAnalysisUncheckedUpdateManyWithoutAnalyzedByNestedInput
+  authoredPatientDocuments?: Prisma.PatientDocumentUncheckedUpdateManyWithoutAuthorNestedInput
   UserBranch?: Prisma.UserBranchUncheckedUpdateManyWithoutUserNestedInput
   UserRole?: Prisma.UserRoleUncheckedUpdateManyWithoutUserNestedInput
   UserPermission?: Prisma.UserPermissionUncheckedUpdateManyWithoutUserNestedInput
@@ -5871,6 +6174,7 @@ export type UserUpdateWithoutRoleInput = {
   treatmentPlans?: Prisma.TreatmentPlanUpdateManyWithoutDoctorNestedInput
   patientPrescriptions?: Prisma.PatientPrescriptionUpdateManyWithoutDoctorNestedInput
   xrayAnalyses?: Prisma.XRayAnalysisUpdateManyWithoutAnalyzedByNestedInput
+  authoredPatientDocuments?: Prisma.PatientDocumentUpdateManyWithoutAuthorNestedInput
   UserBranch?: Prisma.UserBranchUpdateManyWithoutUserNestedInput
   UserRole?: Prisma.UserRoleUpdateManyWithoutUserNestedInput
   UserPermission?: Prisma.UserPermissionUpdateManyWithoutUserNestedInput
@@ -5913,6 +6217,7 @@ export type UserUncheckedUpdateWithoutRoleInput = {
   treatmentPlans?: Prisma.TreatmentPlanUncheckedUpdateManyWithoutDoctorNestedInput
   patientPrescriptions?: Prisma.PatientPrescriptionUncheckedUpdateManyWithoutDoctorNestedInput
   xrayAnalyses?: Prisma.XRayAnalysisUncheckedUpdateManyWithoutAnalyzedByNestedInput
+  authoredPatientDocuments?: Prisma.PatientDocumentUncheckedUpdateManyWithoutAuthorNestedInput
   UserBranch?: Prisma.UserBranchUncheckedUpdateManyWithoutUserNestedInput
   UserRole?: Prisma.UserRoleUncheckedUpdateManyWithoutUserNestedInput
   UserPermission?: Prisma.UserPermissionUncheckedUpdateManyWithoutUserNestedInput
@@ -5960,6 +6265,7 @@ export type UserCountOutputType = {
   treatmentPlans: number
   patientPrescriptions: number
   xrayAnalyses: number
+  authoredPatientDocuments: number
   UserBranch: number
   UserRole: number
   UserPermission: number
@@ -5985,6 +6291,7 @@ export type UserCountOutputTypeSelect<ExtArgs extends runtime.Types.Extensions.I
   treatmentPlans?: boolean | UserCountOutputTypeCountTreatmentPlansArgs
   patientPrescriptions?: boolean | UserCountOutputTypeCountPatientPrescriptionsArgs
   xrayAnalyses?: boolean | UserCountOutputTypeCountXrayAnalysesArgs
+  authoredPatientDocuments?: boolean | UserCountOutputTypeCountAuthoredPatientDocumentsArgs
   UserBranch?: boolean | UserCountOutputTypeCountUserBranchArgs
   UserRole?: boolean | UserCountOutputTypeCountUserRoleArgs
   UserPermission?: boolean | UserCountOutputTypeCountUserPermissionArgs
@@ -6112,6 +6419,13 @@ export type UserCountOutputTypeCountXrayAnalysesArgs<ExtArgs extends runtime.Typ
 /**
  * UserCountOutputType without action
  */
+export type UserCountOutputTypeCountAuthoredPatientDocumentsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  where?: Prisma.PatientDocumentWhereInput
+}
+
+/**
+ * UserCountOutputType without action
+ */
 export type UserCountOutputTypeCountUserBranchArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   where?: Prisma.UserBranchWhereInput
 }
@@ -6191,6 +6505,7 @@ export type UserSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = r
   treatmentPlans?: boolean | Prisma.User$treatmentPlansArgs<ExtArgs>
   patientPrescriptions?: boolean | Prisma.User$patientPrescriptionsArgs<ExtArgs>
   xrayAnalyses?: boolean | Prisma.User$xrayAnalysesArgs<ExtArgs>
+  authoredPatientDocuments?: boolean | Prisma.User$authoredPatientDocumentsArgs<ExtArgs>
   UserBranch?: boolean | Prisma.User$UserBranchArgs<ExtArgs>
   UserRole?: boolean | Prisma.User$UserRoleArgs<ExtArgs>
   UserPermission?: boolean | Prisma.User$UserPermissionArgs<ExtArgs>
@@ -6282,6 +6597,7 @@ export type UserInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = 
   treatmentPlans?: boolean | Prisma.User$treatmentPlansArgs<ExtArgs>
   patientPrescriptions?: boolean | Prisma.User$patientPrescriptionsArgs<ExtArgs>
   xrayAnalyses?: boolean | Prisma.User$xrayAnalysesArgs<ExtArgs>
+  authoredPatientDocuments?: boolean | Prisma.User$authoredPatientDocumentsArgs<ExtArgs>
   UserBranch?: boolean | Prisma.User$UserBranchArgs<ExtArgs>
   UserRole?: boolean | Prisma.User$UserRoleArgs<ExtArgs>
   UserPermission?: boolean | Prisma.User$UserPermissionArgs<ExtArgs>
@@ -6324,6 +6640,7 @@ export type $UserPayload<ExtArgs extends runtime.Types.Extensions.InternalArgs =
     treatmentPlans: Prisma.$TreatmentPlanPayload<ExtArgs>[]
     patientPrescriptions: Prisma.$PatientPrescriptionPayload<ExtArgs>[]
     xrayAnalyses: Prisma.$XRayAnalysisPayload<ExtArgs>[]
+    authoredPatientDocuments: Prisma.$PatientDocumentPayload<ExtArgs>[]
     UserBranch: Prisma.$UserBranchPayload<ExtArgs>[]
     UserRole: Prisma.$UserRolePayload<ExtArgs>[]
     UserPermission: Prisma.$UserPermissionPayload<ExtArgs>[]
@@ -6761,6 +7078,7 @@ export interface Prisma__UserClient<T, Null = never, ExtArgs extends runtime.Typ
   treatmentPlans<T extends Prisma.User$treatmentPlansArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.User$treatmentPlansArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$TreatmentPlanPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   patientPrescriptions<T extends Prisma.User$patientPrescriptionsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.User$patientPrescriptionsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$PatientPrescriptionPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   xrayAnalyses<T extends Prisma.User$xrayAnalysesArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.User$xrayAnalysesArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$XRayAnalysisPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+  authoredPatientDocuments<T extends Prisma.User$authoredPatientDocumentsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.User$authoredPatientDocumentsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$PatientDocumentPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   UserBranch<T extends Prisma.User$UserBranchArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.User$UserBranchArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$UserBranchPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   UserRole<T extends Prisma.User$UserRoleArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.User$UserRoleArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$UserRolePayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   UserPermission<T extends Prisma.User$UserPermissionArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.User$UserPermissionArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$UserPermissionPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
@@ -7587,6 +7905,30 @@ export type User$xrayAnalysesArgs<ExtArgs extends runtime.Types.Extensions.Inter
   take?: number
   skip?: number
   distinct?: Prisma.XRayAnalysisScalarFieldEnum | Prisma.XRayAnalysisScalarFieldEnum[]
+}
+
+/**
+ * User.authoredPatientDocuments
+ */
+export type User$authoredPatientDocumentsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the PatientDocument
+   */
+  select?: Prisma.PatientDocumentSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the PatientDocument
+   */
+  omit?: Prisma.PatientDocumentOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.PatientDocumentInclude<ExtArgs> | null
+  where?: Prisma.PatientDocumentWhereInput
+  orderBy?: Prisma.PatientDocumentOrderByWithRelationInput | Prisma.PatientDocumentOrderByWithRelationInput[]
+  cursor?: Prisma.PatientDocumentWhereUniqueInput
+  take?: number
+  skip?: number
+  distinct?: Prisma.PatientDocumentScalarFieldEnum | Prisma.PatientDocumentScalarFieldEnum[]
 }
 
 /**

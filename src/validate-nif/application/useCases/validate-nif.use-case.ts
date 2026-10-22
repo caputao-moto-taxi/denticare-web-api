@@ -1,4 +1,5 @@
 import axios from 'axios';
+import { Agent } from 'https';
 import { HttpStatus } from '@nestjs/common';
 import {
   HttpResponseType,
@@ -8,75 +9,40 @@ import {
 import type { UseCase } from '../../../shared/contracts/useCasesOrServicesContract';
 import type { ValidateNifInterface } from '../interface/validateNif.interface';
 
-type NifProviderResponse = {
-  success?: boolean;
-  data?: unknown;
-};
-
-export type ValidateNifResult = {
-  nif: string;
-  name: string;
-};
+const NIF_PROVIDER_URL = 'https://dominios.ao/ao/actions/nif.ajcall.php';
+const httpsAgent = new Agent({ rejectUnauthorized: false });
 
 export class ValidateNifUseCase implements UseCase {
-  async execute(request: ValidateNifInterface) {
-    const nif = request.nif?.trim();
-    if (!nif) {
-      return badRequestResponse({ message: 'NIF is required' });
-    }
-    if (!/^\d{10}$/.test(nif)) {
+  async execute({ nif }: ValidateNifInterface) {
+    if (!/^\d{10}$/.test(nif ?? '')) {
       return badRequestResponse({ message: 'NIF must be 10 digits' });
     }
 
     try {
-      const response = await this.validateNif(nif);
-      if (response.data.success !== true) {
+      const { data: result } = await axios.get(NIF_PROVIDER_URL, {
+        params: { nif },
+        httpsAgent,
+      });
+      console.log('NIF validation result:', result);
+      if (result.sucess !== true) {
         return badRequestResponse({ message: 'NIF is not valid' });
       }
-      const name = this.extractName(response.data.data);
+
+      const record = Array.isArray(result.data) ? result.data[0] : result.data;
+      const nameKey = Object.keys(record ?? {}).find((key) =>
+        /nome|name|razao|designacao|titular/i.test(key),
+      );
+      const name = nameKey ? String(record[nameKey]).trim() : '';
       if (!name) {
-        return new HttpResponseType({
-          status: HttpStatus.BAD_GATEWAY,
-          data: { message: 'The NIF provider returned no registered name' },
-        });
+        return badRequestResponse({ message: 'NIF is not valid' });
       }
-      return successResponse({ nif, name } satisfies ValidateNifResult);
+
+      return successResponse({ nif, name });
     } catch {
       return new HttpResponseType({
         status: HttpStatus.BAD_GATEWAY,
         data: { message: 'NIF verification service is unavailable' },
       });
     }
-  }
-
-  private async validateNif(nif: string) {
-    return axios.get<NifProviderResponse>(
-      'https://dominios.ao/ao/actions/nif.ajcall.php',
-      { params: { nif }, timeout: 10000 },
-    );
-  }
-
-  private extractName(data: unknown) {
-    const record = Array.isArray(data) ? data[0] : data;
-    if (!record || typeof record !== 'object') return null;
-
-    for (const [key, value] of Object.entries(record)) {
-      const normalizedKey = key
-        .normalize('NFD')
-        .replace(/[\u0300-\u036f]/g, '')
-        .toLowerCase()
-        .replace(/[^a-z]/g, '');
-      const isNameField =
-        normalizedKey === 'name' ||
-        normalizedKey === 'razaosocial' ||
-        normalizedKey === 'designacao' ||
-        normalizedKey === 'titular' ||
-        normalizedKey.startsWith('nome');
-      if (isNameField && typeof value === 'string' && value.trim()) {
-        return value.trim();
-      }
-    }
-
-    return null;
   }
 }

@@ -97,6 +97,7 @@ export const ModelName = {
   PatientFinancialEntry: 'PatientFinancialEntry',
   XRayAnalysis: 'XRayAnalysis',
   PatientExam: 'PatientExam',
+  PatientDocument: 'PatientDocument',
   NewLatter: 'NewLatter',
   Message: 'Message',
   Audit: 'Audit',
@@ -858,6 +859,21 @@ export const PatientExamScalarFieldEnum = {
 } as const
 
 export type PatientExamScalarFieldEnum = (typeof PatientExamScalarFieldEnum)[keyof typeof PatientExamScalarFieldEnum]
+
+
+export const PatientDocumentScalarFieldEnum = {
+  id: 'id',
+  patientId: 'patientId',
+  authorId: 'authorId',
+  branchId: 'branchId',
+  type: 'type',
+  formData: 'formData',
+  pdfBytes: 'pdfBytes',
+  fileName: 'fileName',
+  createdAt: 'createdAt'
+} as const
+
+export type PatientDocumentScalarFieldEnum = (typeof PatientDocumentScalarFieldEnum)[keyof typeof PatientDocumentScalarFieldEnum]
 
 
 export const NewLatterScalarFieldEnum = {

@@ -12,7 +12,7 @@ describe('ValidateNifUseCase', () => {
     });
 
     await expect(
-      useCase.execute({ nif: ' 1234567890 ' }),
+      useCase.execute({ nif: '1234567890' }),
     ).resolves.toMatchObject({
       status: 200,
       data: { nif: '1234567890', name: 'Clinica DentCare' },

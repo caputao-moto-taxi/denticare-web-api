@@ -148,9 +148,9 @@ describe('Database listing pagination', () => {
           entity === 'appointment'
             ? { doctor: { branchId: 'my-clinic' } }
             : {
-                branchId: 'my-clinic',
-                ...(entity !== 'chatConversation' && { deletedAt: null }),
-              },
+              branchId: 'my-clinic',
+              ...(entity !== 'chatConversation' && { deletedAt: null }),
+            },
         );
       }
       if (name === 'conversations') {

@@ -18,6 +18,8 @@ import { XRayAnalysisModule } from './x-ray-analysis/x-ray-analysis.module';
 import { ClinicSettingsModule } from './clinic-settings/clinic-settings.module';
 import { CommunicationsModule } from './communications/communications.module';
 import { ValidateNifModule } from './validate-nif/validate-nif.module';
+import { DocumentsModule } from './documents/documents.module';
+import { FinancesModule } from './finances/finances.module';
 
 @Module({
   imports: [
@@ -41,6 +43,8 @@ import { ValidateNifModule } from './validate-nif/validate-nif.module';
     ClinicSettingsModule,
     CommunicationsModule,
     ValidateNifModule,
+    DocumentsModule,
+    FinancesModule,
   ],
 })
 export class AppModule implements NestModule {

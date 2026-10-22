@@ -430,6 +430,7 @@ export const ModelName = {
   PatientFinancialEntry: 'PatientFinancialEntry',
   XRayAnalysis: 'XRayAnalysis',
   PatientExam: 'PatientExam',
+  PatientDocument: 'PatientDocument',
   NewLatter: 'NewLatter',
   Message: 'Message',
   Audit: 'Audit',
@@ -451,7 +452,7 @@ export type TypeMap<ExtArgs extends runtime.Types.Extensions.InternalArgs = runt
     omit: GlobalOmitOptions
   }
   meta: {
-    modelProps: "currency" | "plan" | "benefit" | "planBenefit" | "headquarter" | "address" | "branch" | "user" | "person" | "role" | "permission" | "userBranch" | "rolePermission" | "userPermission" | "userRole" | "appointment" | "doctorProfile" | "chatConversation" | "chatMessage" | "stockItem" | "stockCatalogEntry" | "stockSale" | "communicationCampaign" | "stockSaleItem" | "treatmentPlan" | "revokedToken" | "refreshToken" | "authActionToken" | "consult" | "consultTreatment" | "treatment" | "treatmentPrice" | "product" | "clinicService" | "sale" | "saleItem" | "prescription" | "prescriptionItem" | "clinicProccess" | "diagnostic" | "diagnosticAttachment" | "patientTooth" | "patientPrescription" | "patientFinancialEntry" | "xRayAnalysis" | "patientExam" | "newLatter" | "message" | "audit" | "log" | "loginHistory" | "accessHistory"
+    modelProps: "currency" | "plan" | "benefit" | "planBenefit" | "headquarter" | "address" | "branch" | "user" | "person" | "role" | "permission" | "userBranch" | "rolePermission" | "userPermission" | "userRole" | "appointment" | "doctorProfile" | "chatConversation" | "chatMessage" | "stockItem" | "stockCatalogEntry" | "stockSale" | "communicationCampaign" | "stockSaleItem" | "treatmentPlan" | "revokedToken" | "refreshToken" | "authActionToken" | "consult" | "consultTreatment" | "treatment" | "treatmentPrice" | "product" | "clinicService" | "sale" | "saleItem" | "prescription" | "prescriptionItem" | "clinicProccess" | "diagnostic" | "diagnosticAttachment" | "patientTooth" | "patientPrescription" | "patientFinancialEntry" | "xRayAnalysis" | "patientExam" | "patientDocument" | "newLatter" | "message" | "audit" | "log" | "loginHistory" | "accessHistory"
     txIsolationLevel: TransactionIsolationLevel
   }
   model: {
@@ -3859,6 +3860,80 @@ export type TypeMap<ExtArgs extends runtime.Types.Extensions.InternalArgs = runt
         }
       }
     }
+    PatientDocument: {
+      payload: Prisma.$PatientDocumentPayload<ExtArgs>
+      fields: Prisma.PatientDocumentFieldRefs
+      operations: {
+        findUnique: {
+          args: Prisma.PatientDocumentFindUniqueArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$PatientDocumentPayload> | null
+        }
+        findUniqueOrThrow: {
+          args: Prisma.PatientDocumentFindUniqueOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$PatientDocumentPayload>
+        }
+        findFirst: {
+          args: Prisma.PatientDocumentFindFirstArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$PatientDocumentPayload> | null
+        }
+        findFirstOrThrow: {
+          args: Prisma.PatientDocumentFindFirstOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$PatientDocumentPayload>
+        }
+        findMany: {
+          args: Prisma.PatientDocumentFindManyArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$PatientDocumentPayload>[]
+        }
+        create: {
+          args: Prisma.PatientDocumentCreateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$PatientDocumentPayload>
+        }
+        createMany: {
+          args: Prisma.PatientDocumentCreateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        createManyAndReturn: {
+          args: Prisma.PatientDocumentCreateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$PatientDocumentPayload>[]
+        }
+        delete: {
+          args: Prisma.PatientDocumentDeleteArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$PatientDocumentPayload>
+        }
+        update: {
+          args: Prisma.PatientDocumentUpdateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$PatientDocumentPayload>
+        }
+        deleteMany: {
+          args: Prisma.PatientDocumentDeleteManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateMany: {
+          args: Prisma.PatientDocumentUpdateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateManyAndReturn: {
+          args: Prisma.PatientDocumentUpdateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$PatientDocumentPayload>[]
+        }
+        upsert: {
+          args: Prisma.PatientDocumentUpsertArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$PatientDocumentPayload>
+        }
+        aggregate: {
+          args: Prisma.PatientDocumentAggregateArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.AggregatePatientDocument>
+        }
+        groupBy: {
+          args: Prisma.PatientDocumentGroupByArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.PatientDocumentGroupByOutputType>[]
+        }
+        count: {
+          args: Prisma.PatientDocumentCountArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.PatientDocumentCountAggregateOutputType> | number
+        }
+      }
+    }
     NewLatter: {
       payload: Prisma.$NewLatterPayload<ExtArgs>
       fields: Prisma.NewLatterFieldRefs
@@ -5081,6 +5156,21 @@ export const PatientExamScalarFieldEnum = {
 export type PatientExamScalarFieldEnum = (typeof PatientExamScalarFieldEnum)[keyof typeof PatientExamScalarFieldEnum]
 
 
+export const PatientDocumentScalarFieldEnum = {
+  id: 'id',
+  patientId: 'patientId',
+  authorId: 'authorId',
+  branchId: 'branchId',
+  type: 'type',
+  formData: 'formData',
+  pdfBytes: 'pdfBytes',
+  fileName: 'fileName',
+  createdAt: 'createdAt'
+} as const
+
+export type PatientDocumentScalarFieldEnum = (typeof PatientDocumentScalarFieldEnum)[keyof typeof PatientDocumentScalarFieldEnum]
+
+
 export const NewLatterScalarFieldEnum = {
   id: 'id',
   email: 'email',
@@ -5343,6 +5433,20 @@ export type EnumPrescriptionPeriodFieldRefInput<$PrismaModel> = FieldRefInputTyp
 export type ListEnumPrescriptionPeriodFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'PrescriptionPeriod[]'>
     
 
+
+/**
+ * Reference to a field of type 'Bytes'
+ */
+export type BytesFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'Bytes'>
+    
+
+
+/**
+ * Reference to a field of type 'Bytes[]'
+ */
+export type ListBytesFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'Bytes[]'>
+    
+
 /**
  * Batch Payload for updateMany & deleteMany & createMany
  */
@@ -5484,6 +5588,7 @@ export type GlobalOmitConfig = {
   patientFinancialEntry?: Prisma.PatientFinancialEntryOmit
   xRayAnalysis?: Prisma.XRayAnalysisOmit
   patientExam?: Prisma.PatientExamOmit
+  patientDocument?: Prisma.PatientDocumentOmit
   newLatter?: Prisma.NewLatterOmit
   message?: Prisma.MessageOmit
   audit?: Prisma.AuditOmit

@@ -1,6 +1,9 @@
 import { Injectable, ServiceUnavailableException } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import { S3Client } from '@aws-sdk/client-s3';
+import { NodeHttpHandler } from '@smithy/node-http-handler';
+import { Agent as HttpsAgent } from 'node:https';
+import { rootCertificates } from 'node:tls';
 import { IStorage } from '../../../shared/application/storage.interface';
 import { AwsS3Storage } from '../../../shared/infra/storage/aws-s3.storage';
 
@@ -45,6 +48,10 @@ export class PatientExamStorage {
       endpoint ??
       (accountId ? `https://${accountId}.r2.cloudflarestorage.com` : undefined);
     const resolvedSecretAccessKey = secretAccessKey ?? legacySecretAccessKey;
+    const tlsCa = this.config
+      .get<string>('R2_TLS_CA_CERT')
+      ?.replace(/\\n/g, '\n')
+      .trim();
     if (
       !resolvedEndpoint ||
       !accessKeyId ||
@@ -64,6 +71,15 @@ export class PatientExamStorage {
           accessKeyId,
           secretAccessKey: resolvedSecretAccessKey,
         },
+        ...(tlsCa
+          ? {
+              requestHandler: new NodeHttpHandler({
+                httpsAgent: new HttpsAgent({
+                  ca: [...rootCertificates, tlsCa],
+                }),
+              }),
+            }
+          : {}),
       }),
       bucketName,
     );

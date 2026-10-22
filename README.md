@@ -37,6 +37,17 @@ inclua esses valores no controlo de versões. Para uploads, configure
 `R2_ENDPOINT`, `R2_BUCKET`, `R2_ACCESS_KEY_ID` e `R2_SECRET_ACCESS_KEY`. Os
 nomes `CLOUDFLARE_*` antigos continuam aceites como fallback. O bucket R2 deve
 permanecer privado; a API serve os ficheiros após validar a autorização.
+Se o endpoint R2 usar uma CA privada (por exemplo, devido à inspecção TLS da
+rede), configure `R2_TLS_CA_CERT` com o certificado PEM da CA raiz confiável,
+escapando as quebras de linha como `\n`. A configuração adiciona essa CA às
+raízes TLS predefinidas do Node e mantém a validação do certificado e hostname.
+Não use certificados de servidor nem desactive a validação.
+
+Para email por Gmail, configure `GMAIL_USER` e `GMAIL_APP_PASSWORD` com uma
+palavra-passe de aplicação de 16 caracteres. Em redes que inspeccionem TLS,
+configure opcionalmente `SMTP_TLS_CA_CERT` com o certificado PEM da CA raiz
+confiável, escapando as quebras de linha como `\n`. A verificação TLS mantém-se
+activa; não use certificados de servidor nem desactive a validação.
 
 ```bash
 pnpm install
@@ -74,6 +85,16 @@ O Swagger documenta os DTOs e os restantes endpoints.
   `PATCH /appointments/:id/complete` alteram agendamentos existentes. Os
   horários têm duração de 30 minutos; conclusão é permitida a administradores
   e médicos.
+- `GET /documents` consulta o histórico, `POST /documents/preview` gera uma
+  pré-visualização PDF sem persistência e `POST /documents` gera e guarda um
+  justificativo de falta ou termo de responsabilidade. A lista de pacientes
+  usada pelo formulário só devolve nomes e identificadores da filial activa;
+  os PDFs guardados são servidos em `GET /documents/:id/pdf`.
+- `GET /finances/summary` agrega receitas, recebimentos, pendências, tendências
+  e distribuições; `GET /finances/movements` filtra e pagina movimentos da
+  sucursal. O sistema ainda não regista despesas, por isso o resumo assinala
+  explicitamente essa informação como indisponível em vez de apresentar um
+  saldo líquido estimado.
 - `POST /x-ray-analyses` recebe `patientId`, `type`, `region` e `file` em
   `multipart/form-data`, guarda a imagem em armazenamento privado e devolve a
   análise persistida. `GET /x-ray-analyses` lista os registos e
@@ -103,6 +124,10 @@ imagens JPG/JPEG e PNG até 10 MB; DICOM ainda não é suportado. A inferência
 local não tem cobrança por chamada, mas usa os recursos da máquina e a licença
 do modelo deve ser verificada para o uso pretendido. O resultado é apoio à
 decisão e exige revisão profissional, não é um diagnóstico.
+
+O registo de uma clínica consulta o nome registado do NIF em `GET /validate-nif/:nif`
+(10 dígitos), que chama o serviço `dominios.ao` sem verificar o certificado TLS
+do fornecedor.
 
 O registo de uma clínica requer que exista pelo menos um plano não removido no
 banco.

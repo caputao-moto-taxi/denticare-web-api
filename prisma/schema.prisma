@@ -135,6 +135,7 @@ model Branch {
   communicationCampaigns CommunicationCampaign[]
   patientFinancialEntries PatientFinancialEntry[]
   xrayAnalyses            XRayAnalysis[]
+  patientDocuments        PatientDocument[]
 
   @@map("branches")
 }
@@ -171,6 +172,7 @@ model User {
   treatmentPlans        TreatmentPlan[]
   patientPrescriptions  PatientPrescription[]
   xrayAnalyses          XRayAnalysis[]
+  authoredPatientDocuments PatientDocument[]
   UserBranch            UserBranch[]
   UserRole              UserRole[]
   UserPermission        UserPermission[]
@@ -238,6 +240,7 @@ model Person {
   financialEntries             PatientFinancialEntry[]
   exams                        PatientExam[]
   xrayAnalyses                 XRayAnalysis[]
+  patientDocuments             PatientDocument[]
 
   @@map("Persons")
 }
@@ -876,6 +879,25 @@ model PatientExam {
 
   @@index([patientId, deletedAt])
   @@map("patient_exams")
+}
+
+model PatientDocument {
+  id        String   @id @default(dbgenerated("gen_random_uuid()"))
+  patientId String
+  authorId  String
+  branchId  String
+  type      String   @db.VarChar(40)
+  formData  Json
+  pdfBytes  Bytes
+  fileName  String   @db.VarChar(180)
+  createdAt DateTime @default(now())
+  patient   Person   @relation(fields: [patientId], references: [id], onDelete: Restrict)
+  author    User     @relation(fields: [authorId], references: [id], onDelete: Restrict)
+  branch    Branch   @relation(fields: [branchId], references: [id], onDelete: Restrict)
+
+  @@index([branchId, createdAt])
+  @@index([branchId, patientId, createdAt])
+  @@map("patient_documents")
 }
 
 model NewLatter {

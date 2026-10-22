@@ -10,8 +10,15 @@ import { AuthEmailService } from '../../domain/auth-email.service';
 @Injectable()
 export class NodemailerAuthEmailService implements AuthEmailService {
   private readonly logger = new Logger(NodemailerAuthEmailService.name);
-  private readonly user = 'luisafonsocaputo@gmail.com'; //process.env.GMAIL_USER?.trim()
-  private readonly appPassword = 'Luanda20.04.2002'; //process.env.GMAIL_APP_PASSWORD?.replace(/\s/g,'',);
+  private readonly user = process.env.GMAIL_USER?.trim();
+  private readonly appPassword = process.env.GMAIL_APP_PASSWORD?.replace(
+    /\s/g,
+    '',
+  );
+  private readonly smtpTlsCa = process.env.SMTP_TLS_CA_CERT?.replace(
+    /\\n/g,
+    '\n',
+  ).trim();
 
   private readonly frontendUrl = (
     process.env.FRONTEND_URL || 'http://localhost:5173'
@@ -19,16 +26,22 @@ export class NodemailerAuthEmailService implements AuthEmailService {
   private readonly transporter: Transporter | null =
     this.user && this.appPassword
       ? nodemailer.createTransport({
-        host: 'smtp.gmail.com',
-        port: 465,
-        secure: true,
-        auth: { user: 'luiscaputo.dev@gmail.com', pass: 'luanda20.04.2002' },
-      })
+          host: 'smtp.gmail.com',
+          port: 465,
+          secure: true,
+          auth: { user: this.user, pass: this.appPassword },
+          ...(this.smtpTlsCa ? { tls: { ca: this.smtpTlsCa } } : {}),
+        })
       : null;
 
   assertConfigured() {
     if (!this.transporter || !this.user || !this.appPassword) {
       throw new ServiceUnavailableException('Email delivery is not configured');
+    }
+    if (!/^[a-zA-Z0-9]{16}$/.test(this.appPassword)) {
+      throw new ServiceUnavailableException(
+        'Email delivery requires a valid 16-character Gmail app password',
+      );
     }
   }
 
@@ -83,7 +96,6 @@ export class NodemailerAuthEmailService implements AuthEmailService {
         command?: unknown;
         responseCode?: unknown;
       };
-      console.log(error);
       const code = typeof details.code === 'string' ? details.code : 'unknown';
       const command =
         typeof details.command === 'string' ? details.command : 'unknown';
@@ -91,8 +103,15 @@ export class NodemailerAuthEmailService implements AuthEmailService {
         typeof details.responseCode === 'number'
           ? details.responseCode
           : 'none';
+      const certificateError = [
+        'SELF_SIGNED_CERT_IN_CHAIN',
+        'UNABLE_TO_VERIFY_LEAF_SIGNATURE',
+        'CERT_HAS_EXPIRED',
+      ].includes(code);
       this.logger.error(
-        `Email delivery failed (code=${code}, smtp=${responseCode}, command=${command})`,
+        certificateError
+          ? `Email TLS verification failed (code=${code}); configure SMTP_TLS_CA_CERT with the trusted CA certificate. TLS verification remains enabled.`
+          : `Email delivery failed (code=${code}, smtp=${responseCode}, command=${command})`,
       );
       throw new ServiceUnavailableException('Email could not be delivered');
     }

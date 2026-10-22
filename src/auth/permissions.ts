@@ -72,6 +72,21 @@ export const PERMISSION_CATALOG = [
     description: 'Criar, editar e remover registos de pacientes.',
   },
   {
+    slug: 'documents.read',
+    name: 'Ver documentos clínicos',
+    description: 'Consultar e descarregar documentos gerados.',
+  },
+  {
+    slug: 'documents.manage',
+    name: 'Gerir documentos clínicos',
+    description: 'Gerar justificativos de falta e termos de responsabilidade.',
+  },
+  {
+    slug: 'finances.read',
+    name: 'Ver finanças da clínica',
+    description: 'Consultar indicadores e movimentos financeiros da sucursal.',
+  },
+  {
     slug: 'chat.read',
     name: 'Aceder ao chat',
     description: 'Consultar conversas e contactos do chat.',
