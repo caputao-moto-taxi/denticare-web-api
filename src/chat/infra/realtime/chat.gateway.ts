@@ -20,7 +20,9 @@ import { validate } from 'class-validator';
 import type { Namespace, Socket } from 'socket.io';
 import { AuthUser } from '../../../auth/auth-user';
 import { PrismaService } from '../../../shared/infra/db/prisma/prisma.service';
-import { ChatUseCases } from '../../application/useCases/chat.use-cases';
+import { GetConversationParticipantsUseCase } from '../../application/useCases/get-conversation-participants/get-conversation-participants-use-case';
+import { MarkConversationReadUseCase } from '../../application/useCases/mark-conversation-read/mark-conversation-read-use-case';
+import { SendChatMessageUseCase } from '../../application/useCases/send-chat-message/send-chat-message-use-case';
 import {
   SocketReadDto,
   SocketSendMessageDto,
@@ -57,7 +59,9 @@ export class ChatGateway
   constructor(
     private readonly jwtService: JwtService,
     private readonly prisma: PrismaService,
-    private readonly chat: ChatUseCases,
+    private readonly sendMessageUseCase: SendChatMessageUseCase,
+    private readonly markReadUseCase: MarkConversationReadUseCase,
+    private readonly getParticipantsUseCase: GetConversationParticipantsUseCase,
     private readonly realtime: ChatRealtimeService,
   ) {}
 
@@ -93,8 +97,10 @@ export class ChatGateway
   send(@ConnectedSocket() client: Socket, @MessageBody() body: unknown) {
     return this.handle(client, async (user) => {
       const dto = await this.parse(SocketSendMessageDto, body);
-      const message = await this.chat.send(user, dto.conversationId, {
-        content: dto.content,
+      const message = await this.sendMessageUseCase.execute({
+        user,
+        conversationId: dto.conversationId,
+        input: { content: dto.content },
       });
       return { message };
     });
@@ -104,7 +110,10 @@ export class ChatGateway
   read(@ConnectedSocket() client: Socket, @MessageBody() body: unknown) {
     return this.handle(client, async (user) => {
       const dto = await this.parse(SocketReadDto, body);
-      await this.chat.markRead(user, dto.conversationId);
+      await this.markReadUseCase.execute({
+        user,
+        conversationId: dto.conversationId,
+      });
       return {};
     });
   }
@@ -113,10 +122,11 @@ export class ChatGateway
   typing(@ConnectedSocket() client: Socket, @MessageBody() body: unknown) {
     return this.handle(client, async (user) => {
       const dto = await this.parse(SocketTypingDto, body);
-      const { starterId, recipientId } = await this.chat.participants(
-        user,
-        dto.conversationId,
-      );
+      const { starterId, recipientId } =
+        await this.getParticipantsUseCase.execute({
+          user,
+          conversationId: dto.conversationId,
+        });
       this.realtime.typingChanged({
         conversationId: dto.conversationId,
         userId: user.id,

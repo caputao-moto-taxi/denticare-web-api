@@ -6,7 +6,29 @@ export type CreateConversationCommand = {
   category?: 'staff' | 'patients' | 'post-care';
 };
 
-export type SendMessageCommand = { content: string };
+export type ChatAttachmentRecord = {
+  id: string;
+  storageKey: string;
+  name: string;
+  mimeType: string;
+  size: number;
+};
+
+export type SendMessageCommand = {
+  content: string;
+  attachments?: ChatAttachmentRecord[];
+};
+
+export type ChatAttachmentView = Omit<ChatAttachmentRecord, 'storageKey'> & {
+  url: string;
+};
+
+export type ChatMessageUpload = {
+  originalname: string;
+  mimetype: string;
+  size: number;
+  buffer: Buffer;
+};
 
 // A message as seen by one viewer: `sender` is relative to that viewer.
 export type ChatMessageView = {
@@ -14,6 +36,13 @@ export type ChatMessageView = {
   sender: 'me' | 'contact';
   text: string;
   sentAt: string;
+  attachments?: ChatAttachmentView[];
+};
+
+export type ChatAttachmentFile = {
+  storageKey: string;
+  name: string;
+  mimeType: string;
 };
 
 export type ConversationParticipants = {
@@ -29,7 +58,7 @@ export abstract class IChatRepository {
   abstract create(
     user: AuthUser,
     input: CreateConversationCommand,
-  ): Promise<unknown>;
+  ): Promise<{ id: string }>;
   abstract messages(
     user: AuthUser,
     conversationId: string,
@@ -40,6 +69,12 @@ export abstract class IChatRepository {
     conversationId: string,
     input: SendMessageCommand,
   ): Promise<ChatMessageView>;
+  abstract getAttachment(
+    user: AuthUser,
+    conversationId: string,
+    messageId: string,
+    attachmentId: string,
+  ): Promise<ChatAttachmentFile>;
   abstract participants(
     user: AuthUser,
     conversationId: string,

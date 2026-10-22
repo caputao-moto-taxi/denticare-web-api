@@ -1,10 +1,5 @@
-import {
-  ConflictException,
-  ForbiddenException,
-  NotFoundException,
-} from '@nestjs/common';
+import { ConflictException, NotFoundException } from '@nestjs/common';
 import { AuthUser } from '../../../../auth/auth-user';
-import { IHashService } from '../../../../shared/application/interfaces/IHash';
 import { PrismaService } from '../../../../shared/infra/db/prisma/prisma.service';
 import { UsersPrismaRepository } from './users-prisma.repository';
 
@@ -53,10 +48,7 @@ describe('UsersPrismaRepository', () => {
       callback(tx),
     ),
   } as unknown as PrismaService;
-  const hash = {
-    hashPassword: jest.fn().mockResolvedValue('hashed'),
-  } as unknown as IHashService;
-  const repository = new UsersPrismaRepository(prisma, hash);
+  const repository = new UsersPrismaRepository(prisma);
 
   beforeEach(() => {
     jest.clearAllMocks();
@@ -65,12 +57,6 @@ describe('UsersPrismaRepository', () => {
         Array.isArray(operation) ? Promise.all(operation) : operation(tx),
     );
     userModel.count.mockResolvedValue(1);
-  });
-
-  it('only lets administrators manage users', async () => {
-    await expect(
-      repository.list({ ...admin, role: 'nurse' }),
-    ).rejects.toBeInstanceOf(ForbiddenException);
   });
 
   it('lists users of the caller branch only', async () => {
@@ -100,7 +86,7 @@ describe('UsersPrismaRepository', () => {
         name: 'New User',
         email: ' Nurse@Example.test ',
         role: 'nurse',
-        password: 'Password1',
+        passwordHash: 'hashed',
       }),
     ).rejects.toBeInstanceOf(ConflictException);
     expect(userModel.findFirst).toHaveBeenCalledWith({
@@ -125,7 +111,7 @@ describe('UsersPrismaRepository', () => {
       name: 'Dr Who',
       email: 'doctor@example.test',
       role: 'doctor',
-      password: 'Password1',
+      passwordHash: 'hashed',
     });
 
     expect(userModel.create).toHaveBeenCalledWith({
@@ -150,15 +136,6 @@ describe('UsersPrismaRepository', () => {
       expect.objectContaining({
         where: { id: 'foreign-user', branchId: 'branch-1', deletedAt: null },
       }),
-    );
-  });
-
-  it('prevents administrators from deactivating or removing themselves', async () => {
-    await expect(
-      repository.setStatus(admin, 'admin-1', { active: false }),
-    ).rejects.toBeInstanceOf(ForbiddenException);
-    await expect(repository.remove(admin, 'admin-1')).rejects.toBeInstanceOf(
-      ForbiddenException,
     );
   });
 

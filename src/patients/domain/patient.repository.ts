@@ -297,6 +297,15 @@ export abstract class IPatientRepository {
     id: string,
     input: PatientUpdateCommand,
   ): Promise<unknown>;
+  abstract getAvatarStorageKey(
+    user: AuthUser,
+    id: string,
+  ): Promise<string | null>;
+  abstract updateAvatarStorageKey(
+    user: AuthUser,
+    id: string,
+    storageKey: string,
+  ): Promise<void>;
   abstract setStatus(
     user: AuthUser,
     id: string,

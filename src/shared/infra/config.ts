@@ -17,8 +17,7 @@ export class Config {
   static bucketName() {
     Config.readEnv();
 
-    // return Config.env.GOOGLE_CLOUD_STORAGE_BUCKET_NAME;
-    return Config.env.CLOUDFLARE_AWS_BUCKET_NAME;
+    return Config.env.R2_BUCKET ?? Config.env.CLOUDFLARE_AWS_BUCKET_NAME;
   }
 
   static googleCredentials() {
@@ -31,11 +30,17 @@ export class Config {
     Config.readEnv();
 
     return {
-      endpoint: `https://${Config.env.CLOUDFLARE_ACCOUNT_ID}.r2.cloudflarestorage.com`,
+      endpoint:
+        Config.env.R2_ENDPOINT ??
+        `https://${Config.env.CLOUDFLARE_ACCOUNT_ID}.r2.cloudflarestorage.com`,
       region: 'auto',
       credentials: {
-        accessKeyId: Config.env.CLOUDFLARE_AWS_ACCESS_KEY_ID,
-        secretAccessKey: Config.env.CLOUDFLARE_AWS_SECRET_ACCESS_KEY,
+        accessKeyId:
+          Config.env.R2_ACCESS_KEY_ID ??
+          Config.env.CLOUDFLARE_AWS_ACCESS_KEY_ID,
+        secretAccessKey:
+          Config.env.R2_SECRET_ACCESS_KEY ??
+          Config.env.CLOUDFLARE_AWS_SECRET_ACCESS_KEY,
       },
     };
   }
@@ -45,12 +50,13 @@ export class Config {
       return;
     }
 
-    const { parsed } = readEnv({
-      path: join(__dirname, `../../../../.env.${process.env.NODE_ENV}`),
-    });
+    const envFile = process.env.NODE_ENV
+      ? join(process.cwd(), `.env.${process.env.NODE_ENV}`)
+      : undefined;
+    if (envFile) readEnv({ path: envFile });
+    readEnv({ path: join(process.cwd(), '.env') });
 
     Config.env = {
-      ...parsed,
       ...process.env,
     };
   }

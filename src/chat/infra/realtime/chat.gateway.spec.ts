@@ -1,7 +1,9 @@
 import { JwtService } from '@nestjs/jwt';
 import type { Socket } from 'socket.io';
 import { PrismaService } from '../../../shared/infra/db/prisma/prisma.service';
-import { ChatUseCases } from '../../application/useCases/chat.use-cases';
+import { GetConversationParticipantsUseCase } from '../../application/useCases/get-conversation-participants/get-conversation-participants-use-case';
+import { MarkConversationReadUseCase } from '../../application/useCases/mark-conversation-read/mark-conversation-read-use-case';
+import { SendChatMessageUseCase } from '../../application/useCases/send-chat-message/send-chat-message-use-case';
 import { ChatGateway } from './chat.gateway';
 import { ChatRealtimeService } from './chat-realtime.service';
 
@@ -11,16 +13,16 @@ describe('ChatGateway', () => {
     user: { findFirst: jest.fn() },
     revokedToken: { findUnique: jest.fn() },
   };
-  const chat = {
-    send: jest.fn(),
-    markRead: jest.fn(),
-    participants: jest.fn(),
-  };
+  const sendMessage = { execute: jest.fn() };
+  const markRead = { execute: jest.fn() };
+  const getParticipants = { execute: jest.fn() };
   const realtime = { attach: jest.fn(), typingChanged: jest.fn() };
   const gateway = new ChatGateway(
     jwt as unknown as JwtService,
     prisma as unknown as PrismaService,
-    chat as unknown as ChatUseCases,
+    sendMessage as unknown as SendChatMessageUseCase,
+    markRead as unknown as MarkConversationReadUseCase,
+    getParticipants as unknown as GetConversationParticipantsUseCase,
     realtime as unknown as ChatRealtimeService,
   );
 
@@ -106,22 +108,22 @@ describe('ChatGateway', () => {
 
   it('sends messages as the authenticated user and acknowledges them', async () => {
     const socket = await connect();
-    chat.send.mockResolvedValue({ id: 'm1', sender: 'me' });
+    sendMessage.execute.mockResolvedValue({ id: 'm1', sender: 'me' });
 
     await expect(
       gateway.send(socket, { conversationId: 'c1', content: 'hi' }),
     ).resolves.toEqual({ ok: true, message: { id: 'm1', sender: 'me' } });
-    expect(chat.send).toHaveBeenCalledWith(
-      expect.objectContaining({ id: 'user-1', branchId: 'branch-1' }),
-      'c1',
-      { content: 'hi' },
-    );
+    expect(sendMessage.execute).toHaveBeenCalledWith({
+      user: expect.objectContaining({ id: 'user-1', branchId: 'branch-1' }),
+      conversationId: 'c1',
+      input: { content: 'hi' },
+    });
     gateway.handleDisconnect(socket);
   });
 
   it('broadcasts typing only to conversation participants', async () => {
     const socket = await connect();
-    chat.participants.mockResolvedValue({
+    getParticipants.execute.mockResolvedValue({
       starterId: 'user-1',
       recipientId: 'user-2',
     });
@@ -129,10 +131,10 @@ describe('ChatGateway', () => {
     await expect(
       gateway.typing(socket, { conversationId: 'c1', isTyping: true }),
     ).resolves.toEqual({ ok: true });
-    expect(chat.participants).toHaveBeenCalledWith(
-      expect.objectContaining({ id: 'user-1' }),
-      'c1',
-    );
+    expect(getParticipants.execute).toHaveBeenCalledWith({
+      user: expect.objectContaining({ id: 'user-1' }),
+      conversationId: 'c1',
+    });
     expect(realtime.typingChanged).toHaveBeenCalledWith({
       conversationId: 'c1',
       userId: 'user-1',
@@ -148,7 +150,7 @@ describe('ChatGateway', () => {
     await expect(
       gateway.typing(socket, { conversationId: 'c1', isTyping: 'yes' }),
     ).resolves.toMatchObject({ ok: false, status: 400 });
-    expect(chat.participants).not.toHaveBeenCalled();
+    expect(getParticipants.execute).not.toHaveBeenCalled();
     expect(realtime.typingChanged).not.toHaveBeenCalled();
     gateway.handleDisconnect(socket);
   });
@@ -159,7 +161,7 @@ describe('ChatGateway', () => {
     const ack = await gateway.send(socket, { conversationId: 'c1', extra: 1 });
 
     expect(ack).toMatchObject({ ok: false, status: 400 });
-    expect(chat.send).not.toHaveBeenCalled();
+    expect(sendMessage.execute).not.toHaveBeenCalled();
     gateway.handleDisconnect(socket);
   });
 
@@ -169,7 +171,7 @@ describe('ChatGateway', () => {
     await expect(
       gateway.send(socket, { conversationId: 'c1', content: 'hi' }),
     ).resolves.toMatchObject({ ok: false, status: 401 });
-    expect(chat.send).not.toHaveBeenCalled();
+    expect(sendMessage.execute).not.toHaveBeenCalled();
   });
 
   it('drops the socket when the token was revoked after connecting', async () => {
@@ -180,7 +182,7 @@ describe('ChatGateway', () => {
       gateway.read(socket, { conversationId: 'c1' }),
     ).resolves.toMatchObject({ ok: false, status: 401 });
     expect(socket.disconnect).toHaveBeenCalledWith(true);
-    expect(chat.markRead).not.toHaveBeenCalled();
+    expect(markRead.execute).not.toHaveBeenCalled();
     gateway.handleDisconnect(socket);
   });
 });

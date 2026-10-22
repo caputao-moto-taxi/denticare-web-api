@@ -118,10 +118,20 @@ export type ChatMessage = Prisma.ChatMessageModel
  */
 export type StockItem = Prisma.StockItemModel
 /**
+ * Model StockCatalogEntry
+ * 
+ */
+export type StockCatalogEntry = Prisma.StockCatalogEntryModel
+/**
  * Model StockSale
  * 
  */
 export type StockSale = Prisma.StockSaleModel
+/**
+ * Model CommunicationCampaign
+ * 
+ */
+export type CommunicationCampaign = Prisma.CommunicationCampaignModel
 /**
  * Model StockSaleItem
  * 
@@ -137,6 +147,16 @@ export type TreatmentPlan = Prisma.TreatmentPlanModel
  * 
  */
 export type RevokedToken = Prisma.RevokedTokenModel
+/**
+ * Model RefreshToken
+ * 
+ */
+export type RefreshToken = Prisma.RefreshTokenModel
+/**
+ * Model AuthActionToken
+ * 
+ */
+export type AuthActionToken = Prisma.AuthActionTokenModel
 /**
  * Model Consult
  * 
@@ -162,6 +182,11 @@ export type TreatmentPrice = Prisma.TreatmentPriceModel
  * 
  */
 export type Product = Prisma.ProductModel
+/**
+ * Model ClinicService
+ * 
+ */
+export type ClinicService = Prisma.ClinicServiceModel
 /**
  * Model Sale
  * 

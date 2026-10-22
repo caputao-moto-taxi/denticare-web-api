@@ -22,8 +22,11 @@ import { JwtAuthGuard } from '../auth/jwt-auth.guard';
 import { PermissionsGuard } from '../auth/permissions.guard';
 import { RequirePermissions } from '../auth/permissions';
 import { ListQueryDto } from '../shared/infra/http/list-query.dto';
+import { CreateXRayAnalysisUseCase } from './application/useCases/create-x-ray-analysis/create-x-ray-analysis-use-case';
+import { GetXRayAnalysisFileUseCase } from './application/useCases/get-x-ray-analysis-file/get-x-ray-analysis-file-use-case';
+import { ListXRayAnalysesUseCase } from './application/useCases/list-x-ray-analyses/list-x-ray-analyses-use-case';
+import { XRayUpload } from './domain/x-ray-analysis.entity';
 import { CreateXRayAnalysisDto } from './x-ray-analysis.dto';
-import { XRayAnalysisService } from './x-ray-analysis.service';
 
 const XRAY_FILE_LIMIT = 10 * 1024 * 1024;
 const ACCEPTED_IMAGE_TYPES: Record<string, 'image/jpeg' | 'image/png'> = {
@@ -32,24 +35,21 @@ const ACCEPTED_IMAGE_TYPES: Record<string, 'image/jpeg' | 'image/png'> = {
   '.png': 'image/png',
 };
 
-type UploadedXRayFile = {
-  originalname: string;
-  mimetype: string;
-  size: number;
-  buffer: Buffer;
-};
-
 @ApiTags('X-ray analyses')
 @ApiBearerAuth()
 @UseGuards(JwtAuthGuard, PermissionsGuard)
 @Controller('x-ray-analyses')
 export class XRayAnalysisController {
-  constructor(private readonly xrayService: XRayAnalysisService) {}
+  constructor(
+    private readonly listAnalyses: ListXRayAnalysesUseCase,
+    private readonly createAnalysis: CreateXRayAnalysisUseCase,
+    private readonly getAnalysisFile: GetXRayAnalysisFileUseCase,
+  ) {}
 
   @Get()
   @RequirePermissions('patients.clinical.read')
   list(@CurrentUser() user: AuthUser, @Query() query: ListQueryDto) {
-    return this.xrayService.list(user, query);
+    return this.listAnalyses.execute({ user, query });
   }
 
   @Post()
@@ -60,7 +60,7 @@ export class XRayAnalysisController {
   create(
     @CurrentUser() user: AuthUser,
     @Body() input: CreateXRayAnalysisDto,
-    @UploadedFile() file?: UploadedXRayFile,
+    @UploadedFile() file?: XRayUpload & { mimetype: string },
   ) {
     if (!file || !file.size || !file.buffer?.length) {
       throw new BadRequestException('A non-empty X-ray image is required');
@@ -82,10 +82,16 @@ export class XRayAnalysisController {
       );
     }
 
-    return this.xrayService.create(user, input, {
-      ...file,
-      originalname: basename(file.originalname),
-      mimetype: expectedMimeType,
+    return this.createAnalysis.execute({
+      user,
+      patientId: input.patientId,
+      type: input.type,
+      region: input.region,
+      file: {
+        ...file,
+        originalname: basename(file.originalname),
+        mimetype: expectedMimeType,
+      },
     });
   }
 
@@ -96,7 +102,7 @@ export class XRayAnalysisController {
     @Param('id', ParseUUIDPipe) id: string,
     @Res() response: Response,
   ) {
-    const file = await this.xrayService.getFile(user, id);
+    const file = await this.getAnalysisFile.execute({ user, id });
     response.setHeader('Content-Type', file.mimeType);
     response.setHeader(
       'Content-Disposition',

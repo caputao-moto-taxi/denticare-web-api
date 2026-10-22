@@ -16,7 +16,12 @@ import { JwtAuthGuard } from '../../../../auth/jwt-auth.guard';
 import { PermissionsGuard } from '../../../../auth/permissions.guard';
 import { RequirePermissions } from '../../../../auth/permissions';
 import { ListQueryDto } from '../../../../shared/infra/http/list-query.dto';
-import { TreatmentPlansUseCases } from '../../../application/useCases/treatment-plans.use-cases';
+import { CreateTreatmentPlanUseCase } from '../../../application/useCases/create-treatment-plan/create-treatment-plan-use-case';
+import { DeleteTreatmentPlanUseCase } from '../../../application/useCases/delete-treatment-plan/delete-treatment-plan-use-case';
+import { GetTreatmentPlanUseCase } from '../../../application/useCases/get-treatment-plan/get-treatment-plan-use-case';
+import { ListTreatmentPlansUseCase } from '../../../application/useCases/list-treatment-plans/list-treatment-plans-use-case';
+import { SetTreatmentPlanProgressUseCase } from '../../../application/useCases/set-treatment-plan-progress/set-treatment-plan-progress-use-case';
+import { UpdateTreatmentPlanUseCase } from '../../../application/useCases/update-treatment-plan/update-treatment-plan-use-case';
 import {
   CreateTreatmentPlanDto,
   UpdateTreatmentPlanDto,
@@ -28,24 +33,31 @@ import {
 @UseGuards(JwtAuthGuard, PermissionsGuard)
 @Controller('treatment-plans')
 export class TreatmentPlansController {
-  constructor(private readonly plansService: TreatmentPlansUseCases) {}
+  constructor(
+    private readonly listPlans: ListTreatmentPlansUseCase,
+    private readonly getPlan: GetTreatmentPlanUseCase,
+    private readonly createPlan: CreateTreatmentPlanUseCase,
+    private readonly updatePlan: UpdateTreatmentPlanUseCase,
+    private readonly setPlanProgress: SetTreatmentPlanProgressUseCase,
+    private readonly deletePlan: DeleteTreatmentPlanUseCase,
+  ) {}
 
   @Get()
   @RequirePermissions('patients.clinical.read')
   list(@CurrentUser() user: AuthUser, @Query() query: ListQueryDto) {
-    return this.plansService.list(user, query);
+    return this.listPlans.execute({ user, query });
   }
 
   @Get(':id')
   @RequirePermissions('patients.clinical.read')
   findOne(@CurrentUser() user: AuthUser, @Param('id') id: string) {
-    return this.plansService.findOne(user, id);
+    return this.getPlan.execute({ user, id });
   }
 
   @Post()
   @RequirePermissions('patients.clinical.write')
   create(@CurrentUser() user: AuthUser, @Body() input: CreateTreatmentPlanDto) {
-    return this.plansService.create(user, input);
+    return this.createPlan.execute({ user, input });
   }
 
   @Patch(':id')
@@ -55,7 +67,7 @@ export class TreatmentPlansController {
     @Param('id') id: string,
     @Body() input: UpdateTreatmentPlanDto,
   ) {
-    return this.plansService.update(user, id, input);
+    return this.updatePlan.execute({ user, id, input });
   }
 
   @Patch(':id/progress')
@@ -65,12 +77,12 @@ export class TreatmentPlansController {
     @Param('id') id: string,
     @Body() input: UpdateTreatmentPlanProgressDto,
   ) {
-    return this.plansService.setProgress(user, id, input);
+    return this.setPlanProgress.execute({ user, id, input });
   }
 
   @Delete(':id')
   @RequirePermissions('patients.clinical.write')
   remove(@CurrentUser() user: AuthUser, @Param('id') id: string) {
-    return this.plansService.remove(user, id);
+    return this.deletePlan.execute({ user, id });
   }
 }

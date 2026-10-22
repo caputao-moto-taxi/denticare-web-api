@@ -38,23 +38,168 @@ describe('StockPrismaRepository', () => {
   };
   const stockSale = {
     findMany: jest.fn(),
+    findFirst: jest.fn(),
     count: jest.fn().mockResolvedValue(1),
+    aggregate: jest.fn(),
+    groupBy: jest.fn(),
+    create: jest.fn(),
+    update: jest.fn(),
+  };
+  const stockSaleItem = {
+    groupBy: jest.fn(),
+    deleteMany: jest.fn(),
+    createMany: jest.fn(),
+  };
+  const stockCatalogEntry = {
+    findMany: jest.fn(),
+    findFirst: jest.fn(),
     create: jest.fn(),
   };
   const prisma = {
     stockItem,
     stockSale,
+    stockSaleItem,
+    stockCatalogEntry,
     $transaction: jest.fn(
       (operation: Promise<unknown>[] | ((tx: unknown) => unknown)) =>
         Array.isArray(operation)
           ? Promise.all(operation)
-          : operation({ stockItem, stockSale }),
+          : operation({
+              stockItem,
+              stockSale,
+              stockSaleItem,
+              stockCatalogEntry,
+            }),
     ),
   } as unknown as PrismaService;
   const repository = new StockPrismaRepository(prisma);
 
   beforeEach(() => {
     jest.clearAllMocks();
+    stockCatalogEntry.findFirst.mockResolvedValue({ id: 'catalog-1' });
+  });
+
+  it('lists only catalog entries for the caller branch', async () => {
+    stockCatalogEntry.findMany.mockResolvedValue([
+      { id: 'category-1', name: 'Protection' },
+    ]);
+
+    await repository.listCatalog(staff, 'category');
+
+    expect(stockCatalogEntry.findMany).toHaveBeenCalledWith({
+      where: { branchId: 'branch-1', kind: 'category' },
+      orderBy: [{ name: 'asc' }, { id: 'asc' }],
+      select: { id: true, name: true },
+    });
+  });
+
+  it('creates catalog entries for the caller branch only', async () => {
+    stockCatalogEntry.findFirst.mockResolvedValueOnce(null);
+    stockCatalogEntry.create.mockResolvedValue({
+      id: 'supplier-1',
+      name: 'New Supplier',
+    });
+
+    await repository.createCatalog(staff, 'supplier', '  New   Supplier ');
+
+    expect(stockCatalogEntry.findFirst).toHaveBeenCalledWith({
+      where: {
+        branchId: 'branch-1',
+        kind: 'supplier',
+        name: { equals: 'New Supplier', mode: 'insensitive' },
+      },
+      select: { id: true, name: true },
+    });
+    expect(stockCatalogEntry.create).toHaveBeenCalledWith({
+      data: {
+        branchId: 'branch-1',
+        kind: 'supplier',
+        name: 'New Supplier',
+      },
+      select: { id: true, name: true },
+    });
+  });
+
+  it('summarizes only the caller branch inventory', async () => {
+    stockItem.findMany.mockResolvedValue([
+      { quantity: 2, capacity: 10, unitCost: 5 },
+      { quantity: 8, capacity: 10, unitCost: 4 },
+    ]);
+
+    await expect(repository.summary(staff)).resolves.toEqual({
+      productCount: 2,
+      totalUnits: 10,
+      lowStockCount: 1,
+      inventoryCost: 42,
+    });
+    expect(stockItem.findMany).toHaveBeenCalledWith({
+      where: { branchId: 'branch-1', deletedAt: null },
+      select: { quantity: true, capacity: true, unitCost: true },
+    });
+  });
+
+  it('summarizes sales and top products only for the caller branch', async () => {
+    const today = new Date();
+    stockSale.aggregate.mockResolvedValue({
+      _count: { _all: 2 },
+      _sum: { total: 8000 },
+      _avg: { total: 4000 },
+    });
+    stockSale.findMany.mockResolvedValue([{ createdAt: today, total: 4000 }]);
+    stockSale.groupBy.mockResolvedValue([
+      { paymentMethod: 'cash', _count: { _all: 2 }, _sum: { total: 8000 } },
+    ]);
+    stockSaleItem.groupBy.mockResolvedValue([
+      {
+        stockItemId: 'item-1',
+        itemName: 'Gloves',
+        _sum: { quantity: 3, totalPrice: 12000 },
+      },
+    ]);
+
+    const result = await repository.salesSummary(staff);
+
+    expect(result).toMatchObject({
+      totalSales: 2,
+      totalRevenue: 8000,
+      averageTicket: 4000,
+      paymentMethods: [{ method: 'cash', count: 2, revenue: 8000 }],
+      topProducts: [
+        {
+          stockItemId: 'item-1',
+          itemName: 'Gloves',
+          quantity: 3,
+          revenue: 12000,
+        },
+      ],
+    });
+    expect(stockSale.aggregate).toHaveBeenCalledWith(
+      expect.objectContaining({ where: { branchId: 'branch-1' } }),
+    );
+    expect(stockSale.groupBy).toHaveBeenCalledWith(
+      expect.objectContaining({ where: { branchId: 'branch-1' } }),
+    );
+    expect(stockSaleItem.groupBy).toHaveBeenCalledWith(
+      expect.objectContaining({
+        where: { sale: { branchId: 'branch-1' } },
+      }),
+    );
+  });
+
+  it('rejects a product category that is not registered for the caller branch', async () => {
+    stockCatalogEntry.findFirst.mockResolvedValue(null);
+
+    await expect(
+      repository.create(staff, {
+        name: 'Gloves',
+        category: 'Other clinic category',
+        unit: 'box',
+        quantity: 10,
+        unitCost: 3500,
+        supplier: 'MedSupply',
+      }),
+    ).rejects.toBeInstanceOf(BadRequestException);
+    expect(stockItem.create).not.toHaveBeenCalled();
   });
 
   it('only lists items of the caller branch', async () => {
@@ -242,5 +387,114 @@ describe('StockPrismaRepository', () => {
         ],
       }),
     ).rejects.toBeInstanceOf(BadRequestException);
+  });
+
+  it('updates sale items and stock atomically while preserving existing prices', async () => {
+    const sale = {
+      id: 'sale-1',
+      branchId: 'branch-1',
+      customerName: 'Customer',
+      paymentMethod: 'cash',
+      total: 8000,
+      createdAt: new Date('2026-01-02T00:00:00Z'),
+      items: [
+        {
+          id: 'line-1',
+          saleId: 'sale-1',
+          stockItemId: 'item-1',
+          itemName: 'Gloves',
+          unit: 'box',
+          quantity: 2,
+          unitPrice: 4000,
+          totalPrice: 8000,
+        },
+      ],
+    };
+    const addedItem = {
+      ...item,
+      id: 'item-2',
+      name: 'Masks',
+      quantity: 10,
+      capacity: 20,
+      salePrice: 2500,
+      deletedAt: null,
+    };
+    stockSale.findFirst.mockResolvedValue(sale);
+    stockItem.findMany.mockResolvedValue([
+      { ...item, quantity: 8, deletedAt: null },
+      addedItem,
+    ]);
+    stockItem.updateMany.mockResolvedValue({ count: 1 });
+    stockSale.update.mockResolvedValue({
+      ...sale,
+      total: 6500,
+      items: [
+        { ...sale.items[0], quantity: 1, totalPrice: 4000 },
+        {
+          stockItemId: 'item-2',
+          itemName: 'Masks',
+          unit: 'box',
+          quantity: 1,
+          unitPrice: 2500,
+          totalPrice: 2500,
+        },
+      ],
+    });
+
+    const result = await repository.updateSale(staff, 'sale-1', {
+      items: [
+        { stockItemId: 'item-1', quantity: 1 },
+        { stockItemId: 'item-2', quantity: 1 },
+      ],
+    });
+
+    expect(stockSale.findFirst).toHaveBeenCalledWith({
+      where: { id: 'sale-1', branchId: 'branch-1' },
+      include: { items: true },
+    });
+    expect(stockItem.updateMany).toHaveBeenNthCalledWith(1, {
+      where: { id: 'item-1', branchId: 'branch-1', quantity: 8 },
+      data: { quantity: 9 },
+    });
+    expect(stockItem.updateMany).toHaveBeenNthCalledWith(2, {
+      where: { id: 'item-2', branchId: 'branch-1', quantity: 10 },
+      data: { quantity: 9 },
+    });
+    expect(stockSaleItem.deleteMany).toHaveBeenCalledWith({
+      where: { saleId: 'sale-1' },
+    });
+    expect(stockSaleItem.createMany).toHaveBeenCalledWith({
+      data: [
+        expect.objectContaining({
+          stockItemId: 'item-1',
+          quantity: 1,
+          unitPrice: 4000,
+          totalPrice: 4000,
+        }),
+        expect.objectContaining({
+          stockItemId: 'item-2',
+          quantity: 1,
+          unitPrice: 2500,
+          totalPrice: 2500,
+        }),
+      ],
+    });
+    expect(stockSale.update).toHaveBeenCalledWith({
+      where: { id: 'sale-1' },
+      data: { total: 6500 },
+      include: { items: { orderBy: { itemName: 'asc' } } },
+    });
+    expect(result).toMatchObject({ id: 'sale-1', total: 6500 });
+  });
+
+  it('does not edit a sale from another branch', async () => {
+    stockSale.findFirst.mockResolvedValue(null);
+
+    await expect(
+      repository.updateSale(staff, 'foreign-sale', {
+        items: [{ stockItemId: 'item-1', quantity: 1 }],
+      }),
+    ).rejects.toBeInstanceOf(NotFoundException);
+    expect(stockItem.findMany).not.toHaveBeenCalled();
   });
 });

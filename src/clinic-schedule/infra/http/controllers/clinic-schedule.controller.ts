@@ -5,7 +5,10 @@ import { CurrentUser } from '../../../../auth/current-user.decorator';
 import { JwtAuthGuard } from '../../../../auth/jwt-auth.guard';
 import { PermissionsGuard } from '../../../../auth/permissions.guard';
 import { RequirePermissions } from '../../../../auth/permissions';
-import { ClinicScheduleUseCases } from '../../../application/useCases/clinic-schedule.use-cases';
+import {
+  GetClinicScheduleUseCase,
+  UpdateClinicScheduleUseCase,
+} from '../../../application/useCases';
 import { UpdateClinicScheduleDto } from './dtos/clinic-schedule.dto';
 
 @ApiTags('Clinic schedule')
@@ -13,7 +16,10 @@ import { UpdateClinicScheduleDto } from './dtos/clinic-schedule.dto';
 @UseGuards(JwtAuthGuard, PermissionsGuard)
 @Controller('clinic/schedule')
 export class ClinicScheduleController {
-  constructor(private readonly scheduleService: ClinicScheduleUseCases) {}
+  constructor(
+    private readonly getClinicScheduleUseCase: GetClinicScheduleUseCase,
+    private readonly updateClinicScheduleUseCase: UpdateClinicScheduleUseCase,
+  ) {}
 
   @Get()
   @RequirePermissions(
@@ -22,7 +28,7 @@ export class ClinicScheduleController {
     'appointments.create',
   )
   get(@CurrentUser() user: AuthUser) {
-    return this.scheduleService.get(user);
+    return this.getClinicScheduleUseCase.execute({ user });
   }
 
   @Put()
@@ -31,6 +37,9 @@ export class ClinicScheduleController {
     @CurrentUser() user: AuthUser,
     @Body() input: UpdateClinicScheduleDto,
   ) {
-    return this.scheduleService.update(user, input);
+    return this.updateClinicScheduleUseCase.execute({
+      user,
+      schedule: input,
+    });
   }
 }

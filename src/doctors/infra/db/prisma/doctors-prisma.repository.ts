@@ -1,12 +1,9 @@
 import {
   ConflictException,
-  ForbiddenException,
   Injectable,
   NotFoundException,
 } from '@nestjs/common';
-import { randomBytes } from 'crypto';
 import { Prisma } from '../../../../../generated/prisma/client';
-import { IHashService } from '../../../../shared/application/interfaces/IHash';
 import { PrismaService } from '../../../../shared/infra/db/prisma/prisma.service';
 import { AuthUser } from '../../../../auth/auth-user';
 import {
@@ -25,20 +22,9 @@ import {
   IDoctorRepository,
 } from '../../../domain/doctor.repository';
 
-const STAFF_ROLES = new Set([
-  'admin',
-  'doctor',
-  'nurse',
-  'secretary',
-  'receptionist',
-]);
-
 @Injectable()
 export class DoctorsPrismaRepository implements IDoctorRepository {
-  constructor(
-    private readonly prisma: PrismaService,
-    private readonly hashService: IHashService,
-  ) {}
+  constructor(private readonly prisma: PrismaService) {}
 
   async list(user: AuthUser, query: ListQuery = {}) {
     validateListFilters(query, {
@@ -114,11 +100,6 @@ export class DoctorsPrismaRepository implements IDoctorRepository {
   }
 
   async create(user: AuthUser, input: DoctorCreateCommand) {
-    if (user.role !== 'admin') {
-      throw new ForbiddenException(
-        'Only clinic administrators can add doctors',
-      );
-    }
     const email = input.email.trim().toLowerCase();
     const duplicate = await this.prisma.user.findFirst({
       where: { email, deletedAt: null },
@@ -128,10 +109,6 @@ export class DoctorsPrismaRepository implements IDoctorRepository {
       throw new ConflictException('An account with this email already exists');
 
     const name = this.splitName(input.name);
-    const password = await this.hashService.hashPassword(
-      randomBytes(32).toString('hex'),
-    );
-
     try {
       const doctor = await this.prisma.$transaction(async (transaction) => {
         const role = await transaction.role.upsert({
@@ -150,7 +127,7 @@ export class DoctorsPrismaRepository implements IDoctorRepository {
           data: {
             email,
             username: email,
-            password,
+            password: input.passwordHash,
             branchId: user.branchId,
             addressId: address.id,
             roleId: role.id,
@@ -207,9 +184,6 @@ export class DoctorsPrismaRepository implements IDoctorRepository {
   }
 
   async update(user: AuthUser, id: string, input: DoctorUpdateCommand) {
-    if (user.role !== 'admin' && !(user.role === 'doctor' && user.id === id)) {
-      throw new ForbiddenException('You cannot update this doctor profile');
-    }
     const current = await this.prisma.user.findFirst({
       where: {
         id,
@@ -288,11 +262,6 @@ export class DoctorsPrismaRepository implements IDoctorRepository {
   }
 
   async remove(user: AuthUser, id: string) {
-    if (user.role !== 'admin') {
-      throw new ForbiddenException(
-        'Only clinic administrators can deactivate doctors',
-      );
-    }
     const result = await this.prisma.user.updateMany({
       where: {
         id,
@@ -306,10 +275,37 @@ export class DoctorsPrismaRepository implements IDoctorRepository {
     return { id, active: false };
   }
 
-  private requireStaff(user: AuthUser) {
-    if (!STAFF_ROLES.has(user.role)) {
-      throw new ForbiddenException('Clinic staff access is required');
-    }
+  async getAvatarStorageKey(user: AuthUser, id: string) {
+    const doctor = await this.prisma.user.findFirst({
+      where: {
+        id,
+        branchId: user.branchId,
+        deletedAt: null,
+        Role: { slug: 'doctor' },
+      },
+      select: { doctorProfile: { select: { avatar: true } } },
+    });
+    if (!doctor?.doctorProfile) throw new NotFoundException('Doctor not found');
+    const key = doctor.doctorProfile.avatar;
+    return key?.startsWith(`doctors/${id}/avatar/`) ? key : null;
+  }
+
+  async updateAvatarStorageKey(user: AuthUser, id: string, storageKey: string) {
+    await this.getAvatarStorageKey(user, id);
+    const doctor = await this.prisma.user.findFirst({
+      where: {
+        id,
+        branchId: user.branchId,
+        deletedAt: null,
+        Role: { slug: 'doctor' },
+      },
+      select: { doctorProfile: { select: { userId: true } } },
+    });
+    if (!doctor?.doctorProfile) throw new NotFoundException('Doctor not found');
+    await this.prisma.doctorProfile.update({
+      where: { userId: id },
+      data: { avatar: storageKey },
+    });
   }
 
   private splitName(fullName: string) {
@@ -350,7 +346,9 @@ export class DoctorsPrismaRepository implements IDoctorRepository {
       email: doctor.email,
       phone: person?.phoneNumber ?? '',
       address: doctor.Address?.street ?? '',
-      avatar: profile?.avatar ?? '',
+      avatar: profile?.avatar?.startsWith(`doctors/${doctor.id}/avatar/`)
+        ? `/doctors/${doctor.id}/avatar`
+        : (profile?.avatar ?? ''),
       type: profile?.type ?? 'FULL_TIME',
       workingDays: profile?.workingDays ?? [],
       workingHours: profile?.workingHours ?? {},

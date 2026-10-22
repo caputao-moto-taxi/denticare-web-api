@@ -129,7 +129,10 @@ model Branch {
   UserBranch              UserBranch[]
   User                    User[]
   stockItems              StockItem[]
+  stockCatalogEntries     StockCatalogEntry[]
+  clinicServices          ClinicService[]
   treatmentPlans          TreatmentPlan[]
+  communicationCampaigns CommunicationCampaign[]
   patientFinancialEntries PatientFinancialEntry[]
   xrayAnalyses            XRayAnalysis[]
 
@@ -171,7 +174,10 @@ model User {
   UserBranch            UserBranch[]
   UserRole              UserRole[]
   UserPermission        UserPermission[]
+  refreshTokens         RefreshToken[]
+  authActionTokens      AuthActionToken[]
   stockSales            StockSale[]
+  createdCommunicationCampaigns CommunicationCampaign[]
   Address               Address?              @relation(fields: [addressId], references: [id])
   branch                Branch                @relation(fields: [branchId], references: [id])
   Role                  Role?                 @relation(fields: [roleId], references: [id])
@@ -186,6 +192,11 @@ model Person {
   birthDate                    DateTime?
   email                        String?                 @unique
   phoneNumber                  String?
+  marketingEmailConsent        Boolean                 @default(false)
+  marketingEmailConsentUpdatedAt DateTime?
+  marketingSmsConsent          Boolean                 @default(false)
+  marketingSmsConsentUpdatedAt  DateTime?
+  avatar                       String?
   medicalNotes                 String?
   idNumber                     String?
   nif                          String?
@@ -393,7 +404,7 @@ model ChatMessage {
 }
 
 model StockItem {
-  id            String    @id @default(dbgenerated("gen_random_uuid()"))
+  id            String          @id @default(dbgenerated("gen_random_uuid()"))
   branchId      String
   name          String
   category      String
@@ -401,18 +412,31 @@ model StockItem {
   quantity      Int
   capacity      Int
   unitCost      Float
-  salePrice     Float     @default(0)
+  salePrice     Float           @default(0)
   supplier      String
   notes         String?
-  lastRestockAt DateTime  @default(now())
-  createdAt     DateTime  @default(now())
-  updatedAt     DateTime  @updatedAt
+  lastRestockAt DateTime        @default(now())
+  createdAt     DateTime        @default(now())
+  updatedAt     DateTime        @updatedAt
   deletedAt     DateTime?
-  branch        Branch    @relation(fields: [branchId], references: [id])
+  branch        Branch          @relation(fields: [branchId], references: [id])
   saleItems     StockSaleItem[]
 
   @@index([branchId, deletedAt])
   @@map("stock_items")
+}
+
+model StockCatalogEntry {
+  id        String   @id @default(dbgenerated("gen_random_uuid()"))
+  branchId  String
+  kind      String
+  name      String
+  createdAt DateTime @default(now())
+  branch    Branch   @relation(fields: [branchId], references: [id])
+
+  @@unique([branchId, kind, name])
+  @@index([branchId, kind])
+  @@map("stock_catalog_entries")
 }
 
 model StockSale {
@@ -431,17 +455,39 @@ model StockSale {
   @@map("stock_sales")
 }
 
+model CommunicationCampaign {
+  id              String    @id @default(dbgenerated("gen_random_uuid()"))
+  branchId        String
+  createdById     String
+  name            String    @db.VarChar(120)
+  channel         String    @db.VarChar(16)
+  subject         String?   @db.VarChar(200)
+  body            String
+  status          String    @default("SENDING") @db.VarChar(16)
+  recipientCount  Int       @default(0)
+  sentCount       Int       @default(0)
+  failedCount     Int       @default(0)
+  sentAt          DateTime?
+  createdAt       DateTime  @default(now())
+  updatedAt       DateTime  @updatedAt
+  branch          Branch    @relation(fields: [branchId], references: [id])
+  createdBy       User      @relation(fields: [createdById], references: [id])
+
+  @@index([branchId, createdAt])
+  @@map("communication_campaigns")
+}
+
 model StockSaleItem {
-  id            String    @id @default(dbgenerated("gen_random_uuid()"))
-  saleId        String
-  stockItemId   String
-  itemName      String
-  unit          String
-  quantity      Int
-  unitPrice     Float
-  totalPrice    Float
-  sale          StockSale @relation(fields: [saleId], references: [id])
-  stockItem     StockItem @relation(fields: [stockItemId], references: [id], onDelete: Restrict)
+  id          String    @id @default(dbgenerated("gen_random_uuid()"))
+  saleId      String
+  stockItemId String
+  itemName    String
+  unit        String
+  quantity    Int
+  unitPrice   Float
+  totalPrice  Float
+  sale        StockSale @relation(fields: [saleId], references: [id])
+  stockItem   StockItem @relation(fields: [stockItemId], references: [id], onDelete: Restrict)
 
   @@index([saleId])
   @@index([stockItemId])
@@ -479,6 +525,34 @@ model RevokedToken {
 
   @@index([expiresAt])
   @@map("revoked_tokens")
+}
+
+model RefreshToken {
+  jti       String    @id
+  userId    String
+  expiresAt DateTime
+  revokedAt DateTime?
+  createdAt DateTime  @default(now())
+  user      User      @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([userId, revokedAt])
+  @@index([expiresAt])
+  @@map("refresh_tokens")
+}
+
+model AuthActionToken {
+  id        String    @id @default(dbgenerated("gen_random_uuid()"))
+  userId    String
+  tokenHash String    @unique
+  type      String
+  expiresAt DateTime
+  usedAt    DateTime?
+  createdAt DateTime  @default(now())
+  user      User      @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([userId, type])
+  @@index([expiresAt])
+  @@map("auth_action_tokens")
 }
 
 model Consult {
@@ -563,6 +637,22 @@ model Product {
   saleItems           SaleItem[]
 
   @@map("products")
+}
+
+model ClinicService {
+  id              String    @id @default(dbgenerated("gen_random_uuid()"))
+  branchId        String
+  name            String
+  description     String?
+  price           Float
+  durationMinutes Int
+  createdAt       DateTime  @default(now())
+  updatedAt       DateTime  @updatedAt
+  deletedAt       DateTime?
+  branch          Branch    @relation(fields: [branchId], references: [id])
+
+  @@index([branchId, deletedAt])
+  @@map("clinic_services")
 }
 
 model Sale {
@@ -654,35 +744,35 @@ model ClinicProccess {
 }
 
 model Diagnostic {
-  id            String    @id @default(dbgenerated("gen_random_uuid()"))
+  id            String                 @id @default(dbgenerated("gen_random_uuid()"))
   designation   String
   code          String?
-  severity      String    @default("low")
-  status        String    @default("monitoring")
-  affectedTeeth String[]  @default([])
+  severity      String                 @default("low")
+  status        String                 @default("monitoring")
+  affectedTeeth String[]               @default([])
   patientId     String
   doctorId      String
   description   String?
-  createdAt     DateTime  @default(now())
-  updatedAt     DateTime  @updatedAt
+  createdAt     DateTime               @default(now())
+  updatedAt     DateTime               @updatedAt
   deletedAt     DateTime?
-  doctor        User      @relation(fields: [doctorId], references: [id])
-  patient       Person    @relation(fields: [patientId], references: [id])
+  doctor        User                   @relation(fields: [doctorId], references: [id])
+  patient       Person                 @relation(fields: [patientId], references: [id])
   attachments   DiagnosticAttachment[]
 
   @@map("diagnostics")
 }
 
 model DiagnosticAttachment {
-  id           String     @id @default(dbgenerated("gen_random_uuid()"))
-  diagnosisId  String
-  fileName     String
-  mimeType     String
-  fileSize     Int
-  storageKey   String     @unique
-  createdAt    DateTime   @default(now())
-  deletedAt    DateTime?
-  diagnosis    Diagnostic @relation(fields: [diagnosisId], references: [id])
+  id          String     @id @default(dbgenerated("gen_random_uuid()"))
+  diagnosisId String
+  fileName    String
+  mimeType    String
+  fileSize    Int
+  storageKey  String     @unique
+  createdAt   DateTime   @default(now())
+  deletedAt   DateTime?
+  diagnosis   Diagnostic @relation(fields: [diagnosisId], references: [id])
 
   @@index([diagnosisId, deletedAt])
   @@map("diagnostic_attachments")

@@ -1,24 +1,40 @@
-import { S3Client } from '@aws-sdk/client-s3';
-import { AwsS3Storage } from '../aws-s3.storage';
+import { ConfigService } from '@nestjs/config';
+import { randomUUID } from 'crypto';
 import { Config } from '../../config';
+import { PatientExamStorage } from '../../../../patients/infra/storage/patient-exam-storage';
 
-describe('AwsS3Storage Integration Test', () => {
-  let awsS3Storage: AwsS3Storage;
+Config.readEnv();
+const integrationEnabled =
+  process.env.RUN_R2_INTEGRATION_TESTS === 'true' &&
+  Boolean(
+    Config.env.R2_ENDPOINT &&
+    Config.env.R2_ACCESS_KEY_ID &&
+    Config.env.R2_SECRET_ACCESS_KEY &&
+    Config.env.R2_BUCKET,
+  );
 
-  beforeEach(() => {
-    const storageSdk = new S3Client(Config.cloudFlareCredentials());
+const describeR2 = integrationEnabled ? describe : describe.skip;
 
-    awsS3Storage = new AwsS3Storage(storageSdk, Config.bucketName());
-  });
+describeR2('AwsS3Storage R2 integration', () => {
+  const config = new ConfigService(Config.env);
+  const storage = new PatientExamStorage(config);
 
-  it('should store a file', async () => {
-    // await awsS3Storage.store({
-    //   data: Buffer.from('data'),
-    //   id: 'location/1.txt',
-    //   mime_type: 'text/plain',
-    // });
-    // const file = await awsS3Storage.get('location/1.txt');
-    // expect(file.data.toString()).toBe('data');
-    // expect(file.mime_type).toBe('text/plain');
+  it('uploads, reads, and removes an isolated test object', async () => {
+    const id = `integration-tests/${randomUUID()}.txt`;
+    const contents = `R2 upload integration test ${randomUUID()}`;
+
+    try {
+      await storage.store({
+        id,
+        data: Buffer.from(contents),
+        mimeType: 'text/plain',
+      });
+      const file = await storage.get(id);
+
+      expect(file.data.toString()).toBe(contents);
+      expect(file.mime_type).toBe('text/plain');
+    } finally {
+      await storage.delete(id);
+    }
   }, 10000);
 });

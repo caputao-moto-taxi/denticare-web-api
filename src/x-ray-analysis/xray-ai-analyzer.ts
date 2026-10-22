@@ -5,23 +5,13 @@ import {
   ServiceUnavailableException,
 } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
+import { XRayAnalysisResult, XRayType } from './domain/x-ray-analysis.entity';
+import { IXRayAnalyzer } from './domain/x-ray-analyzer.interface';
 
-export type XRayAnalysisResult = {
-  summary: string;
-  observations: {
-    description: string;
-    location: string;
-    confidence: 'low' | 'moderate' | 'high';
-  }[];
-  imageQuality: {
-    rating: 'adequate' | 'limited' | 'unusable';
-    issues: string[];
-  };
-  requiresProfessionalReview: true;
-};
+export type { XRayAnalysisResult } from './domain/x-ray-analysis.entity';
 
 @Injectable()
-export class XRayAiAnalyzer {
+export class XRayAiAnalyzer implements IXRayAnalyzer {
   private readonly logger = new Logger(XRayAiAnalyzer.name);
 
   constructor(private readonly config: ConfigService) {}
@@ -29,7 +19,7 @@ export class XRayAiAnalyzer {
   async analyze(
     image: Buffer,
     mimeType: 'image/jpeg' | 'image/png',
-    type: string,
+    type: XRayType,
     region: string,
   ): Promise<{ result: XRayAnalysisResult; modelName: string }> {
     const baseUrl = this.config.get<string>('XRAY_AI_BASE_URL')?.trim();

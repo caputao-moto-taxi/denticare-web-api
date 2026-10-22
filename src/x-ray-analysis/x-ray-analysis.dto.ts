@@ -1,12 +1,8 @@
 import { Transform } from 'class-transformer';
 import { IsIn, IsString, IsUUID, MaxLength, MinLength } from 'class-validator';
+import { XRAY_TYPES } from './domain/x-ray-analysis.entity';
 
-export const XRAY_TYPES = [
-  'periapical',
-  'panoramic',
-  'bitewing',
-  'cephalometric',
-] as const;
+export { XRAY_TYPES };
 
 export class CreateXRayAnalysisDto {
   @IsUUID()

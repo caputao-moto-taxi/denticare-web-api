@@ -17,6 +17,7 @@ import {
 } from '../../../../shared/helpers/list-filters';
 import { PrismaService } from '../../../../shared/infra/db/prisma/prisma.service';
 import {
+  ChatAttachmentRecord,
   ChatMessageView,
   CreateConversationCommand,
   IChatRepository,
@@ -266,6 +267,9 @@ export class ChatPrismaRepository implements IChatRepository {
           conversationId,
           authorId: user.id,
           content: input.content.trim(),
+          ...(input.attachments?.length && {
+            attachments: input.attachments as Prisma.InputJsonValue,
+          }),
         },
         include: { author: { include: PARTICIPANT_INCLUDE } },
       });
@@ -280,6 +284,29 @@ export class ChatPrismaRepository implements IChatRepository {
       return created;
     });
     return this.toMessage(message, user.id);
+  }
+
+  async getAttachment(
+    user: AuthUser,
+    conversationId: string,
+    messageId: string,
+    attachmentId: string,
+  ) {
+    await this.requireParticipant(user, conversationId);
+    const message = await this.prisma.chatMessage.findFirst({
+      where: { id: messageId, conversationId },
+      select: { attachments: true },
+    });
+    const attachments = Array.isArray(message?.attachments)
+      ? (message.attachments as unknown as ChatAttachmentRecord[])
+      : [];
+    const attachment = attachments.find((item) => item.id === attachmentId);
+    if (!attachment) throw new NotFoundException('Attachment not found');
+    return {
+      storageKey: attachment.storageKey,
+      name: attachment.name,
+      mimeType: attachment.mimeType,
+    };
   }
 
   async participants(user: AuthUser, conversationId: string) {
@@ -324,9 +351,11 @@ export class ChatPrismaRepository implements IChatRepository {
       };
       messages: {
         id: string;
+        conversationId: string;
         authorId: string;
         content: string;
         createdAt: Date;
+        attachments: Prisma.JsonValue | null;
         author: {
           email: string;
           Person: { firstName: string; lastName: string }[];
@@ -374,9 +403,11 @@ export class ChatPrismaRepository implements IChatRepository {
   private toMessage(
     message: {
       id: string;
+      conversationId: string;
       authorId: string;
       content: string;
       createdAt: Date;
+      attachments: Prisma.JsonValue | null;
       author: {
         email: string;
         Person: { firstName: string; lastName: string }[];
@@ -384,11 +415,23 @@ export class ChatPrismaRepository implements IChatRepository {
     },
     userId: string,
   ): ChatMessageView {
+    const attachments = Array.isArray(message.attachments)
+      ? (message.attachments as unknown as ChatAttachmentRecord[]).map(
+          (attachment) => ({
+            id: attachment.id,
+            name: attachment.name,
+            mimeType: attachment.mimeType,
+            size: attachment.size,
+            url: `/chat/conversations/${message.conversationId}/messages/${message.id}/attachments/${attachment.id}/file`,
+          }),
+        )
+      : [];
     return {
       id: message.id,
       sender: message.authorId === userId ? 'me' : 'contact',
       text: message.content,
       sentAt: message.createdAt.toISOString(),
+      ...(attachments.length > 0 && { attachments }),
     };
   }
 
