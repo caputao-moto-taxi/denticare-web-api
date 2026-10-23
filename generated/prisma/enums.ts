@@ -41,6 +41,38 @@ export const AppointmentStatus = {
 export type AppointmentStatus = (typeof AppointmentStatus)[keyof typeof AppointmentStatus]
 
 
+export const ClinicSubscriptionStatus = {
+  TRIAL_ACTIVE: 'TRIAL_ACTIVE',
+  TRIAL_EXPIRED: 'TRIAL_EXPIRED',
+  ACTIVE: 'ACTIVE',
+  EXPIRING_SOON: 'EXPIRING_SOON',
+  EXPIRED: 'EXPIRED',
+  CANCELLED: 'CANCELLED'
+} as const
+
+export type ClinicSubscriptionStatus = (typeof ClinicSubscriptionStatus)[keyof typeof ClinicSubscriptionStatus]
+
+
+export const SubscriptionRequestStatus = {
+  PENDING: 'PENDING',
+  UNDER_REVIEW: 'UNDER_REVIEW',
+  INFORMATION_REQUESTED: 'INFORMATION_REQUESTED',
+  APPROVED: 'APPROVED',
+  REJECTED: 'REJECTED',
+  CANCELLED: 'CANCELLED'
+} as const
+
+export type SubscriptionRequestStatus = (typeof SubscriptionRequestStatus)[keyof typeof SubscriptionRequestStatus]
+
+
+export const AssistantMessageRole = {
+  USER: 'USER',
+  ASSISTANT: 'ASSISTANT'
+} as const
+
+export type AssistantMessageRole = (typeof AssistantMessageRole)[keyof typeof AssistantMessageRole]
+
+
 export const ConsultType = {
   CONSULT: 'CONSULT',
   DIAGNOSTIC: 'DIAGNOSTIC',

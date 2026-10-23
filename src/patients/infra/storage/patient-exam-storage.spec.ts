@@ -1,15 +1,16 @@
+import { ServiceUnavailableException } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import { S3Client } from '@aws-sdk/client-s3';
 import { NodeHttpHandler } from '@smithy/node-http-handler';
 import { Agent as HttpsAgent } from 'node:https';
-import { rootCertificates } from 'node:tls';
 import { PatientExamStorage } from './patient-exam-storage';
 
+const mockS3Send = jest.fn();
+
 jest.mock('@aws-sdk/client-s3', () => ({
-  S3Client: jest.fn().mockImplementation((config) => ({
-    config,
-    send: jest.fn().mockResolvedValue({}),
-  })),
+  S3Client: jest
+    .fn()
+    .mockImplementation((config) => ({ config, send: mockS3Send })),
   PutObjectCommand: jest.fn((input) => input),
   GetObjectCommand: jest.fn((input) => input),
   DeleteObjectCommand: jest.fn((input) => input),
@@ -22,18 +23,16 @@ jest.mock('@smithy/node-http-handler', () => ({
 describe('PatientExamStorage', () => {
   beforeEach(() => {
     jest.clearAllMocks();
+    mockS3Send.mockResolvedValue({});
   });
 
-  it('adds the configured R2 CA while retaining Node trusted roots', async () => {
-    const ca =
-      '-----BEGIN CERTIFICATE-----\ntrusted-root\n-----END CERTIFICATE-----';
+  it('requires TLS 1.2 or newer and validates the R2 certificate', async () => {
     const storage = new PatientExamStorage(
       new ConfigService({
         R2_ENDPOINT: 'https://storage.example.test',
         R2_BUCKET: 'dentcare',
         R2_ACCESS_KEY_ID: 'access-key',
         R2_SECRET_ACCESS_KEY: 'secret-key',
-        R2_TLS_CA_CERT: ca.replace(/\n/g, '\\n'),
       }),
     );
 
@@ -43,19 +42,27 @@ describe('PatientExamStorage', () => {
       mimeType: 'image/png',
     });
 
-    expect(NodeHttpHandler).toHaveBeenCalledTimes(1);
     const handlerOptions = jest.mocked(NodeHttpHandler).mock.calls[0][0];
     const httpsAgent = handlerOptions.httpsAgent as HttpsAgent;
-    expect(httpsAgent.options.ca).toEqual([...rootCertificates, ca]);
-    expect(jest.mocked(S3Client).mock.calls[0][0]).toEqual(
+    expect(httpsAgent.options).toEqual(
       expect.objectContaining({
-        endpoint: 'https://storage.example.test',
-        requestHandler: expect.anything(),
+        minVersion: 'TLSv1.2',
+        rejectUnauthorized: true,
       }),
+    );
+    expect(jest.mocked(S3Client).mock.calls[0][0]).toEqual(
+      expect.objectContaining({ requestHandler: expect.anything() }),
     );
   });
 
-  it('uses the default S3 TLS handler when no custom CA is configured', async () => {
+  it('reports an actionable error when R2 TLS certificate verification fails', async () => {
+    mockS3Send.mockRejectedValue(
+      Object.assign(new Error('request failed'), {
+        cause: Object.assign(new Error('certificate rejected'), {
+          code: 'SELF_SIGNED_CERT_IN_CHAIN',
+        }),
+      }),
+    );
     const storage = new PatientExamStorage(
       new ConfigService({
         R2_ENDPOINT: 'https://storage.example.test',
@@ -65,15 +72,12 @@ describe('PatientExamStorage', () => {
       }),
     );
 
-    await storage.store({
-      id: 'logo.png',
-      data: Buffer.from('image'),
-      mimeType: 'image/png',
-    });
-
-    expect(NodeHttpHandler).not.toHaveBeenCalled();
-    expect(jest.mocked(S3Client).mock.calls[0][0]).not.toHaveProperty(
-      'requestHandler',
-    );
+    await expect(
+      storage.store({
+        id: 'payment-proof',
+        data: Buffer.from('file'),
+        mimeType: 'application/pdf',
+      }),
+    ).rejects.toThrow(ServiceUnavailableException);
   });
 });

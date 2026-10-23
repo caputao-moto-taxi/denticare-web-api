@@ -103,7 +103,15 @@ export const ModelName = {
   Audit: 'Audit',
   Log: 'Log',
   LoginHistory: 'LoginHistory',
-  AccessHistory: 'AccessHistory'
+  AccessHistory: 'AccessHistory',
+  ClinicSubscription: 'ClinicSubscription',
+  SubscriptionRequest: 'SubscriptionRequest',
+  SubscriptionAudit: 'SubscriptionAudit',
+  PlatformAdminAudit: 'PlatformAdminAudit',
+  SubscriptionSettings: 'SubscriptionSettings',
+  NotificationOutbox: 'NotificationOutbox',
+  AssistantConversation: 'AssistantConversation',
+  AssistantMessage: 'AssistantMessage'
 } as const
 
 export type ModelName = (typeof ModelName)[keyof typeof ModelName]
@@ -139,6 +147,9 @@ export const PlanScalarFieldEnum = {
   name: 'name',
   total_branch: 'total_branch',
   price: 'price',
+  subscriptionPrice: 'subscriptionPrice',
+  subscriptionMonths: 'subscriptionMonths',
+  isSubscriptionOption: 'isSubscriptionOption',
   currencyId: 'currencyId',
   duration: 'duration',
   createdAt: 'createdAt',
@@ -188,6 +199,7 @@ export const HeadquarterScalarFieldEnum = {
   description: 'description',
   nif: 'nif',
   logo: 'logo',
+  isActive: 'isActive',
   planId: 'planId',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt',
@@ -950,6 +962,146 @@ export const AccessHistoryScalarFieldEnum = {
 } as const
 
 export type AccessHistoryScalarFieldEnum = (typeof AccessHistoryScalarFieldEnum)[keyof typeof AccessHistoryScalarFieldEnum]
+
+
+export const ClinicSubscriptionScalarFieldEnum = {
+  id: 'id',
+  headquarterId: 'headquarterId',
+  planId: 'planId',
+  status: 'status',
+  startsAt: 'startsAt',
+  expiresAt: 'expiresAt',
+  endedAt: 'endedAt',
+  planNameSnapshot: 'planNameSnapshot',
+  durationMonths: 'durationMonths',
+  approvedAmount: 'approvedAmount',
+  originalAmount: 'originalAmount',
+  savingsAmount: 'savingsAmount',
+  discountPercent: 'discountPercent',
+  currencyCode: 'currencyCode',
+  approvedByUserId: 'approvedByUserId',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+} as const
+
+export type ClinicSubscriptionScalarFieldEnum = (typeof ClinicSubscriptionScalarFieldEnum)[keyof typeof ClinicSubscriptionScalarFieldEnum]
+
+
+export const SubscriptionRequestScalarFieldEnum = {
+  id: 'id',
+  headquarterId: 'headquarterId',
+  planId: 'planId',
+  submittedByUserId: 'submittedByUserId',
+  reviewedByUserId: 'reviewedByUserId',
+  subscriptionId: 'subscriptionId',
+  status: 'status',
+  paymentDate: 'paymentDate',
+  amountPaid: 'amountPaid',
+  currencyCode: 'currencyCode',
+  paymentReference: 'paymentReference',
+  notes: 'notes',
+  clinicResponse: 'clinicResponse',
+  informationRequest: 'informationRequest',
+  rejectionReason: 'rejectionReason',
+  proofStorageKey: 'proofStorageKey',
+  proofMimeType: 'proofMimeType',
+  proofOriginalFileName: 'proofOriginalFileName',
+  proofSizeBytes: 'proofSizeBytes',
+  planNameSnapshot: 'planNameSnapshot',
+  durationMonths: 'durationMonths',
+  originalAmount: 'originalAmount',
+  requestedAmount: 'requestedAmount',
+  savingsAmount: 'savingsAmount',
+  discountPercent: 'discountPercent',
+  idempotencyKey: 'idempotencyKey',
+  submittedAt: 'submittedAt',
+  reviewedAt: 'reviewedAt',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+} as const
+
+export type SubscriptionRequestScalarFieldEnum = (typeof SubscriptionRequestScalarFieldEnum)[keyof typeof SubscriptionRequestScalarFieldEnum]
+
+
+export const SubscriptionAuditScalarFieldEnum = {
+  id: 'id',
+  requestId: 'requestId',
+  headquarterId: 'headquarterId',
+  actorUserId: 'actorUserId',
+  action: 'action',
+  details: 'details',
+  createdAt: 'createdAt'
+} as const
+
+export type SubscriptionAuditScalarFieldEnum = (typeof SubscriptionAuditScalarFieldEnum)[keyof typeof SubscriptionAuditScalarFieldEnum]
+
+
+export const PlatformAdminAuditScalarFieldEnum = {
+  id: 'id',
+  headquarterId: 'headquarterId',
+  actorUserId: 'actorUserId',
+  targetUserId: 'targetUserId',
+  action: 'action',
+  details: 'details',
+  createdAt: 'createdAt'
+} as const
+
+export type PlatformAdminAuditScalarFieldEnum = (typeof PlatformAdminAuditScalarFieldEnum)[keyof typeof PlatformAdminAuditScalarFieldEnum]
+
+
+export const SubscriptionSettingsScalarFieldEnum = {
+  id: 'id',
+  bankName: 'bankName',
+  accountHolder: 'accountHolder',
+  iban: 'iban',
+  estimatedReviewHours: 'estimatedReviewHours',
+  updatedByUserId: 'updatedByUserId',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+} as const
+
+export type SubscriptionSettingsScalarFieldEnum = (typeof SubscriptionSettingsScalarFieldEnum)[keyof typeof SubscriptionSettingsScalarFieldEnum]
+
+
+export const NotificationOutboxScalarFieldEnum = {
+  id: 'id',
+  dedupeKey: 'dedupeKey',
+  recipient: 'recipient',
+  eventType: 'eventType',
+  payload: 'payload',
+  attempts: 'attempts',
+  nextAttemptAt: 'nextAttemptAt',
+  lockedAt: 'lockedAt',
+  sentAt: 'sentAt',
+  createdAt: 'createdAt'
+} as const
+
+export type NotificationOutboxScalarFieldEnum = (typeof NotificationOutboxScalarFieldEnum)[keyof typeof NotificationOutboxScalarFieldEnum]
+
+
+export const AssistantConversationScalarFieldEnum = {
+  id: 'id',
+  headquarterId: 'headquarterId',
+  branchId: 'branchId',
+  userId: 'userId',
+  expiresAt: 'expiresAt',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+} as const
+
+export type AssistantConversationScalarFieldEnum = (typeof AssistantConversationScalarFieldEnum)[keyof typeof AssistantConversationScalarFieldEnum]
+
+
+export const AssistantMessageScalarFieldEnum = {
+  id: 'id',
+  conversationId: 'conversationId',
+  userId: 'userId',
+  role: 'role',
+  content: 'content',
+  createdAt: 'createdAt'
+} as const
+
+export type AssistantMessageScalarFieldEnum = (typeof AssistantMessageScalarFieldEnum)[keyof typeof AssistantMessageScalarFieldEnum]
 
 
 export const SortOrder = {

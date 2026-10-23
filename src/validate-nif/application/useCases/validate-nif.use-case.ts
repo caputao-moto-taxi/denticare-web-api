@@ -1,5 +1,4 @@
 import axios from 'axios';
-import { Agent } from 'https';
 import { HttpStatus } from '@nestjs/common';
 import {
   HttpResponseType,
@@ -10,7 +9,6 @@ import type { UseCase } from '../../../shared/contracts/useCasesOrServicesContra
 import type { ValidateNifInterface } from '../interface/validateNif.interface';
 
 const NIF_PROVIDER_URL = 'https://dominios.ao/ao/actions/nif.ajcall.php';
-const httpsAgent = new Agent({ rejectUnauthorized: false });
 
 export class ValidateNifUseCase implements UseCase {
   async execute({ nif }: ValidateNifInterface) {
@@ -21,10 +19,8 @@ export class ValidateNifUseCase implements UseCase {
     try {
       const { data: result } = await axios.get(NIF_PROVIDER_URL, {
         params: { nif },
-        httpsAgent,
       });
-      console.log('NIF validation result:', result);
-      if (result.sucess !== true) {
+      if (result.success !== true && result.sucess !== true) {
         return badRequestResponse({ message: 'NIF is not valid' });
       }
 

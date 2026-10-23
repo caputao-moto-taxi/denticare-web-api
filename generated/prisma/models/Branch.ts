@@ -247,6 +247,7 @@ export type BranchWhereInput = {
   patientFinancialEntries?: Prisma.PatientFinancialEntryListRelationFilter
   xrayAnalyses?: Prisma.XRayAnalysisListRelationFilter
   patientDocuments?: Prisma.PatientDocumentListRelationFilter
+  assistantConversations?: Prisma.AssistantConversationListRelationFilter
 }
 
 export type BranchOrderByWithRelationInput = {
@@ -279,6 +280,7 @@ export type BranchOrderByWithRelationInput = {
   patientFinancialEntries?: Prisma.PatientFinancialEntryOrderByRelationAggregateInput
   xrayAnalyses?: Prisma.XRayAnalysisOrderByRelationAggregateInput
   patientDocuments?: Prisma.PatientDocumentOrderByRelationAggregateInput
+  assistantConversations?: Prisma.AssistantConversationOrderByRelationAggregateInput
 }
 
 export type BranchWhereUniqueInput = Prisma.AtLeast<{
@@ -314,6 +316,7 @@ export type BranchWhereUniqueInput = Prisma.AtLeast<{
   patientFinancialEntries?: Prisma.PatientFinancialEntryListRelationFilter
   xrayAnalyses?: Prisma.XRayAnalysisListRelationFilter
   patientDocuments?: Prisma.PatientDocumentListRelationFilter
+  assistantConversations?: Prisma.AssistantConversationListRelationFilter
 }, "id">
 
 export type BranchOrderByWithAggregationInput = {
@@ -380,6 +383,7 @@ export type BranchCreateInput = {
   patientFinancialEntries?: Prisma.PatientFinancialEntryCreateNestedManyWithoutBranchInput
   xrayAnalyses?: Prisma.XRayAnalysisCreateNestedManyWithoutBranchInput
   patientDocuments?: Prisma.PatientDocumentCreateNestedManyWithoutBranchInput
+  assistantConversations?: Prisma.AssistantConversationCreateNestedManyWithoutBranchInput
 }
 
 export type BranchUncheckedCreateInput = {
@@ -410,6 +414,7 @@ export type BranchUncheckedCreateInput = {
   patientFinancialEntries?: Prisma.PatientFinancialEntryUncheckedCreateNestedManyWithoutBranchInput
   xrayAnalyses?: Prisma.XRayAnalysisUncheckedCreateNestedManyWithoutBranchInput
   patientDocuments?: Prisma.PatientDocumentUncheckedCreateNestedManyWithoutBranchInput
+  assistantConversations?: Prisma.AssistantConversationUncheckedCreateNestedManyWithoutBranchInput
 }
 
 export type BranchUpdateInput = {
@@ -440,6 +445,7 @@ export type BranchUpdateInput = {
   patientFinancialEntries?: Prisma.PatientFinancialEntryUpdateManyWithoutBranchNestedInput
   xrayAnalyses?: Prisma.XRayAnalysisUpdateManyWithoutBranchNestedInput
   patientDocuments?: Prisma.PatientDocumentUpdateManyWithoutBranchNestedInput
+  assistantConversations?: Prisma.AssistantConversationUpdateManyWithoutBranchNestedInput
 }
 
 export type BranchUncheckedUpdateInput = {
@@ -470,6 +476,7 @@ export type BranchUncheckedUpdateInput = {
   patientFinancialEntries?: Prisma.PatientFinancialEntryUncheckedUpdateManyWithoutBranchNestedInput
   xrayAnalyses?: Prisma.XRayAnalysisUncheckedUpdateManyWithoutBranchNestedInput
   patientDocuments?: Prisma.PatientDocumentUncheckedUpdateManyWithoutBranchNestedInput
+  assistantConversations?: Prisma.AssistantConversationUncheckedUpdateManyWithoutBranchNestedInput
 }
 
 export type BranchCreateManyInput = {
@@ -572,6 +579,11 @@ export type BranchMinOrderByAggregateInput = {
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
   deletedAt?: Prisma.SortOrder
+}
+
+export type BranchNullableScalarRelationFilter = {
+  is?: Prisma.BranchWhereInput | null
+  isNot?: Prisma.BranchWhereInput | null
 }
 
 export type BranchScalarRelationFilter = {
@@ -678,10 +690,12 @@ export type BranchCreateNestedOneWithoutUserInput = {
   connect?: Prisma.BranchWhereUniqueInput
 }
 
-export type BranchUpdateOneRequiredWithoutUserNestedInput = {
+export type BranchUpdateOneWithoutUserNestedInput = {
   create?: Prisma.XOR<Prisma.BranchCreateWithoutUserInput, Prisma.BranchUncheckedCreateWithoutUserInput>
   connectOrCreate?: Prisma.BranchCreateOrConnectWithoutUserInput
   upsert?: Prisma.BranchUpsertWithoutUserInput
+  disconnect?: Prisma.BranchWhereInput | boolean
+  delete?: Prisma.BranchWhereInput | boolean
   connect?: Prisma.BranchWhereUniqueInput
   update?: Prisma.XOR<Prisma.XOR<Prisma.BranchUpdateToOneWithWhereWithoutUserInput, Prisma.BranchUpdateWithoutUserInput>, Prisma.BranchUncheckedUpdateWithoutUserInput>
 }
@@ -882,6 +896,20 @@ export type BranchUpdateOneRequiredWithoutPatientDocumentsNestedInput = {
   update?: Prisma.XOR<Prisma.XOR<Prisma.BranchUpdateToOneWithWhereWithoutPatientDocumentsInput, Prisma.BranchUpdateWithoutPatientDocumentsInput>, Prisma.BranchUncheckedUpdateWithoutPatientDocumentsInput>
 }
 
+export type BranchCreateNestedOneWithoutAssistantConversationsInput = {
+  create?: Prisma.XOR<Prisma.BranchCreateWithoutAssistantConversationsInput, Prisma.BranchUncheckedCreateWithoutAssistantConversationsInput>
+  connectOrCreate?: Prisma.BranchCreateOrConnectWithoutAssistantConversationsInput
+  connect?: Prisma.BranchWhereUniqueInput
+}
+
+export type BranchUpdateOneRequiredWithoutAssistantConversationsNestedInput = {
+  create?: Prisma.XOR<Prisma.BranchCreateWithoutAssistantConversationsInput, Prisma.BranchUncheckedCreateWithoutAssistantConversationsInput>
+  connectOrCreate?: Prisma.BranchCreateOrConnectWithoutAssistantConversationsInput
+  upsert?: Prisma.BranchUpsertWithoutAssistantConversationsInput
+  connect?: Prisma.BranchWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.BranchUpdateToOneWithWhereWithoutAssistantConversationsInput, Prisma.BranchUpdateWithoutAssistantConversationsInput>, Prisma.BranchUncheckedUpdateWithoutAssistantConversationsInput>
+}
+
 export type BranchCreateWithoutHeadquarterInput = {
   id?: string
   name: string
@@ -909,6 +937,7 @@ export type BranchCreateWithoutHeadquarterInput = {
   patientFinancialEntries?: Prisma.PatientFinancialEntryCreateNestedManyWithoutBranchInput
   xrayAnalyses?: Prisma.XRayAnalysisCreateNestedManyWithoutBranchInput
   patientDocuments?: Prisma.PatientDocumentCreateNestedManyWithoutBranchInput
+  assistantConversations?: Prisma.AssistantConversationCreateNestedManyWithoutBranchInput
 }
 
 export type BranchUncheckedCreateWithoutHeadquarterInput = {
@@ -938,6 +967,7 @@ export type BranchUncheckedCreateWithoutHeadquarterInput = {
   patientFinancialEntries?: Prisma.PatientFinancialEntryUncheckedCreateNestedManyWithoutBranchInput
   xrayAnalyses?: Prisma.XRayAnalysisUncheckedCreateNestedManyWithoutBranchInput
   patientDocuments?: Prisma.PatientDocumentUncheckedCreateNestedManyWithoutBranchInput
+  assistantConversations?: Prisma.AssistantConversationUncheckedCreateNestedManyWithoutBranchInput
 }
 
 export type BranchCreateOrConnectWithoutHeadquarterInput = {
@@ -1011,6 +1041,7 @@ export type BranchCreateWithoutAddressInput = {
   patientFinancialEntries?: Prisma.PatientFinancialEntryCreateNestedManyWithoutBranchInput
   xrayAnalyses?: Prisma.XRayAnalysisCreateNestedManyWithoutBranchInput
   patientDocuments?: Prisma.PatientDocumentCreateNestedManyWithoutBranchInput
+  assistantConversations?: Prisma.AssistantConversationCreateNestedManyWithoutBranchInput
 }
 
 export type BranchUncheckedCreateWithoutAddressInput = {
@@ -1040,6 +1071,7 @@ export type BranchUncheckedCreateWithoutAddressInput = {
   patientFinancialEntries?: Prisma.PatientFinancialEntryUncheckedCreateNestedManyWithoutBranchInput
   xrayAnalyses?: Prisma.XRayAnalysisUncheckedCreateNestedManyWithoutBranchInput
   patientDocuments?: Prisma.PatientDocumentUncheckedCreateNestedManyWithoutBranchInput
+  assistantConversations?: Prisma.AssistantConversationUncheckedCreateNestedManyWithoutBranchInput
 }
 
 export type BranchCreateOrConnectWithoutAddressInput = {
@@ -1095,6 +1127,7 @@ export type BranchCreateWithoutUserInput = {
   patientFinancialEntries?: Prisma.PatientFinancialEntryCreateNestedManyWithoutBranchInput
   xrayAnalyses?: Prisma.XRayAnalysisCreateNestedManyWithoutBranchInput
   patientDocuments?: Prisma.PatientDocumentCreateNestedManyWithoutBranchInput
+  assistantConversations?: Prisma.AssistantConversationCreateNestedManyWithoutBranchInput
 }
 
 export type BranchUncheckedCreateWithoutUserInput = {
@@ -1124,6 +1157,7 @@ export type BranchUncheckedCreateWithoutUserInput = {
   patientFinancialEntries?: Prisma.PatientFinancialEntryUncheckedCreateNestedManyWithoutBranchInput
   xrayAnalyses?: Prisma.XRayAnalysisUncheckedCreateNestedManyWithoutBranchInput
   patientDocuments?: Prisma.PatientDocumentUncheckedCreateNestedManyWithoutBranchInput
+  assistantConversations?: Prisma.AssistantConversationUncheckedCreateNestedManyWithoutBranchInput
 }
 
 export type BranchCreateOrConnectWithoutUserInput = {
@@ -1169,6 +1203,7 @@ export type BranchUpdateWithoutUserInput = {
   patientFinancialEntries?: Prisma.PatientFinancialEntryUpdateManyWithoutBranchNestedInput
   xrayAnalyses?: Prisma.XRayAnalysisUpdateManyWithoutBranchNestedInput
   patientDocuments?: Prisma.PatientDocumentUpdateManyWithoutBranchNestedInput
+  assistantConversations?: Prisma.AssistantConversationUpdateManyWithoutBranchNestedInput
 }
 
 export type BranchUncheckedUpdateWithoutUserInput = {
@@ -1198,6 +1233,7 @@ export type BranchUncheckedUpdateWithoutUserInput = {
   patientFinancialEntries?: Prisma.PatientFinancialEntryUncheckedUpdateManyWithoutBranchNestedInput
   xrayAnalyses?: Prisma.XRayAnalysisUncheckedUpdateManyWithoutBranchNestedInput
   patientDocuments?: Prisma.PatientDocumentUncheckedUpdateManyWithoutBranchNestedInput
+  assistantConversations?: Prisma.AssistantConversationUncheckedUpdateManyWithoutBranchNestedInput
 }
 
 export type BranchCreateWithoutPersonInput = {
@@ -1227,6 +1263,7 @@ export type BranchCreateWithoutPersonInput = {
   patientFinancialEntries?: Prisma.PatientFinancialEntryCreateNestedManyWithoutBranchInput
   xrayAnalyses?: Prisma.XRayAnalysisCreateNestedManyWithoutBranchInput
   patientDocuments?: Prisma.PatientDocumentCreateNestedManyWithoutBranchInput
+  assistantConversations?: Prisma.AssistantConversationCreateNestedManyWithoutBranchInput
 }
 
 export type BranchUncheckedCreateWithoutPersonInput = {
@@ -1256,6 +1293,7 @@ export type BranchUncheckedCreateWithoutPersonInput = {
   patientFinancialEntries?: Prisma.PatientFinancialEntryUncheckedCreateNestedManyWithoutBranchInput
   xrayAnalyses?: Prisma.XRayAnalysisUncheckedCreateNestedManyWithoutBranchInput
   patientDocuments?: Prisma.PatientDocumentUncheckedCreateNestedManyWithoutBranchInput
+  assistantConversations?: Prisma.AssistantConversationUncheckedCreateNestedManyWithoutBranchInput
 }
 
 export type BranchCreateOrConnectWithoutPersonInput = {
@@ -1301,6 +1339,7 @@ export type BranchUpdateWithoutPersonInput = {
   patientFinancialEntries?: Prisma.PatientFinancialEntryUpdateManyWithoutBranchNestedInput
   xrayAnalyses?: Prisma.XRayAnalysisUpdateManyWithoutBranchNestedInput
   patientDocuments?: Prisma.PatientDocumentUpdateManyWithoutBranchNestedInput
+  assistantConversations?: Prisma.AssistantConversationUpdateManyWithoutBranchNestedInput
 }
 
 export type BranchUncheckedUpdateWithoutPersonInput = {
@@ -1330,6 +1369,7 @@ export type BranchUncheckedUpdateWithoutPersonInput = {
   patientFinancialEntries?: Prisma.PatientFinancialEntryUncheckedUpdateManyWithoutBranchNestedInput
   xrayAnalyses?: Prisma.XRayAnalysisUncheckedUpdateManyWithoutBranchNestedInput
   patientDocuments?: Prisma.PatientDocumentUncheckedUpdateManyWithoutBranchNestedInput
+  assistantConversations?: Prisma.AssistantConversationUncheckedUpdateManyWithoutBranchNestedInput
 }
 
 export type BranchCreateWithoutUserBranchInput = {
@@ -1359,6 +1399,7 @@ export type BranchCreateWithoutUserBranchInput = {
   patientFinancialEntries?: Prisma.PatientFinancialEntryCreateNestedManyWithoutBranchInput
   xrayAnalyses?: Prisma.XRayAnalysisCreateNestedManyWithoutBranchInput
   patientDocuments?: Prisma.PatientDocumentCreateNestedManyWithoutBranchInput
+  assistantConversations?: Prisma.AssistantConversationCreateNestedManyWithoutBranchInput
 }
 
 export type BranchUncheckedCreateWithoutUserBranchInput = {
@@ -1388,6 +1429,7 @@ export type BranchUncheckedCreateWithoutUserBranchInput = {
   patientFinancialEntries?: Prisma.PatientFinancialEntryUncheckedCreateNestedManyWithoutBranchInput
   xrayAnalyses?: Prisma.XRayAnalysisUncheckedCreateNestedManyWithoutBranchInput
   patientDocuments?: Prisma.PatientDocumentUncheckedCreateNestedManyWithoutBranchInput
+  assistantConversations?: Prisma.AssistantConversationUncheckedCreateNestedManyWithoutBranchInput
 }
 
 export type BranchCreateOrConnectWithoutUserBranchInput = {
@@ -1433,6 +1475,7 @@ export type BranchUpdateWithoutUserBranchInput = {
   patientFinancialEntries?: Prisma.PatientFinancialEntryUpdateManyWithoutBranchNestedInput
   xrayAnalyses?: Prisma.XRayAnalysisUpdateManyWithoutBranchNestedInput
   patientDocuments?: Prisma.PatientDocumentUpdateManyWithoutBranchNestedInput
+  assistantConversations?: Prisma.AssistantConversationUpdateManyWithoutBranchNestedInput
 }
 
 export type BranchUncheckedUpdateWithoutUserBranchInput = {
@@ -1462,6 +1505,7 @@ export type BranchUncheckedUpdateWithoutUserBranchInput = {
   patientFinancialEntries?: Prisma.PatientFinancialEntryUncheckedUpdateManyWithoutBranchNestedInput
   xrayAnalyses?: Prisma.XRayAnalysisUncheckedUpdateManyWithoutBranchNestedInput
   patientDocuments?: Prisma.PatientDocumentUncheckedUpdateManyWithoutBranchNestedInput
+  assistantConversations?: Prisma.AssistantConversationUncheckedUpdateManyWithoutBranchNestedInput
 }
 
 export type BranchCreateWithoutStockItemsInput = {
@@ -1491,6 +1535,7 @@ export type BranchCreateWithoutStockItemsInput = {
   patientFinancialEntries?: Prisma.PatientFinancialEntryCreateNestedManyWithoutBranchInput
   xrayAnalyses?: Prisma.XRayAnalysisCreateNestedManyWithoutBranchInput
   patientDocuments?: Prisma.PatientDocumentCreateNestedManyWithoutBranchInput
+  assistantConversations?: Prisma.AssistantConversationCreateNestedManyWithoutBranchInput
 }
 
 export type BranchUncheckedCreateWithoutStockItemsInput = {
@@ -1520,6 +1565,7 @@ export type BranchUncheckedCreateWithoutStockItemsInput = {
   patientFinancialEntries?: Prisma.PatientFinancialEntryUncheckedCreateNestedManyWithoutBranchInput
   xrayAnalyses?: Prisma.XRayAnalysisUncheckedCreateNestedManyWithoutBranchInput
   patientDocuments?: Prisma.PatientDocumentUncheckedCreateNestedManyWithoutBranchInput
+  assistantConversations?: Prisma.AssistantConversationUncheckedCreateNestedManyWithoutBranchInput
 }
 
 export type BranchCreateOrConnectWithoutStockItemsInput = {
@@ -1565,6 +1611,7 @@ export type BranchUpdateWithoutStockItemsInput = {
   patientFinancialEntries?: Prisma.PatientFinancialEntryUpdateManyWithoutBranchNestedInput
   xrayAnalyses?: Prisma.XRayAnalysisUpdateManyWithoutBranchNestedInput
   patientDocuments?: Prisma.PatientDocumentUpdateManyWithoutBranchNestedInput
+  assistantConversations?: Prisma.AssistantConversationUpdateManyWithoutBranchNestedInput
 }
 
 export type BranchUncheckedUpdateWithoutStockItemsInput = {
@@ -1594,6 +1641,7 @@ export type BranchUncheckedUpdateWithoutStockItemsInput = {
   patientFinancialEntries?: Prisma.PatientFinancialEntryUncheckedUpdateManyWithoutBranchNestedInput
   xrayAnalyses?: Prisma.XRayAnalysisUncheckedUpdateManyWithoutBranchNestedInput
   patientDocuments?: Prisma.PatientDocumentUncheckedUpdateManyWithoutBranchNestedInput
+  assistantConversations?: Prisma.AssistantConversationUncheckedUpdateManyWithoutBranchNestedInput
 }
 
 export type BranchCreateWithoutStockCatalogEntriesInput = {
@@ -1623,6 +1671,7 @@ export type BranchCreateWithoutStockCatalogEntriesInput = {
   patientFinancialEntries?: Prisma.PatientFinancialEntryCreateNestedManyWithoutBranchInput
   xrayAnalyses?: Prisma.XRayAnalysisCreateNestedManyWithoutBranchInput
   patientDocuments?: Prisma.PatientDocumentCreateNestedManyWithoutBranchInput
+  assistantConversations?: Prisma.AssistantConversationCreateNestedManyWithoutBranchInput
 }
 
 export type BranchUncheckedCreateWithoutStockCatalogEntriesInput = {
@@ -1652,6 +1701,7 @@ export type BranchUncheckedCreateWithoutStockCatalogEntriesInput = {
   patientFinancialEntries?: Prisma.PatientFinancialEntryUncheckedCreateNestedManyWithoutBranchInput
   xrayAnalyses?: Prisma.XRayAnalysisUncheckedCreateNestedManyWithoutBranchInput
   patientDocuments?: Prisma.PatientDocumentUncheckedCreateNestedManyWithoutBranchInput
+  assistantConversations?: Prisma.AssistantConversationUncheckedCreateNestedManyWithoutBranchInput
 }
 
 export type BranchCreateOrConnectWithoutStockCatalogEntriesInput = {
@@ -1697,6 +1747,7 @@ export type BranchUpdateWithoutStockCatalogEntriesInput = {
   patientFinancialEntries?: Prisma.PatientFinancialEntryUpdateManyWithoutBranchNestedInput
   xrayAnalyses?: Prisma.XRayAnalysisUpdateManyWithoutBranchNestedInput
   patientDocuments?: Prisma.PatientDocumentUpdateManyWithoutBranchNestedInput
+  assistantConversations?: Prisma.AssistantConversationUpdateManyWithoutBranchNestedInput
 }
 
 export type BranchUncheckedUpdateWithoutStockCatalogEntriesInput = {
@@ -1726,6 +1777,7 @@ export type BranchUncheckedUpdateWithoutStockCatalogEntriesInput = {
   patientFinancialEntries?: Prisma.PatientFinancialEntryUncheckedUpdateManyWithoutBranchNestedInput
   xrayAnalyses?: Prisma.XRayAnalysisUncheckedUpdateManyWithoutBranchNestedInput
   patientDocuments?: Prisma.PatientDocumentUncheckedUpdateManyWithoutBranchNestedInput
+  assistantConversations?: Prisma.AssistantConversationUncheckedUpdateManyWithoutBranchNestedInput
 }
 
 export type BranchCreateWithoutStockSalesInput = {
@@ -1755,6 +1807,7 @@ export type BranchCreateWithoutStockSalesInput = {
   patientFinancialEntries?: Prisma.PatientFinancialEntryCreateNestedManyWithoutBranchInput
   xrayAnalyses?: Prisma.XRayAnalysisCreateNestedManyWithoutBranchInput
   patientDocuments?: Prisma.PatientDocumentCreateNestedManyWithoutBranchInput
+  assistantConversations?: Prisma.AssistantConversationCreateNestedManyWithoutBranchInput
 }
 
 export type BranchUncheckedCreateWithoutStockSalesInput = {
@@ -1784,6 +1837,7 @@ export type BranchUncheckedCreateWithoutStockSalesInput = {
   patientFinancialEntries?: Prisma.PatientFinancialEntryUncheckedCreateNestedManyWithoutBranchInput
   xrayAnalyses?: Prisma.XRayAnalysisUncheckedCreateNestedManyWithoutBranchInput
   patientDocuments?: Prisma.PatientDocumentUncheckedCreateNestedManyWithoutBranchInput
+  assistantConversations?: Prisma.AssistantConversationUncheckedCreateNestedManyWithoutBranchInput
 }
 
 export type BranchCreateOrConnectWithoutStockSalesInput = {
@@ -1829,6 +1883,7 @@ export type BranchUpdateWithoutStockSalesInput = {
   patientFinancialEntries?: Prisma.PatientFinancialEntryUpdateManyWithoutBranchNestedInput
   xrayAnalyses?: Prisma.XRayAnalysisUpdateManyWithoutBranchNestedInput
   patientDocuments?: Prisma.PatientDocumentUpdateManyWithoutBranchNestedInput
+  assistantConversations?: Prisma.AssistantConversationUpdateManyWithoutBranchNestedInput
 }
 
 export type BranchUncheckedUpdateWithoutStockSalesInput = {
@@ -1858,6 +1913,7 @@ export type BranchUncheckedUpdateWithoutStockSalesInput = {
   patientFinancialEntries?: Prisma.PatientFinancialEntryUncheckedUpdateManyWithoutBranchNestedInput
   xrayAnalyses?: Prisma.XRayAnalysisUncheckedUpdateManyWithoutBranchNestedInput
   patientDocuments?: Prisma.PatientDocumentUncheckedUpdateManyWithoutBranchNestedInput
+  assistantConversations?: Prisma.AssistantConversationUncheckedUpdateManyWithoutBranchNestedInput
 }
 
 export type BranchCreateWithoutCommunicationCampaignsInput = {
@@ -1887,6 +1943,7 @@ export type BranchCreateWithoutCommunicationCampaignsInput = {
   patientFinancialEntries?: Prisma.PatientFinancialEntryCreateNestedManyWithoutBranchInput
   xrayAnalyses?: Prisma.XRayAnalysisCreateNestedManyWithoutBranchInput
   patientDocuments?: Prisma.PatientDocumentCreateNestedManyWithoutBranchInput
+  assistantConversations?: Prisma.AssistantConversationCreateNestedManyWithoutBranchInput
 }
 
 export type BranchUncheckedCreateWithoutCommunicationCampaignsInput = {
@@ -1916,6 +1973,7 @@ export type BranchUncheckedCreateWithoutCommunicationCampaignsInput = {
   patientFinancialEntries?: Prisma.PatientFinancialEntryUncheckedCreateNestedManyWithoutBranchInput
   xrayAnalyses?: Prisma.XRayAnalysisUncheckedCreateNestedManyWithoutBranchInput
   patientDocuments?: Prisma.PatientDocumentUncheckedCreateNestedManyWithoutBranchInput
+  assistantConversations?: Prisma.AssistantConversationUncheckedCreateNestedManyWithoutBranchInput
 }
 
 export type BranchCreateOrConnectWithoutCommunicationCampaignsInput = {
@@ -1961,6 +2019,7 @@ export type BranchUpdateWithoutCommunicationCampaignsInput = {
   patientFinancialEntries?: Prisma.PatientFinancialEntryUpdateManyWithoutBranchNestedInput
   xrayAnalyses?: Prisma.XRayAnalysisUpdateManyWithoutBranchNestedInput
   patientDocuments?: Prisma.PatientDocumentUpdateManyWithoutBranchNestedInput
+  assistantConversations?: Prisma.AssistantConversationUpdateManyWithoutBranchNestedInput
 }
 
 export type BranchUncheckedUpdateWithoutCommunicationCampaignsInput = {
@@ -1990,6 +2049,7 @@ export type BranchUncheckedUpdateWithoutCommunicationCampaignsInput = {
   patientFinancialEntries?: Prisma.PatientFinancialEntryUncheckedUpdateManyWithoutBranchNestedInput
   xrayAnalyses?: Prisma.XRayAnalysisUncheckedUpdateManyWithoutBranchNestedInput
   patientDocuments?: Prisma.PatientDocumentUncheckedUpdateManyWithoutBranchNestedInput
+  assistantConversations?: Prisma.AssistantConversationUncheckedUpdateManyWithoutBranchNestedInput
 }
 
 export type BranchCreateWithoutTreatmentPlansInput = {
@@ -2019,6 +2079,7 @@ export type BranchCreateWithoutTreatmentPlansInput = {
   patientFinancialEntries?: Prisma.PatientFinancialEntryCreateNestedManyWithoutBranchInput
   xrayAnalyses?: Prisma.XRayAnalysisCreateNestedManyWithoutBranchInput
   patientDocuments?: Prisma.PatientDocumentCreateNestedManyWithoutBranchInput
+  assistantConversations?: Prisma.AssistantConversationCreateNestedManyWithoutBranchInput
 }
 
 export type BranchUncheckedCreateWithoutTreatmentPlansInput = {
@@ -2048,6 +2109,7 @@ export type BranchUncheckedCreateWithoutTreatmentPlansInput = {
   patientFinancialEntries?: Prisma.PatientFinancialEntryUncheckedCreateNestedManyWithoutBranchInput
   xrayAnalyses?: Prisma.XRayAnalysisUncheckedCreateNestedManyWithoutBranchInput
   patientDocuments?: Prisma.PatientDocumentUncheckedCreateNestedManyWithoutBranchInput
+  assistantConversations?: Prisma.AssistantConversationUncheckedCreateNestedManyWithoutBranchInput
 }
 
 export type BranchCreateOrConnectWithoutTreatmentPlansInput = {
@@ -2093,6 +2155,7 @@ export type BranchUpdateWithoutTreatmentPlansInput = {
   patientFinancialEntries?: Prisma.PatientFinancialEntryUpdateManyWithoutBranchNestedInput
   xrayAnalyses?: Prisma.XRayAnalysisUpdateManyWithoutBranchNestedInput
   patientDocuments?: Prisma.PatientDocumentUpdateManyWithoutBranchNestedInput
+  assistantConversations?: Prisma.AssistantConversationUpdateManyWithoutBranchNestedInput
 }
 
 export type BranchUncheckedUpdateWithoutTreatmentPlansInput = {
@@ -2122,6 +2185,7 @@ export type BranchUncheckedUpdateWithoutTreatmentPlansInput = {
   patientFinancialEntries?: Prisma.PatientFinancialEntryUncheckedUpdateManyWithoutBranchNestedInput
   xrayAnalyses?: Prisma.XRayAnalysisUncheckedUpdateManyWithoutBranchNestedInput
   patientDocuments?: Prisma.PatientDocumentUncheckedUpdateManyWithoutBranchNestedInput
+  assistantConversations?: Prisma.AssistantConversationUncheckedUpdateManyWithoutBranchNestedInput
 }
 
 export type BranchCreateWithoutTreatmentPricesInput = {
@@ -2151,6 +2215,7 @@ export type BranchCreateWithoutTreatmentPricesInput = {
   patientFinancialEntries?: Prisma.PatientFinancialEntryCreateNestedManyWithoutBranchInput
   xrayAnalyses?: Prisma.XRayAnalysisCreateNestedManyWithoutBranchInput
   patientDocuments?: Prisma.PatientDocumentCreateNestedManyWithoutBranchInput
+  assistantConversations?: Prisma.AssistantConversationCreateNestedManyWithoutBranchInput
 }
 
 export type BranchUncheckedCreateWithoutTreatmentPricesInput = {
@@ -2180,6 +2245,7 @@ export type BranchUncheckedCreateWithoutTreatmentPricesInput = {
   patientFinancialEntries?: Prisma.PatientFinancialEntryUncheckedCreateNestedManyWithoutBranchInput
   xrayAnalyses?: Prisma.XRayAnalysisUncheckedCreateNestedManyWithoutBranchInput
   patientDocuments?: Prisma.PatientDocumentUncheckedCreateNestedManyWithoutBranchInput
+  assistantConversations?: Prisma.AssistantConversationUncheckedCreateNestedManyWithoutBranchInput
 }
 
 export type BranchCreateOrConnectWithoutTreatmentPricesInput = {
@@ -2225,6 +2291,7 @@ export type BranchUpdateWithoutTreatmentPricesInput = {
   patientFinancialEntries?: Prisma.PatientFinancialEntryUpdateManyWithoutBranchNestedInput
   xrayAnalyses?: Prisma.XRayAnalysisUpdateManyWithoutBranchNestedInput
   patientDocuments?: Prisma.PatientDocumentUpdateManyWithoutBranchNestedInput
+  assistantConversations?: Prisma.AssistantConversationUpdateManyWithoutBranchNestedInput
 }
 
 export type BranchUncheckedUpdateWithoutTreatmentPricesInput = {
@@ -2254,6 +2321,7 @@ export type BranchUncheckedUpdateWithoutTreatmentPricesInput = {
   patientFinancialEntries?: Prisma.PatientFinancialEntryUncheckedUpdateManyWithoutBranchNestedInput
   xrayAnalyses?: Prisma.XRayAnalysisUncheckedUpdateManyWithoutBranchNestedInput
   patientDocuments?: Prisma.PatientDocumentUncheckedUpdateManyWithoutBranchNestedInput
+  assistantConversations?: Prisma.AssistantConversationUncheckedUpdateManyWithoutBranchNestedInput
 }
 
 export type BranchCreateWithoutProductsInput = {
@@ -2283,6 +2351,7 @@ export type BranchCreateWithoutProductsInput = {
   patientFinancialEntries?: Prisma.PatientFinancialEntryCreateNestedManyWithoutBranchInput
   xrayAnalyses?: Prisma.XRayAnalysisCreateNestedManyWithoutBranchInput
   patientDocuments?: Prisma.PatientDocumentCreateNestedManyWithoutBranchInput
+  assistantConversations?: Prisma.AssistantConversationCreateNestedManyWithoutBranchInput
 }
 
 export type BranchUncheckedCreateWithoutProductsInput = {
@@ -2312,6 +2381,7 @@ export type BranchUncheckedCreateWithoutProductsInput = {
   patientFinancialEntries?: Prisma.PatientFinancialEntryUncheckedCreateNestedManyWithoutBranchInput
   xrayAnalyses?: Prisma.XRayAnalysisUncheckedCreateNestedManyWithoutBranchInput
   patientDocuments?: Prisma.PatientDocumentUncheckedCreateNestedManyWithoutBranchInput
+  assistantConversations?: Prisma.AssistantConversationUncheckedCreateNestedManyWithoutBranchInput
 }
 
 export type BranchCreateOrConnectWithoutProductsInput = {
@@ -2357,6 +2427,7 @@ export type BranchUpdateWithoutProductsInput = {
   patientFinancialEntries?: Prisma.PatientFinancialEntryUpdateManyWithoutBranchNestedInput
   xrayAnalyses?: Prisma.XRayAnalysisUpdateManyWithoutBranchNestedInput
   patientDocuments?: Prisma.PatientDocumentUpdateManyWithoutBranchNestedInput
+  assistantConversations?: Prisma.AssistantConversationUpdateManyWithoutBranchNestedInput
 }
 
 export type BranchUncheckedUpdateWithoutProductsInput = {
@@ -2386,6 +2457,7 @@ export type BranchUncheckedUpdateWithoutProductsInput = {
   patientFinancialEntries?: Prisma.PatientFinancialEntryUncheckedUpdateManyWithoutBranchNestedInput
   xrayAnalyses?: Prisma.XRayAnalysisUncheckedUpdateManyWithoutBranchNestedInput
   patientDocuments?: Prisma.PatientDocumentUncheckedUpdateManyWithoutBranchNestedInput
+  assistantConversations?: Prisma.AssistantConversationUncheckedUpdateManyWithoutBranchNestedInput
 }
 
 export type BranchCreateWithoutClinicServicesInput = {
@@ -2415,6 +2487,7 @@ export type BranchCreateWithoutClinicServicesInput = {
   patientFinancialEntries?: Prisma.PatientFinancialEntryCreateNestedManyWithoutBranchInput
   xrayAnalyses?: Prisma.XRayAnalysisCreateNestedManyWithoutBranchInput
   patientDocuments?: Prisma.PatientDocumentCreateNestedManyWithoutBranchInput
+  assistantConversations?: Prisma.AssistantConversationCreateNestedManyWithoutBranchInput
 }
 
 export type BranchUncheckedCreateWithoutClinicServicesInput = {
@@ -2444,6 +2517,7 @@ export type BranchUncheckedCreateWithoutClinicServicesInput = {
   patientFinancialEntries?: Prisma.PatientFinancialEntryUncheckedCreateNestedManyWithoutBranchInput
   xrayAnalyses?: Prisma.XRayAnalysisUncheckedCreateNestedManyWithoutBranchInput
   patientDocuments?: Prisma.PatientDocumentUncheckedCreateNestedManyWithoutBranchInput
+  assistantConversations?: Prisma.AssistantConversationUncheckedCreateNestedManyWithoutBranchInput
 }
 
 export type BranchCreateOrConnectWithoutClinicServicesInput = {
@@ -2489,6 +2563,7 @@ export type BranchUpdateWithoutClinicServicesInput = {
   patientFinancialEntries?: Prisma.PatientFinancialEntryUpdateManyWithoutBranchNestedInput
   xrayAnalyses?: Prisma.XRayAnalysisUpdateManyWithoutBranchNestedInput
   patientDocuments?: Prisma.PatientDocumentUpdateManyWithoutBranchNestedInput
+  assistantConversations?: Prisma.AssistantConversationUpdateManyWithoutBranchNestedInput
 }
 
 export type BranchUncheckedUpdateWithoutClinicServicesInput = {
@@ -2518,6 +2593,7 @@ export type BranchUncheckedUpdateWithoutClinicServicesInput = {
   patientFinancialEntries?: Prisma.PatientFinancialEntryUncheckedUpdateManyWithoutBranchNestedInput
   xrayAnalyses?: Prisma.XRayAnalysisUncheckedUpdateManyWithoutBranchNestedInput
   patientDocuments?: Prisma.PatientDocumentUncheckedUpdateManyWithoutBranchNestedInput
+  assistantConversations?: Prisma.AssistantConversationUncheckedUpdateManyWithoutBranchNestedInput
 }
 
 export type BranchCreateWithoutSalesInput = {
@@ -2547,6 +2623,7 @@ export type BranchCreateWithoutSalesInput = {
   patientFinancialEntries?: Prisma.PatientFinancialEntryCreateNestedManyWithoutBranchInput
   xrayAnalyses?: Prisma.XRayAnalysisCreateNestedManyWithoutBranchInput
   patientDocuments?: Prisma.PatientDocumentCreateNestedManyWithoutBranchInput
+  assistantConversations?: Prisma.AssistantConversationCreateNestedManyWithoutBranchInput
 }
 
 export type BranchUncheckedCreateWithoutSalesInput = {
@@ -2576,6 +2653,7 @@ export type BranchUncheckedCreateWithoutSalesInput = {
   patientFinancialEntries?: Prisma.PatientFinancialEntryUncheckedCreateNestedManyWithoutBranchInput
   xrayAnalyses?: Prisma.XRayAnalysisUncheckedCreateNestedManyWithoutBranchInput
   patientDocuments?: Prisma.PatientDocumentUncheckedCreateNestedManyWithoutBranchInput
+  assistantConversations?: Prisma.AssistantConversationUncheckedCreateNestedManyWithoutBranchInput
 }
 
 export type BranchCreateOrConnectWithoutSalesInput = {
@@ -2621,6 +2699,7 @@ export type BranchUpdateWithoutSalesInput = {
   patientFinancialEntries?: Prisma.PatientFinancialEntryUpdateManyWithoutBranchNestedInput
   xrayAnalyses?: Prisma.XRayAnalysisUpdateManyWithoutBranchNestedInput
   patientDocuments?: Prisma.PatientDocumentUpdateManyWithoutBranchNestedInput
+  assistantConversations?: Prisma.AssistantConversationUpdateManyWithoutBranchNestedInput
 }
 
 export type BranchUncheckedUpdateWithoutSalesInput = {
@@ -2650,6 +2729,7 @@ export type BranchUncheckedUpdateWithoutSalesInput = {
   patientFinancialEntries?: Prisma.PatientFinancialEntryUncheckedUpdateManyWithoutBranchNestedInput
   xrayAnalyses?: Prisma.XRayAnalysisUncheckedUpdateManyWithoutBranchNestedInput
   patientDocuments?: Prisma.PatientDocumentUncheckedUpdateManyWithoutBranchNestedInput
+  assistantConversations?: Prisma.AssistantConversationUncheckedUpdateManyWithoutBranchNestedInput
 }
 
 export type BranchCreateWithoutPatientFinancialEntriesInput = {
@@ -2679,6 +2759,7 @@ export type BranchCreateWithoutPatientFinancialEntriesInput = {
   communicationCampaigns?: Prisma.CommunicationCampaignCreateNestedManyWithoutBranchInput
   xrayAnalyses?: Prisma.XRayAnalysisCreateNestedManyWithoutBranchInput
   patientDocuments?: Prisma.PatientDocumentCreateNestedManyWithoutBranchInput
+  assistantConversations?: Prisma.AssistantConversationCreateNestedManyWithoutBranchInput
 }
 
 export type BranchUncheckedCreateWithoutPatientFinancialEntriesInput = {
@@ -2708,6 +2789,7 @@ export type BranchUncheckedCreateWithoutPatientFinancialEntriesInput = {
   communicationCampaigns?: Prisma.CommunicationCampaignUncheckedCreateNestedManyWithoutBranchInput
   xrayAnalyses?: Prisma.XRayAnalysisUncheckedCreateNestedManyWithoutBranchInput
   patientDocuments?: Prisma.PatientDocumentUncheckedCreateNestedManyWithoutBranchInput
+  assistantConversations?: Prisma.AssistantConversationUncheckedCreateNestedManyWithoutBranchInput
 }
 
 export type BranchCreateOrConnectWithoutPatientFinancialEntriesInput = {
@@ -2753,6 +2835,7 @@ export type BranchUpdateWithoutPatientFinancialEntriesInput = {
   communicationCampaigns?: Prisma.CommunicationCampaignUpdateManyWithoutBranchNestedInput
   xrayAnalyses?: Prisma.XRayAnalysisUpdateManyWithoutBranchNestedInput
   patientDocuments?: Prisma.PatientDocumentUpdateManyWithoutBranchNestedInput
+  assistantConversations?: Prisma.AssistantConversationUpdateManyWithoutBranchNestedInput
 }
 
 export type BranchUncheckedUpdateWithoutPatientFinancialEntriesInput = {
@@ -2782,6 +2865,7 @@ export type BranchUncheckedUpdateWithoutPatientFinancialEntriesInput = {
   communicationCampaigns?: Prisma.CommunicationCampaignUncheckedUpdateManyWithoutBranchNestedInput
   xrayAnalyses?: Prisma.XRayAnalysisUncheckedUpdateManyWithoutBranchNestedInput
   patientDocuments?: Prisma.PatientDocumentUncheckedUpdateManyWithoutBranchNestedInput
+  assistantConversations?: Prisma.AssistantConversationUncheckedUpdateManyWithoutBranchNestedInput
 }
 
 export type BranchCreateWithoutXrayAnalysesInput = {
@@ -2811,6 +2895,7 @@ export type BranchCreateWithoutXrayAnalysesInput = {
   communicationCampaigns?: Prisma.CommunicationCampaignCreateNestedManyWithoutBranchInput
   patientFinancialEntries?: Prisma.PatientFinancialEntryCreateNestedManyWithoutBranchInput
   patientDocuments?: Prisma.PatientDocumentCreateNestedManyWithoutBranchInput
+  assistantConversations?: Prisma.AssistantConversationCreateNestedManyWithoutBranchInput
 }
 
 export type BranchUncheckedCreateWithoutXrayAnalysesInput = {
@@ -2840,6 +2925,7 @@ export type BranchUncheckedCreateWithoutXrayAnalysesInput = {
   communicationCampaigns?: Prisma.CommunicationCampaignUncheckedCreateNestedManyWithoutBranchInput
   patientFinancialEntries?: Prisma.PatientFinancialEntryUncheckedCreateNestedManyWithoutBranchInput
   patientDocuments?: Prisma.PatientDocumentUncheckedCreateNestedManyWithoutBranchInput
+  assistantConversations?: Prisma.AssistantConversationUncheckedCreateNestedManyWithoutBranchInput
 }
 
 export type BranchCreateOrConnectWithoutXrayAnalysesInput = {
@@ -2885,6 +2971,7 @@ export type BranchUpdateWithoutXrayAnalysesInput = {
   communicationCampaigns?: Prisma.CommunicationCampaignUpdateManyWithoutBranchNestedInput
   patientFinancialEntries?: Prisma.PatientFinancialEntryUpdateManyWithoutBranchNestedInput
   patientDocuments?: Prisma.PatientDocumentUpdateManyWithoutBranchNestedInput
+  assistantConversations?: Prisma.AssistantConversationUpdateManyWithoutBranchNestedInput
 }
 
 export type BranchUncheckedUpdateWithoutXrayAnalysesInput = {
@@ -2914,6 +3001,7 @@ export type BranchUncheckedUpdateWithoutXrayAnalysesInput = {
   communicationCampaigns?: Prisma.CommunicationCampaignUncheckedUpdateManyWithoutBranchNestedInput
   patientFinancialEntries?: Prisma.PatientFinancialEntryUncheckedUpdateManyWithoutBranchNestedInput
   patientDocuments?: Prisma.PatientDocumentUncheckedUpdateManyWithoutBranchNestedInput
+  assistantConversations?: Prisma.AssistantConversationUncheckedUpdateManyWithoutBranchNestedInput
 }
 
 export type BranchCreateWithoutPatientDocumentsInput = {
@@ -2943,6 +3031,7 @@ export type BranchCreateWithoutPatientDocumentsInput = {
   communicationCampaigns?: Prisma.CommunicationCampaignCreateNestedManyWithoutBranchInput
   patientFinancialEntries?: Prisma.PatientFinancialEntryCreateNestedManyWithoutBranchInput
   xrayAnalyses?: Prisma.XRayAnalysisCreateNestedManyWithoutBranchInput
+  assistantConversations?: Prisma.AssistantConversationCreateNestedManyWithoutBranchInput
 }
 
 export type BranchUncheckedCreateWithoutPatientDocumentsInput = {
@@ -2972,6 +3061,7 @@ export type BranchUncheckedCreateWithoutPatientDocumentsInput = {
   communicationCampaigns?: Prisma.CommunicationCampaignUncheckedCreateNestedManyWithoutBranchInput
   patientFinancialEntries?: Prisma.PatientFinancialEntryUncheckedCreateNestedManyWithoutBranchInput
   xrayAnalyses?: Prisma.XRayAnalysisUncheckedCreateNestedManyWithoutBranchInput
+  assistantConversations?: Prisma.AssistantConversationUncheckedCreateNestedManyWithoutBranchInput
 }
 
 export type BranchCreateOrConnectWithoutPatientDocumentsInput = {
@@ -3017,6 +3107,7 @@ export type BranchUpdateWithoutPatientDocumentsInput = {
   communicationCampaigns?: Prisma.CommunicationCampaignUpdateManyWithoutBranchNestedInput
   patientFinancialEntries?: Prisma.PatientFinancialEntryUpdateManyWithoutBranchNestedInput
   xrayAnalyses?: Prisma.XRayAnalysisUpdateManyWithoutBranchNestedInput
+  assistantConversations?: Prisma.AssistantConversationUpdateManyWithoutBranchNestedInput
 }
 
 export type BranchUncheckedUpdateWithoutPatientDocumentsInput = {
@@ -3046,6 +3137,143 @@ export type BranchUncheckedUpdateWithoutPatientDocumentsInput = {
   communicationCampaigns?: Prisma.CommunicationCampaignUncheckedUpdateManyWithoutBranchNestedInput
   patientFinancialEntries?: Prisma.PatientFinancialEntryUncheckedUpdateManyWithoutBranchNestedInput
   xrayAnalyses?: Prisma.XRayAnalysisUncheckedUpdateManyWithoutBranchNestedInput
+  assistantConversations?: Prisma.AssistantConversationUncheckedUpdateManyWithoutBranchNestedInput
+}
+
+export type BranchCreateWithoutAssistantConversationsInput = {
+  id?: string
+  name: string
+  description?: string | null
+  isActive?: boolean
+  workingDays?: Prisma.BranchCreateworkingDaysInput | string[]
+  workingHours?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  timezone?: string
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  deletedAt?: Date | string | null
+  Person?: Prisma.PersonCreateNestedManyWithoutBranchInput
+  treatmentPrices?: Prisma.TreatmentPriceCreateNestedManyWithoutBranchInput
+  address: Prisma.AddressCreateNestedOneWithoutBranchInput
+  headquarter: Prisma.HeadquarterCreateNestedOneWithoutBranchInput
+  products?: Prisma.ProductCreateNestedManyWithoutBranchInput
+  sales?: Prisma.SaleCreateNestedManyWithoutBranchInput
+  stockSales?: Prisma.StockSaleCreateNestedManyWithoutBranchInput
+  UserBranch?: Prisma.UserBranchCreateNestedManyWithoutBranchInput
+  User?: Prisma.UserCreateNestedManyWithoutBranchInput
+  stockItems?: Prisma.StockItemCreateNestedManyWithoutBranchInput
+  stockCatalogEntries?: Prisma.StockCatalogEntryCreateNestedManyWithoutBranchInput
+  clinicServices?: Prisma.ClinicServiceCreateNestedManyWithoutBranchInput
+  treatmentPlans?: Prisma.TreatmentPlanCreateNestedManyWithoutBranchInput
+  communicationCampaigns?: Prisma.CommunicationCampaignCreateNestedManyWithoutBranchInput
+  patientFinancialEntries?: Prisma.PatientFinancialEntryCreateNestedManyWithoutBranchInput
+  xrayAnalyses?: Prisma.XRayAnalysisCreateNestedManyWithoutBranchInput
+  patientDocuments?: Prisma.PatientDocumentCreateNestedManyWithoutBranchInput
+}
+
+export type BranchUncheckedCreateWithoutAssistantConversationsInput = {
+  id?: string
+  name: string
+  addressId: string
+  headquarterId: string
+  description?: string | null
+  isActive?: boolean
+  workingDays?: Prisma.BranchCreateworkingDaysInput | string[]
+  workingHours?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  timezone?: string
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  deletedAt?: Date | string | null
+  Person?: Prisma.PersonUncheckedCreateNestedManyWithoutBranchInput
+  treatmentPrices?: Prisma.TreatmentPriceUncheckedCreateNestedManyWithoutBranchInput
+  products?: Prisma.ProductUncheckedCreateNestedManyWithoutBranchInput
+  sales?: Prisma.SaleUncheckedCreateNestedManyWithoutBranchInput
+  stockSales?: Prisma.StockSaleUncheckedCreateNestedManyWithoutBranchInput
+  UserBranch?: Prisma.UserBranchUncheckedCreateNestedManyWithoutBranchInput
+  User?: Prisma.UserUncheckedCreateNestedManyWithoutBranchInput
+  stockItems?: Prisma.StockItemUncheckedCreateNestedManyWithoutBranchInput
+  stockCatalogEntries?: Prisma.StockCatalogEntryUncheckedCreateNestedManyWithoutBranchInput
+  clinicServices?: Prisma.ClinicServiceUncheckedCreateNestedManyWithoutBranchInput
+  treatmentPlans?: Prisma.TreatmentPlanUncheckedCreateNestedManyWithoutBranchInput
+  communicationCampaigns?: Prisma.CommunicationCampaignUncheckedCreateNestedManyWithoutBranchInput
+  patientFinancialEntries?: Prisma.PatientFinancialEntryUncheckedCreateNestedManyWithoutBranchInput
+  xrayAnalyses?: Prisma.XRayAnalysisUncheckedCreateNestedManyWithoutBranchInput
+  patientDocuments?: Prisma.PatientDocumentUncheckedCreateNestedManyWithoutBranchInput
+}
+
+export type BranchCreateOrConnectWithoutAssistantConversationsInput = {
+  where: Prisma.BranchWhereUniqueInput
+  create: Prisma.XOR<Prisma.BranchCreateWithoutAssistantConversationsInput, Prisma.BranchUncheckedCreateWithoutAssistantConversationsInput>
+}
+
+export type BranchUpsertWithoutAssistantConversationsInput = {
+  update: Prisma.XOR<Prisma.BranchUpdateWithoutAssistantConversationsInput, Prisma.BranchUncheckedUpdateWithoutAssistantConversationsInput>
+  create: Prisma.XOR<Prisma.BranchCreateWithoutAssistantConversationsInput, Prisma.BranchUncheckedCreateWithoutAssistantConversationsInput>
+  where?: Prisma.BranchWhereInput
+}
+
+export type BranchUpdateToOneWithWhereWithoutAssistantConversationsInput = {
+  where?: Prisma.BranchWhereInput
+  data: Prisma.XOR<Prisma.BranchUpdateWithoutAssistantConversationsInput, Prisma.BranchUncheckedUpdateWithoutAssistantConversationsInput>
+}
+
+export type BranchUpdateWithoutAssistantConversationsInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  workingDays?: Prisma.BranchUpdateworkingDaysInput | string[]
+  workingHours?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  timezone?: Prisma.StringFieldUpdateOperationsInput | string
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  deletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  Person?: Prisma.PersonUpdateManyWithoutBranchNestedInput
+  treatmentPrices?: Prisma.TreatmentPriceUpdateManyWithoutBranchNestedInput
+  address?: Prisma.AddressUpdateOneRequiredWithoutBranchNestedInput
+  headquarter?: Prisma.HeadquarterUpdateOneRequiredWithoutBranchNestedInput
+  products?: Prisma.ProductUpdateManyWithoutBranchNestedInput
+  sales?: Prisma.SaleUpdateManyWithoutBranchNestedInput
+  stockSales?: Prisma.StockSaleUpdateManyWithoutBranchNestedInput
+  UserBranch?: Prisma.UserBranchUpdateManyWithoutBranchNestedInput
+  User?: Prisma.UserUpdateManyWithoutBranchNestedInput
+  stockItems?: Prisma.StockItemUpdateManyWithoutBranchNestedInput
+  stockCatalogEntries?: Prisma.StockCatalogEntryUpdateManyWithoutBranchNestedInput
+  clinicServices?: Prisma.ClinicServiceUpdateManyWithoutBranchNestedInput
+  treatmentPlans?: Prisma.TreatmentPlanUpdateManyWithoutBranchNestedInput
+  communicationCampaigns?: Prisma.CommunicationCampaignUpdateManyWithoutBranchNestedInput
+  patientFinancialEntries?: Prisma.PatientFinancialEntryUpdateManyWithoutBranchNestedInput
+  xrayAnalyses?: Prisma.XRayAnalysisUpdateManyWithoutBranchNestedInput
+  patientDocuments?: Prisma.PatientDocumentUpdateManyWithoutBranchNestedInput
+}
+
+export type BranchUncheckedUpdateWithoutAssistantConversationsInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  addressId?: Prisma.StringFieldUpdateOperationsInput | string
+  headquarterId?: Prisma.StringFieldUpdateOperationsInput | string
+  description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  workingDays?: Prisma.BranchUpdateworkingDaysInput | string[]
+  workingHours?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  timezone?: Prisma.StringFieldUpdateOperationsInput | string
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  deletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  Person?: Prisma.PersonUncheckedUpdateManyWithoutBranchNestedInput
+  treatmentPrices?: Prisma.TreatmentPriceUncheckedUpdateManyWithoutBranchNestedInput
+  products?: Prisma.ProductUncheckedUpdateManyWithoutBranchNestedInput
+  sales?: Prisma.SaleUncheckedUpdateManyWithoutBranchNestedInput
+  stockSales?: Prisma.StockSaleUncheckedUpdateManyWithoutBranchNestedInput
+  UserBranch?: Prisma.UserBranchUncheckedUpdateManyWithoutBranchNestedInput
+  User?: Prisma.UserUncheckedUpdateManyWithoutBranchNestedInput
+  stockItems?: Prisma.StockItemUncheckedUpdateManyWithoutBranchNestedInput
+  stockCatalogEntries?: Prisma.StockCatalogEntryUncheckedUpdateManyWithoutBranchNestedInput
+  clinicServices?: Prisma.ClinicServiceUncheckedUpdateManyWithoutBranchNestedInput
+  treatmentPlans?: Prisma.TreatmentPlanUncheckedUpdateManyWithoutBranchNestedInput
+  communicationCampaigns?: Prisma.CommunicationCampaignUncheckedUpdateManyWithoutBranchNestedInput
+  patientFinancialEntries?: Prisma.PatientFinancialEntryUncheckedUpdateManyWithoutBranchNestedInput
+  xrayAnalyses?: Prisma.XRayAnalysisUncheckedUpdateManyWithoutBranchNestedInput
+  patientDocuments?: Prisma.PatientDocumentUncheckedUpdateManyWithoutBranchNestedInput
 }
 
 export type BranchCreateManyHeadquarterInput = {
@@ -3089,6 +3317,7 @@ export type BranchUpdateWithoutHeadquarterInput = {
   patientFinancialEntries?: Prisma.PatientFinancialEntryUpdateManyWithoutBranchNestedInput
   xrayAnalyses?: Prisma.XRayAnalysisUpdateManyWithoutBranchNestedInput
   patientDocuments?: Prisma.PatientDocumentUpdateManyWithoutBranchNestedInput
+  assistantConversations?: Prisma.AssistantConversationUpdateManyWithoutBranchNestedInput
 }
 
 export type BranchUncheckedUpdateWithoutHeadquarterInput = {
@@ -3118,6 +3347,7 @@ export type BranchUncheckedUpdateWithoutHeadquarterInput = {
   patientFinancialEntries?: Prisma.PatientFinancialEntryUncheckedUpdateManyWithoutBranchNestedInput
   xrayAnalyses?: Prisma.XRayAnalysisUncheckedUpdateManyWithoutBranchNestedInput
   patientDocuments?: Prisma.PatientDocumentUncheckedUpdateManyWithoutBranchNestedInput
+  assistantConversations?: Prisma.AssistantConversationUncheckedUpdateManyWithoutBranchNestedInput
 }
 
 export type BranchUncheckedUpdateManyWithoutHeadquarterInput = {
@@ -3175,6 +3405,7 @@ export type BranchUpdateWithoutAddressInput = {
   patientFinancialEntries?: Prisma.PatientFinancialEntryUpdateManyWithoutBranchNestedInput
   xrayAnalyses?: Prisma.XRayAnalysisUpdateManyWithoutBranchNestedInput
   patientDocuments?: Prisma.PatientDocumentUpdateManyWithoutBranchNestedInput
+  assistantConversations?: Prisma.AssistantConversationUpdateManyWithoutBranchNestedInput
 }
 
 export type BranchUncheckedUpdateWithoutAddressInput = {
@@ -3204,6 +3435,7 @@ export type BranchUncheckedUpdateWithoutAddressInput = {
   patientFinancialEntries?: Prisma.PatientFinancialEntryUncheckedUpdateManyWithoutBranchNestedInput
   xrayAnalyses?: Prisma.XRayAnalysisUncheckedUpdateManyWithoutBranchNestedInput
   patientDocuments?: Prisma.PatientDocumentUncheckedUpdateManyWithoutBranchNestedInput
+  assistantConversations?: Prisma.AssistantConversationUncheckedUpdateManyWithoutBranchNestedInput
 }
 
 export type BranchUncheckedUpdateManyWithoutAddressInput = {
@@ -3241,6 +3473,7 @@ export type BranchCountOutputType = {
   patientFinancialEntries: number
   xrayAnalyses: number
   patientDocuments: number
+  assistantConversations: number
 }
 
 export type BranchCountOutputTypeSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
@@ -3259,6 +3492,7 @@ export type BranchCountOutputTypeSelect<ExtArgs extends runtime.Types.Extensions
   patientFinancialEntries?: boolean | BranchCountOutputTypeCountPatientFinancialEntriesArgs
   xrayAnalyses?: boolean | BranchCountOutputTypeCountXrayAnalysesArgs
   patientDocuments?: boolean | BranchCountOutputTypeCountPatientDocumentsArgs
+  assistantConversations?: boolean | BranchCountOutputTypeCountAssistantConversationsArgs
 }
 
 /**
@@ -3376,6 +3610,13 @@ export type BranchCountOutputTypeCountPatientDocumentsArgs<ExtArgs extends runti
   where?: Prisma.PatientDocumentWhereInput
 }
 
+/**
+ * BranchCountOutputType without action
+ */
+export type BranchCountOutputTypeCountAssistantConversationsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  where?: Prisma.AssistantConversationWhereInput
+}
+
 
 export type BranchSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
   id?: boolean
@@ -3407,6 +3648,7 @@ export type BranchSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs =
   patientFinancialEntries?: boolean | Prisma.Branch$patientFinancialEntriesArgs<ExtArgs>
   xrayAnalyses?: boolean | Prisma.Branch$xrayAnalysesArgs<ExtArgs>
   patientDocuments?: boolean | Prisma.Branch$patientDocumentsArgs<ExtArgs>
+  assistantConversations?: boolean | Prisma.Branch$assistantConversationsArgs<ExtArgs>
   _count?: boolean | Prisma.BranchCountOutputTypeDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["branch"]>
 
@@ -3478,6 +3720,7 @@ export type BranchInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs 
   patientFinancialEntries?: boolean | Prisma.Branch$patientFinancialEntriesArgs<ExtArgs>
   xrayAnalyses?: boolean | Prisma.Branch$xrayAnalysesArgs<ExtArgs>
   patientDocuments?: boolean | Prisma.Branch$patientDocumentsArgs<ExtArgs>
+  assistantConversations?: boolean | Prisma.Branch$assistantConversationsArgs<ExtArgs>
   _count?: boolean | Prisma.BranchCountOutputTypeDefaultArgs<ExtArgs>
 }
 export type BranchIncludeCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
@@ -3509,6 +3752,7 @@ export type $BranchPayload<ExtArgs extends runtime.Types.Extensions.InternalArgs
     patientFinancialEntries: Prisma.$PatientFinancialEntryPayload<ExtArgs>[]
     xrayAnalyses: Prisma.$XRayAnalysisPayload<ExtArgs>[]
     patientDocuments: Prisma.$PatientDocumentPayload<ExtArgs>[]
+    assistantConversations: Prisma.$AssistantConversationPayload<ExtArgs>[]
   }
   scalars: runtime.Types.Extensions.GetPayloadResult<{
     id: string
@@ -3934,6 +4178,7 @@ export interface Prisma__BranchClient<T, Null = never, ExtArgs extends runtime.T
   patientFinancialEntries<T extends Prisma.Branch$patientFinancialEntriesArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Branch$patientFinancialEntriesArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$PatientFinancialEntryPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   xrayAnalyses<T extends Prisma.Branch$xrayAnalysesArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Branch$xrayAnalysesArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$XRayAnalysisPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   patientDocuments<T extends Prisma.Branch$patientDocumentsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Branch$patientDocumentsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$PatientDocumentPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+  assistantConversations<T extends Prisma.Branch$assistantConversationsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Branch$assistantConversationsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$AssistantConversationPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   /**
    * Attaches callbacks for the resolution and/or rejection of the Promise.
    * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -4728,6 +4973,30 @@ export type Branch$patientDocumentsArgs<ExtArgs extends runtime.Types.Extensions
   take?: number
   skip?: number
   distinct?: Prisma.PatientDocumentScalarFieldEnum | Prisma.PatientDocumentScalarFieldEnum[]
+}
+
+/**
+ * Branch.assistantConversations
+ */
+export type Branch$assistantConversationsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the AssistantConversation
+   */
+  select?: Prisma.AssistantConversationSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the AssistantConversation
+   */
+  omit?: Prisma.AssistantConversationOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.AssistantConversationInclude<ExtArgs> | null
+  where?: Prisma.AssistantConversationWhereInput
+  orderBy?: Prisma.AssistantConversationOrderByWithRelationInput | Prisma.AssistantConversationOrderByWithRelationInput[]
+  cursor?: Prisma.AssistantConversationWhereUniqueInput
+  take?: number
+  skip?: number
+  distinct?: Prisma.AssistantConversationScalarFieldEnum | Prisma.AssistantConversationScalarFieldEnum[]
 }
 
 /**

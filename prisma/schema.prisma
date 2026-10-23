@@ -26,6 +26,9 @@ model Plan {
   name                String
   total_branch        Int?          @default(0)
   price               Float         @default(0.0)
+  subscriptionPrice   Decimal?      @db.Decimal(12, 2)
+  subscriptionMonths  Int?          @unique
+  isSubscriptionOption Boolean      @default(false)
   currencyId          String
   duration            Int           @default(30)
   createdAt           DateTime      @default(now())
@@ -39,8 +42,11 @@ model Plan {
   deletedAt           DateTime?
   Headquarter         Headquarter[]
   PlanBenefit         PlanBenefit[]
+  subscriptions       ClinicSubscription[]
+  subscriptionRequests SubscriptionRequest[]
   currency            Currency      @relation(fields: [currencyId], references: [id])
 
+  @@index([isSubscriptionOption, deletedAt])
   @@map("plans")
 }
 
@@ -79,12 +85,18 @@ model Headquarter {
   description String?
   nif         String
   logo        String?
+  isActive    Boolean   @default(true)
   planId      String
   createdAt   DateTime  @default(now())
   updatedAt   DateTime  @updatedAt
   deletedAt   DateTime?
   Branch      Branch[]
   plan        Plan      @relation(fields: [planId], references: [id])
+  subscriptions ClinicSubscription[]
+  subscriptionRequests SubscriptionRequest[]
+  subscriptionAudits SubscriptionAudit[]
+  assistantConversations AssistantConversation[]
+  platformAdminAudits PlatformAdminAudit[]
 
   @@map("headquarters")
 }
@@ -136,6 +148,7 @@ model Branch {
   patientFinancialEntries PatientFinancialEntry[]
   xrayAnalyses            XRayAnalysis[]
   patientDocuments        PatientDocument[]
+  assistantConversations  AssistantConversation[]
 
   @@map("branches")
 }
@@ -145,7 +158,7 @@ model User {
   email                 String                @unique
   password              String
   username              String                @unique
-  branchId              String
+  branchId              String?
   addressId             String?
   roleId                String?
   isActive              Boolean               @default(false)
@@ -158,6 +171,8 @@ model User {
   deletedAt             DateTime?
   accessHistories       AccessHistory[]
   audits                Audit[]
+  platformAdminActions PlatformAdminAudit[] @relation("PlatformAdminActor")
+  platformAdminTargets PlatformAdminAudit[] @relation("PlatformAdminTarget")
   loginHistories        LoginHistory[]
   Person                Person[]
   Appointment           Appointment[]         @relation("UserPrimaryAppointments")
@@ -178,10 +193,17 @@ model User {
   UserPermission        UserPermission[]
   refreshTokens         RefreshToken[]
   authActionTokens      AuthActionToken[]
+  requestedSubscriptionPayments SubscriptionRequest[] @relation("SubscriptionRequestSubmitter")
+  reviewedSubscriptionPayments  SubscriptionRequest[] @relation("SubscriptionRequestReviewer")
+  approvedSubscriptions         ClinicSubscription[]  @relation("SubscriptionApprover")
+  subscriptionAudits            SubscriptionAudit[]
+  updatedSubscriptionSettings   SubscriptionSettings[]
+  assistantConversations        AssistantConversation[]
+  assistantMessages             AssistantMessage[]
   stockSales            StockSale[]
   createdCommunicationCampaigns CommunicationCampaign[]
   Address               Address?              @relation(fields: [addressId], references: [id])
-  branch                Branch                @relation(fields: [branchId], references: [id])
+  branch                Branch?               @relation(fields: [branchId], references: [id])
   Role                  Role?                 @relation(fields: [roleId], references: [id])
 
   @@map("users")
@@ -965,6 +987,174 @@ model AccessHistory {
   User      User     @relation(fields: [userId], references: [id])
 }
 
+model ClinicSubscription {
+  id                   String             @id @default(dbgenerated("gen_random_uuid()"))
+  headquarterId        String
+  planId               String?
+  status               ClinicSubscriptionStatus
+  startsAt             DateTime
+  expiresAt            DateTime
+  endedAt              DateTime?
+  planNameSnapshot     String?
+  durationMonths       Int?
+  approvedAmount       Decimal?           @db.Decimal(12, 2)
+  originalAmount       Decimal?           @db.Decimal(12, 2)
+  savingsAmount        Decimal?           @db.Decimal(12, 2)
+  discountPercent      Decimal?           @db.Decimal(5, 2)
+  currencyCode         String             @default("AOA")
+  approvedByUserId     String?
+  createdAt            DateTime           @default(now())
+  updatedAt            DateTime           @updatedAt
+  headquarter          Headquarter        @relation(fields: [headquarterId], references: [id])
+  plan                 Plan?              @relation(fields: [planId], references: [id])
+  approvedBy           User?              @relation("SubscriptionApprover", fields: [approvedByUserId], references: [id])
+  paymentRequest       SubscriptionRequest? @relation("ActivatedSubscription")
+
+  @@index([headquarterId, status, expiresAt])
+  @@index([headquarterId, startsAt])
+  @@map("clinic_subscriptions")
+}
+
+model SubscriptionRequest {
+  id                    String                   @id @default(dbgenerated("gen_random_uuid()"))
+  headquarterId         String
+  planId                String
+  submittedByUserId     String
+  reviewedByUserId      String?
+  subscriptionId        String?                  @unique
+  status                SubscriptionRequestStatus @default(PENDING)
+  paymentDate           DateTime
+  amountPaid            Decimal                  @db.Decimal(12, 2)
+  currencyCode          String                   @default("AOA")
+  paymentReference      String?
+  notes                 String?
+  clinicResponse        String?
+  informationRequest    String?
+  rejectionReason       String?
+  proofStorageKey       String
+  proofMimeType         String
+  proofOriginalFileName String
+  proofSizeBytes        Int
+  planNameSnapshot      String
+  durationMonths        Int
+  originalAmount        Decimal                  @db.Decimal(12, 2)
+  requestedAmount       Decimal                  @db.Decimal(12, 2)
+  savingsAmount         Decimal                  @db.Decimal(12, 2)
+  discountPercent       Decimal                  @db.Decimal(5, 2)
+  idempotencyKey        String
+  submittedAt           DateTime                 @default(now())
+  reviewedAt            DateTime?
+  createdAt             DateTime                 @default(now())
+  updatedAt             DateTime                 @updatedAt
+  headquarter           Headquarter              @relation(fields: [headquarterId], references: [id])
+  plan                  Plan                     @relation(fields: [planId], references: [id])
+  submittedBy           User                     @relation("SubscriptionRequestSubmitter", fields: [submittedByUserId], references: [id])
+  reviewedBy            User?                    @relation("SubscriptionRequestReviewer", fields: [reviewedByUserId], references: [id])
+  activatedSubscription ClinicSubscription?      @relation("ActivatedSubscription", fields: [subscriptionId], references: [id])
+  auditEntries          SubscriptionAudit[]
+
+  @@unique([headquarterId, idempotencyKey])
+  @@index([headquarterId, status, submittedAt])
+  @@index([status, submittedAt])
+  @@map("subscription_requests")
+}
+
+model SubscriptionAudit {
+  id                   String              @id @default(dbgenerated("gen_random_uuid()"))
+  requestId            String?
+  headquarterId        String
+  actorUserId          String
+  action               String
+  details              Json?
+  createdAt            DateTime            @default(now())
+  request              SubscriptionRequest? @relation(fields: [requestId], references: [id])
+  headquarter          Headquarter         @relation(fields: [headquarterId], references: [id])
+  actor                User                @relation(fields: [actorUserId], references: [id])
+
+  @@index([headquarterId, createdAt])
+  @@index([requestId, createdAt])
+  @@map("subscription_audits")
+}
+
+model PlatformAdminAudit {
+  id            String      @id @default(dbgenerated("gen_random_uuid()"))
+  headquarterId String
+  actorUserId   String
+  targetUserId  String?
+  action        String
+  details       Json?
+  createdAt     DateTime    @default(now())
+  headquarter   Headquarter @relation(fields: [headquarterId], references: [id], onDelete: Restrict)
+  actor         User        @relation("PlatformAdminActor", fields: [actorUserId], references: [id], onDelete: Restrict)
+  target        User?       @relation("PlatformAdminTarget", fields: [targetUserId], references: [id], onDelete: Restrict)
+
+  @@index([headquarterId, createdAt])
+  @@index([targetUserId, createdAt])
+  @@map("platform_admin_audits")
+}
+
+model SubscriptionSettings {
+  id                    String   @id @default("platform")
+  bankName              String
+  accountHolder         String
+  iban                  String
+  estimatedReviewHours  Int
+  updatedByUserId       String
+  createdAt             DateTime @default(now())
+  updatedAt             DateTime @updatedAt
+  updatedBy             User     @relation(fields: [updatedByUserId], references: [id])
+
+  @@map("subscription_settings")
+}
+
+model NotificationOutbox {
+  id             String    @id @default(dbgenerated("gen_random_uuid()"))
+  dedupeKey      String    @unique
+  recipient      String
+  eventType      String
+  payload        Json
+  attempts       Int       @default(0)
+  nextAttemptAt  DateTime  @default(now())
+  lockedAt       DateTime?
+  sentAt         DateTime?
+  createdAt      DateTime  @default(now())
+
+  @@index([sentAt, nextAttemptAt])
+  @@map("notification_outbox")
+}
+
+model AssistantConversation {
+  id             String             @id @default(dbgenerated("gen_random_uuid()"))
+  headquarterId  String
+  branchId       String
+  userId         String
+  expiresAt      DateTime
+  createdAt      DateTime           @default(now())
+  updatedAt      DateTime           @updatedAt
+  headquarter    Headquarter        @relation(fields: [headquarterId], references: [id])
+  branch         Branch             @relation(fields: [branchId], references: [id])
+  user           User               @relation(fields: [userId], references: [id])
+  messages       AssistantMessage[]
+
+  @@index([headquarterId, userId, updatedAt])
+  @@index([expiresAt])
+  @@map("assistant_conversations")
+}
+
+model AssistantMessage {
+  id              String                @id @default(dbgenerated("gen_random_uuid()"))
+  conversationId  String
+  userId          String
+  role            AssistantMessageRole
+  content         String
+  createdAt       DateTime              @default(now())
+  conversation    AssistantConversation @relation(fields: [conversationId], references: [id], onDelete: Cascade)
+  user            User                  @relation(fields: [userId], references: [id])
+
+  @@index([conversationId, createdAt])
+  @@map("assistant_messages")
+}
+
 enum Sex {
   MALE
   FEMALE
@@ -986,6 +1176,29 @@ enum AppointmentStatus {
   COMPLETED
   NO_SHOW
   RESCHEDULED
+}
+
+enum ClinicSubscriptionStatus {
+  TRIAL_ACTIVE
+  TRIAL_EXPIRED
+  ACTIVE
+  EXPIRING_SOON
+  EXPIRED
+  CANCELLED
+}
+
+enum SubscriptionRequestStatus {
+  PENDING
+  UNDER_REVIEW
+  INFORMATION_REQUESTED
+  APPROVED
+  REJECTED
+  CANCELLED
+}
+
+enum AssistantMessageRole {
+  USER
+  ASSISTANT
 }
 
 enum ConsultType {

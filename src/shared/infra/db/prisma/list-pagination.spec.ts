@@ -2,6 +2,7 @@ import { BadRequestException } from '@nestjs/common';
 import { Test, TestingModule } from '@nestjs/testing';
 import { AuthUser } from '../../../../auth/auth-user';
 import { PatientsPrismaRepository } from '../../../../patients/infra/db/prisma/patients-prisma.repository';
+import { PatientExamStorage } from '../../../../patients/infra/storage/patient-exam-storage';
 import { DoctorsPrismaRepository } from '../../../../doctors/infra/db/prisma/doctors-prisma.repository';
 import { AppointmentsPrismaRepository } from '../../../../appointments/infra/db/prisma/appointments-prisma.repository';
 import { UsersPrismaRepository } from '../../../../users/infra/db/prisma/users-prisma.repository';
@@ -53,6 +54,7 @@ describe('Database listing pagination', () => {
     module = await Test.createTestingModule({
       providers: [
         { provide: PrismaService, useValue: prisma },
+        { provide: PatientExamStorage, useValue: {} },
         PatientsPrismaRepository,
         AppointmentsPrismaRepository,
         StockPrismaRepository,
@@ -95,7 +97,7 @@ describe('Database listing pagination', () => {
     };
   });
   beforeEach(() => jest.clearAllMocks());
-  afterAll(() => module.close());
+  afterAll(() => module?.close());
 
   const cases = [
     ['patients', 'person', { status: 'active' }],
@@ -148,9 +150,9 @@ describe('Database listing pagination', () => {
           entity === 'appointment'
             ? { doctor: { branchId: 'my-clinic' } }
             : {
-              branchId: 'my-clinic',
-              ...(entity !== 'chatConversation' && { deletedAt: null }),
-            },
+                branchId: 'my-clinic',
+                ...(entity !== 'chatConversation' && { deletedAt: null }),
+              },
         );
       }
       if (name === 'conversations') {
@@ -184,7 +186,11 @@ describe('Database listing pagination', () => {
   it('does not allow a doctor filter to override the authenticated doctor scope', async () => {
     await list.appointments(
       { doctorId: 'another-doctor' },
-      { ...user, role: 'doctor' },
+      {
+        ...user,
+        role: 'doctor',
+        permissions: ['appointments.read.assigned'],
+      },
     );
     expect(models.appointment.findMany).toHaveBeenCalledWith(
       expect.objectContaining({

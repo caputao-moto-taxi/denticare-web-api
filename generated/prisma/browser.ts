@@ -282,3 +282,43 @@ export type LoginHistory = Prisma.LoginHistoryModel
  * 
  */
 export type AccessHistory = Prisma.AccessHistoryModel
+/**
+ * Model ClinicSubscription
+ * 
+ */
+export type ClinicSubscription = Prisma.ClinicSubscriptionModel
+/**
+ * Model SubscriptionRequest
+ * 
+ */
+export type SubscriptionRequest = Prisma.SubscriptionRequestModel
+/**
+ * Model SubscriptionAudit
+ * 
+ */
+export type SubscriptionAudit = Prisma.SubscriptionAuditModel
+/**
+ * Model PlatformAdminAudit
+ * 
+ */
+export type PlatformAdminAudit = Prisma.PlatformAdminAuditModel
+/**
+ * Model SubscriptionSettings
+ * 
+ */
+export type SubscriptionSettings = Prisma.SubscriptionSettingsModel
+/**
+ * Model NotificationOutbox
+ * 
+ */
+export type NotificationOutbox = Prisma.NotificationOutboxModel
+/**
+ * Model AssistantConversation
+ * 
+ */
+export type AssistantConversation = Prisma.AssistantConversationModel
+/**
+ * Model AssistantMessage
+ * 
+ */
+export type AssistantMessage = Prisma.AssistantMessageModel

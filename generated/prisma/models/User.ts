@@ -244,7 +244,7 @@ export type UserGroupByOutputType = {
   email: string
   password: string
   username: string
-  branchId: string
+  branchId: string | null
   addressId: string | null
   roleId: string | null
   isActive: boolean
@@ -285,7 +285,7 @@ export type UserWhereInput = {
   email?: Prisma.StringFilter<"User"> | string
   password?: Prisma.StringFilter<"User"> | string
   username?: Prisma.StringFilter<"User"> | string
-  branchId?: Prisma.StringFilter<"User"> | string
+  branchId?: Prisma.StringNullableFilter<"User"> | string | null
   addressId?: Prisma.StringNullableFilter<"User"> | string | null
   roleId?: Prisma.StringNullableFilter<"User"> | string | null
   isActive?: Prisma.BoolFilter<"User"> | boolean
@@ -298,6 +298,8 @@ export type UserWhereInput = {
   deletedAt?: Prisma.DateTimeNullableFilter<"User"> | Date | string | null
   accessHistories?: Prisma.AccessHistoryListRelationFilter
   audits?: Prisma.AuditListRelationFilter
+  platformAdminActions?: Prisma.PlatformAdminAuditListRelationFilter
+  platformAdminTargets?: Prisma.PlatformAdminAuditListRelationFilter
   loginHistories?: Prisma.LoginHistoryListRelationFilter
   Person?: Prisma.PersonListRelationFilter
   Appointment?: Prisma.AppointmentListRelationFilter
@@ -318,10 +320,17 @@ export type UserWhereInput = {
   UserPermission?: Prisma.UserPermissionListRelationFilter
   refreshTokens?: Prisma.RefreshTokenListRelationFilter
   authActionTokens?: Prisma.AuthActionTokenListRelationFilter
+  requestedSubscriptionPayments?: Prisma.SubscriptionRequestListRelationFilter
+  reviewedSubscriptionPayments?: Prisma.SubscriptionRequestListRelationFilter
+  approvedSubscriptions?: Prisma.ClinicSubscriptionListRelationFilter
+  subscriptionAudits?: Prisma.SubscriptionAuditListRelationFilter
+  updatedSubscriptionSettings?: Prisma.SubscriptionSettingsListRelationFilter
+  assistantConversations?: Prisma.AssistantConversationListRelationFilter
+  assistantMessages?: Prisma.AssistantMessageListRelationFilter
   stockSales?: Prisma.StockSaleListRelationFilter
   createdCommunicationCampaigns?: Prisma.CommunicationCampaignListRelationFilter
   Address?: Prisma.XOR<Prisma.AddressNullableScalarRelationFilter, Prisma.AddressWhereInput> | null
-  branch?: Prisma.XOR<Prisma.BranchScalarRelationFilter, Prisma.BranchWhereInput>
+  branch?: Prisma.XOR<Prisma.BranchNullableScalarRelationFilter, Prisma.BranchWhereInput> | null
   Role?: Prisma.XOR<Prisma.RoleNullableScalarRelationFilter, Prisma.RoleWhereInput> | null
 }
 
@@ -330,7 +339,7 @@ export type UserOrderByWithRelationInput = {
   email?: Prisma.SortOrder
   password?: Prisma.SortOrder
   username?: Prisma.SortOrder
-  branchId?: Prisma.SortOrder
+  branchId?: Prisma.SortOrderInput | Prisma.SortOrder
   addressId?: Prisma.SortOrderInput | Prisma.SortOrder
   roleId?: Prisma.SortOrderInput | Prisma.SortOrder
   isActive?: Prisma.SortOrder
@@ -343,6 +352,8 @@ export type UserOrderByWithRelationInput = {
   deletedAt?: Prisma.SortOrderInput | Prisma.SortOrder
   accessHistories?: Prisma.AccessHistoryOrderByRelationAggregateInput
   audits?: Prisma.AuditOrderByRelationAggregateInput
+  platformAdminActions?: Prisma.PlatformAdminAuditOrderByRelationAggregateInput
+  platformAdminTargets?: Prisma.PlatformAdminAuditOrderByRelationAggregateInput
   loginHistories?: Prisma.LoginHistoryOrderByRelationAggregateInput
   Person?: Prisma.PersonOrderByRelationAggregateInput
   Appointment?: Prisma.AppointmentOrderByRelationAggregateInput
@@ -363,6 +374,13 @@ export type UserOrderByWithRelationInput = {
   UserPermission?: Prisma.UserPermissionOrderByRelationAggregateInput
   refreshTokens?: Prisma.RefreshTokenOrderByRelationAggregateInput
   authActionTokens?: Prisma.AuthActionTokenOrderByRelationAggregateInput
+  requestedSubscriptionPayments?: Prisma.SubscriptionRequestOrderByRelationAggregateInput
+  reviewedSubscriptionPayments?: Prisma.SubscriptionRequestOrderByRelationAggregateInput
+  approvedSubscriptions?: Prisma.ClinicSubscriptionOrderByRelationAggregateInput
+  subscriptionAudits?: Prisma.SubscriptionAuditOrderByRelationAggregateInput
+  updatedSubscriptionSettings?: Prisma.SubscriptionSettingsOrderByRelationAggregateInput
+  assistantConversations?: Prisma.AssistantConversationOrderByRelationAggregateInput
+  assistantMessages?: Prisma.AssistantMessageOrderByRelationAggregateInput
   stockSales?: Prisma.StockSaleOrderByRelationAggregateInput
   createdCommunicationCampaigns?: Prisma.CommunicationCampaignOrderByRelationAggregateInput
   Address?: Prisma.AddressOrderByWithRelationInput
@@ -378,7 +396,7 @@ export type UserWhereUniqueInput = Prisma.AtLeast<{
   OR?: Prisma.UserWhereInput[]
   NOT?: Prisma.UserWhereInput | Prisma.UserWhereInput[]
   password?: Prisma.StringFilter<"User"> | string
-  branchId?: Prisma.StringFilter<"User"> | string
+  branchId?: Prisma.StringNullableFilter<"User"> | string | null
   addressId?: Prisma.StringNullableFilter<"User"> | string | null
   roleId?: Prisma.StringNullableFilter<"User"> | string | null
   isActive?: Prisma.BoolFilter<"User"> | boolean
@@ -391,6 +409,8 @@ export type UserWhereUniqueInput = Prisma.AtLeast<{
   deletedAt?: Prisma.DateTimeNullableFilter<"User"> | Date | string | null
   accessHistories?: Prisma.AccessHistoryListRelationFilter
   audits?: Prisma.AuditListRelationFilter
+  platformAdminActions?: Prisma.PlatformAdminAuditListRelationFilter
+  platformAdminTargets?: Prisma.PlatformAdminAuditListRelationFilter
   loginHistories?: Prisma.LoginHistoryListRelationFilter
   Person?: Prisma.PersonListRelationFilter
   Appointment?: Prisma.AppointmentListRelationFilter
@@ -411,10 +431,17 @@ export type UserWhereUniqueInput = Prisma.AtLeast<{
   UserPermission?: Prisma.UserPermissionListRelationFilter
   refreshTokens?: Prisma.RefreshTokenListRelationFilter
   authActionTokens?: Prisma.AuthActionTokenListRelationFilter
+  requestedSubscriptionPayments?: Prisma.SubscriptionRequestListRelationFilter
+  reviewedSubscriptionPayments?: Prisma.SubscriptionRequestListRelationFilter
+  approvedSubscriptions?: Prisma.ClinicSubscriptionListRelationFilter
+  subscriptionAudits?: Prisma.SubscriptionAuditListRelationFilter
+  updatedSubscriptionSettings?: Prisma.SubscriptionSettingsListRelationFilter
+  assistantConversations?: Prisma.AssistantConversationListRelationFilter
+  assistantMessages?: Prisma.AssistantMessageListRelationFilter
   stockSales?: Prisma.StockSaleListRelationFilter
   createdCommunicationCampaigns?: Prisma.CommunicationCampaignListRelationFilter
   Address?: Prisma.XOR<Prisma.AddressNullableScalarRelationFilter, Prisma.AddressWhereInput> | null
-  branch?: Prisma.XOR<Prisma.BranchScalarRelationFilter, Prisma.BranchWhereInput>
+  branch?: Prisma.XOR<Prisma.BranchNullableScalarRelationFilter, Prisma.BranchWhereInput> | null
   Role?: Prisma.XOR<Prisma.RoleNullableScalarRelationFilter, Prisma.RoleWhereInput> | null
 }, "id" | "email" | "username">
 
@@ -423,7 +450,7 @@ export type UserOrderByWithAggregationInput = {
   email?: Prisma.SortOrder
   password?: Prisma.SortOrder
   username?: Prisma.SortOrder
-  branchId?: Prisma.SortOrder
+  branchId?: Prisma.SortOrderInput | Prisma.SortOrder
   addressId?: Prisma.SortOrderInput | Prisma.SortOrder
   roleId?: Prisma.SortOrderInput | Prisma.SortOrder
   isActive?: Prisma.SortOrder
@@ -449,7 +476,7 @@ export type UserScalarWhereWithAggregatesInput = {
   email?: Prisma.StringWithAggregatesFilter<"User"> | string
   password?: Prisma.StringWithAggregatesFilter<"User"> | string
   username?: Prisma.StringWithAggregatesFilter<"User"> | string
-  branchId?: Prisma.StringWithAggregatesFilter<"User"> | string
+  branchId?: Prisma.StringNullableWithAggregatesFilter<"User"> | string | null
   addressId?: Prisma.StringNullableWithAggregatesFilter<"User"> | string | null
   roleId?: Prisma.StringNullableWithAggregatesFilter<"User"> | string | null
   isActive?: Prisma.BoolWithAggregatesFilter<"User"> | boolean
@@ -477,6 +504,8 @@ export type UserCreateInput = {
   deletedAt?: Date | string | null
   accessHistories?: Prisma.AccessHistoryCreateNestedManyWithoutUserInput
   audits?: Prisma.AuditCreateNestedManyWithoutUserInput
+  platformAdminActions?: Prisma.PlatformAdminAuditCreateNestedManyWithoutActorInput
+  platformAdminTargets?: Prisma.PlatformAdminAuditCreateNestedManyWithoutTargetInput
   loginHistories?: Prisma.LoginHistoryCreateNestedManyWithoutUserInput
   Person?: Prisma.PersonCreateNestedManyWithoutUserInput
   Appointment?: Prisma.AppointmentCreateNestedManyWithoutDoctorInput
@@ -497,10 +526,17 @@ export type UserCreateInput = {
   UserPermission?: Prisma.UserPermissionCreateNestedManyWithoutUserInput
   refreshTokens?: Prisma.RefreshTokenCreateNestedManyWithoutUserInput
   authActionTokens?: Prisma.AuthActionTokenCreateNestedManyWithoutUserInput
+  requestedSubscriptionPayments?: Prisma.SubscriptionRequestCreateNestedManyWithoutSubmittedByInput
+  reviewedSubscriptionPayments?: Prisma.SubscriptionRequestCreateNestedManyWithoutReviewedByInput
+  approvedSubscriptions?: Prisma.ClinicSubscriptionCreateNestedManyWithoutApprovedByInput
+  subscriptionAudits?: Prisma.SubscriptionAuditCreateNestedManyWithoutActorInput
+  updatedSubscriptionSettings?: Prisma.SubscriptionSettingsCreateNestedManyWithoutUpdatedByInput
+  assistantConversations?: Prisma.AssistantConversationCreateNestedManyWithoutUserInput
+  assistantMessages?: Prisma.AssistantMessageCreateNestedManyWithoutUserInput
   stockSales?: Prisma.StockSaleCreateNestedManyWithoutSoldByInput
   createdCommunicationCampaigns?: Prisma.CommunicationCampaignCreateNestedManyWithoutCreatedByInput
   Address?: Prisma.AddressCreateNestedOneWithoutUserInput
-  branch: Prisma.BranchCreateNestedOneWithoutUserInput
+  branch?: Prisma.BranchCreateNestedOneWithoutUserInput
   Role?: Prisma.RoleCreateNestedOneWithoutUserInput
 }
 
@@ -509,7 +545,7 @@ export type UserUncheckedCreateInput = {
   email: string
   password: string
   username: string
-  branchId: string
+  branchId?: string | null
   addressId?: string | null
   roleId?: string | null
   isActive?: boolean
@@ -522,6 +558,8 @@ export type UserUncheckedCreateInput = {
   deletedAt?: Date | string | null
   accessHistories?: Prisma.AccessHistoryUncheckedCreateNestedManyWithoutUserInput
   audits?: Prisma.AuditUncheckedCreateNestedManyWithoutUserInput
+  platformAdminActions?: Prisma.PlatformAdminAuditUncheckedCreateNestedManyWithoutActorInput
+  platformAdminTargets?: Prisma.PlatformAdminAuditUncheckedCreateNestedManyWithoutTargetInput
   loginHistories?: Prisma.LoginHistoryUncheckedCreateNestedManyWithoutUserInput
   Person?: Prisma.PersonUncheckedCreateNestedManyWithoutUserInput
   Appointment?: Prisma.AppointmentUncheckedCreateNestedManyWithoutDoctorInput
@@ -542,6 +580,13 @@ export type UserUncheckedCreateInput = {
   UserPermission?: Prisma.UserPermissionUncheckedCreateNestedManyWithoutUserInput
   refreshTokens?: Prisma.RefreshTokenUncheckedCreateNestedManyWithoutUserInput
   authActionTokens?: Prisma.AuthActionTokenUncheckedCreateNestedManyWithoutUserInput
+  requestedSubscriptionPayments?: Prisma.SubscriptionRequestUncheckedCreateNestedManyWithoutSubmittedByInput
+  reviewedSubscriptionPayments?: Prisma.SubscriptionRequestUncheckedCreateNestedManyWithoutReviewedByInput
+  approvedSubscriptions?: Prisma.ClinicSubscriptionUncheckedCreateNestedManyWithoutApprovedByInput
+  subscriptionAudits?: Prisma.SubscriptionAuditUncheckedCreateNestedManyWithoutActorInput
+  updatedSubscriptionSettings?: Prisma.SubscriptionSettingsUncheckedCreateNestedManyWithoutUpdatedByInput
+  assistantConversations?: Prisma.AssistantConversationUncheckedCreateNestedManyWithoutUserInput
+  assistantMessages?: Prisma.AssistantMessageUncheckedCreateNestedManyWithoutUserInput
   stockSales?: Prisma.StockSaleUncheckedCreateNestedManyWithoutSoldByInput
   createdCommunicationCampaigns?: Prisma.CommunicationCampaignUncheckedCreateNestedManyWithoutCreatedByInput
 }
@@ -561,6 +606,8 @@ export type UserUpdateInput = {
   deletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   accessHistories?: Prisma.AccessHistoryUpdateManyWithoutUserNestedInput
   audits?: Prisma.AuditUpdateManyWithoutUserNestedInput
+  platformAdminActions?: Prisma.PlatformAdminAuditUpdateManyWithoutActorNestedInput
+  platformAdminTargets?: Prisma.PlatformAdminAuditUpdateManyWithoutTargetNestedInput
   loginHistories?: Prisma.LoginHistoryUpdateManyWithoutUserNestedInput
   Person?: Prisma.PersonUpdateManyWithoutUserNestedInput
   Appointment?: Prisma.AppointmentUpdateManyWithoutDoctorNestedInput
@@ -581,10 +628,17 @@ export type UserUpdateInput = {
   UserPermission?: Prisma.UserPermissionUpdateManyWithoutUserNestedInput
   refreshTokens?: Prisma.RefreshTokenUpdateManyWithoutUserNestedInput
   authActionTokens?: Prisma.AuthActionTokenUpdateManyWithoutUserNestedInput
+  requestedSubscriptionPayments?: Prisma.SubscriptionRequestUpdateManyWithoutSubmittedByNestedInput
+  reviewedSubscriptionPayments?: Prisma.SubscriptionRequestUpdateManyWithoutReviewedByNestedInput
+  approvedSubscriptions?: Prisma.ClinicSubscriptionUpdateManyWithoutApprovedByNestedInput
+  subscriptionAudits?: Prisma.SubscriptionAuditUpdateManyWithoutActorNestedInput
+  updatedSubscriptionSettings?: Prisma.SubscriptionSettingsUpdateManyWithoutUpdatedByNestedInput
+  assistantConversations?: Prisma.AssistantConversationUpdateManyWithoutUserNestedInput
+  assistantMessages?: Prisma.AssistantMessageUpdateManyWithoutUserNestedInput
   stockSales?: Prisma.StockSaleUpdateManyWithoutSoldByNestedInput
   createdCommunicationCampaigns?: Prisma.CommunicationCampaignUpdateManyWithoutCreatedByNestedInput
   Address?: Prisma.AddressUpdateOneWithoutUserNestedInput
-  branch?: Prisma.BranchUpdateOneRequiredWithoutUserNestedInput
+  branch?: Prisma.BranchUpdateOneWithoutUserNestedInput
   Role?: Prisma.RoleUpdateOneWithoutUserNestedInput
 }
 
@@ -593,7 +647,7 @@ export type UserUncheckedUpdateInput = {
   email?: Prisma.StringFieldUpdateOperationsInput | string
   password?: Prisma.StringFieldUpdateOperationsInput | string
   username?: Prisma.StringFieldUpdateOperationsInput | string
-  branchId?: Prisma.StringFieldUpdateOperationsInput | string
+  branchId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   addressId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   roleId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
@@ -606,6 +660,8 @@ export type UserUncheckedUpdateInput = {
   deletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   accessHistories?: Prisma.AccessHistoryUncheckedUpdateManyWithoutUserNestedInput
   audits?: Prisma.AuditUncheckedUpdateManyWithoutUserNestedInput
+  platformAdminActions?: Prisma.PlatformAdminAuditUncheckedUpdateManyWithoutActorNestedInput
+  platformAdminTargets?: Prisma.PlatformAdminAuditUncheckedUpdateManyWithoutTargetNestedInput
   loginHistories?: Prisma.LoginHistoryUncheckedUpdateManyWithoutUserNestedInput
   Person?: Prisma.PersonUncheckedUpdateManyWithoutUserNestedInput
   Appointment?: Prisma.AppointmentUncheckedUpdateManyWithoutDoctorNestedInput
@@ -626,6 +682,13 @@ export type UserUncheckedUpdateInput = {
   UserPermission?: Prisma.UserPermissionUncheckedUpdateManyWithoutUserNestedInput
   refreshTokens?: Prisma.RefreshTokenUncheckedUpdateManyWithoutUserNestedInput
   authActionTokens?: Prisma.AuthActionTokenUncheckedUpdateManyWithoutUserNestedInput
+  requestedSubscriptionPayments?: Prisma.SubscriptionRequestUncheckedUpdateManyWithoutSubmittedByNestedInput
+  reviewedSubscriptionPayments?: Prisma.SubscriptionRequestUncheckedUpdateManyWithoutReviewedByNestedInput
+  approvedSubscriptions?: Prisma.ClinicSubscriptionUncheckedUpdateManyWithoutApprovedByNestedInput
+  subscriptionAudits?: Prisma.SubscriptionAuditUncheckedUpdateManyWithoutActorNestedInput
+  updatedSubscriptionSettings?: Prisma.SubscriptionSettingsUncheckedUpdateManyWithoutUpdatedByNestedInput
+  assistantConversations?: Prisma.AssistantConversationUncheckedUpdateManyWithoutUserNestedInput
+  assistantMessages?: Prisma.AssistantMessageUncheckedUpdateManyWithoutUserNestedInput
   stockSales?: Prisma.StockSaleUncheckedUpdateManyWithoutSoldByNestedInput
   createdCommunicationCampaigns?: Prisma.CommunicationCampaignUncheckedUpdateManyWithoutCreatedByNestedInput
 }
@@ -635,7 +698,7 @@ export type UserCreateManyInput = {
   email: string
   password: string
   username: string
-  branchId: string
+  branchId?: string | null
   addressId?: string | null
   roleId?: string | null
   isActive?: boolean
@@ -668,7 +731,7 @@ export type UserUncheckedUpdateManyInput = {
   email?: Prisma.StringFieldUpdateOperationsInput | string
   password?: Prisma.StringFieldUpdateOperationsInput | string
   username?: Prisma.StringFieldUpdateOperationsInput | string
-  branchId?: Prisma.StringFieldUpdateOperationsInput | string
+  branchId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   addressId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   roleId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
@@ -1231,6 +1294,138 @@ export type UserUpdateOneRequiredWithoutAccessHistoriesNestedInput = {
   update?: Prisma.XOR<Prisma.XOR<Prisma.UserUpdateToOneWithWhereWithoutAccessHistoriesInput, Prisma.UserUpdateWithoutAccessHistoriesInput>, Prisma.UserUncheckedUpdateWithoutAccessHistoriesInput>
 }
 
+export type UserCreateNestedOneWithoutApprovedSubscriptionsInput = {
+  create?: Prisma.XOR<Prisma.UserCreateWithoutApprovedSubscriptionsInput, Prisma.UserUncheckedCreateWithoutApprovedSubscriptionsInput>
+  connectOrCreate?: Prisma.UserCreateOrConnectWithoutApprovedSubscriptionsInput
+  connect?: Prisma.UserWhereUniqueInput
+}
+
+export type UserUpdateOneWithoutApprovedSubscriptionsNestedInput = {
+  create?: Prisma.XOR<Prisma.UserCreateWithoutApprovedSubscriptionsInput, Prisma.UserUncheckedCreateWithoutApprovedSubscriptionsInput>
+  connectOrCreate?: Prisma.UserCreateOrConnectWithoutApprovedSubscriptionsInput
+  upsert?: Prisma.UserUpsertWithoutApprovedSubscriptionsInput
+  disconnect?: Prisma.UserWhereInput | boolean
+  delete?: Prisma.UserWhereInput | boolean
+  connect?: Prisma.UserWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.UserUpdateToOneWithWhereWithoutApprovedSubscriptionsInput, Prisma.UserUpdateWithoutApprovedSubscriptionsInput>, Prisma.UserUncheckedUpdateWithoutApprovedSubscriptionsInput>
+}
+
+export type UserCreateNestedOneWithoutRequestedSubscriptionPaymentsInput = {
+  create?: Prisma.XOR<Prisma.UserCreateWithoutRequestedSubscriptionPaymentsInput, Prisma.UserUncheckedCreateWithoutRequestedSubscriptionPaymentsInput>
+  connectOrCreate?: Prisma.UserCreateOrConnectWithoutRequestedSubscriptionPaymentsInput
+  connect?: Prisma.UserWhereUniqueInput
+}
+
+export type UserCreateNestedOneWithoutReviewedSubscriptionPaymentsInput = {
+  create?: Prisma.XOR<Prisma.UserCreateWithoutReviewedSubscriptionPaymentsInput, Prisma.UserUncheckedCreateWithoutReviewedSubscriptionPaymentsInput>
+  connectOrCreate?: Prisma.UserCreateOrConnectWithoutReviewedSubscriptionPaymentsInput
+  connect?: Prisma.UserWhereUniqueInput
+}
+
+export type UserUpdateOneRequiredWithoutRequestedSubscriptionPaymentsNestedInput = {
+  create?: Prisma.XOR<Prisma.UserCreateWithoutRequestedSubscriptionPaymentsInput, Prisma.UserUncheckedCreateWithoutRequestedSubscriptionPaymentsInput>
+  connectOrCreate?: Prisma.UserCreateOrConnectWithoutRequestedSubscriptionPaymentsInput
+  upsert?: Prisma.UserUpsertWithoutRequestedSubscriptionPaymentsInput
+  connect?: Prisma.UserWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.UserUpdateToOneWithWhereWithoutRequestedSubscriptionPaymentsInput, Prisma.UserUpdateWithoutRequestedSubscriptionPaymentsInput>, Prisma.UserUncheckedUpdateWithoutRequestedSubscriptionPaymentsInput>
+}
+
+export type UserUpdateOneWithoutReviewedSubscriptionPaymentsNestedInput = {
+  create?: Prisma.XOR<Prisma.UserCreateWithoutReviewedSubscriptionPaymentsInput, Prisma.UserUncheckedCreateWithoutReviewedSubscriptionPaymentsInput>
+  connectOrCreate?: Prisma.UserCreateOrConnectWithoutReviewedSubscriptionPaymentsInput
+  upsert?: Prisma.UserUpsertWithoutReviewedSubscriptionPaymentsInput
+  disconnect?: Prisma.UserWhereInput | boolean
+  delete?: Prisma.UserWhereInput | boolean
+  connect?: Prisma.UserWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.UserUpdateToOneWithWhereWithoutReviewedSubscriptionPaymentsInput, Prisma.UserUpdateWithoutReviewedSubscriptionPaymentsInput>, Prisma.UserUncheckedUpdateWithoutReviewedSubscriptionPaymentsInput>
+}
+
+export type UserCreateNestedOneWithoutSubscriptionAuditsInput = {
+  create?: Prisma.XOR<Prisma.UserCreateWithoutSubscriptionAuditsInput, Prisma.UserUncheckedCreateWithoutSubscriptionAuditsInput>
+  connectOrCreate?: Prisma.UserCreateOrConnectWithoutSubscriptionAuditsInput
+  connect?: Prisma.UserWhereUniqueInput
+}
+
+export type UserUpdateOneRequiredWithoutSubscriptionAuditsNestedInput = {
+  create?: Prisma.XOR<Prisma.UserCreateWithoutSubscriptionAuditsInput, Prisma.UserUncheckedCreateWithoutSubscriptionAuditsInput>
+  connectOrCreate?: Prisma.UserCreateOrConnectWithoutSubscriptionAuditsInput
+  upsert?: Prisma.UserUpsertWithoutSubscriptionAuditsInput
+  connect?: Prisma.UserWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.UserUpdateToOneWithWhereWithoutSubscriptionAuditsInput, Prisma.UserUpdateWithoutSubscriptionAuditsInput>, Prisma.UserUncheckedUpdateWithoutSubscriptionAuditsInput>
+}
+
+export type UserCreateNestedOneWithoutPlatformAdminActionsInput = {
+  create?: Prisma.XOR<Prisma.UserCreateWithoutPlatformAdminActionsInput, Prisma.UserUncheckedCreateWithoutPlatformAdminActionsInput>
+  connectOrCreate?: Prisma.UserCreateOrConnectWithoutPlatformAdminActionsInput
+  connect?: Prisma.UserWhereUniqueInput
+}
+
+export type UserCreateNestedOneWithoutPlatformAdminTargetsInput = {
+  create?: Prisma.XOR<Prisma.UserCreateWithoutPlatformAdminTargetsInput, Prisma.UserUncheckedCreateWithoutPlatformAdminTargetsInput>
+  connectOrCreate?: Prisma.UserCreateOrConnectWithoutPlatformAdminTargetsInput
+  connect?: Prisma.UserWhereUniqueInput
+}
+
+export type UserUpdateOneRequiredWithoutPlatformAdminActionsNestedInput = {
+  create?: Prisma.XOR<Prisma.UserCreateWithoutPlatformAdminActionsInput, Prisma.UserUncheckedCreateWithoutPlatformAdminActionsInput>
+  connectOrCreate?: Prisma.UserCreateOrConnectWithoutPlatformAdminActionsInput
+  upsert?: Prisma.UserUpsertWithoutPlatformAdminActionsInput
+  connect?: Prisma.UserWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.UserUpdateToOneWithWhereWithoutPlatformAdminActionsInput, Prisma.UserUpdateWithoutPlatformAdminActionsInput>, Prisma.UserUncheckedUpdateWithoutPlatformAdminActionsInput>
+}
+
+export type UserUpdateOneWithoutPlatformAdminTargetsNestedInput = {
+  create?: Prisma.XOR<Prisma.UserCreateWithoutPlatformAdminTargetsInput, Prisma.UserUncheckedCreateWithoutPlatformAdminTargetsInput>
+  connectOrCreate?: Prisma.UserCreateOrConnectWithoutPlatformAdminTargetsInput
+  upsert?: Prisma.UserUpsertWithoutPlatformAdminTargetsInput
+  disconnect?: Prisma.UserWhereInput | boolean
+  delete?: Prisma.UserWhereInput | boolean
+  connect?: Prisma.UserWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.UserUpdateToOneWithWhereWithoutPlatformAdminTargetsInput, Prisma.UserUpdateWithoutPlatformAdminTargetsInput>, Prisma.UserUncheckedUpdateWithoutPlatformAdminTargetsInput>
+}
+
+export type UserCreateNestedOneWithoutUpdatedSubscriptionSettingsInput = {
+  create?: Prisma.XOR<Prisma.UserCreateWithoutUpdatedSubscriptionSettingsInput, Prisma.UserUncheckedCreateWithoutUpdatedSubscriptionSettingsInput>
+  connectOrCreate?: Prisma.UserCreateOrConnectWithoutUpdatedSubscriptionSettingsInput
+  connect?: Prisma.UserWhereUniqueInput
+}
+
+export type UserUpdateOneRequiredWithoutUpdatedSubscriptionSettingsNestedInput = {
+  create?: Prisma.XOR<Prisma.UserCreateWithoutUpdatedSubscriptionSettingsInput, Prisma.UserUncheckedCreateWithoutUpdatedSubscriptionSettingsInput>
+  connectOrCreate?: Prisma.UserCreateOrConnectWithoutUpdatedSubscriptionSettingsInput
+  upsert?: Prisma.UserUpsertWithoutUpdatedSubscriptionSettingsInput
+  connect?: Prisma.UserWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.UserUpdateToOneWithWhereWithoutUpdatedSubscriptionSettingsInput, Prisma.UserUpdateWithoutUpdatedSubscriptionSettingsInput>, Prisma.UserUncheckedUpdateWithoutUpdatedSubscriptionSettingsInput>
+}
+
+export type UserCreateNestedOneWithoutAssistantConversationsInput = {
+  create?: Prisma.XOR<Prisma.UserCreateWithoutAssistantConversationsInput, Prisma.UserUncheckedCreateWithoutAssistantConversationsInput>
+  connectOrCreate?: Prisma.UserCreateOrConnectWithoutAssistantConversationsInput
+  connect?: Prisma.UserWhereUniqueInput
+}
+
+export type UserUpdateOneRequiredWithoutAssistantConversationsNestedInput = {
+  create?: Prisma.XOR<Prisma.UserCreateWithoutAssistantConversationsInput, Prisma.UserUncheckedCreateWithoutAssistantConversationsInput>
+  connectOrCreate?: Prisma.UserCreateOrConnectWithoutAssistantConversationsInput
+  upsert?: Prisma.UserUpsertWithoutAssistantConversationsInput
+  connect?: Prisma.UserWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.UserUpdateToOneWithWhereWithoutAssistantConversationsInput, Prisma.UserUpdateWithoutAssistantConversationsInput>, Prisma.UserUncheckedUpdateWithoutAssistantConversationsInput>
+}
+
+export type UserCreateNestedOneWithoutAssistantMessagesInput = {
+  create?: Prisma.XOR<Prisma.UserCreateWithoutAssistantMessagesInput, Prisma.UserUncheckedCreateWithoutAssistantMessagesInput>
+  connectOrCreate?: Prisma.UserCreateOrConnectWithoutAssistantMessagesInput
+  connect?: Prisma.UserWhereUniqueInput
+}
+
+export type UserUpdateOneRequiredWithoutAssistantMessagesNestedInput = {
+  create?: Prisma.XOR<Prisma.UserCreateWithoutAssistantMessagesInput, Prisma.UserUncheckedCreateWithoutAssistantMessagesInput>
+  connectOrCreate?: Prisma.UserCreateOrConnectWithoutAssistantMessagesInput
+  upsert?: Prisma.UserUpsertWithoutAssistantMessagesInput
+  connect?: Prisma.UserWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.UserUpdateToOneWithWhereWithoutAssistantMessagesInput, Prisma.UserUpdateWithoutAssistantMessagesInput>, Prisma.UserUncheckedUpdateWithoutAssistantMessagesInput>
+}
+
 export type UserCreateWithoutAddressInput = {
   id?: string
   email: string
@@ -1246,6 +1441,8 @@ export type UserCreateWithoutAddressInput = {
   deletedAt?: Date | string | null
   accessHistories?: Prisma.AccessHistoryCreateNestedManyWithoutUserInput
   audits?: Prisma.AuditCreateNestedManyWithoutUserInput
+  platformAdminActions?: Prisma.PlatformAdminAuditCreateNestedManyWithoutActorInput
+  platformAdminTargets?: Prisma.PlatformAdminAuditCreateNestedManyWithoutTargetInput
   loginHistories?: Prisma.LoginHistoryCreateNestedManyWithoutUserInput
   Person?: Prisma.PersonCreateNestedManyWithoutUserInput
   Appointment?: Prisma.AppointmentCreateNestedManyWithoutDoctorInput
@@ -1266,9 +1463,16 @@ export type UserCreateWithoutAddressInput = {
   UserPermission?: Prisma.UserPermissionCreateNestedManyWithoutUserInput
   refreshTokens?: Prisma.RefreshTokenCreateNestedManyWithoutUserInput
   authActionTokens?: Prisma.AuthActionTokenCreateNestedManyWithoutUserInput
+  requestedSubscriptionPayments?: Prisma.SubscriptionRequestCreateNestedManyWithoutSubmittedByInput
+  reviewedSubscriptionPayments?: Prisma.SubscriptionRequestCreateNestedManyWithoutReviewedByInput
+  approvedSubscriptions?: Prisma.ClinicSubscriptionCreateNestedManyWithoutApprovedByInput
+  subscriptionAudits?: Prisma.SubscriptionAuditCreateNestedManyWithoutActorInput
+  updatedSubscriptionSettings?: Prisma.SubscriptionSettingsCreateNestedManyWithoutUpdatedByInput
+  assistantConversations?: Prisma.AssistantConversationCreateNestedManyWithoutUserInput
+  assistantMessages?: Prisma.AssistantMessageCreateNestedManyWithoutUserInput
   stockSales?: Prisma.StockSaleCreateNestedManyWithoutSoldByInput
   createdCommunicationCampaigns?: Prisma.CommunicationCampaignCreateNestedManyWithoutCreatedByInput
-  branch: Prisma.BranchCreateNestedOneWithoutUserInput
+  branch?: Prisma.BranchCreateNestedOneWithoutUserInput
   Role?: Prisma.RoleCreateNestedOneWithoutUserInput
 }
 
@@ -1277,7 +1481,7 @@ export type UserUncheckedCreateWithoutAddressInput = {
   email: string
   password: string
   username: string
-  branchId: string
+  branchId?: string | null
   roleId?: string | null
   isActive?: boolean
   phoneNumber?: number | null
@@ -1289,6 +1493,8 @@ export type UserUncheckedCreateWithoutAddressInput = {
   deletedAt?: Date | string | null
   accessHistories?: Prisma.AccessHistoryUncheckedCreateNestedManyWithoutUserInput
   audits?: Prisma.AuditUncheckedCreateNestedManyWithoutUserInput
+  platformAdminActions?: Prisma.PlatformAdminAuditUncheckedCreateNestedManyWithoutActorInput
+  platformAdminTargets?: Prisma.PlatformAdminAuditUncheckedCreateNestedManyWithoutTargetInput
   loginHistories?: Prisma.LoginHistoryUncheckedCreateNestedManyWithoutUserInput
   Person?: Prisma.PersonUncheckedCreateNestedManyWithoutUserInput
   Appointment?: Prisma.AppointmentUncheckedCreateNestedManyWithoutDoctorInput
@@ -1309,6 +1515,13 @@ export type UserUncheckedCreateWithoutAddressInput = {
   UserPermission?: Prisma.UserPermissionUncheckedCreateNestedManyWithoutUserInput
   refreshTokens?: Prisma.RefreshTokenUncheckedCreateNestedManyWithoutUserInput
   authActionTokens?: Prisma.AuthActionTokenUncheckedCreateNestedManyWithoutUserInput
+  requestedSubscriptionPayments?: Prisma.SubscriptionRequestUncheckedCreateNestedManyWithoutSubmittedByInput
+  reviewedSubscriptionPayments?: Prisma.SubscriptionRequestUncheckedCreateNestedManyWithoutReviewedByInput
+  approvedSubscriptions?: Prisma.ClinicSubscriptionUncheckedCreateNestedManyWithoutApprovedByInput
+  subscriptionAudits?: Prisma.SubscriptionAuditUncheckedCreateNestedManyWithoutActorInput
+  updatedSubscriptionSettings?: Prisma.SubscriptionSettingsUncheckedCreateNestedManyWithoutUpdatedByInput
+  assistantConversations?: Prisma.AssistantConversationUncheckedCreateNestedManyWithoutUserInput
+  assistantMessages?: Prisma.AssistantMessageUncheckedCreateNestedManyWithoutUserInput
   stockSales?: Prisma.StockSaleUncheckedCreateNestedManyWithoutSoldByInput
   createdCommunicationCampaigns?: Prisma.CommunicationCampaignUncheckedCreateNestedManyWithoutCreatedByInput
 }
@@ -1347,7 +1560,7 @@ export type UserScalarWhereInput = {
   email?: Prisma.StringFilter<"User"> | string
   password?: Prisma.StringFilter<"User"> | string
   username?: Prisma.StringFilter<"User"> | string
-  branchId?: Prisma.StringFilter<"User"> | string
+  branchId?: Prisma.StringNullableFilter<"User"> | string | null
   addressId?: Prisma.StringNullableFilter<"User"> | string | null
   roleId?: Prisma.StringNullableFilter<"User"> | string | null
   isActive?: Prisma.BoolFilter<"User"> | boolean
@@ -1375,6 +1588,8 @@ export type UserCreateWithoutBranchInput = {
   deletedAt?: Date | string | null
   accessHistories?: Prisma.AccessHistoryCreateNestedManyWithoutUserInput
   audits?: Prisma.AuditCreateNestedManyWithoutUserInput
+  platformAdminActions?: Prisma.PlatformAdminAuditCreateNestedManyWithoutActorInput
+  platformAdminTargets?: Prisma.PlatformAdminAuditCreateNestedManyWithoutTargetInput
   loginHistories?: Prisma.LoginHistoryCreateNestedManyWithoutUserInput
   Person?: Prisma.PersonCreateNestedManyWithoutUserInput
   Appointment?: Prisma.AppointmentCreateNestedManyWithoutDoctorInput
@@ -1395,6 +1610,13 @@ export type UserCreateWithoutBranchInput = {
   UserPermission?: Prisma.UserPermissionCreateNestedManyWithoutUserInput
   refreshTokens?: Prisma.RefreshTokenCreateNestedManyWithoutUserInput
   authActionTokens?: Prisma.AuthActionTokenCreateNestedManyWithoutUserInput
+  requestedSubscriptionPayments?: Prisma.SubscriptionRequestCreateNestedManyWithoutSubmittedByInput
+  reviewedSubscriptionPayments?: Prisma.SubscriptionRequestCreateNestedManyWithoutReviewedByInput
+  approvedSubscriptions?: Prisma.ClinicSubscriptionCreateNestedManyWithoutApprovedByInput
+  subscriptionAudits?: Prisma.SubscriptionAuditCreateNestedManyWithoutActorInput
+  updatedSubscriptionSettings?: Prisma.SubscriptionSettingsCreateNestedManyWithoutUpdatedByInput
+  assistantConversations?: Prisma.AssistantConversationCreateNestedManyWithoutUserInput
+  assistantMessages?: Prisma.AssistantMessageCreateNestedManyWithoutUserInput
   stockSales?: Prisma.StockSaleCreateNestedManyWithoutSoldByInput
   createdCommunicationCampaigns?: Prisma.CommunicationCampaignCreateNestedManyWithoutCreatedByInput
   Address?: Prisma.AddressCreateNestedOneWithoutUserInput
@@ -1418,6 +1640,8 @@ export type UserUncheckedCreateWithoutBranchInput = {
   deletedAt?: Date | string | null
   accessHistories?: Prisma.AccessHistoryUncheckedCreateNestedManyWithoutUserInput
   audits?: Prisma.AuditUncheckedCreateNestedManyWithoutUserInput
+  platformAdminActions?: Prisma.PlatformAdminAuditUncheckedCreateNestedManyWithoutActorInput
+  platformAdminTargets?: Prisma.PlatformAdminAuditUncheckedCreateNestedManyWithoutTargetInput
   loginHistories?: Prisma.LoginHistoryUncheckedCreateNestedManyWithoutUserInput
   Person?: Prisma.PersonUncheckedCreateNestedManyWithoutUserInput
   Appointment?: Prisma.AppointmentUncheckedCreateNestedManyWithoutDoctorInput
@@ -1438,6 +1662,13 @@ export type UserUncheckedCreateWithoutBranchInput = {
   UserPermission?: Prisma.UserPermissionUncheckedCreateNestedManyWithoutUserInput
   refreshTokens?: Prisma.RefreshTokenUncheckedCreateNestedManyWithoutUserInput
   authActionTokens?: Prisma.AuthActionTokenUncheckedCreateNestedManyWithoutUserInput
+  requestedSubscriptionPayments?: Prisma.SubscriptionRequestUncheckedCreateNestedManyWithoutSubmittedByInput
+  reviewedSubscriptionPayments?: Prisma.SubscriptionRequestUncheckedCreateNestedManyWithoutReviewedByInput
+  approvedSubscriptions?: Prisma.ClinicSubscriptionUncheckedCreateNestedManyWithoutApprovedByInput
+  subscriptionAudits?: Prisma.SubscriptionAuditUncheckedCreateNestedManyWithoutActorInput
+  updatedSubscriptionSettings?: Prisma.SubscriptionSettingsUncheckedCreateNestedManyWithoutUpdatedByInput
+  assistantConversations?: Prisma.AssistantConversationUncheckedCreateNestedManyWithoutUserInput
+  assistantMessages?: Prisma.AssistantMessageUncheckedCreateNestedManyWithoutUserInput
   stockSales?: Prisma.StockSaleUncheckedCreateNestedManyWithoutSoldByInput
   createdCommunicationCampaigns?: Prisma.CommunicationCampaignUncheckedCreateNestedManyWithoutCreatedByInput
 }
@@ -1483,6 +1714,8 @@ export type UserCreateWithoutPersonInput = {
   deletedAt?: Date | string | null
   accessHistories?: Prisma.AccessHistoryCreateNestedManyWithoutUserInput
   audits?: Prisma.AuditCreateNestedManyWithoutUserInput
+  platformAdminActions?: Prisma.PlatformAdminAuditCreateNestedManyWithoutActorInput
+  platformAdminTargets?: Prisma.PlatformAdminAuditCreateNestedManyWithoutTargetInput
   loginHistories?: Prisma.LoginHistoryCreateNestedManyWithoutUserInput
   Appointment?: Prisma.AppointmentCreateNestedManyWithoutDoctorInput
   appointments?: Prisma.AppointmentCreateNestedManyWithoutUserInput
@@ -1502,10 +1735,17 @@ export type UserCreateWithoutPersonInput = {
   UserPermission?: Prisma.UserPermissionCreateNestedManyWithoutUserInput
   refreshTokens?: Prisma.RefreshTokenCreateNestedManyWithoutUserInput
   authActionTokens?: Prisma.AuthActionTokenCreateNestedManyWithoutUserInput
+  requestedSubscriptionPayments?: Prisma.SubscriptionRequestCreateNestedManyWithoutSubmittedByInput
+  reviewedSubscriptionPayments?: Prisma.SubscriptionRequestCreateNestedManyWithoutReviewedByInput
+  approvedSubscriptions?: Prisma.ClinicSubscriptionCreateNestedManyWithoutApprovedByInput
+  subscriptionAudits?: Prisma.SubscriptionAuditCreateNestedManyWithoutActorInput
+  updatedSubscriptionSettings?: Prisma.SubscriptionSettingsCreateNestedManyWithoutUpdatedByInput
+  assistantConversations?: Prisma.AssistantConversationCreateNestedManyWithoutUserInput
+  assistantMessages?: Prisma.AssistantMessageCreateNestedManyWithoutUserInput
   stockSales?: Prisma.StockSaleCreateNestedManyWithoutSoldByInput
   createdCommunicationCampaigns?: Prisma.CommunicationCampaignCreateNestedManyWithoutCreatedByInput
   Address?: Prisma.AddressCreateNestedOneWithoutUserInput
-  branch: Prisma.BranchCreateNestedOneWithoutUserInput
+  branch?: Prisma.BranchCreateNestedOneWithoutUserInput
   Role?: Prisma.RoleCreateNestedOneWithoutUserInput
 }
 
@@ -1514,7 +1754,7 @@ export type UserUncheckedCreateWithoutPersonInput = {
   email: string
   password: string
   username: string
-  branchId: string
+  branchId?: string | null
   addressId?: string | null
   roleId?: string | null
   isActive?: boolean
@@ -1527,6 +1767,8 @@ export type UserUncheckedCreateWithoutPersonInput = {
   deletedAt?: Date | string | null
   accessHistories?: Prisma.AccessHistoryUncheckedCreateNestedManyWithoutUserInput
   audits?: Prisma.AuditUncheckedCreateNestedManyWithoutUserInput
+  platformAdminActions?: Prisma.PlatformAdminAuditUncheckedCreateNestedManyWithoutActorInput
+  platformAdminTargets?: Prisma.PlatformAdminAuditUncheckedCreateNestedManyWithoutTargetInput
   loginHistories?: Prisma.LoginHistoryUncheckedCreateNestedManyWithoutUserInput
   Appointment?: Prisma.AppointmentUncheckedCreateNestedManyWithoutDoctorInput
   appointments?: Prisma.AppointmentUncheckedCreateNestedManyWithoutUserInput
@@ -1546,6 +1788,13 @@ export type UserUncheckedCreateWithoutPersonInput = {
   UserPermission?: Prisma.UserPermissionUncheckedCreateNestedManyWithoutUserInput
   refreshTokens?: Prisma.RefreshTokenUncheckedCreateNestedManyWithoutUserInput
   authActionTokens?: Prisma.AuthActionTokenUncheckedCreateNestedManyWithoutUserInput
+  requestedSubscriptionPayments?: Prisma.SubscriptionRequestUncheckedCreateNestedManyWithoutSubmittedByInput
+  reviewedSubscriptionPayments?: Prisma.SubscriptionRequestUncheckedCreateNestedManyWithoutReviewedByInput
+  approvedSubscriptions?: Prisma.ClinicSubscriptionUncheckedCreateNestedManyWithoutApprovedByInput
+  subscriptionAudits?: Prisma.SubscriptionAuditUncheckedCreateNestedManyWithoutActorInput
+  updatedSubscriptionSettings?: Prisma.SubscriptionSettingsUncheckedCreateNestedManyWithoutUpdatedByInput
+  assistantConversations?: Prisma.AssistantConversationUncheckedCreateNestedManyWithoutUserInput
+  assistantMessages?: Prisma.AssistantMessageUncheckedCreateNestedManyWithoutUserInput
   stockSales?: Prisma.StockSaleUncheckedCreateNestedManyWithoutSoldByInput
   createdCommunicationCampaigns?: Prisma.CommunicationCampaignUncheckedCreateNestedManyWithoutCreatedByInput
 }
@@ -1581,6 +1830,8 @@ export type UserUpdateWithoutPersonInput = {
   deletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   accessHistories?: Prisma.AccessHistoryUpdateManyWithoutUserNestedInput
   audits?: Prisma.AuditUpdateManyWithoutUserNestedInput
+  platformAdminActions?: Prisma.PlatformAdminAuditUpdateManyWithoutActorNestedInput
+  platformAdminTargets?: Prisma.PlatformAdminAuditUpdateManyWithoutTargetNestedInput
   loginHistories?: Prisma.LoginHistoryUpdateManyWithoutUserNestedInput
   Appointment?: Prisma.AppointmentUpdateManyWithoutDoctorNestedInput
   appointments?: Prisma.AppointmentUpdateManyWithoutUserNestedInput
@@ -1600,10 +1851,17 @@ export type UserUpdateWithoutPersonInput = {
   UserPermission?: Prisma.UserPermissionUpdateManyWithoutUserNestedInput
   refreshTokens?: Prisma.RefreshTokenUpdateManyWithoutUserNestedInput
   authActionTokens?: Prisma.AuthActionTokenUpdateManyWithoutUserNestedInput
+  requestedSubscriptionPayments?: Prisma.SubscriptionRequestUpdateManyWithoutSubmittedByNestedInput
+  reviewedSubscriptionPayments?: Prisma.SubscriptionRequestUpdateManyWithoutReviewedByNestedInput
+  approvedSubscriptions?: Prisma.ClinicSubscriptionUpdateManyWithoutApprovedByNestedInput
+  subscriptionAudits?: Prisma.SubscriptionAuditUpdateManyWithoutActorNestedInput
+  updatedSubscriptionSettings?: Prisma.SubscriptionSettingsUpdateManyWithoutUpdatedByNestedInput
+  assistantConversations?: Prisma.AssistantConversationUpdateManyWithoutUserNestedInput
+  assistantMessages?: Prisma.AssistantMessageUpdateManyWithoutUserNestedInput
   stockSales?: Prisma.StockSaleUpdateManyWithoutSoldByNestedInput
   createdCommunicationCampaigns?: Prisma.CommunicationCampaignUpdateManyWithoutCreatedByNestedInput
   Address?: Prisma.AddressUpdateOneWithoutUserNestedInput
-  branch?: Prisma.BranchUpdateOneRequiredWithoutUserNestedInput
+  branch?: Prisma.BranchUpdateOneWithoutUserNestedInput
   Role?: Prisma.RoleUpdateOneWithoutUserNestedInput
 }
 
@@ -1612,7 +1870,7 @@ export type UserUncheckedUpdateWithoutPersonInput = {
   email?: Prisma.StringFieldUpdateOperationsInput | string
   password?: Prisma.StringFieldUpdateOperationsInput | string
   username?: Prisma.StringFieldUpdateOperationsInput | string
-  branchId?: Prisma.StringFieldUpdateOperationsInput | string
+  branchId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   addressId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   roleId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
@@ -1625,6 +1883,8 @@ export type UserUncheckedUpdateWithoutPersonInput = {
   deletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   accessHistories?: Prisma.AccessHistoryUncheckedUpdateManyWithoutUserNestedInput
   audits?: Prisma.AuditUncheckedUpdateManyWithoutUserNestedInput
+  platformAdminActions?: Prisma.PlatformAdminAuditUncheckedUpdateManyWithoutActorNestedInput
+  platformAdminTargets?: Prisma.PlatformAdminAuditUncheckedUpdateManyWithoutTargetNestedInput
   loginHistories?: Prisma.LoginHistoryUncheckedUpdateManyWithoutUserNestedInput
   Appointment?: Prisma.AppointmentUncheckedUpdateManyWithoutDoctorNestedInput
   appointments?: Prisma.AppointmentUncheckedUpdateManyWithoutUserNestedInput
@@ -1644,6 +1904,13 @@ export type UserUncheckedUpdateWithoutPersonInput = {
   UserPermission?: Prisma.UserPermissionUncheckedUpdateManyWithoutUserNestedInput
   refreshTokens?: Prisma.RefreshTokenUncheckedUpdateManyWithoutUserNestedInput
   authActionTokens?: Prisma.AuthActionTokenUncheckedUpdateManyWithoutUserNestedInput
+  requestedSubscriptionPayments?: Prisma.SubscriptionRequestUncheckedUpdateManyWithoutSubmittedByNestedInput
+  reviewedSubscriptionPayments?: Prisma.SubscriptionRequestUncheckedUpdateManyWithoutReviewedByNestedInput
+  approvedSubscriptions?: Prisma.ClinicSubscriptionUncheckedUpdateManyWithoutApprovedByNestedInput
+  subscriptionAudits?: Prisma.SubscriptionAuditUncheckedUpdateManyWithoutActorNestedInput
+  updatedSubscriptionSettings?: Prisma.SubscriptionSettingsUncheckedUpdateManyWithoutUpdatedByNestedInput
+  assistantConversations?: Prisma.AssistantConversationUncheckedUpdateManyWithoutUserNestedInput
+  assistantMessages?: Prisma.AssistantMessageUncheckedUpdateManyWithoutUserNestedInput
   stockSales?: Prisma.StockSaleUncheckedUpdateManyWithoutSoldByNestedInput
   createdCommunicationCampaigns?: Prisma.CommunicationCampaignUncheckedUpdateManyWithoutCreatedByNestedInput
 }
@@ -1663,6 +1930,8 @@ export type UserCreateWithoutRoleInput = {
   deletedAt?: Date | string | null
   accessHistories?: Prisma.AccessHistoryCreateNestedManyWithoutUserInput
   audits?: Prisma.AuditCreateNestedManyWithoutUserInput
+  platformAdminActions?: Prisma.PlatformAdminAuditCreateNestedManyWithoutActorInput
+  platformAdminTargets?: Prisma.PlatformAdminAuditCreateNestedManyWithoutTargetInput
   loginHistories?: Prisma.LoginHistoryCreateNestedManyWithoutUserInput
   Person?: Prisma.PersonCreateNestedManyWithoutUserInput
   Appointment?: Prisma.AppointmentCreateNestedManyWithoutDoctorInput
@@ -1683,10 +1952,17 @@ export type UserCreateWithoutRoleInput = {
   UserPermission?: Prisma.UserPermissionCreateNestedManyWithoutUserInput
   refreshTokens?: Prisma.RefreshTokenCreateNestedManyWithoutUserInput
   authActionTokens?: Prisma.AuthActionTokenCreateNestedManyWithoutUserInput
+  requestedSubscriptionPayments?: Prisma.SubscriptionRequestCreateNestedManyWithoutSubmittedByInput
+  reviewedSubscriptionPayments?: Prisma.SubscriptionRequestCreateNestedManyWithoutReviewedByInput
+  approvedSubscriptions?: Prisma.ClinicSubscriptionCreateNestedManyWithoutApprovedByInput
+  subscriptionAudits?: Prisma.SubscriptionAuditCreateNestedManyWithoutActorInput
+  updatedSubscriptionSettings?: Prisma.SubscriptionSettingsCreateNestedManyWithoutUpdatedByInput
+  assistantConversations?: Prisma.AssistantConversationCreateNestedManyWithoutUserInput
+  assistantMessages?: Prisma.AssistantMessageCreateNestedManyWithoutUserInput
   stockSales?: Prisma.StockSaleCreateNestedManyWithoutSoldByInput
   createdCommunicationCampaigns?: Prisma.CommunicationCampaignCreateNestedManyWithoutCreatedByInput
   Address?: Prisma.AddressCreateNestedOneWithoutUserInput
-  branch: Prisma.BranchCreateNestedOneWithoutUserInput
+  branch?: Prisma.BranchCreateNestedOneWithoutUserInput
 }
 
 export type UserUncheckedCreateWithoutRoleInput = {
@@ -1694,7 +1970,7 @@ export type UserUncheckedCreateWithoutRoleInput = {
   email: string
   password: string
   username: string
-  branchId: string
+  branchId?: string | null
   addressId?: string | null
   isActive?: boolean
   phoneNumber?: number | null
@@ -1706,6 +1982,8 @@ export type UserUncheckedCreateWithoutRoleInput = {
   deletedAt?: Date | string | null
   accessHistories?: Prisma.AccessHistoryUncheckedCreateNestedManyWithoutUserInput
   audits?: Prisma.AuditUncheckedCreateNestedManyWithoutUserInput
+  platformAdminActions?: Prisma.PlatformAdminAuditUncheckedCreateNestedManyWithoutActorInput
+  platformAdminTargets?: Prisma.PlatformAdminAuditUncheckedCreateNestedManyWithoutTargetInput
   loginHistories?: Prisma.LoginHistoryUncheckedCreateNestedManyWithoutUserInput
   Person?: Prisma.PersonUncheckedCreateNestedManyWithoutUserInput
   Appointment?: Prisma.AppointmentUncheckedCreateNestedManyWithoutDoctorInput
@@ -1726,6 +2004,13 @@ export type UserUncheckedCreateWithoutRoleInput = {
   UserPermission?: Prisma.UserPermissionUncheckedCreateNestedManyWithoutUserInput
   refreshTokens?: Prisma.RefreshTokenUncheckedCreateNestedManyWithoutUserInput
   authActionTokens?: Prisma.AuthActionTokenUncheckedCreateNestedManyWithoutUserInput
+  requestedSubscriptionPayments?: Prisma.SubscriptionRequestUncheckedCreateNestedManyWithoutSubmittedByInput
+  reviewedSubscriptionPayments?: Prisma.SubscriptionRequestUncheckedCreateNestedManyWithoutReviewedByInput
+  approvedSubscriptions?: Prisma.ClinicSubscriptionUncheckedCreateNestedManyWithoutApprovedByInput
+  subscriptionAudits?: Prisma.SubscriptionAuditUncheckedCreateNestedManyWithoutActorInput
+  updatedSubscriptionSettings?: Prisma.SubscriptionSettingsUncheckedCreateNestedManyWithoutUpdatedByInput
+  assistantConversations?: Prisma.AssistantConversationUncheckedCreateNestedManyWithoutUserInput
+  assistantMessages?: Prisma.AssistantMessageUncheckedCreateNestedManyWithoutUserInput
   stockSales?: Prisma.StockSaleUncheckedCreateNestedManyWithoutSoldByInput
   createdCommunicationCampaigns?: Prisma.CommunicationCampaignUncheckedCreateNestedManyWithoutCreatedByInput
 }
@@ -1771,6 +2056,8 @@ export type UserCreateWithoutUserBranchInput = {
   deletedAt?: Date | string | null
   accessHistories?: Prisma.AccessHistoryCreateNestedManyWithoutUserInput
   audits?: Prisma.AuditCreateNestedManyWithoutUserInput
+  platformAdminActions?: Prisma.PlatformAdminAuditCreateNestedManyWithoutActorInput
+  platformAdminTargets?: Prisma.PlatformAdminAuditCreateNestedManyWithoutTargetInput
   loginHistories?: Prisma.LoginHistoryCreateNestedManyWithoutUserInput
   Person?: Prisma.PersonCreateNestedManyWithoutUserInput
   Appointment?: Prisma.AppointmentCreateNestedManyWithoutDoctorInput
@@ -1790,10 +2077,17 @@ export type UserCreateWithoutUserBranchInput = {
   UserPermission?: Prisma.UserPermissionCreateNestedManyWithoutUserInput
   refreshTokens?: Prisma.RefreshTokenCreateNestedManyWithoutUserInput
   authActionTokens?: Prisma.AuthActionTokenCreateNestedManyWithoutUserInput
+  requestedSubscriptionPayments?: Prisma.SubscriptionRequestCreateNestedManyWithoutSubmittedByInput
+  reviewedSubscriptionPayments?: Prisma.SubscriptionRequestCreateNestedManyWithoutReviewedByInput
+  approvedSubscriptions?: Prisma.ClinicSubscriptionCreateNestedManyWithoutApprovedByInput
+  subscriptionAudits?: Prisma.SubscriptionAuditCreateNestedManyWithoutActorInput
+  updatedSubscriptionSettings?: Prisma.SubscriptionSettingsCreateNestedManyWithoutUpdatedByInput
+  assistantConversations?: Prisma.AssistantConversationCreateNestedManyWithoutUserInput
+  assistantMessages?: Prisma.AssistantMessageCreateNestedManyWithoutUserInput
   stockSales?: Prisma.StockSaleCreateNestedManyWithoutSoldByInput
   createdCommunicationCampaigns?: Prisma.CommunicationCampaignCreateNestedManyWithoutCreatedByInput
   Address?: Prisma.AddressCreateNestedOneWithoutUserInput
-  branch: Prisma.BranchCreateNestedOneWithoutUserInput
+  branch?: Prisma.BranchCreateNestedOneWithoutUserInput
   Role?: Prisma.RoleCreateNestedOneWithoutUserInput
 }
 
@@ -1802,7 +2096,7 @@ export type UserUncheckedCreateWithoutUserBranchInput = {
   email: string
   password: string
   username: string
-  branchId: string
+  branchId?: string | null
   addressId?: string | null
   roleId?: string | null
   isActive?: boolean
@@ -1815,6 +2109,8 @@ export type UserUncheckedCreateWithoutUserBranchInput = {
   deletedAt?: Date | string | null
   accessHistories?: Prisma.AccessHistoryUncheckedCreateNestedManyWithoutUserInput
   audits?: Prisma.AuditUncheckedCreateNestedManyWithoutUserInput
+  platformAdminActions?: Prisma.PlatformAdminAuditUncheckedCreateNestedManyWithoutActorInput
+  platformAdminTargets?: Prisma.PlatformAdminAuditUncheckedCreateNestedManyWithoutTargetInput
   loginHistories?: Prisma.LoginHistoryUncheckedCreateNestedManyWithoutUserInput
   Person?: Prisma.PersonUncheckedCreateNestedManyWithoutUserInput
   Appointment?: Prisma.AppointmentUncheckedCreateNestedManyWithoutDoctorInput
@@ -1834,6 +2130,13 @@ export type UserUncheckedCreateWithoutUserBranchInput = {
   UserPermission?: Prisma.UserPermissionUncheckedCreateNestedManyWithoutUserInput
   refreshTokens?: Prisma.RefreshTokenUncheckedCreateNestedManyWithoutUserInput
   authActionTokens?: Prisma.AuthActionTokenUncheckedCreateNestedManyWithoutUserInput
+  requestedSubscriptionPayments?: Prisma.SubscriptionRequestUncheckedCreateNestedManyWithoutSubmittedByInput
+  reviewedSubscriptionPayments?: Prisma.SubscriptionRequestUncheckedCreateNestedManyWithoutReviewedByInput
+  approvedSubscriptions?: Prisma.ClinicSubscriptionUncheckedCreateNestedManyWithoutApprovedByInput
+  subscriptionAudits?: Prisma.SubscriptionAuditUncheckedCreateNestedManyWithoutActorInput
+  updatedSubscriptionSettings?: Prisma.SubscriptionSettingsUncheckedCreateNestedManyWithoutUpdatedByInput
+  assistantConversations?: Prisma.AssistantConversationUncheckedCreateNestedManyWithoutUserInput
+  assistantMessages?: Prisma.AssistantMessageUncheckedCreateNestedManyWithoutUserInput
   stockSales?: Prisma.StockSaleUncheckedCreateNestedManyWithoutSoldByInput
   createdCommunicationCampaigns?: Prisma.CommunicationCampaignUncheckedCreateNestedManyWithoutCreatedByInput
 }
@@ -1869,6 +2172,8 @@ export type UserUpdateWithoutUserBranchInput = {
   deletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   accessHistories?: Prisma.AccessHistoryUpdateManyWithoutUserNestedInput
   audits?: Prisma.AuditUpdateManyWithoutUserNestedInput
+  platformAdminActions?: Prisma.PlatformAdminAuditUpdateManyWithoutActorNestedInput
+  platformAdminTargets?: Prisma.PlatformAdminAuditUpdateManyWithoutTargetNestedInput
   loginHistories?: Prisma.LoginHistoryUpdateManyWithoutUserNestedInput
   Person?: Prisma.PersonUpdateManyWithoutUserNestedInput
   Appointment?: Prisma.AppointmentUpdateManyWithoutDoctorNestedInput
@@ -1888,10 +2193,17 @@ export type UserUpdateWithoutUserBranchInput = {
   UserPermission?: Prisma.UserPermissionUpdateManyWithoutUserNestedInput
   refreshTokens?: Prisma.RefreshTokenUpdateManyWithoutUserNestedInput
   authActionTokens?: Prisma.AuthActionTokenUpdateManyWithoutUserNestedInput
+  requestedSubscriptionPayments?: Prisma.SubscriptionRequestUpdateManyWithoutSubmittedByNestedInput
+  reviewedSubscriptionPayments?: Prisma.SubscriptionRequestUpdateManyWithoutReviewedByNestedInput
+  approvedSubscriptions?: Prisma.ClinicSubscriptionUpdateManyWithoutApprovedByNestedInput
+  subscriptionAudits?: Prisma.SubscriptionAuditUpdateManyWithoutActorNestedInput
+  updatedSubscriptionSettings?: Prisma.SubscriptionSettingsUpdateManyWithoutUpdatedByNestedInput
+  assistantConversations?: Prisma.AssistantConversationUpdateManyWithoutUserNestedInput
+  assistantMessages?: Prisma.AssistantMessageUpdateManyWithoutUserNestedInput
   stockSales?: Prisma.StockSaleUpdateManyWithoutSoldByNestedInput
   createdCommunicationCampaigns?: Prisma.CommunicationCampaignUpdateManyWithoutCreatedByNestedInput
   Address?: Prisma.AddressUpdateOneWithoutUserNestedInput
-  branch?: Prisma.BranchUpdateOneRequiredWithoutUserNestedInput
+  branch?: Prisma.BranchUpdateOneWithoutUserNestedInput
   Role?: Prisma.RoleUpdateOneWithoutUserNestedInput
 }
 
@@ -1900,7 +2212,7 @@ export type UserUncheckedUpdateWithoutUserBranchInput = {
   email?: Prisma.StringFieldUpdateOperationsInput | string
   password?: Prisma.StringFieldUpdateOperationsInput | string
   username?: Prisma.StringFieldUpdateOperationsInput | string
-  branchId?: Prisma.StringFieldUpdateOperationsInput | string
+  branchId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   addressId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   roleId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
@@ -1913,6 +2225,8 @@ export type UserUncheckedUpdateWithoutUserBranchInput = {
   deletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   accessHistories?: Prisma.AccessHistoryUncheckedUpdateManyWithoutUserNestedInput
   audits?: Prisma.AuditUncheckedUpdateManyWithoutUserNestedInput
+  platformAdminActions?: Prisma.PlatformAdminAuditUncheckedUpdateManyWithoutActorNestedInput
+  platformAdminTargets?: Prisma.PlatformAdminAuditUncheckedUpdateManyWithoutTargetNestedInput
   loginHistories?: Prisma.LoginHistoryUncheckedUpdateManyWithoutUserNestedInput
   Person?: Prisma.PersonUncheckedUpdateManyWithoutUserNestedInput
   Appointment?: Prisma.AppointmentUncheckedUpdateManyWithoutDoctorNestedInput
@@ -1932,6 +2246,13 @@ export type UserUncheckedUpdateWithoutUserBranchInput = {
   UserPermission?: Prisma.UserPermissionUncheckedUpdateManyWithoutUserNestedInput
   refreshTokens?: Prisma.RefreshTokenUncheckedUpdateManyWithoutUserNestedInput
   authActionTokens?: Prisma.AuthActionTokenUncheckedUpdateManyWithoutUserNestedInput
+  requestedSubscriptionPayments?: Prisma.SubscriptionRequestUncheckedUpdateManyWithoutSubmittedByNestedInput
+  reviewedSubscriptionPayments?: Prisma.SubscriptionRequestUncheckedUpdateManyWithoutReviewedByNestedInput
+  approvedSubscriptions?: Prisma.ClinicSubscriptionUncheckedUpdateManyWithoutApprovedByNestedInput
+  subscriptionAudits?: Prisma.SubscriptionAuditUncheckedUpdateManyWithoutActorNestedInput
+  updatedSubscriptionSettings?: Prisma.SubscriptionSettingsUncheckedUpdateManyWithoutUpdatedByNestedInput
+  assistantConversations?: Prisma.AssistantConversationUncheckedUpdateManyWithoutUserNestedInput
+  assistantMessages?: Prisma.AssistantMessageUncheckedUpdateManyWithoutUserNestedInput
   stockSales?: Prisma.StockSaleUncheckedUpdateManyWithoutSoldByNestedInput
   createdCommunicationCampaigns?: Prisma.CommunicationCampaignUncheckedUpdateManyWithoutCreatedByNestedInput
 }
@@ -1951,6 +2272,8 @@ export type UserCreateWithoutUserPermissionInput = {
   deletedAt?: Date | string | null
   accessHistories?: Prisma.AccessHistoryCreateNestedManyWithoutUserInput
   audits?: Prisma.AuditCreateNestedManyWithoutUserInput
+  platformAdminActions?: Prisma.PlatformAdminAuditCreateNestedManyWithoutActorInput
+  platformAdminTargets?: Prisma.PlatformAdminAuditCreateNestedManyWithoutTargetInput
   loginHistories?: Prisma.LoginHistoryCreateNestedManyWithoutUserInput
   Person?: Prisma.PersonCreateNestedManyWithoutUserInput
   Appointment?: Prisma.AppointmentCreateNestedManyWithoutDoctorInput
@@ -1970,10 +2293,17 @@ export type UserCreateWithoutUserPermissionInput = {
   UserRole?: Prisma.UserRoleCreateNestedManyWithoutUserInput
   refreshTokens?: Prisma.RefreshTokenCreateNestedManyWithoutUserInput
   authActionTokens?: Prisma.AuthActionTokenCreateNestedManyWithoutUserInput
+  requestedSubscriptionPayments?: Prisma.SubscriptionRequestCreateNestedManyWithoutSubmittedByInput
+  reviewedSubscriptionPayments?: Prisma.SubscriptionRequestCreateNestedManyWithoutReviewedByInput
+  approvedSubscriptions?: Prisma.ClinicSubscriptionCreateNestedManyWithoutApprovedByInput
+  subscriptionAudits?: Prisma.SubscriptionAuditCreateNestedManyWithoutActorInput
+  updatedSubscriptionSettings?: Prisma.SubscriptionSettingsCreateNestedManyWithoutUpdatedByInput
+  assistantConversations?: Prisma.AssistantConversationCreateNestedManyWithoutUserInput
+  assistantMessages?: Prisma.AssistantMessageCreateNestedManyWithoutUserInput
   stockSales?: Prisma.StockSaleCreateNestedManyWithoutSoldByInput
   createdCommunicationCampaigns?: Prisma.CommunicationCampaignCreateNestedManyWithoutCreatedByInput
   Address?: Prisma.AddressCreateNestedOneWithoutUserInput
-  branch: Prisma.BranchCreateNestedOneWithoutUserInput
+  branch?: Prisma.BranchCreateNestedOneWithoutUserInput
   Role?: Prisma.RoleCreateNestedOneWithoutUserInput
 }
 
@@ -1982,7 +2312,7 @@ export type UserUncheckedCreateWithoutUserPermissionInput = {
   email: string
   password: string
   username: string
-  branchId: string
+  branchId?: string | null
   addressId?: string | null
   roleId?: string | null
   isActive?: boolean
@@ -1995,6 +2325,8 @@ export type UserUncheckedCreateWithoutUserPermissionInput = {
   deletedAt?: Date | string | null
   accessHistories?: Prisma.AccessHistoryUncheckedCreateNestedManyWithoutUserInput
   audits?: Prisma.AuditUncheckedCreateNestedManyWithoutUserInput
+  platformAdminActions?: Prisma.PlatformAdminAuditUncheckedCreateNestedManyWithoutActorInput
+  platformAdminTargets?: Prisma.PlatformAdminAuditUncheckedCreateNestedManyWithoutTargetInput
   loginHistories?: Prisma.LoginHistoryUncheckedCreateNestedManyWithoutUserInput
   Person?: Prisma.PersonUncheckedCreateNestedManyWithoutUserInput
   Appointment?: Prisma.AppointmentUncheckedCreateNestedManyWithoutDoctorInput
@@ -2014,6 +2346,13 @@ export type UserUncheckedCreateWithoutUserPermissionInput = {
   UserRole?: Prisma.UserRoleUncheckedCreateNestedManyWithoutUserInput
   refreshTokens?: Prisma.RefreshTokenUncheckedCreateNestedManyWithoutUserInput
   authActionTokens?: Prisma.AuthActionTokenUncheckedCreateNestedManyWithoutUserInput
+  requestedSubscriptionPayments?: Prisma.SubscriptionRequestUncheckedCreateNestedManyWithoutSubmittedByInput
+  reviewedSubscriptionPayments?: Prisma.SubscriptionRequestUncheckedCreateNestedManyWithoutReviewedByInput
+  approvedSubscriptions?: Prisma.ClinicSubscriptionUncheckedCreateNestedManyWithoutApprovedByInput
+  subscriptionAudits?: Prisma.SubscriptionAuditUncheckedCreateNestedManyWithoutActorInput
+  updatedSubscriptionSettings?: Prisma.SubscriptionSettingsUncheckedCreateNestedManyWithoutUpdatedByInput
+  assistantConversations?: Prisma.AssistantConversationUncheckedCreateNestedManyWithoutUserInput
+  assistantMessages?: Prisma.AssistantMessageUncheckedCreateNestedManyWithoutUserInput
   stockSales?: Prisma.StockSaleUncheckedCreateNestedManyWithoutSoldByInput
   createdCommunicationCampaigns?: Prisma.CommunicationCampaignUncheckedCreateNestedManyWithoutCreatedByInput
 }
@@ -2049,6 +2388,8 @@ export type UserUpdateWithoutUserPermissionInput = {
   deletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   accessHistories?: Prisma.AccessHistoryUpdateManyWithoutUserNestedInput
   audits?: Prisma.AuditUpdateManyWithoutUserNestedInput
+  platformAdminActions?: Prisma.PlatformAdminAuditUpdateManyWithoutActorNestedInput
+  platformAdminTargets?: Prisma.PlatformAdminAuditUpdateManyWithoutTargetNestedInput
   loginHistories?: Prisma.LoginHistoryUpdateManyWithoutUserNestedInput
   Person?: Prisma.PersonUpdateManyWithoutUserNestedInput
   Appointment?: Prisma.AppointmentUpdateManyWithoutDoctorNestedInput
@@ -2068,10 +2409,17 @@ export type UserUpdateWithoutUserPermissionInput = {
   UserRole?: Prisma.UserRoleUpdateManyWithoutUserNestedInput
   refreshTokens?: Prisma.RefreshTokenUpdateManyWithoutUserNestedInput
   authActionTokens?: Prisma.AuthActionTokenUpdateManyWithoutUserNestedInput
+  requestedSubscriptionPayments?: Prisma.SubscriptionRequestUpdateManyWithoutSubmittedByNestedInput
+  reviewedSubscriptionPayments?: Prisma.SubscriptionRequestUpdateManyWithoutReviewedByNestedInput
+  approvedSubscriptions?: Prisma.ClinicSubscriptionUpdateManyWithoutApprovedByNestedInput
+  subscriptionAudits?: Prisma.SubscriptionAuditUpdateManyWithoutActorNestedInput
+  updatedSubscriptionSettings?: Prisma.SubscriptionSettingsUpdateManyWithoutUpdatedByNestedInput
+  assistantConversations?: Prisma.AssistantConversationUpdateManyWithoutUserNestedInput
+  assistantMessages?: Prisma.AssistantMessageUpdateManyWithoutUserNestedInput
   stockSales?: Prisma.StockSaleUpdateManyWithoutSoldByNestedInput
   createdCommunicationCampaigns?: Prisma.CommunicationCampaignUpdateManyWithoutCreatedByNestedInput
   Address?: Prisma.AddressUpdateOneWithoutUserNestedInput
-  branch?: Prisma.BranchUpdateOneRequiredWithoutUserNestedInput
+  branch?: Prisma.BranchUpdateOneWithoutUserNestedInput
   Role?: Prisma.RoleUpdateOneWithoutUserNestedInput
 }
 
@@ -2080,7 +2428,7 @@ export type UserUncheckedUpdateWithoutUserPermissionInput = {
   email?: Prisma.StringFieldUpdateOperationsInput | string
   password?: Prisma.StringFieldUpdateOperationsInput | string
   username?: Prisma.StringFieldUpdateOperationsInput | string
-  branchId?: Prisma.StringFieldUpdateOperationsInput | string
+  branchId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   addressId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   roleId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
@@ -2093,6 +2441,8 @@ export type UserUncheckedUpdateWithoutUserPermissionInput = {
   deletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   accessHistories?: Prisma.AccessHistoryUncheckedUpdateManyWithoutUserNestedInput
   audits?: Prisma.AuditUncheckedUpdateManyWithoutUserNestedInput
+  platformAdminActions?: Prisma.PlatformAdminAuditUncheckedUpdateManyWithoutActorNestedInput
+  platformAdminTargets?: Prisma.PlatformAdminAuditUncheckedUpdateManyWithoutTargetNestedInput
   loginHistories?: Prisma.LoginHistoryUncheckedUpdateManyWithoutUserNestedInput
   Person?: Prisma.PersonUncheckedUpdateManyWithoutUserNestedInput
   Appointment?: Prisma.AppointmentUncheckedUpdateManyWithoutDoctorNestedInput
@@ -2112,6 +2462,13 @@ export type UserUncheckedUpdateWithoutUserPermissionInput = {
   UserRole?: Prisma.UserRoleUncheckedUpdateManyWithoutUserNestedInput
   refreshTokens?: Prisma.RefreshTokenUncheckedUpdateManyWithoutUserNestedInput
   authActionTokens?: Prisma.AuthActionTokenUncheckedUpdateManyWithoutUserNestedInput
+  requestedSubscriptionPayments?: Prisma.SubscriptionRequestUncheckedUpdateManyWithoutSubmittedByNestedInput
+  reviewedSubscriptionPayments?: Prisma.SubscriptionRequestUncheckedUpdateManyWithoutReviewedByNestedInput
+  approvedSubscriptions?: Prisma.ClinicSubscriptionUncheckedUpdateManyWithoutApprovedByNestedInput
+  subscriptionAudits?: Prisma.SubscriptionAuditUncheckedUpdateManyWithoutActorNestedInput
+  updatedSubscriptionSettings?: Prisma.SubscriptionSettingsUncheckedUpdateManyWithoutUpdatedByNestedInput
+  assistantConversations?: Prisma.AssistantConversationUncheckedUpdateManyWithoutUserNestedInput
+  assistantMessages?: Prisma.AssistantMessageUncheckedUpdateManyWithoutUserNestedInput
   stockSales?: Prisma.StockSaleUncheckedUpdateManyWithoutSoldByNestedInput
   createdCommunicationCampaigns?: Prisma.CommunicationCampaignUncheckedUpdateManyWithoutCreatedByNestedInput
 }
@@ -2131,6 +2488,8 @@ export type UserCreateWithoutUserRoleInput = {
   deletedAt?: Date | string | null
   accessHistories?: Prisma.AccessHistoryCreateNestedManyWithoutUserInput
   audits?: Prisma.AuditCreateNestedManyWithoutUserInput
+  platformAdminActions?: Prisma.PlatformAdminAuditCreateNestedManyWithoutActorInput
+  platformAdminTargets?: Prisma.PlatformAdminAuditCreateNestedManyWithoutTargetInput
   loginHistories?: Prisma.LoginHistoryCreateNestedManyWithoutUserInput
   Person?: Prisma.PersonCreateNestedManyWithoutUserInput
   Appointment?: Prisma.AppointmentCreateNestedManyWithoutDoctorInput
@@ -2150,10 +2509,17 @@ export type UserCreateWithoutUserRoleInput = {
   UserPermission?: Prisma.UserPermissionCreateNestedManyWithoutUserInput
   refreshTokens?: Prisma.RefreshTokenCreateNestedManyWithoutUserInput
   authActionTokens?: Prisma.AuthActionTokenCreateNestedManyWithoutUserInput
+  requestedSubscriptionPayments?: Prisma.SubscriptionRequestCreateNestedManyWithoutSubmittedByInput
+  reviewedSubscriptionPayments?: Prisma.SubscriptionRequestCreateNestedManyWithoutReviewedByInput
+  approvedSubscriptions?: Prisma.ClinicSubscriptionCreateNestedManyWithoutApprovedByInput
+  subscriptionAudits?: Prisma.SubscriptionAuditCreateNestedManyWithoutActorInput
+  updatedSubscriptionSettings?: Prisma.SubscriptionSettingsCreateNestedManyWithoutUpdatedByInput
+  assistantConversations?: Prisma.AssistantConversationCreateNestedManyWithoutUserInput
+  assistantMessages?: Prisma.AssistantMessageCreateNestedManyWithoutUserInput
   stockSales?: Prisma.StockSaleCreateNestedManyWithoutSoldByInput
   createdCommunicationCampaigns?: Prisma.CommunicationCampaignCreateNestedManyWithoutCreatedByInput
   Address?: Prisma.AddressCreateNestedOneWithoutUserInput
-  branch: Prisma.BranchCreateNestedOneWithoutUserInput
+  branch?: Prisma.BranchCreateNestedOneWithoutUserInput
   Role?: Prisma.RoleCreateNestedOneWithoutUserInput
 }
 
@@ -2162,7 +2528,7 @@ export type UserUncheckedCreateWithoutUserRoleInput = {
   email: string
   password: string
   username: string
-  branchId: string
+  branchId?: string | null
   addressId?: string | null
   roleId?: string | null
   isActive?: boolean
@@ -2175,6 +2541,8 @@ export type UserUncheckedCreateWithoutUserRoleInput = {
   deletedAt?: Date | string | null
   accessHistories?: Prisma.AccessHistoryUncheckedCreateNestedManyWithoutUserInput
   audits?: Prisma.AuditUncheckedCreateNestedManyWithoutUserInput
+  platformAdminActions?: Prisma.PlatformAdminAuditUncheckedCreateNestedManyWithoutActorInput
+  platformAdminTargets?: Prisma.PlatformAdminAuditUncheckedCreateNestedManyWithoutTargetInput
   loginHistories?: Prisma.LoginHistoryUncheckedCreateNestedManyWithoutUserInput
   Person?: Prisma.PersonUncheckedCreateNestedManyWithoutUserInput
   Appointment?: Prisma.AppointmentUncheckedCreateNestedManyWithoutDoctorInput
@@ -2194,6 +2562,13 @@ export type UserUncheckedCreateWithoutUserRoleInput = {
   UserPermission?: Prisma.UserPermissionUncheckedCreateNestedManyWithoutUserInput
   refreshTokens?: Prisma.RefreshTokenUncheckedCreateNestedManyWithoutUserInput
   authActionTokens?: Prisma.AuthActionTokenUncheckedCreateNestedManyWithoutUserInput
+  requestedSubscriptionPayments?: Prisma.SubscriptionRequestUncheckedCreateNestedManyWithoutSubmittedByInput
+  reviewedSubscriptionPayments?: Prisma.SubscriptionRequestUncheckedCreateNestedManyWithoutReviewedByInput
+  approvedSubscriptions?: Prisma.ClinicSubscriptionUncheckedCreateNestedManyWithoutApprovedByInput
+  subscriptionAudits?: Prisma.SubscriptionAuditUncheckedCreateNestedManyWithoutActorInput
+  updatedSubscriptionSettings?: Prisma.SubscriptionSettingsUncheckedCreateNestedManyWithoutUpdatedByInput
+  assistantConversations?: Prisma.AssistantConversationUncheckedCreateNestedManyWithoutUserInput
+  assistantMessages?: Prisma.AssistantMessageUncheckedCreateNestedManyWithoutUserInput
   stockSales?: Prisma.StockSaleUncheckedCreateNestedManyWithoutSoldByInput
   createdCommunicationCampaigns?: Prisma.CommunicationCampaignUncheckedCreateNestedManyWithoutCreatedByInput
 }
@@ -2229,6 +2604,8 @@ export type UserUpdateWithoutUserRoleInput = {
   deletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   accessHistories?: Prisma.AccessHistoryUpdateManyWithoutUserNestedInput
   audits?: Prisma.AuditUpdateManyWithoutUserNestedInput
+  platformAdminActions?: Prisma.PlatformAdminAuditUpdateManyWithoutActorNestedInput
+  platformAdminTargets?: Prisma.PlatformAdminAuditUpdateManyWithoutTargetNestedInput
   loginHistories?: Prisma.LoginHistoryUpdateManyWithoutUserNestedInput
   Person?: Prisma.PersonUpdateManyWithoutUserNestedInput
   Appointment?: Prisma.AppointmentUpdateManyWithoutDoctorNestedInput
@@ -2248,10 +2625,17 @@ export type UserUpdateWithoutUserRoleInput = {
   UserPermission?: Prisma.UserPermissionUpdateManyWithoutUserNestedInput
   refreshTokens?: Prisma.RefreshTokenUpdateManyWithoutUserNestedInput
   authActionTokens?: Prisma.AuthActionTokenUpdateManyWithoutUserNestedInput
+  requestedSubscriptionPayments?: Prisma.SubscriptionRequestUpdateManyWithoutSubmittedByNestedInput
+  reviewedSubscriptionPayments?: Prisma.SubscriptionRequestUpdateManyWithoutReviewedByNestedInput
+  approvedSubscriptions?: Prisma.ClinicSubscriptionUpdateManyWithoutApprovedByNestedInput
+  subscriptionAudits?: Prisma.SubscriptionAuditUpdateManyWithoutActorNestedInput
+  updatedSubscriptionSettings?: Prisma.SubscriptionSettingsUpdateManyWithoutUpdatedByNestedInput
+  assistantConversations?: Prisma.AssistantConversationUpdateManyWithoutUserNestedInput
+  assistantMessages?: Prisma.AssistantMessageUpdateManyWithoutUserNestedInput
   stockSales?: Prisma.StockSaleUpdateManyWithoutSoldByNestedInput
   createdCommunicationCampaigns?: Prisma.CommunicationCampaignUpdateManyWithoutCreatedByNestedInput
   Address?: Prisma.AddressUpdateOneWithoutUserNestedInput
-  branch?: Prisma.BranchUpdateOneRequiredWithoutUserNestedInput
+  branch?: Prisma.BranchUpdateOneWithoutUserNestedInput
   Role?: Prisma.RoleUpdateOneWithoutUserNestedInput
 }
 
@@ -2260,7 +2644,7 @@ export type UserUncheckedUpdateWithoutUserRoleInput = {
   email?: Prisma.StringFieldUpdateOperationsInput | string
   password?: Prisma.StringFieldUpdateOperationsInput | string
   username?: Prisma.StringFieldUpdateOperationsInput | string
-  branchId?: Prisma.StringFieldUpdateOperationsInput | string
+  branchId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   addressId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   roleId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
@@ -2273,6 +2657,8 @@ export type UserUncheckedUpdateWithoutUserRoleInput = {
   deletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   accessHistories?: Prisma.AccessHistoryUncheckedUpdateManyWithoutUserNestedInput
   audits?: Prisma.AuditUncheckedUpdateManyWithoutUserNestedInput
+  platformAdminActions?: Prisma.PlatformAdminAuditUncheckedUpdateManyWithoutActorNestedInput
+  platformAdminTargets?: Prisma.PlatformAdminAuditUncheckedUpdateManyWithoutTargetNestedInput
   loginHistories?: Prisma.LoginHistoryUncheckedUpdateManyWithoutUserNestedInput
   Person?: Prisma.PersonUncheckedUpdateManyWithoutUserNestedInput
   Appointment?: Prisma.AppointmentUncheckedUpdateManyWithoutDoctorNestedInput
@@ -2292,6 +2678,13 @@ export type UserUncheckedUpdateWithoutUserRoleInput = {
   UserPermission?: Prisma.UserPermissionUncheckedUpdateManyWithoutUserNestedInput
   refreshTokens?: Prisma.RefreshTokenUncheckedUpdateManyWithoutUserNestedInput
   authActionTokens?: Prisma.AuthActionTokenUncheckedUpdateManyWithoutUserNestedInput
+  requestedSubscriptionPayments?: Prisma.SubscriptionRequestUncheckedUpdateManyWithoutSubmittedByNestedInput
+  reviewedSubscriptionPayments?: Prisma.SubscriptionRequestUncheckedUpdateManyWithoutReviewedByNestedInput
+  approvedSubscriptions?: Prisma.ClinicSubscriptionUncheckedUpdateManyWithoutApprovedByNestedInput
+  subscriptionAudits?: Prisma.SubscriptionAuditUncheckedUpdateManyWithoutActorNestedInput
+  updatedSubscriptionSettings?: Prisma.SubscriptionSettingsUncheckedUpdateManyWithoutUpdatedByNestedInput
+  assistantConversations?: Prisma.AssistantConversationUncheckedUpdateManyWithoutUserNestedInput
+  assistantMessages?: Prisma.AssistantMessageUncheckedUpdateManyWithoutUserNestedInput
   stockSales?: Prisma.StockSaleUncheckedUpdateManyWithoutSoldByNestedInput
   createdCommunicationCampaigns?: Prisma.CommunicationCampaignUncheckedUpdateManyWithoutCreatedByNestedInput
 }
@@ -2311,6 +2704,8 @@ export type UserCreateWithoutAppointmentInput = {
   deletedAt?: Date | string | null
   accessHistories?: Prisma.AccessHistoryCreateNestedManyWithoutUserInput
   audits?: Prisma.AuditCreateNestedManyWithoutUserInput
+  platformAdminActions?: Prisma.PlatformAdminAuditCreateNestedManyWithoutActorInput
+  platformAdminTargets?: Prisma.PlatformAdminAuditCreateNestedManyWithoutTargetInput
   loginHistories?: Prisma.LoginHistoryCreateNestedManyWithoutUserInput
   Person?: Prisma.PersonCreateNestedManyWithoutUserInput
   appointments?: Prisma.AppointmentCreateNestedManyWithoutUserInput
@@ -2330,10 +2725,17 @@ export type UserCreateWithoutAppointmentInput = {
   UserPermission?: Prisma.UserPermissionCreateNestedManyWithoutUserInput
   refreshTokens?: Prisma.RefreshTokenCreateNestedManyWithoutUserInput
   authActionTokens?: Prisma.AuthActionTokenCreateNestedManyWithoutUserInput
+  requestedSubscriptionPayments?: Prisma.SubscriptionRequestCreateNestedManyWithoutSubmittedByInput
+  reviewedSubscriptionPayments?: Prisma.SubscriptionRequestCreateNestedManyWithoutReviewedByInput
+  approvedSubscriptions?: Prisma.ClinicSubscriptionCreateNestedManyWithoutApprovedByInput
+  subscriptionAudits?: Prisma.SubscriptionAuditCreateNestedManyWithoutActorInput
+  updatedSubscriptionSettings?: Prisma.SubscriptionSettingsCreateNestedManyWithoutUpdatedByInput
+  assistantConversations?: Prisma.AssistantConversationCreateNestedManyWithoutUserInput
+  assistantMessages?: Prisma.AssistantMessageCreateNestedManyWithoutUserInput
   stockSales?: Prisma.StockSaleCreateNestedManyWithoutSoldByInput
   createdCommunicationCampaigns?: Prisma.CommunicationCampaignCreateNestedManyWithoutCreatedByInput
   Address?: Prisma.AddressCreateNestedOneWithoutUserInput
-  branch: Prisma.BranchCreateNestedOneWithoutUserInput
+  branch?: Prisma.BranchCreateNestedOneWithoutUserInput
   Role?: Prisma.RoleCreateNestedOneWithoutUserInput
 }
 
@@ -2342,7 +2744,7 @@ export type UserUncheckedCreateWithoutAppointmentInput = {
   email: string
   password: string
   username: string
-  branchId: string
+  branchId?: string | null
   addressId?: string | null
   roleId?: string | null
   isActive?: boolean
@@ -2355,6 +2757,8 @@ export type UserUncheckedCreateWithoutAppointmentInput = {
   deletedAt?: Date | string | null
   accessHistories?: Prisma.AccessHistoryUncheckedCreateNestedManyWithoutUserInput
   audits?: Prisma.AuditUncheckedCreateNestedManyWithoutUserInput
+  platformAdminActions?: Prisma.PlatformAdminAuditUncheckedCreateNestedManyWithoutActorInput
+  platformAdminTargets?: Prisma.PlatformAdminAuditUncheckedCreateNestedManyWithoutTargetInput
   loginHistories?: Prisma.LoginHistoryUncheckedCreateNestedManyWithoutUserInput
   Person?: Prisma.PersonUncheckedCreateNestedManyWithoutUserInput
   appointments?: Prisma.AppointmentUncheckedCreateNestedManyWithoutUserInput
@@ -2374,6 +2778,13 @@ export type UserUncheckedCreateWithoutAppointmentInput = {
   UserPermission?: Prisma.UserPermissionUncheckedCreateNestedManyWithoutUserInput
   refreshTokens?: Prisma.RefreshTokenUncheckedCreateNestedManyWithoutUserInput
   authActionTokens?: Prisma.AuthActionTokenUncheckedCreateNestedManyWithoutUserInput
+  requestedSubscriptionPayments?: Prisma.SubscriptionRequestUncheckedCreateNestedManyWithoutSubmittedByInput
+  reviewedSubscriptionPayments?: Prisma.SubscriptionRequestUncheckedCreateNestedManyWithoutReviewedByInput
+  approvedSubscriptions?: Prisma.ClinicSubscriptionUncheckedCreateNestedManyWithoutApprovedByInput
+  subscriptionAudits?: Prisma.SubscriptionAuditUncheckedCreateNestedManyWithoutActorInput
+  updatedSubscriptionSettings?: Prisma.SubscriptionSettingsUncheckedCreateNestedManyWithoutUpdatedByInput
+  assistantConversations?: Prisma.AssistantConversationUncheckedCreateNestedManyWithoutUserInput
+  assistantMessages?: Prisma.AssistantMessageUncheckedCreateNestedManyWithoutUserInput
   stockSales?: Prisma.StockSaleUncheckedCreateNestedManyWithoutSoldByInput
   createdCommunicationCampaigns?: Prisma.CommunicationCampaignUncheckedCreateNestedManyWithoutCreatedByInput
 }
@@ -2398,6 +2809,8 @@ export type UserCreateWithoutAppointmentsInput = {
   deletedAt?: Date | string | null
   accessHistories?: Prisma.AccessHistoryCreateNestedManyWithoutUserInput
   audits?: Prisma.AuditCreateNestedManyWithoutUserInput
+  platformAdminActions?: Prisma.PlatformAdminAuditCreateNestedManyWithoutActorInput
+  platformAdminTargets?: Prisma.PlatformAdminAuditCreateNestedManyWithoutTargetInput
   loginHistories?: Prisma.LoginHistoryCreateNestedManyWithoutUserInput
   Person?: Prisma.PersonCreateNestedManyWithoutUserInput
   Appointment?: Prisma.AppointmentCreateNestedManyWithoutDoctorInput
@@ -2417,10 +2830,17 @@ export type UserCreateWithoutAppointmentsInput = {
   UserPermission?: Prisma.UserPermissionCreateNestedManyWithoutUserInput
   refreshTokens?: Prisma.RefreshTokenCreateNestedManyWithoutUserInput
   authActionTokens?: Prisma.AuthActionTokenCreateNestedManyWithoutUserInput
+  requestedSubscriptionPayments?: Prisma.SubscriptionRequestCreateNestedManyWithoutSubmittedByInput
+  reviewedSubscriptionPayments?: Prisma.SubscriptionRequestCreateNestedManyWithoutReviewedByInput
+  approvedSubscriptions?: Prisma.ClinicSubscriptionCreateNestedManyWithoutApprovedByInput
+  subscriptionAudits?: Prisma.SubscriptionAuditCreateNestedManyWithoutActorInput
+  updatedSubscriptionSettings?: Prisma.SubscriptionSettingsCreateNestedManyWithoutUpdatedByInput
+  assistantConversations?: Prisma.AssistantConversationCreateNestedManyWithoutUserInput
+  assistantMessages?: Prisma.AssistantMessageCreateNestedManyWithoutUserInput
   stockSales?: Prisma.StockSaleCreateNestedManyWithoutSoldByInput
   createdCommunicationCampaigns?: Prisma.CommunicationCampaignCreateNestedManyWithoutCreatedByInput
   Address?: Prisma.AddressCreateNestedOneWithoutUserInput
-  branch: Prisma.BranchCreateNestedOneWithoutUserInput
+  branch?: Prisma.BranchCreateNestedOneWithoutUserInput
   Role?: Prisma.RoleCreateNestedOneWithoutUserInput
 }
 
@@ -2429,7 +2849,7 @@ export type UserUncheckedCreateWithoutAppointmentsInput = {
   email: string
   password: string
   username: string
-  branchId: string
+  branchId?: string | null
   addressId?: string | null
   roleId?: string | null
   isActive?: boolean
@@ -2442,6 +2862,8 @@ export type UserUncheckedCreateWithoutAppointmentsInput = {
   deletedAt?: Date | string | null
   accessHistories?: Prisma.AccessHistoryUncheckedCreateNestedManyWithoutUserInput
   audits?: Prisma.AuditUncheckedCreateNestedManyWithoutUserInput
+  platformAdminActions?: Prisma.PlatformAdminAuditUncheckedCreateNestedManyWithoutActorInput
+  platformAdminTargets?: Prisma.PlatformAdminAuditUncheckedCreateNestedManyWithoutTargetInput
   loginHistories?: Prisma.LoginHistoryUncheckedCreateNestedManyWithoutUserInput
   Person?: Prisma.PersonUncheckedCreateNestedManyWithoutUserInput
   Appointment?: Prisma.AppointmentUncheckedCreateNestedManyWithoutDoctorInput
@@ -2461,6 +2883,13 @@ export type UserUncheckedCreateWithoutAppointmentsInput = {
   UserPermission?: Prisma.UserPermissionUncheckedCreateNestedManyWithoutUserInput
   refreshTokens?: Prisma.RefreshTokenUncheckedCreateNestedManyWithoutUserInput
   authActionTokens?: Prisma.AuthActionTokenUncheckedCreateNestedManyWithoutUserInput
+  requestedSubscriptionPayments?: Prisma.SubscriptionRequestUncheckedCreateNestedManyWithoutSubmittedByInput
+  reviewedSubscriptionPayments?: Prisma.SubscriptionRequestUncheckedCreateNestedManyWithoutReviewedByInput
+  approvedSubscriptions?: Prisma.ClinicSubscriptionUncheckedCreateNestedManyWithoutApprovedByInput
+  subscriptionAudits?: Prisma.SubscriptionAuditUncheckedCreateNestedManyWithoutActorInput
+  updatedSubscriptionSettings?: Prisma.SubscriptionSettingsUncheckedCreateNestedManyWithoutUpdatedByInput
+  assistantConversations?: Prisma.AssistantConversationUncheckedCreateNestedManyWithoutUserInput
+  assistantMessages?: Prisma.AssistantMessageUncheckedCreateNestedManyWithoutUserInput
   stockSales?: Prisma.StockSaleUncheckedCreateNestedManyWithoutSoldByInput
   createdCommunicationCampaigns?: Prisma.CommunicationCampaignUncheckedCreateNestedManyWithoutCreatedByInput
 }
@@ -2496,6 +2925,8 @@ export type UserUpdateWithoutAppointmentInput = {
   deletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   accessHistories?: Prisma.AccessHistoryUpdateManyWithoutUserNestedInput
   audits?: Prisma.AuditUpdateManyWithoutUserNestedInput
+  platformAdminActions?: Prisma.PlatformAdminAuditUpdateManyWithoutActorNestedInput
+  platformAdminTargets?: Prisma.PlatformAdminAuditUpdateManyWithoutTargetNestedInput
   loginHistories?: Prisma.LoginHistoryUpdateManyWithoutUserNestedInput
   Person?: Prisma.PersonUpdateManyWithoutUserNestedInput
   appointments?: Prisma.AppointmentUpdateManyWithoutUserNestedInput
@@ -2515,10 +2946,17 @@ export type UserUpdateWithoutAppointmentInput = {
   UserPermission?: Prisma.UserPermissionUpdateManyWithoutUserNestedInput
   refreshTokens?: Prisma.RefreshTokenUpdateManyWithoutUserNestedInput
   authActionTokens?: Prisma.AuthActionTokenUpdateManyWithoutUserNestedInput
+  requestedSubscriptionPayments?: Prisma.SubscriptionRequestUpdateManyWithoutSubmittedByNestedInput
+  reviewedSubscriptionPayments?: Prisma.SubscriptionRequestUpdateManyWithoutReviewedByNestedInput
+  approvedSubscriptions?: Prisma.ClinicSubscriptionUpdateManyWithoutApprovedByNestedInput
+  subscriptionAudits?: Prisma.SubscriptionAuditUpdateManyWithoutActorNestedInput
+  updatedSubscriptionSettings?: Prisma.SubscriptionSettingsUpdateManyWithoutUpdatedByNestedInput
+  assistantConversations?: Prisma.AssistantConversationUpdateManyWithoutUserNestedInput
+  assistantMessages?: Prisma.AssistantMessageUpdateManyWithoutUserNestedInput
   stockSales?: Prisma.StockSaleUpdateManyWithoutSoldByNestedInput
   createdCommunicationCampaigns?: Prisma.CommunicationCampaignUpdateManyWithoutCreatedByNestedInput
   Address?: Prisma.AddressUpdateOneWithoutUserNestedInput
-  branch?: Prisma.BranchUpdateOneRequiredWithoutUserNestedInput
+  branch?: Prisma.BranchUpdateOneWithoutUserNestedInput
   Role?: Prisma.RoleUpdateOneWithoutUserNestedInput
 }
 
@@ -2527,7 +2965,7 @@ export type UserUncheckedUpdateWithoutAppointmentInput = {
   email?: Prisma.StringFieldUpdateOperationsInput | string
   password?: Prisma.StringFieldUpdateOperationsInput | string
   username?: Prisma.StringFieldUpdateOperationsInput | string
-  branchId?: Prisma.StringFieldUpdateOperationsInput | string
+  branchId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   addressId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   roleId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
@@ -2540,6 +2978,8 @@ export type UserUncheckedUpdateWithoutAppointmentInput = {
   deletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   accessHistories?: Prisma.AccessHistoryUncheckedUpdateManyWithoutUserNestedInput
   audits?: Prisma.AuditUncheckedUpdateManyWithoutUserNestedInput
+  platformAdminActions?: Prisma.PlatformAdminAuditUncheckedUpdateManyWithoutActorNestedInput
+  platformAdminTargets?: Prisma.PlatformAdminAuditUncheckedUpdateManyWithoutTargetNestedInput
   loginHistories?: Prisma.LoginHistoryUncheckedUpdateManyWithoutUserNestedInput
   Person?: Prisma.PersonUncheckedUpdateManyWithoutUserNestedInput
   appointments?: Prisma.AppointmentUncheckedUpdateManyWithoutUserNestedInput
@@ -2559,6 +2999,13 @@ export type UserUncheckedUpdateWithoutAppointmentInput = {
   UserPermission?: Prisma.UserPermissionUncheckedUpdateManyWithoutUserNestedInput
   refreshTokens?: Prisma.RefreshTokenUncheckedUpdateManyWithoutUserNestedInput
   authActionTokens?: Prisma.AuthActionTokenUncheckedUpdateManyWithoutUserNestedInput
+  requestedSubscriptionPayments?: Prisma.SubscriptionRequestUncheckedUpdateManyWithoutSubmittedByNestedInput
+  reviewedSubscriptionPayments?: Prisma.SubscriptionRequestUncheckedUpdateManyWithoutReviewedByNestedInput
+  approvedSubscriptions?: Prisma.ClinicSubscriptionUncheckedUpdateManyWithoutApprovedByNestedInput
+  subscriptionAudits?: Prisma.SubscriptionAuditUncheckedUpdateManyWithoutActorNestedInput
+  updatedSubscriptionSettings?: Prisma.SubscriptionSettingsUncheckedUpdateManyWithoutUpdatedByNestedInput
+  assistantConversations?: Prisma.AssistantConversationUncheckedUpdateManyWithoutUserNestedInput
+  assistantMessages?: Prisma.AssistantMessageUncheckedUpdateManyWithoutUserNestedInput
   stockSales?: Prisma.StockSaleUncheckedUpdateManyWithoutSoldByNestedInput
   createdCommunicationCampaigns?: Prisma.CommunicationCampaignUncheckedUpdateManyWithoutCreatedByNestedInput
 }
@@ -2589,6 +3036,8 @@ export type UserUpdateWithoutAppointmentsInput = {
   deletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   accessHistories?: Prisma.AccessHistoryUpdateManyWithoutUserNestedInput
   audits?: Prisma.AuditUpdateManyWithoutUserNestedInput
+  platformAdminActions?: Prisma.PlatformAdminAuditUpdateManyWithoutActorNestedInput
+  platformAdminTargets?: Prisma.PlatformAdminAuditUpdateManyWithoutTargetNestedInput
   loginHistories?: Prisma.LoginHistoryUpdateManyWithoutUserNestedInput
   Person?: Prisma.PersonUpdateManyWithoutUserNestedInput
   Appointment?: Prisma.AppointmentUpdateManyWithoutDoctorNestedInput
@@ -2608,10 +3057,17 @@ export type UserUpdateWithoutAppointmentsInput = {
   UserPermission?: Prisma.UserPermissionUpdateManyWithoutUserNestedInput
   refreshTokens?: Prisma.RefreshTokenUpdateManyWithoutUserNestedInput
   authActionTokens?: Prisma.AuthActionTokenUpdateManyWithoutUserNestedInput
+  requestedSubscriptionPayments?: Prisma.SubscriptionRequestUpdateManyWithoutSubmittedByNestedInput
+  reviewedSubscriptionPayments?: Prisma.SubscriptionRequestUpdateManyWithoutReviewedByNestedInput
+  approvedSubscriptions?: Prisma.ClinicSubscriptionUpdateManyWithoutApprovedByNestedInput
+  subscriptionAudits?: Prisma.SubscriptionAuditUpdateManyWithoutActorNestedInput
+  updatedSubscriptionSettings?: Prisma.SubscriptionSettingsUpdateManyWithoutUpdatedByNestedInput
+  assistantConversations?: Prisma.AssistantConversationUpdateManyWithoutUserNestedInput
+  assistantMessages?: Prisma.AssistantMessageUpdateManyWithoutUserNestedInput
   stockSales?: Prisma.StockSaleUpdateManyWithoutSoldByNestedInput
   createdCommunicationCampaigns?: Prisma.CommunicationCampaignUpdateManyWithoutCreatedByNestedInput
   Address?: Prisma.AddressUpdateOneWithoutUserNestedInput
-  branch?: Prisma.BranchUpdateOneRequiredWithoutUserNestedInput
+  branch?: Prisma.BranchUpdateOneWithoutUserNestedInput
   Role?: Prisma.RoleUpdateOneWithoutUserNestedInput
 }
 
@@ -2620,7 +3076,7 @@ export type UserUncheckedUpdateWithoutAppointmentsInput = {
   email?: Prisma.StringFieldUpdateOperationsInput | string
   password?: Prisma.StringFieldUpdateOperationsInput | string
   username?: Prisma.StringFieldUpdateOperationsInput | string
-  branchId?: Prisma.StringFieldUpdateOperationsInput | string
+  branchId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   addressId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   roleId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
@@ -2633,6 +3089,8 @@ export type UserUncheckedUpdateWithoutAppointmentsInput = {
   deletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   accessHistories?: Prisma.AccessHistoryUncheckedUpdateManyWithoutUserNestedInput
   audits?: Prisma.AuditUncheckedUpdateManyWithoutUserNestedInput
+  platformAdminActions?: Prisma.PlatformAdminAuditUncheckedUpdateManyWithoutActorNestedInput
+  platformAdminTargets?: Prisma.PlatformAdminAuditUncheckedUpdateManyWithoutTargetNestedInput
   loginHistories?: Prisma.LoginHistoryUncheckedUpdateManyWithoutUserNestedInput
   Person?: Prisma.PersonUncheckedUpdateManyWithoutUserNestedInput
   Appointment?: Prisma.AppointmentUncheckedUpdateManyWithoutDoctorNestedInput
@@ -2652,6 +3110,13 @@ export type UserUncheckedUpdateWithoutAppointmentsInput = {
   UserPermission?: Prisma.UserPermissionUncheckedUpdateManyWithoutUserNestedInput
   refreshTokens?: Prisma.RefreshTokenUncheckedUpdateManyWithoutUserNestedInput
   authActionTokens?: Prisma.AuthActionTokenUncheckedUpdateManyWithoutUserNestedInput
+  requestedSubscriptionPayments?: Prisma.SubscriptionRequestUncheckedUpdateManyWithoutSubmittedByNestedInput
+  reviewedSubscriptionPayments?: Prisma.SubscriptionRequestUncheckedUpdateManyWithoutReviewedByNestedInput
+  approvedSubscriptions?: Prisma.ClinicSubscriptionUncheckedUpdateManyWithoutApprovedByNestedInput
+  subscriptionAudits?: Prisma.SubscriptionAuditUncheckedUpdateManyWithoutActorNestedInput
+  updatedSubscriptionSettings?: Prisma.SubscriptionSettingsUncheckedUpdateManyWithoutUpdatedByNestedInput
+  assistantConversations?: Prisma.AssistantConversationUncheckedUpdateManyWithoutUserNestedInput
+  assistantMessages?: Prisma.AssistantMessageUncheckedUpdateManyWithoutUserNestedInput
   stockSales?: Prisma.StockSaleUncheckedUpdateManyWithoutSoldByNestedInput
   createdCommunicationCampaigns?: Prisma.CommunicationCampaignUncheckedUpdateManyWithoutCreatedByNestedInput
 }
@@ -2671,6 +3136,8 @@ export type UserCreateWithoutDoctorProfileInput = {
   deletedAt?: Date | string | null
   accessHistories?: Prisma.AccessHistoryCreateNestedManyWithoutUserInput
   audits?: Prisma.AuditCreateNestedManyWithoutUserInput
+  platformAdminActions?: Prisma.PlatformAdminAuditCreateNestedManyWithoutActorInput
+  platformAdminTargets?: Prisma.PlatformAdminAuditCreateNestedManyWithoutTargetInput
   loginHistories?: Prisma.LoginHistoryCreateNestedManyWithoutUserInput
   Person?: Prisma.PersonCreateNestedManyWithoutUserInput
   Appointment?: Prisma.AppointmentCreateNestedManyWithoutDoctorInput
@@ -2690,10 +3157,17 @@ export type UserCreateWithoutDoctorProfileInput = {
   UserPermission?: Prisma.UserPermissionCreateNestedManyWithoutUserInput
   refreshTokens?: Prisma.RefreshTokenCreateNestedManyWithoutUserInput
   authActionTokens?: Prisma.AuthActionTokenCreateNestedManyWithoutUserInput
+  requestedSubscriptionPayments?: Prisma.SubscriptionRequestCreateNestedManyWithoutSubmittedByInput
+  reviewedSubscriptionPayments?: Prisma.SubscriptionRequestCreateNestedManyWithoutReviewedByInput
+  approvedSubscriptions?: Prisma.ClinicSubscriptionCreateNestedManyWithoutApprovedByInput
+  subscriptionAudits?: Prisma.SubscriptionAuditCreateNestedManyWithoutActorInput
+  updatedSubscriptionSettings?: Prisma.SubscriptionSettingsCreateNestedManyWithoutUpdatedByInput
+  assistantConversations?: Prisma.AssistantConversationCreateNestedManyWithoutUserInput
+  assistantMessages?: Prisma.AssistantMessageCreateNestedManyWithoutUserInput
   stockSales?: Prisma.StockSaleCreateNestedManyWithoutSoldByInput
   createdCommunicationCampaigns?: Prisma.CommunicationCampaignCreateNestedManyWithoutCreatedByInput
   Address?: Prisma.AddressCreateNestedOneWithoutUserInput
-  branch: Prisma.BranchCreateNestedOneWithoutUserInput
+  branch?: Prisma.BranchCreateNestedOneWithoutUserInput
   Role?: Prisma.RoleCreateNestedOneWithoutUserInput
 }
 
@@ -2702,7 +3176,7 @@ export type UserUncheckedCreateWithoutDoctorProfileInput = {
   email: string
   password: string
   username: string
-  branchId: string
+  branchId?: string | null
   addressId?: string | null
   roleId?: string | null
   isActive?: boolean
@@ -2715,6 +3189,8 @@ export type UserUncheckedCreateWithoutDoctorProfileInput = {
   deletedAt?: Date | string | null
   accessHistories?: Prisma.AccessHistoryUncheckedCreateNestedManyWithoutUserInput
   audits?: Prisma.AuditUncheckedCreateNestedManyWithoutUserInput
+  platformAdminActions?: Prisma.PlatformAdminAuditUncheckedCreateNestedManyWithoutActorInput
+  platformAdminTargets?: Prisma.PlatformAdminAuditUncheckedCreateNestedManyWithoutTargetInput
   loginHistories?: Prisma.LoginHistoryUncheckedCreateNestedManyWithoutUserInput
   Person?: Prisma.PersonUncheckedCreateNestedManyWithoutUserInput
   Appointment?: Prisma.AppointmentUncheckedCreateNestedManyWithoutDoctorInput
@@ -2734,6 +3210,13 @@ export type UserUncheckedCreateWithoutDoctorProfileInput = {
   UserPermission?: Prisma.UserPermissionUncheckedCreateNestedManyWithoutUserInput
   refreshTokens?: Prisma.RefreshTokenUncheckedCreateNestedManyWithoutUserInput
   authActionTokens?: Prisma.AuthActionTokenUncheckedCreateNestedManyWithoutUserInput
+  requestedSubscriptionPayments?: Prisma.SubscriptionRequestUncheckedCreateNestedManyWithoutSubmittedByInput
+  reviewedSubscriptionPayments?: Prisma.SubscriptionRequestUncheckedCreateNestedManyWithoutReviewedByInput
+  approvedSubscriptions?: Prisma.ClinicSubscriptionUncheckedCreateNestedManyWithoutApprovedByInput
+  subscriptionAudits?: Prisma.SubscriptionAuditUncheckedCreateNestedManyWithoutActorInput
+  updatedSubscriptionSettings?: Prisma.SubscriptionSettingsUncheckedCreateNestedManyWithoutUpdatedByInput
+  assistantConversations?: Prisma.AssistantConversationUncheckedCreateNestedManyWithoutUserInput
+  assistantMessages?: Prisma.AssistantMessageUncheckedCreateNestedManyWithoutUserInput
   stockSales?: Prisma.StockSaleUncheckedCreateNestedManyWithoutSoldByInput
   createdCommunicationCampaigns?: Prisma.CommunicationCampaignUncheckedCreateNestedManyWithoutCreatedByInput
 }
@@ -2769,6 +3252,8 @@ export type UserUpdateWithoutDoctorProfileInput = {
   deletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   accessHistories?: Prisma.AccessHistoryUpdateManyWithoutUserNestedInput
   audits?: Prisma.AuditUpdateManyWithoutUserNestedInput
+  platformAdminActions?: Prisma.PlatformAdminAuditUpdateManyWithoutActorNestedInput
+  platformAdminTargets?: Prisma.PlatformAdminAuditUpdateManyWithoutTargetNestedInput
   loginHistories?: Prisma.LoginHistoryUpdateManyWithoutUserNestedInput
   Person?: Prisma.PersonUpdateManyWithoutUserNestedInput
   Appointment?: Prisma.AppointmentUpdateManyWithoutDoctorNestedInput
@@ -2788,10 +3273,17 @@ export type UserUpdateWithoutDoctorProfileInput = {
   UserPermission?: Prisma.UserPermissionUpdateManyWithoutUserNestedInput
   refreshTokens?: Prisma.RefreshTokenUpdateManyWithoutUserNestedInput
   authActionTokens?: Prisma.AuthActionTokenUpdateManyWithoutUserNestedInput
+  requestedSubscriptionPayments?: Prisma.SubscriptionRequestUpdateManyWithoutSubmittedByNestedInput
+  reviewedSubscriptionPayments?: Prisma.SubscriptionRequestUpdateManyWithoutReviewedByNestedInput
+  approvedSubscriptions?: Prisma.ClinicSubscriptionUpdateManyWithoutApprovedByNestedInput
+  subscriptionAudits?: Prisma.SubscriptionAuditUpdateManyWithoutActorNestedInput
+  updatedSubscriptionSettings?: Prisma.SubscriptionSettingsUpdateManyWithoutUpdatedByNestedInput
+  assistantConversations?: Prisma.AssistantConversationUpdateManyWithoutUserNestedInput
+  assistantMessages?: Prisma.AssistantMessageUpdateManyWithoutUserNestedInput
   stockSales?: Prisma.StockSaleUpdateManyWithoutSoldByNestedInput
   createdCommunicationCampaigns?: Prisma.CommunicationCampaignUpdateManyWithoutCreatedByNestedInput
   Address?: Prisma.AddressUpdateOneWithoutUserNestedInput
-  branch?: Prisma.BranchUpdateOneRequiredWithoutUserNestedInput
+  branch?: Prisma.BranchUpdateOneWithoutUserNestedInput
   Role?: Prisma.RoleUpdateOneWithoutUserNestedInput
 }
 
@@ -2800,7 +3292,7 @@ export type UserUncheckedUpdateWithoutDoctorProfileInput = {
   email?: Prisma.StringFieldUpdateOperationsInput | string
   password?: Prisma.StringFieldUpdateOperationsInput | string
   username?: Prisma.StringFieldUpdateOperationsInput | string
-  branchId?: Prisma.StringFieldUpdateOperationsInput | string
+  branchId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   addressId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   roleId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
@@ -2813,6 +3305,8 @@ export type UserUncheckedUpdateWithoutDoctorProfileInput = {
   deletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   accessHistories?: Prisma.AccessHistoryUncheckedUpdateManyWithoutUserNestedInput
   audits?: Prisma.AuditUncheckedUpdateManyWithoutUserNestedInput
+  platformAdminActions?: Prisma.PlatformAdminAuditUncheckedUpdateManyWithoutActorNestedInput
+  platformAdminTargets?: Prisma.PlatformAdminAuditUncheckedUpdateManyWithoutTargetNestedInput
   loginHistories?: Prisma.LoginHistoryUncheckedUpdateManyWithoutUserNestedInput
   Person?: Prisma.PersonUncheckedUpdateManyWithoutUserNestedInput
   Appointment?: Prisma.AppointmentUncheckedUpdateManyWithoutDoctorNestedInput
@@ -2832,6 +3326,13 @@ export type UserUncheckedUpdateWithoutDoctorProfileInput = {
   UserPermission?: Prisma.UserPermissionUncheckedUpdateManyWithoutUserNestedInput
   refreshTokens?: Prisma.RefreshTokenUncheckedUpdateManyWithoutUserNestedInput
   authActionTokens?: Prisma.AuthActionTokenUncheckedUpdateManyWithoutUserNestedInput
+  requestedSubscriptionPayments?: Prisma.SubscriptionRequestUncheckedUpdateManyWithoutSubmittedByNestedInput
+  reviewedSubscriptionPayments?: Prisma.SubscriptionRequestUncheckedUpdateManyWithoutReviewedByNestedInput
+  approvedSubscriptions?: Prisma.ClinicSubscriptionUncheckedUpdateManyWithoutApprovedByNestedInput
+  subscriptionAudits?: Prisma.SubscriptionAuditUncheckedUpdateManyWithoutActorNestedInput
+  updatedSubscriptionSettings?: Prisma.SubscriptionSettingsUncheckedUpdateManyWithoutUpdatedByNestedInput
+  assistantConversations?: Prisma.AssistantConversationUncheckedUpdateManyWithoutUserNestedInput
+  assistantMessages?: Prisma.AssistantMessageUncheckedUpdateManyWithoutUserNestedInput
   stockSales?: Prisma.StockSaleUncheckedUpdateManyWithoutSoldByNestedInput
   createdCommunicationCampaigns?: Prisma.CommunicationCampaignUncheckedUpdateManyWithoutCreatedByNestedInput
 }
@@ -2851,6 +3352,8 @@ export type UserCreateWithoutConversationsStartedInput = {
   deletedAt?: Date | string | null
   accessHistories?: Prisma.AccessHistoryCreateNestedManyWithoutUserInput
   audits?: Prisma.AuditCreateNestedManyWithoutUserInput
+  platformAdminActions?: Prisma.PlatformAdminAuditCreateNestedManyWithoutActorInput
+  platformAdminTargets?: Prisma.PlatformAdminAuditCreateNestedManyWithoutTargetInput
   loginHistories?: Prisma.LoginHistoryCreateNestedManyWithoutUserInput
   Person?: Prisma.PersonCreateNestedManyWithoutUserInput
   Appointment?: Prisma.AppointmentCreateNestedManyWithoutDoctorInput
@@ -2870,10 +3373,17 @@ export type UserCreateWithoutConversationsStartedInput = {
   UserPermission?: Prisma.UserPermissionCreateNestedManyWithoutUserInput
   refreshTokens?: Prisma.RefreshTokenCreateNestedManyWithoutUserInput
   authActionTokens?: Prisma.AuthActionTokenCreateNestedManyWithoutUserInput
+  requestedSubscriptionPayments?: Prisma.SubscriptionRequestCreateNestedManyWithoutSubmittedByInput
+  reviewedSubscriptionPayments?: Prisma.SubscriptionRequestCreateNestedManyWithoutReviewedByInput
+  approvedSubscriptions?: Prisma.ClinicSubscriptionCreateNestedManyWithoutApprovedByInput
+  subscriptionAudits?: Prisma.SubscriptionAuditCreateNestedManyWithoutActorInput
+  updatedSubscriptionSettings?: Prisma.SubscriptionSettingsCreateNestedManyWithoutUpdatedByInput
+  assistantConversations?: Prisma.AssistantConversationCreateNestedManyWithoutUserInput
+  assistantMessages?: Prisma.AssistantMessageCreateNestedManyWithoutUserInput
   stockSales?: Prisma.StockSaleCreateNestedManyWithoutSoldByInput
   createdCommunicationCampaigns?: Prisma.CommunicationCampaignCreateNestedManyWithoutCreatedByInput
   Address?: Prisma.AddressCreateNestedOneWithoutUserInput
-  branch: Prisma.BranchCreateNestedOneWithoutUserInput
+  branch?: Prisma.BranchCreateNestedOneWithoutUserInput
   Role?: Prisma.RoleCreateNestedOneWithoutUserInput
 }
 
@@ -2882,7 +3392,7 @@ export type UserUncheckedCreateWithoutConversationsStartedInput = {
   email: string
   password: string
   username: string
-  branchId: string
+  branchId?: string | null
   addressId?: string | null
   roleId?: string | null
   isActive?: boolean
@@ -2895,6 +3405,8 @@ export type UserUncheckedCreateWithoutConversationsStartedInput = {
   deletedAt?: Date | string | null
   accessHistories?: Prisma.AccessHistoryUncheckedCreateNestedManyWithoutUserInput
   audits?: Prisma.AuditUncheckedCreateNestedManyWithoutUserInput
+  platformAdminActions?: Prisma.PlatformAdminAuditUncheckedCreateNestedManyWithoutActorInput
+  platformAdminTargets?: Prisma.PlatformAdminAuditUncheckedCreateNestedManyWithoutTargetInput
   loginHistories?: Prisma.LoginHistoryUncheckedCreateNestedManyWithoutUserInput
   Person?: Prisma.PersonUncheckedCreateNestedManyWithoutUserInput
   Appointment?: Prisma.AppointmentUncheckedCreateNestedManyWithoutDoctorInput
@@ -2914,6 +3426,13 @@ export type UserUncheckedCreateWithoutConversationsStartedInput = {
   UserPermission?: Prisma.UserPermissionUncheckedCreateNestedManyWithoutUserInput
   refreshTokens?: Prisma.RefreshTokenUncheckedCreateNestedManyWithoutUserInput
   authActionTokens?: Prisma.AuthActionTokenUncheckedCreateNestedManyWithoutUserInput
+  requestedSubscriptionPayments?: Prisma.SubscriptionRequestUncheckedCreateNestedManyWithoutSubmittedByInput
+  reviewedSubscriptionPayments?: Prisma.SubscriptionRequestUncheckedCreateNestedManyWithoutReviewedByInput
+  approvedSubscriptions?: Prisma.ClinicSubscriptionUncheckedCreateNestedManyWithoutApprovedByInput
+  subscriptionAudits?: Prisma.SubscriptionAuditUncheckedCreateNestedManyWithoutActorInput
+  updatedSubscriptionSettings?: Prisma.SubscriptionSettingsUncheckedCreateNestedManyWithoutUpdatedByInput
+  assistantConversations?: Prisma.AssistantConversationUncheckedCreateNestedManyWithoutUserInput
+  assistantMessages?: Prisma.AssistantMessageUncheckedCreateNestedManyWithoutUserInput
   stockSales?: Prisma.StockSaleUncheckedCreateNestedManyWithoutSoldByInput
   createdCommunicationCampaigns?: Prisma.CommunicationCampaignUncheckedCreateNestedManyWithoutCreatedByInput
 }
@@ -2938,6 +3457,8 @@ export type UserCreateWithoutConversationsReceivedInput = {
   deletedAt?: Date | string | null
   accessHistories?: Prisma.AccessHistoryCreateNestedManyWithoutUserInput
   audits?: Prisma.AuditCreateNestedManyWithoutUserInput
+  platformAdminActions?: Prisma.PlatformAdminAuditCreateNestedManyWithoutActorInput
+  platformAdminTargets?: Prisma.PlatformAdminAuditCreateNestedManyWithoutTargetInput
   loginHistories?: Prisma.LoginHistoryCreateNestedManyWithoutUserInput
   Person?: Prisma.PersonCreateNestedManyWithoutUserInput
   Appointment?: Prisma.AppointmentCreateNestedManyWithoutDoctorInput
@@ -2957,10 +3478,17 @@ export type UserCreateWithoutConversationsReceivedInput = {
   UserPermission?: Prisma.UserPermissionCreateNestedManyWithoutUserInput
   refreshTokens?: Prisma.RefreshTokenCreateNestedManyWithoutUserInput
   authActionTokens?: Prisma.AuthActionTokenCreateNestedManyWithoutUserInput
+  requestedSubscriptionPayments?: Prisma.SubscriptionRequestCreateNestedManyWithoutSubmittedByInput
+  reviewedSubscriptionPayments?: Prisma.SubscriptionRequestCreateNestedManyWithoutReviewedByInput
+  approvedSubscriptions?: Prisma.ClinicSubscriptionCreateNestedManyWithoutApprovedByInput
+  subscriptionAudits?: Prisma.SubscriptionAuditCreateNestedManyWithoutActorInput
+  updatedSubscriptionSettings?: Prisma.SubscriptionSettingsCreateNestedManyWithoutUpdatedByInput
+  assistantConversations?: Prisma.AssistantConversationCreateNestedManyWithoutUserInput
+  assistantMessages?: Prisma.AssistantMessageCreateNestedManyWithoutUserInput
   stockSales?: Prisma.StockSaleCreateNestedManyWithoutSoldByInput
   createdCommunicationCampaigns?: Prisma.CommunicationCampaignCreateNestedManyWithoutCreatedByInput
   Address?: Prisma.AddressCreateNestedOneWithoutUserInput
-  branch: Prisma.BranchCreateNestedOneWithoutUserInput
+  branch?: Prisma.BranchCreateNestedOneWithoutUserInput
   Role?: Prisma.RoleCreateNestedOneWithoutUserInput
 }
 
@@ -2969,7 +3497,7 @@ export type UserUncheckedCreateWithoutConversationsReceivedInput = {
   email: string
   password: string
   username: string
-  branchId: string
+  branchId?: string | null
   addressId?: string | null
   roleId?: string | null
   isActive?: boolean
@@ -2982,6 +3510,8 @@ export type UserUncheckedCreateWithoutConversationsReceivedInput = {
   deletedAt?: Date | string | null
   accessHistories?: Prisma.AccessHistoryUncheckedCreateNestedManyWithoutUserInput
   audits?: Prisma.AuditUncheckedCreateNestedManyWithoutUserInput
+  platformAdminActions?: Prisma.PlatformAdminAuditUncheckedCreateNestedManyWithoutActorInput
+  platformAdminTargets?: Prisma.PlatformAdminAuditUncheckedCreateNestedManyWithoutTargetInput
   loginHistories?: Prisma.LoginHistoryUncheckedCreateNestedManyWithoutUserInput
   Person?: Prisma.PersonUncheckedCreateNestedManyWithoutUserInput
   Appointment?: Prisma.AppointmentUncheckedCreateNestedManyWithoutDoctorInput
@@ -3001,6 +3531,13 @@ export type UserUncheckedCreateWithoutConversationsReceivedInput = {
   UserPermission?: Prisma.UserPermissionUncheckedCreateNestedManyWithoutUserInput
   refreshTokens?: Prisma.RefreshTokenUncheckedCreateNestedManyWithoutUserInput
   authActionTokens?: Prisma.AuthActionTokenUncheckedCreateNestedManyWithoutUserInput
+  requestedSubscriptionPayments?: Prisma.SubscriptionRequestUncheckedCreateNestedManyWithoutSubmittedByInput
+  reviewedSubscriptionPayments?: Prisma.SubscriptionRequestUncheckedCreateNestedManyWithoutReviewedByInput
+  approvedSubscriptions?: Prisma.ClinicSubscriptionUncheckedCreateNestedManyWithoutApprovedByInput
+  subscriptionAudits?: Prisma.SubscriptionAuditUncheckedCreateNestedManyWithoutActorInput
+  updatedSubscriptionSettings?: Prisma.SubscriptionSettingsUncheckedCreateNestedManyWithoutUpdatedByInput
+  assistantConversations?: Prisma.AssistantConversationUncheckedCreateNestedManyWithoutUserInput
+  assistantMessages?: Prisma.AssistantMessageUncheckedCreateNestedManyWithoutUserInput
   stockSales?: Prisma.StockSaleUncheckedCreateNestedManyWithoutSoldByInput
   createdCommunicationCampaigns?: Prisma.CommunicationCampaignUncheckedCreateNestedManyWithoutCreatedByInput
 }
@@ -3036,6 +3573,8 @@ export type UserUpdateWithoutConversationsStartedInput = {
   deletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   accessHistories?: Prisma.AccessHistoryUpdateManyWithoutUserNestedInput
   audits?: Prisma.AuditUpdateManyWithoutUserNestedInput
+  platformAdminActions?: Prisma.PlatformAdminAuditUpdateManyWithoutActorNestedInput
+  platformAdminTargets?: Prisma.PlatformAdminAuditUpdateManyWithoutTargetNestedInput
   loginHistories?: Prisma.LoginHistoryUpdateManyWithoutUserNestedInput
   Person?: Prisma.PersonUpdateManyWithoutUserNestedInput
   Appointment?: Prisma.AppointmentUpdateManyWithoutDoctorNestedInput
@@ -3055,10 +3594,17 @@ export type UserUpdateWithoutConversationsStartedInput = {
   UserPermission?: Prisma.UserPermissionUpdateManyWithoutUserNestedInput
   refreshTokens?: Prisma.RefreshTokenUpdateManyWithoutUserNestedInput
   authActionTokens?: Prisma.AuthActionTokenUpdateManyWithoutUserNestedInput
+  requestedSubscriptionPayments?: Prisma.SubscriptionRequestUpdateManyWithoutSubmittedByNestedInput
+  reviewedSubscriptionPayments?: Prisma.SubscriptionRequestUpdateManyWithoutReviewedByNestedInput
+  approvedSubscriptions?: Prisma.ClinicSubscriptionUpdateManyWithoutApprovedByNestedInput
+  subscriptionAudits?: Prisma.SubscriptionAuditUpdateManyWithoutActorNestedInput
+  updatedSubscriptionSettings?: Prisma.SubscriptionSettingsUpdateManyWithoutUpdatedByNestedInput
+  assistantConversations?: Prisma.AssistantConversationUpdateManyWithoutUserNestedInput
+  assistantMessages?: Prisma.AssistantMessageUpdateManyWithoutUserNestedInput
   stockSales?: Prisma.StockSaleUpdateManyWithoutSoldByNestedInput
   createdCommunicationCampaigns?: Prisma.CommunicationCampaignUpdateManyWithoutCreatedByNestedInput
   Address?: Prisma.AddressUpdateOneWithoutUserNestedInput
-  branch?: Prisma.BranchUpdateOneRequiredWithoutUserNestedInput
+  branch?: Prisma.BranchUpdateOneWithoutUserNestedInput
   Role?: Prisma.RoleUpdateOneWithoutUserNestedInput
 }
 
@@ -3067,7 +3613,7 @@ export type UserUncheckedUpdateWithoutConversationsStartedInput = {
   email?: Prisma.StringFieldUpdateOperationsInput | string
   password?: Prisma.StringFieldUpdateOperationsInput | string
   username?: Prisma.StringFieldUpdateOperationsInput | string
-  branchId?: Prisma.StringFieldUpdateOperationsInput | string
+  branchId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   addressId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   roleId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
@@ -3080,6 +3626,8 @@ export type UserUncheckedUpdateWithoutConversationsStartedInput = {
   deletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   accessHistories?: Prisma.AccessHistoryUncheckedUpdateManyWithoutUserNestedInput
   audits?: Prisma.AuditUncheckedUpdateManyWithoutUserNestedInput
+  platformAdminActions?: Prisma.PlatformAdminAuditUncheckedUpdateManyWithoutActorNestedInput
+  platformAdminTargets?: Prisma.PlatformAdminAuditUncheckedUpdateManyWithoutTargetNestedInput
   loginHistories?: Prisma.LoginHistoryUncheckedUpdateManyWithoutUserNestedInput
   Person?: Prisma.PersonUncheckedUpdateManyWithoutUserNestedInput
   Appointment?: Prisma.AppointmentUncheckedUpdateManyWithoutDoctorNestedInput
@@ -3099,6 +3647,13 @@ export type UserUncheckedUpdateWithoutConversationsStartedInput = {
   UserPermission?: Prisma.UserPermissionUncheckedUpdateManyWithoutUserNestedInput
   refreshTokens?: Prisma.RefreshTokenUncheckedUpdateManyWithoutUserNestedInput
   authActionTokens?: Prisma.AuthActionTokenUncheckedUpdateManyWithoutUserNestedInput
+  requestedSubscriptionPayments?: Prisma.SubscriptionRequestUncheckedUpdateManyWithoutSubmittedByNestedInput
+  reviewedSubscriptionPayments?: Prisma.SubscriptionRequestUncheckedUpdateManyWithoutReviewedByNestedInput
+  approvedSubscriptions?: Prisma.ClinicSubscriptionUncheckedUpdateManyWithoutApprovedByNestedInput
+  subscriptionAudits?: Prisma.SubscriptionAuditUncheckedUpdateManyWithoutActorNestedInput
+  updatedSubscriptionSettings?: Prisma.SubscriptionSettingsUncheckedUpdateManyWithoutUpdatedByNestedInput
+  assistantConversations?: Prisma.AssistantConversationUncheckedUpdateManyWithoutUserNestedInput
+  assistantMessages?: Prisma.AssistantMessageUncheckedUpdateManyWithoutUserNestedInput
   stockSales?: Prisma.StockSaleUncheckedUpdateManyWithoutSoldByNestedInput
   createdCommunicationCampaigns?: Prisma.CommunicationCampaignUncheckedUpdateManyWithoutCreatedByNestedInput
 }
@@ -3129,6 +3684,8 @@ export type UserUpdateWithoutConversationsReceivedInput = {
   deletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   accessHistories?: Prisma.AccessHistoryUpdateManyWithoutUserNestedInput
   audits?: Prisma.AuditUpdateManyWithoutUserNestedInput
+  platformAdminActions?: Prisma.PlatformAdminAuditUpdateManyWithoutActorNestedInput
+  platformAdminTargets?: Prisma.PlatformAdminAuditUpdateManyWithoutTargetNestedInput
   loginHistories?: Prisma.LoginHistoryUpdateManyWithoutUserNestedInput
   Person?: Prisma.PersonUpdateManyWithoutUserNestedInput
   Appointment?: Prisma.AppointmentUpdateManyWithoutDoctorNestedInput
@@ -3148,10 +3705,17 @@ export type UserUpdateWithoutConversationsReceivedInput = {
   UserPermission?: Prisma.UserPermissionUpdateManyWithoutUserNestedInput
   refreshTokens?: Prisma.RefreshTokenUpdateManyWithoutUserNestedInput
   authActionTokens?: Prisma.AuthActionTokenUpdateManyWithoutUserNestedInput
+  requestedSubscriptionPayments?: Prisma.SubscriptionRequestUpdateManyWithoutSubmittedByNestedInput
+  reviewedSubscriptionPayments?: Prisma.SubscriptionRequestUpdateManyWithoutReviewedByNestedInput
+  approvedSubscriptions?: Prisma.ClinicSubscriptionUpdateManyWithoutApprovedByNestedInput
+  subscriptionAudits?: Prisma.SubscriptionAuditUpdateManyWithoutActorNestedInput
+  updatedSubscriptionSettings?: Prisma.SubscriptionSettingsUpdateManyWithoutUpdatedByNestedInput
+  assistantConversations?: Prisma.AssistantConversationUpdateManyWithoutUserNestedInput
+  assistantMessages?: Prisma.AssistantMessageUpdateManyWithoutUserNestedInput
   stockSales?: Prisma.StockSaleUpdateManyWithoutSoldByNestedInput
   createdCommunicationCampaigns?: Prisma.CommunicationCampaignUpdateManyWithoutCreatedByNestedInput
   Address?: Prisma.AddressUpdateOneWithoutUserNestedInput
-  branch?: Prisma.BranchUpdateOneRequiredWithoutUserNestedInput
+  branch?: Prisma.BranchUpdateOneWithoutUserNestedInput
   Role?: Prisma.RoleUpdateOneWithoutUserNestedInput
 }
 
@@ -3160,7 +3724,7 @@ export type UserUncheckedUpdateWithoutConversationsReceivedInput = {
   email?: Prisma.StringFieldUpdateOperationsInput | string
   password?: Prisma.StringFieldUpdateOperationsInput | string
   username?: Prisma.StringFieldUpdateOperationsInput | string
-  branchId?: Prisma.StringFieldUpdateOperationsInput | string
+  branchId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   addressId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   roleId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
@@ -3173,6 +3737,8 @@ export type UserUncheckedUpdateWithoutConversationsReceivedInput = {
   deletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   accessHistories?: Prisma.AccessHistoryUncheckedUpdateManyWithoutUserNestedInput
   audits?: Prisma.AuditUncheckedUpdateManyWithoutUserNestedInput
+  platformAdminActions?: Prisma.PlatformAdminAuditUncheckedUpdateManyWithoutActorNestedInput
+  platformAdminTargets?: Prisma.PlatformAdminAuditUncheckedUpdateManyWithoutTargetNestedInput
   loginHistories?: Prisma.LoginHistoryUncheckedUpdateManyWithoutUserNestedInput
   Person?: Prisma.PersonUncheckedUpdateManyWithoutUserNestedInput
   Appointment?: Prisma.AppointmentUncheckedUpdateManyWithoutDoctorNestedInput
@@ -3192,6 +3758,13 @@ export type UserUncheckedUpdateWithoutConversationsReceivedInput = {
   UserPermission?: Prisma.UserPermissionUncheckedUpdateManyWithoutUserNestedInput
   refreshTokens?: Prisma.RefreshTokenUncheckedUpdateManyWithoutUserNestedInput
   authActionTokens?: Prisma.AuthActionTokenUncheckedUpdateManyWithoutUserNestedInput
+  requestedSubscriptionPayments?: Prisma.SubscriptionRequestUncheckedUpdateManyWithoutSubmittedByNestedInput
+  reviewedSubscriptionPayments?: Prisma.SubscriptionRequestUncheckedUpdateManyWithoutReviewedByNestedInput
+  approvedSubscriptions?: Prisma.ClinicSubscriptionUncheckedUpdateManyWithoutApprovedByNestedInput
+  subscriptionAudits?: Prisma.SubscriptionAuditUncheckedUpdateManyWithoutActorNestedInput
+  updatedSubscriptionSettings?: Prisma.SubscriptionSettingsUncheckedUpdateManyWithoutUpdatedByNestedInput
+  assistantConversations?: Prisma.AssistantConversationUncheckedUpdateManyWithoutUserNestedInput
+  assistantMessages?: Prisma.AssistantMessageUncheckedUpdateManyWithoutUserNestedInput
   stockSales?: Prisma.StockSaleUncheckedUpdateManyWithoutSoldByNestedInput
   createdCommunicationCampaigns?: Prisma.CommunicationCampaignUncheckedUpdateManyWithoutCreatedByNestedInput
 }
@@ -3211,6 +3784,8 @@ export type UserCreateWithoutChatMessagesInput = {
   deletedAt?: Date | string | null
   accessHistories?: Prisma.AccessHistoryCreateNestedManyWithoutUserInput
   audits?: Prisma.AuditCreateNestedManyWithoutUserInput
+  platformAdminActions?: Prisma.PlatformAdminAuditCreateNestedManyWithoutActorInput
+  platformAdminTargets?: Prisma.PlatformAdminAuditCreateNestedManyWithoutTargetInput
   loginHistories?: Prisma.LoginHistoryCreateNestedManyWithoutUserInput
   Person?: Prisma.PersonCreateNestedManyWithoutUserInput
   Appointment?: Prisma.AppointmentCreateNestedManyWithoutDoctorInput
@@ -3230,10 +3805,17 @@ export type UserCreateWithoutChatMessagesInput = {
   UserPermission?: Prisma.UserPermissionCreateNestedManyWithoutUserInput
   refreshTokens?: Prisma.RefreshTokenCreateNestedManyWithoutUserInput
   authActionTokens?: Prisma.AuthActionTokenCreateNestedManyWithoutUserInput
+  requestedSubscriptionPayments?: Prisma.SubscriptionRequestCreateNestedManyWithoutSubmittedByInput
+  reviewedSubscriptionPayments?: Prisma.SubscriptionRequestCreateNestedManyWithoutReviewedByInput
+  approvedSubscriptions?: Prisma.ClinicSubscriptionCreateNestedManyWithoutApprovedByInput
+  subscriptionAudits?: Prisma.SubscriptionAuditCreateNestedManyWithoutActorInput
+  updatedSubscriptionSettings?: Prisma.SubscriptionSettingsCreateNestedManyWithoutUpdatedByInput
+  assistantConversations?: Prisma.AssistantConversationCreateNestedManyWithoutUserInput
+  assistantMessages?: Prisma.AssistantMessageCreateNestedManyWithoutUserInput
   stockSales?: Prisma.StockSaleCreateNestedManyWithoutSoldByInput
   createdCommunicationCampaigns?: Prisma.CommunicationCampaignCreateNestedManyWithoutCreatedByInput
   Address?: Prisma.AddressCreateNestedOneWithoutUserInput
-  branch: Prisma.BranchCreateNestedOneWithoutUserInput
+  branch?: Prisma.BranchCreateNestedOneWithoutUserInput
   Role?: Prisma.RoleCreateNestedOneWithoutUserInput
 }
 
@@ -3242,7 +3824,7 @@ export type UserUncheckedCreateWithoutChatMessagesInput = {
   email: string
   password: string
   username: string
-  branchId: string
+  branchId?: string | null
   addressId?: string | null
   roleId?: string | null
   isActive?: boolean
@@ -3255,6 +3837,8 @@ export type UserUncheckedCreateWithoutChatMessagesInput = {
   deletedAt?: Date | string | null
   accessHistories?: Prisma.AccessHistoryUncheckedCreateNestedManyWithoutUserInput
   audits?: Prisma.AuditUncheckedCreateNestedManyWithoutUserInput
+  platformAdminActions?: Prisma.PlatformAdminAuditUncheckedCreateNestedManyWithoutActorInput
+  platformAdminTargets?: Prisma.PlatformAdminAuditUncheckedCreateNestedManyWithoutTargetInput
   loginHistories?: Prisma.LoginHistoryUncheckedCreateNestedManyWithoutUserInput
   Person?: Prisma.PersonUncheckedCreateNestedManyWithoutUserInput
   Appointment?: Prisma.AppointmentUncheckedCreateNestedManyWithoutDoctorInput
@@ -3274,6 +3858,13 @@ export type UserUncheckedCreateWithoutChatMessagesInput = {
   UserPermission?: Prisma.UserPermissionUncheckedCreateNestedManyWithoutUserInput
   refreshTokens?: Prisma.RefreshTokenUncheckedCreateNestedManyWithoutUserInput
   authActionTokens?: Prisma.AuthActionTokenUncheckedCreateNestedManyWithoutUserInput
+  requestedSubscriptionPayments?: Prisma.SubscriptionRequestUncheckedCreateNestedManyWithoutSubmittedByInput
+  reviewedSubscriptionPayments?: Prisma.SubscriptionRequestUncheckedCreateNestedManyWithoutReviewedByInput
+  approvedSubscriptions?: Prisma.ClinicSubscriptionUncheckedCreateNestedManyWithoutApprovedByInput
+  subscriptionAudits?: Prisma.SubscriptionAuditUncheckedCreateNestedManyWithoutActorInput
+  updatedSubscriptionSettings?: Prisma.SubscriptionSettingsUncheckedCreateNestedManyWithoutUpdatedByInput
+  assistantConversations?: Prisma.AssistantConversationUncheckedCreateNestedManyWithoutUserInput
+  assistantMessages?: Prisma.AssistantMessageUncheckedCreateNestedManyWithoutUserInput
   stockSales?: Prisma.StockSaleUncheckedCreateNestedManyWithoutSoldByInput
   createdCommunicationCampaigns?: Prisma.CommunicationCampaignUncheckedCreateNestedManyWithoutCreatedByInput
 }
@@ -3309,6 +3900,8 @@ export type UserUpdateWithoutChatMessagesInput = {
   deletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   accessHistories?: Prisma.AccessHistoryUpdateManyWithoutUserNestedInput
   audits?: Prisma.AuditUpdateManyWithoutUserNestedInput
+  platformAdminActions?: Prisma.PlatformAdminAuditUpdateManyWithoutActorNestedInput
+  platformAdminTargets?: Prisma.PlatformAdminAuditUpdateManyWithoutTargetNestedInput
   loginHistories?: Prisma.LoginHistoryUpdateManyWithoutUserNestedInput
   Person?: Prisma.PersonUpdateManyWithoutUserNestedInput
   Appointment?: Prisma.AppointmentUpdateManyWithoutDoctorNestedInput
@@ -3328,10 +3921,17 @@ export type UserUpdateWithoutChatMessagesInput = {
   UserPermission?: Prisma.UserPermissionUpdateManyWithoutUserNestedInput
   refreshTokens?: Prisma.RefreshTokenUpdateManyWithoutUserNestedInput
   authActionTokens?: Prisma.AuthActionTokenUpdateManyWithoutUserNestedInput
+  requestedSubscriptionPayments?: Prisma.SubscriptionRequestUpdateManyWithoutSubmittedByNestedInput
+  reviewedSubscriptionPayments?: Prisma.SubscriptionRequestUpdateManyWithoutReviewedByNestedInput
+  approvedSubscriptions?: Prisma.ClinicSubscriptionUpdateManyWithoutApprovedByNestedInput
+  subscriptionAudits?: Prisma.SubscriptionAuditUpdateManyWithoutActorNestedInput
+  updatedSubscriptionSettings?: Prisma.SubscriptionSettingsUpdateManyWithoutUpdatedByNestedInput
+  assistantConversations?: Prisma.AssistantConversationUpdateManyWithoutUserNestedInput
+  assistantMessages?: Prisma.AssistantMessageUpdateManyWithoutUserNestedInput
   stockSales?: Prisma.StockSaleUpdateManyWithoutSoldByNestedInput
   createdCommunicationCampaigns?: Prisma.CommunicationCampaignUpdateManyWithoutCreatedByNestedInput
   Address?: Prisma.AddressUpdateOneWithoutUserNestedInput
-  branch?: Prisma.BranchUpdateOneRequiredWithoutUserNestedInput
+  branch?: Prisma.BranchUpdateOneWithoutUserNestedInput
   Role?: Prisma.RoleUpdateOneWithoutUserNestedInput
 }
 
@@ -3340,7 +3940,7 @@ export type UserUncheckedUpdateWithoutChatMessagesInput = {
   email?: Prisma.StringFieldUpdateOperationsInput | string
   password?: Prisma.StringFieldUpdateOperationsInput | string
   username?: Prisma.StringFieldUpdateOperationsInput | string
-  branchId?: Prisma.StringFieldUpdateOperationsInput | string
+  branchId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   addressId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   roleId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
@@ -3353,6 +3953,8 @@ export type UserUncheckedUpdateWithoutChatMessagesInput = {
   deletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   accessHistories?: Prisma.AccessHistoryUncheckedUpdateManyWithoutUserNestedInput
   audits?: Prisma.AuditUncheckedUpdateManyWithoutUserNestedInput
+  platformAdminActions?: Prisma.PlatformAdminAuditUncheckedUpdateManyWithoutActorNestedInput
+  platformAdminTargets?: Prisma.PlatformAdminAuditUncheckedUpdateManyWithoutTargetNestedInput
   loginHistories?: Prisma.LoginHistoryUncheckedUpdateManyWithoutUserNestedInput
   Person?: Prisma.PersonUncheckedUpdateManyWithoutUserNestedInput
   Appointment?: Prisma.AppointmentUncheckedUpdateManyWithoutDoctorNestedInput
@@ -3372,6 +3974,13 @@ export type UserUncheckedUpdateWithoutChatMessagesInput = {
   UserPermission?: Prisma.UserPermissionUncheckedUpdateManyWithoutUserNestedInput
   refreshTokens?: Prisma.RefreshTokenUncheckedUpdateManyWithoutUserNestedInput
   authActionTokens?: Prisma.AuthActionTokenUncheckedUpdateManyWithoutUserNestedInput
+  requestedSubscriptionPayments?: Prisma.SubscriptionRequestUncheckedUpdateManyWithoutSubmittedByNestedInput
+  reviewedSubscriptionPayments?: Prisma.SubscriptionRequestUncheckedUpdateManyWithoutReviewedByNestedInput
+  approvedSubscriptions?: Prisma.ClinicSubscriptionUncheckedUpdateManyWithoutApprovedByNestedInput
+  subscriptionAudits?: Prisma.SubscriptionAuditUncheckedUpdateManyWithoutActorNestedInput
+  updatedSubscriptionSettings?: Prisma.SubscriptionSettingsUncheckedUpdateManyWithoutUpdatedByNestedInput
+  assistantConversations?: Prisma.AssistantConversationUncheckedUpdateManyWithoutUserNestedInput
+  assistantMessages?: Prisma.AssistantMessageUncheckedUpdateManyWithoutUserNestedInput
   stockSales?: Prisma.StockSaleUncheckedUpdateManyWithoutSoldByNestedInput
   createdCommunicationCampaigns?: Prisma.CommunicationCampaignUncheckedUpdateManyWithoutCreatedByNestedInput
 }
@@ -3391,6 +4000,8 @@ export type UserCreateWithoutStockSalesInput = {
   deletedAt?: Date | string | null
   accessHistories?: Prisma.AccessHistoryCreateNestedManyWithoutUserInput
   audits?: Prisma.AuditCreateNestedManyWithoutUserInput
+  platformAdminActions?: Prisma.PlatformAdminAuditCreateNestedManyWithoutActorInput
+  platformAdminTargets?: Prisma.PlatformAdminAuditCreateNestedManyWithoutTargetInput
   loginHistories?: Prisma.LoginHistoryCreateNestedManyWithoutUserInput
   Person?: Prisma.PersonCreateNestedManyWithoutUserInput
   Appointment?: Prisma.AppointmentCreateNestedManyWithoutDoctorInput
@@ -3411,9 +4022,16 @@ export type UserCreateWithoutStockSalesInput = {
   UserPermission?: Prisma.UserPermissionCreateNestedManyWithoutUserInput
   refreshTokens?: Prisma.RefreshTokenCreateNestedManyWithoutUserInput
   authActionTokens?: Prisma.AuthActionTokenCreateNestedManyWithoutUserInput
+  requestedSubscriptionPayments?: Prisma.SubscriptionRequestCreateNestedManyWithoutSubmittedByInput
+  reviewedSubscriptionPayments?: Prisma.SubscriptionRequestCreateNestedManyWithoutReviewedByInput
+  approvedSubscriptions?: Prisma.ClinicSubscriptionCreateNestedManyWithoutApprovedByInput
+  subscriptionAudits?: Prisma.SubscriptionAuditCreateNestedManyWithoutActorInput
+  updatedSubscriptionSettings?: Prisma.SubscriptionSettingsCreateNestedManyWithoutUpdatedByInput
+  assistantConversations?: Prisma.AssistantConversationCreateNestedManyWithoutUserInput
+  assistantMessages?: Prisma.AssistantMessageCreateNestedManyWithoutUserInput
   createdCommunicationCampaigns?: Prisma.CommunicationCampaignCreateNestedManyWithoutCreatedByInput
   Address?: Prisma.AddressCreateNestedOneWithoutUserInput
-  branch: Prisma.BranchCreateNestedOneWithoutUserInput
+  branch?: Prisma.BranchCreateNestedOneWithoutUserInput
   Role?: Prisma.RoleCreateNestedOneWithoutUserInput
 }
 
@@ -3422,7 +4040,7 @@ export type UserUncheckedCreateWithoutStockSalesInput = {
   email: string
   password: string
   username: string
-  branchId: string
+  branchId?: string | null
   addressId?: string | null
   roleId?: string | null
   isActive?: boolean
@@ -3435,6 +4053,8 @@ export type UserUncheckedCreateWithoutStockSalesInput = {
   deletedAt?: Date | string | null
   accessHistories?: Prisma.AccessHistoryUncheckedCreateNestedManyWithoutUserInput
   audits?: Prisma.AuditUncheckedCreateNestedManyWithoutUserInput
+  platformAdminActions?: Prisma.PlatformAdminAuditUncheckedCreateNestedManyWithoutActorInput
+  platformAdminTargets?: Prisma.PlatformAdminAuditUncheckedCreateNestedManyWithoutTargetInput
   loginHistories?: Prisma.LoginHistoryUncheckedCreateNestedManyWithoutUserInput
   Person?: Prisma.PersonUncheckedCreateNestedManyWithoutUserInput
   Appointment?: Prisma.AppointmentUncheckedCreateNestedManyWithoutDoctorInput
@@ -3455,6 +4075,13 @@ export type UserUncheckedCreateWithoutStockSalesInput = {
   UserPermission?: Prisma.UserPermissionUncheckedCreateNestedManyWithoutUserInput
   refreshTokens?: Prisma.RefreshTokenUncheckedCreateNestedManyWithoutUserInput
   authActionTokens?: Prisma.AuthActionTokenUncheckedCreateNestedManyWithoutUserInput
+  requestedSubscriptionPayments?: Prisma.SubscriptionRequestUncheckedCreateNestedManyWithoutSubmittedByInput
+  reviewedSubscriptionPayments?: Prisma.SubscriptionRequestUncheckedCreateNestedManyWithoutReviewedByInput
+  approvedSubscriptions?: Prisma.ClinicSubscriptionUncheckedCreateNestedManyWithoutApprovedByInput
+  subscriptionAudits?: Prisma.SubscriptionAuditUncheckedCreateNestedManyWithoutActorInput
+  updatedSubscriptionSettings?: Prisma.SubscriptionSettingsUncheckedCreateNestedManyWithoutUpdatedByInput
+  assistantConversations?: Prisma.AssistantConversationUncheckedCreateNestedManyWithoutUserInput
+  assistantMessages?: Prisma.AssistantMessageUncheckedCreateNestedManyWithoutUserInput
   createdCommunicationCampaigns?: Prisma.CommunicationCampaignUncheckedCreateNestedManyWithoutCreatedByInput
 }
 
@@ -3489,6 +4116,8 @@ export type UserUpdateWithoutStockSalesInput = {
   deletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   accessHistories?: Prisma.AccessHistoryUpdateManyWithoutUserNestedInput
   audits?: Prisma.AuditUpdateManyWithoutUserNestedInput
+  platformAdminActions?: Prisma.PlatformAdminAuditUpdateManyWithoutActorNestedInput
+  platformAdminTargets?: Prisma.PlatformAdminAuditUpdateManyWithoutTargetNestedInput
   loginHistories?: Prisma.LoginHistoryUpdateManyWithoutUserNestedInput
   Person?: Prisma.PersonUpdateManyWithoutUserNestedInput
   Appointment?: Prisma.AppointmentUpdateManyWithoutDoctorNestedInput
@@ -3509,9 +4138,16 @@ export type UserUpdateWithoutStockSalesInput = {
   UserPermission?: Prisma.UserPermissionUpdateManyWithoutUserNestedInput
   refreshTokens?: Prisma.RefreshTokenUpdateManyWithoutUserNestedInput
   authActionTokens?: Prisma.AuthActionTokenUpdateManyWithoutUserNestedInput
+  requestedSubscriptionPayments?: Prisma.SubscriptionRequestUpdateManyWithoutSubmittedByNestedInput
+  reviewedSubscriptionPayments?: Prisma.SubscriptionRequestUpdateManyWithoutReviewedByNestedInput
+  approvedSubscriptions?: Prisma.ClinicSubscriptionUpdateManyWithoutApprovedByNestedInput
+  subscriptionAudits?: Prisma.SubscriptionAuditUpdateManyWithoutActorNestedInput
+  updatedSubscriptionSettings?: Prisma.SubscriptionSettingsUpdateManyWithoutUpdatedByNestedInput
+  assistantConversations?: Prisma.AssistantConversationUpdateManyWithoutUserNestedInput
+  assistantMessages?: Prisma.AssistantMessageUpdateManyWithoutUserNestedInput
   createdCommunicationCampaigns?: Prisma.CommunicationCampaignUpdateManyWithoutCreatedByNestedInput
   Address?: Prisma.AddressUpdateOneWithoutUserNestedInput
-  branch?: Prisma.BranchUpdateOneRequiredWithoutUserNestedInput
+  branch?: Prisma.BranchUpdateOneWithoutUserNestedInput
   Role?: Prisma.RoleUpdateOneWithoutUserNestedInput
 }
 
@@ -3520,7 +4156,7 @@ export type UserUncheckedUpdateWithoutStockSalesInput = {
   email?: Prisma.StringFieldUpdateOperationsInput | string
   password?: Prisma.StringFieldUpdateOperationsInput | string
   username?: Prisma.StringFieldUpdateOperationsInput | string
-  branchId?: Prisma.StringFieldUpdateOperationsInput | string
+  branchId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   addressId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   roleId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
@@ -3533,6 +4169,8 @@ export type UserUncheckedUpdateWithoutStockSalesInput = {
   deletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   accessHistories?: Prisma.AccessHistoryUncheckedUpdateManyWithoutUserNestedInput
   audits?: Prisma.AuditUncheckedUpdateManyWithoutUserNestedInput
+  platformAdminActions?: Prisma.PlatformAdminAuditUncheckedUpdateManyWithoutActorNestedInput
+  platformAdminTargets?: Prisma.PlatformAdminAuditUncheckedUpdateManyWithoutTargetNestedInput
   loginHistories?: Prisma.LoginHistoryUncheckedUpdateManyWithoutUserNestedInput
   Person?: Prisma.PersonUncheckedUpdateManyWithoutUserNestedInput
   Appointment?: Prisma.AppointmentUncheckedUpdateManyWithoutDoctorNestedInput
@@ -3553,6 +4191,13 @@ export type UserUncheckedUpdateWithoutStockSalesInput = {
   UserPermission?: Prisma.UserPermissionUncheckedUpdateManyWithoutUserNestedInput
   refreshTokens?: Prisma.RefreshTokenUncheckedUpdateManyWithoutUserNestedInput
   authActionTokens?: Prisma.AuthActionTokenUncheckedUpdateManyWithoutUserNestedInput
+  requestedSubscriptionPayments?: Prisma.SubscriptionRequestUncheckedUpdateManyWithoutSubmittedByNestedInput
+  reviewedSubscriptionPayments?: Prisma.SubscriptionRequestUncheckedUpdateManyWithoutReviewedByNestedInput
+  approvedSubscriptions?: Prisma.ClinicSubscriptionUncheckedUpdateManyWithoutApprovedByNestedInput
+  subscriptionAudits?: Prisma.SubscriptionAuditUncheckedUpdateManyWithoutActorNestedInput
+  updatedSubscriptionSettings?: Prisma.SubscriptionSettingsUncheckedUpdateManyWithoutUpdatedByNestedInput
+  assistantConversations?: Prisma.AssistantConversationUncheckedUpdateManyWithoutUserNestedInput
+  assistantMessages?: Prisma.AssistantMessageUncheckedUpdateManyWithoutUserNestedInput
   createdCommunicationCampaigns?: Prisma.CommunicationCampaignUncheckedUpdateManyWithoutCreatedByNestedInput
 }
 
@@ -3571,6 +4216,8 @@ export type UserCreateWithoutCreatedCommunicationCampaignsInput = {
   deletedAt?: Date | string | null
   accessHistories?: Prisma.AccessHistoryCreateNestedManyWithoutUserInput
   audits?: Prisma.AuditCreateNestedManyWithoutUserInput
+  platformAdminActions?: Prisma.PlatformAdminAuditCreateNestedManyWithoutActorInput
+  platformAdminTargets?: Prisma.PlatformAdminAuditCreateNestedManyWithoutTargetInput
   loginHistories?: Prisma.LoginHistoryCreateNestedManyWithoutUserInput
   Person?: Prisma.PersonCreateNestedManyWithoutUserInput
   Appointment?: Prisma.AppointmentCreateNestedManyWithoutDoctorInput
@@ -3591,9 +4238,16 @@ export type UserCreateWithoutCreatedCommunicationCampaignsInput = {
   UserPermission?: Prisma.UserPermissionCreateNestedManyWithoutUserInput
   refreshTokens?: Prisma.RefreshTokenCreateNestedManyWithoutUserInput
   authActionTokens?: Prisma.AuthActionTokenCreateNestedManyWithoutUserInput
+  requestedSubscriptionPayments?: Prisma.SubscriptionRequestCreateNestedManyWithoutSubmittedByInput
+  reviewedSubscriptionPayments?: Prisma.SubscriptionRequestCreateNestedManyWithoutReviewedByInput
+  approvedSubscriptions?: Prisma.ClinicSubscriptionCreateNestedManyWithoutApprovedByInput
+  subscriptionAudits?: Prisma.SubscriptionAuditCreateNestedManyWithoutActorInput
+  updatedSubscriptionSettings?: Prisma.SubscriptionSettingsCreateNestedManyWithoutUpdatedByInput
+  assistantConversations?: Prisma.AssistantConversationCreateNestedManyWithoutUserInput
+  assistantMessages?: Prisma.AssistantMessageCreateNestedManyWithoutUserInput
   stockSales?: Prisma.StockSaleCreateNestedManyWithoutSoldByInput
   Address?: Prisma.AddressCreateNestedOneWithoutUserInput
-  branch: Prisma.BranchCreateNestedOneWithoutUserInput
+  branch?: Prisma.BranchCreateNestedOneWithoutUserInput
   Role?: Prisma.RoleCreateNestedOneWithoutUserInput
 }
 
@@ -3602,7 +4256,7 @@ export type UserUncheckedCreateWithoutCreatedCommunicationCampaignsInput = {
   email: string
   password: string
   username: string
-  branchId: string
+  branchId?: string | null
   addressId?: string | null
   roleId?: string | null
   isActive?: boolean
@@ -3615,6 +4269,8 @@ export type UserUncheckedCreateWithoutCreatedCommunicationCampaignsInput = {
   deletedAt?: Date | string | null
   accessHistories?: Prisma.AccessHistoryUncheckedCreateNestedManyWithoutUserInput
   audits?: Prisma.AuditUncheckedCreateNestedManyWithoutUserInput
+  platformAdminActions?: Prisma.PlatformAdminAuditUncheckedCreateNestedManyWithoutActorInput
+  platformAdminTargets?: Prisma.PlatformAdminAuditUncheckedCreateNestedManyWithoutTargetInput
   loginHistories?: Prisma.LoginHistoryUncheckedCreateNestedManyWithoutUserInput
   Person?: Prisma.PersonUncheckedCreateNestedManyWithoutUserInput
   Appointment?: Prisma.AppointmentUncheckedCreateNestedManyWithoutDoctorInput
@@ -3635,6 +4291,13 @@ export type UserUncheckedCreateWithoutCreatedCommunicationCampaignsInput = {
   UserPermission?: Prisma.UserPermissionUncheckedCreateNestedManyWithoutUserInput
   refreshTokens?: Prisma.RefreshTokenUncheckedCreateNestedManyWithoutUserInput
   authActionTokens?: Prisma.AuthActionTokenUncheckedCreateNestedManyWithoutUserInput
+  requestedSubscriptionPayments?: Prisma.SubscriptionRequestUncheckedCreateNestedManyWithoutSubmittedByInput
+  reviewedSubscriptionPayments?: Prisma.SubscriptionRequestUncheckedCreateNestedManyWithoutReviewedByInput
+  approvedSubscriptions?: Prisma.ClinicSubscriptionUncheckedCreateNestedManyWithoutApprovedByInput
+  subscriptionAudits?: Prisma.SubscriptionAuditUncheckedCreateNestedManyWithoutActorInput
+  updatedSubscriptionSettings?: Prisma.SubscriptionSettingsUncheckedCreateNestedManyWithoutUpdatedByInput
+  assistantConversations?: Prisma.AssistantConversationUncheckedCreateNestedManyWithoutUserInput
+  assistantMessages?: Prisma.AssistantMessageUncheckedCreateNestedManyWithoutUserInput
   stockSales?: Prisma.StockSaleUncheckedCreateNestedManyWithoutSoldByInput
 }
 
@@ -3669,6 +4332,8 @@ export type UserUpdateWithoutCreatedCommunicationCampaignsInput = {
   deletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   accessHistories?: Prisma.AccessHistoryUpdateManyWithoutUserNestedInput
   audits?: Prisma.AuditUpdateManyWithoutUserNestedInput
+  platformAdminActions?: Prisma.PlatformAdminAuditUpdateManyWithoutActorNestedInput
+  platformAdminTargets?: Prisma.PlatformAdminAuditUpdateManyWithoutTargetNestedInput
   loginHistories?: Prisma.LoginHistoryUpdateManyWithoutUserNestedInput
   Person?: Prisma.PersonUpdateManyWithoutUserNestedInput
   Appointment?: Prisma.AppointmentUpdateManyWithoutDoctorNestedInput
@@ -3689,9 +4354,16 @@ export type UserUpdateWithoutCreatedCommunicationCampaignsInput = {
   UserPermission?: Prisma.UserPermissionUpdateManyWithoutUserNestedInput
   refreshTokens?: Prisma.RefreshTokenUpdateManyWithoutUserNestedInput
   authActionTokens?: Prisma.AuthActionTokenUpdateManyWithoutUserNestedInput
+  requestedSubscriptionPayments?: Prisma.SubscriptionRequestUpdateManyWithoutSubmittedByNestedInput
+  reviewedSubscriptionPayments?: Prisma.SubscriptionRequestUpdateManyWithoutReviewedByNestedInput
+  approvedSubscriptions?: Prisma.ClinicSubscriptionUpdateManyWithoutApprovedByNestedInput
+  subscriptionAudits?: Prisma.SubscriptionAuditUpdateManyWithoutActorNestedInput
+  updatedSubscriptionSettings?: Prisma.SubscriptionSettingsUpdateManyWithoutUpdatedByNestedInput
+  assistantConversations?: Prisma.AssistantConversationUpdateManyWithoutUserNestedInput
+  assistantMessages?: Prisma.AssistantMessageUpdateManyWithoutUserNestedInput
   stockSales?: Prisma.StockSaleUpdateManyWithoutSoldByNestedInput
   Address?: Prisma.AddressUpdateOneWithoutUserNestedInput
-  branch?: Prisma.BranchUpdateOneRequiredWithoutUserNestedInput
+  branch?: Prisma.BranchUpdateOneWithoutUserNestedInput
   Role?: Prisma.RoleUpdateOneWithoutUserNestedInput
 }
 
@@ -3700,7 +4372,7 @@ export type UserUncheckedUpdateWithoutCreatedCommunicationCampaignsInput = {
   email?: Prisma.StringFieldUpdateOperationsInput | string
   password?: Prisma.StringFieldUpdateOperationsInput | string
   username?: Prisma.StringFieldUpdateOperationsInput | string
-  branchId?: Prisma.StringFieldUpdateOperationsInput | string
+  branchId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   addressId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   roleId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
@@ -3713,6 +4385,8 @@ export type UserUncheckedUpdateWithoutCreatedCommunicationCampaignsInput = {
   deletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   accessHistories?: Prisma.AccessHistoryUncheckedUpdateManyWithoutUserNestedInput
   audits?: Prisma.AuditUncheckedUpdateManyWithoutUserNestedInput
+  platformAdminActions?: Prisma.PlatformAdminAuditUncheckedUpdateManyWithoutActorNestedInput
+  platformAdminTargets?: Prisma.PlatformAdminAuditUncheckedUpdateManyWithoutTargetNestedInput
   loginHistories?: Prisma.LoginHistoryUncheckedUpdateManyWithoutUserNestedInput
   Person?: Prisma.PersonUncheckedUpdateManyWithoutUserNestedInput
   Appointment?: Prisma.AppointmentUncheckedUpdateManyWithoutDoctorNestedInput
@@ -3733,6 +4407,13 @@ export type UserUncheckedUpdateWithoutCreatedCommunicationCampaignsInput = {
   UserPermission?: Prisma.UserPermissionUncheckedUpdateManyWithoutUserNestedInput
   refreshTokens?: Prisma.RefreshTokenUncheckedUpdateManyWithoutUserNestedInput
   authActionTokens?: Prisma.AuthActionTokenUncheckedUpdateManyWithoutUserNestedInput
+  requestedSubscriptionPayments?: Prisma.SubscriptionRequestUncheckedUpdateManyWithoutSubmittedByNestedInput
+  reviewedSubscriptionPayments?: Prisma.SubscriptionRequestUncheckedUpdateManyWithoutReviewedByNestedInput
+  approvedSubscriptions?: Prisma.ClinicSubscriptionUncheckedUpdateManyWithoutApprovedByNestedInput
+  subscriptionAudits?: Prisma.SubscriptionAuditUncheckedUpdateManyWithoutActorNestedInput
+  updatedSubscriptionSettings?: Prisma.SubscriptionSettingsUncheckedUpdateManyWithoutUpdatedByNestedInput
+  assistantConversations?: Prisma.AssistantConversationUncheckedUpdateManyWithoutUserNestedInput
+  assistantMessages?: Prisma.AssistantMessageUncheckedUpdateManyWithoutUserNestedInput
   stockSales?: Prisma.StockSaleUncheckedUpdateManyWithoutSoldByNestedInput
 }
 
@@ -3751,6 +4432,8 @@ export type UserCreateWithoutTreatmentPlansInput = {
   deletedAt?: Date | string | null
   accessHistories?: Prisma.AccessHistoryCreateNestedManyWithoutUserInput
   audits?: Prisma.AuditCreateNestedManyWithoutUserInput
+  platformAdminActions?: Prisma.PlatformAdminAuditCreateNestedManyWithoutActorInput
+  platformAdminTargets?: Prisma.PlatformAdminAuditCreateNestedManyWithoutTargetInput
   loginHistories?: Prisma.LoginHistoryCreateNestedManyWithoutUserInput
   Person?: Prisma.PersonCreateNestedManyWithoutUserInput
   Appointment?: Prisma.AppointmentCreateNestedManyWithoutDoctorInput
@@ -3770,10 +4453,17 @@ export type UserCreateWithoutTreatmentPlansInput = {
   UserPermission?: Prisma.UserPermissionCreateNestedManyWithoutUserInput
   refreshTokens?: Prisma.RefreshTokenCreateNestedManyWithoutUserInput
   authActionTokens?: Prisma.AuthActionTokenCreateNestedManyWithoutUserInput
+  requestedSubscriptionPayments?: Prisma.SubscriptionRequestCreateNestedManyWithoutSubmittedByInput
+  reviewedSubscriptionPayments?: Prisma.SubscriptionRequestCreateNestedManyWithoutReviewedByInput
+  approvedSubscriptions?: Prisma.ClinicSubscriptionCreateNestedManyWithoutApprovedByInput
+  subscriptionAudits?: Prisma.SubscriptionAuditCreateNestedManyWithoutActorInput
+  updatedSubscriptionSettings?: Prisma.SubscriptionSettingsCreateNestedManyWithoutUpdatedByInput
+  assistantConversations?: Prisma.AssistantConversationCreateNestedManyWithoutUserInput
+  assistantMessages?: Prisma.AssistantMessageCreateNestedManyWithoutUserInput
   stockSales?: Prisma.StockSaleCreateNestedManyWithoutSoldByInput
   createdCommunicationCampaigns?: Prisma.CommunicationCampaignCreateNestedManyWithoutCreatedByInput
   Address?: Prisma.AddressCreateNestedOneWithoutUserInput
-  branch: Prisma.BranchCreateNestedOneWithoutUserInput
+  branch?: Prisma.BranchCreateNestedOneWithoutUserInput
   Role?: Prisma.RoleCreateNestedOneWithoutUserInput
 }
 
@@ -3782,7 +4472,7 @@ export type UserUncheckedCreateWithoutTreatmentPlansInput = {
   email: string
   password: string
   username: string
-  branchId: string
+  branchId?: string | null
   addressId?: string | null
   roleId?: string | null
   isActive?: boolean
@@ -3795,6 +4485,8 @@ export type UserUncheckedCreateWithoutTreatmentPlansInput = {
   deletedAt?: Date | string | null
   accessHistories?: Prisma.AccessHistoryUncheckedCreateNestedManyWithoutUserInput
   audits?: Prisma.AuditUncheckedCreateNestedManyWithoutUserInput
+  platformAdminActions?: Prisma.PlatformAdminAuditUncheckedCreateNestedManyWithoutActorInput
+  platformAdminTargets?: Prisma.PlatformAdminAuditUncheckedCreateNestedManyWithoutTargetInput
   loginHistories?: Prisma.LoginHistoryUncheckedCreateNestedManyWithoutUserInput
   Person?: Prisma.PersonUncheckedCreateNestedManyWithoutUserInput
   Appointment?: Prisma.AppointmentUncheckedCreateNestedManyWithoutDoctorInput
@@ -3814,6 +4506,13 @@ export type UserUncheckedCreateWithoutTreatmentPlansInput = {
   UserPermission?: Prisma.UserPermissionUncheckedCreateNestedManyWithoutUserInput
   refreshTokens?: Prisma.RefreshTokenUncheckedCreateNestedManyWithoutUserInput
   authActionTokens?: Prisma.AuthActionTokenUncheckedCreateNestedManyWithoutUserInput
+  requestedSubscriptionPayments?: Prisma.SubscriptionRequestUncheckedCreateNestedManyWithoutSubmittedByInput
+  reviewedSubscriptionPayments?: Prisma.SubscriptionRequestUncheckedCreateNestedManyWithoutReviewedByInput
+  approvedSubscriptions?: Prisma.ClinicSubscriptionUncheckedCreateNestedManyWithoutApprovedByInput
+  subscriptionAudits?: Prisma.SubscriptionAuditUncheckedCreateNestedManyWithoutActorInput
+  updatedSubscriptionSettings?: Prisma.SubscriptionSettingsUncheckedCreateNestedManyWithoutUpdatedByInput
+  assistantConversations?: Prisma.AssistantConversationUncheckedCreateNestedManyWithoutUserInput
+  assistantMessages?: Prisma.AssistantMessageUncheckedCreateNestedManyWithoutUserInput
   stockSales?: Prisma.StockSaleUncheckedCreateNestedManyWithoutSoldByInput
   createdCommunicationCampaigns?: Prisma.CommunicationCampaignUncheckedCreateNestedManyWithoutCreatedByInput
 }
@@ -3849,6 +4548,8 @@ export type UserUpdateWithoutTreatmentPlansInput = {
   deletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   accessHistories?: Prisma.AccessHistoryUpdateManyWithoutUserNestedInput
   audits?: Prisma.AuditUpdateManyWithoutUserNestedInput
+  platformAdminActions?: Prisma.PlatformAdminAuditUpdateManyWithoutActorNestedInput
+  platformAdminTargets?: Prisma.PlatformAdminAuditUpdateManyWithoutTargetNestedInput
   loginHistories?: Prisma.LoginHistoryUpdateManyWithoutUserNestedInput
   Person?: Prisma.PersonUpdateManyWithoutUserNestedInput
   Appointment?: Prisma.AppointmentUpdateManyWithoutDoctorNestedInput
@@ -3868,10 +4569,17 @@ export type UserUpdateWithoutTreatmentPlansInput = {
   UserPermission?: Prisma.UserPermissionUpdateManyWithoutUserNestedInput
   refreshTokens?: Prisma.RefreshTokenUpdateManyWithoutUserNestedInput
   authActionTokens?: Prisma.AuthActionTokenUpdateManyWithoutUserNestedInput
+  requestedSubscriptionPayments?: Prisma.SubscriptionRequestUpdateManyWithoutSubmittedByNestedInput
+  reviewedSubscriptionPayments?: Prisma.SubscriptionRequestUpdateManyWithoutReviewedByNestedInput
+  approvedSubscriptions?: Prisma.ClinicSubscriptionUpdateManyWithoutApprovedByNestedInput
+  subscriptionAudits?: Prisma.SubscriptionAuditUpdateManyWithoutActorNestedInput
+  updatedSubscriptionSettings?: Prisma.SubscriptionSettingsUpdateManyWithoutUpdatedByNestedInput
+  assistantConversations?: Prisma.AssistantConversationUpdateManyWithoutUserNestedInput
+  assistantMessages?: Prisma.AssistantMessageUpdateManyWithoutUserNestedInput
   stockSales?: Prisma.StockSaleUpdateManyWithoutSoldByNestedInput
   createdCommunicationCampaigns?: Prisma.CommunicationCampaignUpdateManyWithoutCreatedByNestedInput
   Address?: Prisma.AddressUpdateOneWithoutUserNestedInput
-  branch?: Prisma.BranchUpdateOneRequiredWithoutUserNestedInput
+  branch?: Prisma.BranchUpdateOneWithoutUserNestedInput
   Role?: Prisma.RoleUpdateOneWithoutUserNestedInput
 }
 
@@ -3880,7 +4588,7 @@ export type UserUncheckedUpdateWithoutTreatmentPlansInput = {
   email?: Prisma.StringFieldUpdateOperationsInput | string
   password?: Prisma.StringFieldUpdateOperationsInput | string
   username?: Prisma.StringFieldUpdateOperationsInput | string
-  branchId?: Prisma.StringFieldUpdateOperationsInput | string
+  branchId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   addressId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   roleId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
@@ -3893,6 +4601,8 @@ export type UserUncheckedUpdateWithoutTreatmentPlansInput = {
   deletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   accessHistories?: Prisma.AccessHistoryUncheckedUpdateManyWithoutUserNestedInput
   audits?: Prisma.AuditUncheckedUpdateManyWithoutUserNestedInput
+  platformAdminActions?: Prisma.PlatformAdminAuditUncheckedUpdateManyWithoutActorNestedInput
+  platformAdminTargets?: Prisma.PlatformAdminAuditUncheckedUpdateManyWithoutTargetNestedInput
   loginHistories?: Prisma.LoginHistoryUncheckedUpdateManyWithoutUserNestedInput
   Person?: Prisma.PersonUncheckedUpdateManyWithoutUserNestedInput
   Appointment?: Prisma.AppointmentUncheckedUpdateManyWithoutDoctorNestedInput
@@ -3912,6 +4622,13 @@ export type UserUncheckedUpdateWithoutTreatmentPlansInput = {
   UserPermission?: Prisma.UserPermissionUncheckedUpdateManyWithoutUserNestedInput
   refreshTokens?: Prisma.RefreshTokenUncheckedUpdateManyWithoutUserNestedInput
   authActionTokens?: Prisma.AuthActionTokenUncheckedUpdateManyWithoutUserNestedInput
+  requestedSubscriptionPayments?: Prisma.SubscriptionRequestUncheckedUpdateManyWithoutSubmittedByNestedInput
+  reviewedSubscriptionPayments?: Prisma.SubscriptionRequestUncheckedUpdateManyWithoutReviewedByNestedInput
+  approvedSubscriptions?: Prisma.ClinicSubscriptionUncheckedUpdateManyWithoutApprovedByNestedInput
+  subscriptionAudits?: Prisma.SubscriptionAuditUncheckedUpdateManyWithoutActorNestedInput
+  updatedSubscriptionSettings?: Prisma.SubscriptionSettingsUncheckedUpdateManyWithoutUpdatedByNestedInput
+  assistantConversations?: Prisma.AssistantConversationUncheckedUpdateManyWithoutUserNestedInput
+  assistantMessages?: Prisma.AssistantMessageUncheckedUpdateManyWithoutUserNestedInput
   stockSales?: Prisma.StockSaleUncheckedUpdateManyWithoutSoldByNestedInput
   createdCommunicationCampaigns?: Prisma.CommunicationCampaignUncheckedUpdateManyWithoutCreatedByNestedInput
 }
@@ -3931,6 +4648,8 @@ export type UserCreateWithoutRefreshTokensInput = {
   deletedAt?: Date | string | null
   accessHistories?: Prisma.AccessHistoryCreateNestedManyWithoutUserInput
   audits?: Prisma.AuditCreateNestedManyWithoutUserInput
+  platformAdminActions?: Prisma.PlatformAdminAuditCreateNestedManyWithoutActorInput
+  platformAdminTargets?: Prisma.PlatformAdminAuditCreateNestedManyWithoutTargetInput
   loginHistories?: Prisma.LoginHistoryCreateNestedManyWithoutUserInput
   Person?: Prisma.PersonCreateNestedManyWithoutUserInput
   Appointment?: Prisma.AppointmentCreateNestedManyWithoutDoctorInput
@@ -3950,10 +4669,17 @@ export type UserCreateWithoutRefreshTokensInput = {
   UserRole?: Prisma.UserRoleCreateNestedManyWithoutUserInput
   UserPermission?: Prisma.UserPermissionCreateNestedManyWithoutUserInput
   authActionTokens?: Prisma.AuthActionTokenCreateNestedManyWithoutUserInput
+  requestedSubscriptionPayments?: Prisma.SubscriptionRequestCreateNestedManyWithoutSubmittedByInput
+  reviewedSubscriptionPayments?: Prisma.SubscriptionRequestCreateNestedManyWithoutReviewedByInput
+  approvedSubscriptions?: Prisma.ClinicSubscriptionCreateNestedManyWithoutApprovedByInput
+  subscriptionAudits?: Prisma.SubscriptionAuditCreateNestedManyWithoutActorInput
+  updatedSubscriptionSettings?: Prisma.SubscriptionSettingsCreateNestedManyWithoutUpdatedByInput
+  assistantConversations?: Prisma.AssistantConversationCreateNestedManyWithoutUserInput
+  assistantMessages?: Prisma.AssistantMessageCreateNestedManyWithoutUserInput
   stockSales?: Prisma.StockSaleCreateNestedManyWithoutSoldByInput
   createdCommunicationCampaigns?: Prisma.CommunicationCampaignCreateNestedManyWithoutCreatedByInput
   Address?: Prisma.AddressCreateNestedOneWithoutUserInput
-  branch: Prisma.BranchCreateNestedOneWithoutUserInput
+  branch?: Prisma.BranchCreateNestedOneWithoutUserInput
   Role?: Prisma.RoleCreateNestedOneWithoutUserInput
 }
 
@@ -3962,7 +4688,7 @@ export type UserUncheckedCreateWithoutRefreshTokensInput = {
   email: string
   password: string
   username: string
-  branchId: string
+  branchId?: string | null
   addressId?: string | null
   roleId?: string | null
   isActive?: boolean
@@ -3975,6 +4701,8 @@ export type UserUncheckedCreateWithoutRefreshTokensInput = {
   deletedAt?: Date | string | null
   accessHistories?: Prisma.AccessHistoryUncheckedCreateNestedManyWithoutUserInput
   audits?: Prisma.AuditUncheckedCreateNestedManyWithoutUserInput
+  platformAdminActions?: Prisma.PlatformAdminAuditUncheckedCreateNestedManyWithoutActorInput
+  platformAdminTargets?: Prisma.PlatformAdminAuditUncheckedCreateNestedManyWithoutTargetInput
   loginHistories?: Prisma.LoginHistoryUncheckedCreateNestedManyWithoutUserInput
   Person?: Prisma.PersonUncheckedCreateNestedManyWithoutUserInput
   Appointment?: Prisma.AppointmentUncheckedCreateNestedManyWithoutDoctorInput
@@ -3994,6 +4722,13 @@ export type UserUncheckedCreateWithoutRefreshTokensInput = {
   UserRole?: Prisma.UserRoleUncheckedCreateNestedManyWithoutUserInput
   UserPermission?: Prisma.UserPermissionUncheckedCreateNestedManyWithoutUserInput
   authActionTokens?: Prisma.AuthActionTokenUncheckedCreateNestedManyWithoutUserInput
+  requestedSubscriptionPayments?: Prisma.SubscriptionRequestUncheckedCreateNestedManyWithoutSubmittedByInput
+  reviewedSubscriptionPayments?: Prisma.SubscriptionRequestUncheckedCreateNestedManyWithoutReviewedByInput
+  approvedSubscriptions?: Prisma.ClinicSubscriptionUncheckedCreateNestedManyWithoutApprovedByInput
+  subscriptionAudits?: Prisma.SubscriptionAuditUncheckedCreateNestedManyWithoutActorInput
+  updatedSubscriptionSettings?: Prisma.SubscriptionSettingsUncheckedCreateNestedManyWithoutUpdatedByInput
+  assistantConversations?: Prisma.AssistantConversationUncheckedCreateNestedManyWithoutUserInput
+  assistantMessages?: Prisma.AssistantMessageUncheckedCreateNestedManyWithoutUserInput
   stockSales?: Prisma.StockSaleUncheckedCreateNestedManyWithoutSoldByInput
   createdCommunicationCampaigns?: Prisma.CommunicationCampaignUncheckedCreateNestedManyWithoutCreatedByInput
 }
@@ -4029,6 +4764,8 @@ export type UserUpdateWithoutRefreshTokensInput = {
   deletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   accessHistories?: Prisma.AccessHistoryUpdateManyWithoutUserNestedInput
   audits?: Prisma.AuditUpdateManyWithoutUserNestedInput
+  platformAdminActions?: Prisma.PlatformAdminAuditUpdateManyWithoutActorNestedInput
+  platformAdminTargets?: Prisma.PlatformAdminAuditUpdateManyWithoutTargetNestedInput
   loginHistories?: Prisma.LoginHistoryUpdateManyWithoutUserNestedInput
   Person?: Prisma.PersonUpdateManyWithoutUserNestedInput
   Appointment?: Prisma.AppointmentUpdateManyWithoutDoctorNestedInput
@@ -4048,10 +4785,17 @@ export type UserUpdateWithoutRefreshTokensInput = {
   UserRole?: Prisma.UserRoleUpdateManyWithoutUserNestedInput
   UserPermission?: Prisma.UserPermissionUpdateManyWithoutUserNestedInput
   authActionTokens?: Prisma.AuthActionTokenUpdateManyWithoutUserNestedInput
+  requestedSubscriptionPayments?: Prisma.SubscriptionRequestUpdateManyWithoutSubmittedByNestedInput
+  reviewedSubscriptionPayments?: Prisma.SubscriptionRequestUpdateManyWithoutReviewedByNestedInput
+  approvedSubscriptions?: Prisma.ClinicSubscriptionUpdateManyWithoutApprovedByNestedInput
+  subscriptionAudits?: Prisma.SubscriptionAuditUpdateManyWithoutActorNestedInput
+  updatedSubscriptionSettings?: Prisma.SubscriptionSettingsUpdateManyWithoutUpdatedByNestedInput
+  assistantConversations?: Prisma.AssistantConversationUpdateManyWithoutUserNestedInput
+  assistantMessages?: Prisma.AssistantMessageUpdateManyWithoutUserNestedInput
   stockSales?: Prisma.StockSaleUpdateManyWithoutSoldByNestedInput
   createdCommunicationCampaigns?: Prisma.CommunicationCampaignUpdateManyWithoutCreatedByNestedInput
   Address?: Prisma.AddressUpdateOneWithoutUserNestedInput
-  branch?: Prisma.BranchUpdateOneRequiredWithoutUserNestedInput
+  branch?: Prisma.BranchUpdateOneWithoutUserNestedInput
   Role?: Prisma.RoleUpdateOneWithoutUserNestedInput
 }
 
@@ -4060,7 +4804,7 @@ export type UserUncheckedUpdateWithoutRefreshTokensInput = {
   email?: Prisma.StringFieldUpdateOperationsInput | string
   password?: Prisma.StringFieldUpdateOperationsInput | string
   username?: Prisma.StringFieldUpdateOperationsInput | string
-  branchId?: Prisma.StringFieldUpdateOperationsInput | string
+  branchId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   addressId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   roleId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
@@ -4073,6 +4817,8 @@ export type UserUncheckedUpdateWithoutRefreshTokensInput = {
   deletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   accessHistories?: Prisma.AccessHistoryUncheckedUpdateManyWithoutUserNestedInput
   audits?: Prisma.AuditUncheckedUpdateManyWithoutUserNestedInput
+  platformAdminActions?: Prisma.PlatformAdminAuditUncheckedUpdateManyWithoutActorNestedInput
+  platformAdminTargets?: Prisma.PlatformAdminAuditUncheckedUpdateManyWithoutTargetNestedInput
   loginHistories?: Prisma.LoginHistoryUncheckedUpdateManyWithoutUserNestedInput
   Person?: Prisma.PersonUncheckedUpdateManyWithoutUserNestedInput
   Appointment?: Prisma.AppointmentUncheckedUpdateManyWithoutDoctorNestedInput
@@ -4092,6 +4838,13 @@ export type UserUncheckedUpdateWithoutRefreshTokensInput = {
   UserRole?: Prisma.UserRoleUncheckedUpdateManyWithoutUserNestedInput
   UserPermission?: Prisma.UserPermissionUncheckedUpdateManyWithoutUserNestedInput
   authActionTokens?: Prisma.AuthActionTokenUncheckedUpdateManyWithoutUserNestedInput
+  requestedSubscriptionPayments?: Prisma.SubscriptionRequestUncheckedUpdateManyWithoutSubmittedByNestedInput
+  reviewedSubscriptionPayments?: Prisma.SubscriptionRequestUncheckedUpdateManyWithoutReviewedByNestedInput
+  approvedSubscriptions?: Prisma.ClinicSubscriptionUncheckedUpdateManyWithoutApprovedByNestedInput
+  subscriptionAudits?: Prisma.SubscriptionAuditUncheckedUpdateManyWithoutActorNestedInput
+  updatedSubscriptionSettings?: Prisma.SubscriptionSettingsUncheckedUpdateManyWithoutUpdatedByNestedInput
+  assistantConversations?: Prisma.AssistantConversationUncheckedUpdateManyWithoutUserNestedInput
+  assistantMessages?: Prisma.AssistantMessageUncheckedUpdateManyWithoutUserNestedInput
   stockSales?: Prisma.StockSaleUncheckedUpdateManyWithoutSoldByNestedInput
   createdCommunicationCampaigns?: Prisma.CommunicationCampaignUncheckedUpdateManyWithoutCreatedByNestedInput
 }
@@ -4111,6 +4864,8 @@ export type UserCreateWithoutAuthActionTokensInput = {
   deletedAt?: Date | string | null
   accessHistories?: Prisma.AccessHistoryCreateNestedManyWithoutUserInput
   audits?: Prisma.AuditCreateNestedManyWithoutUserInput
+  platformAdminActions?: Prisma.PlatformAdminAuditCreateNestedManyWithoutActorInput
+  platformAdminTargets?: Prisma.PlatformAdminAuditCreateNestedManyWithoutTargetInput
   loginHistories?: Prisma.LoginHistoryCreateNestedManyWithoutUserInput
   Person?: Prisma.PersonCreateNestedManyWithoutUserInput
   Appointment?: Prisma.AppointmentCreateNestedManyWithoutDoctorInput
@@ -4130,10 +4885,17 @@ export type UserCreateWithoutAuthActionTokensInput = {
   UserRole?: Prisma.UserRoleCreateNestedManyWithoutUserInput
   UserPermission?: Prisma.UserPermissionCreateNestedManyWithoutUserInput
   refreshTokens?: Prisma.RefreshTokenCreateNestedManyWithoutUserInput
+  requestedSubscriptionPayments?: Prisma.SubscriptionRequestCreateNestedManyWithoutSubmittedByInput
+  reviewedSubscriptionPayments?: Prisma.SubscriptionRequestCreateNestedManyWithoutReviewedByInput
+  approvedSubscriptions?: Prisma.ClinicSubscriptionCreateNestedManyWithoutApprovedByInput
+  subscriptionAudits?: Prisma.SubscriptionAuditCreateNestedManyWithoutActorInput
+  updatedSubscriptionSettings?: Prisma.SubscriptionSettingsCreateNestedManyWithoutUpdatedByInput
+  assistantConversations?: Prisma.AssistantConversationCreateNestedManyWithoutUserInput
+  assistantMessages?: Prisma.AssistantMessageCreateNestedManyWithoutUserInput
   stockSales?: Prisma.StockSaleCreateNestedManyWithoutSoldByInput
   createdCommunicationCampaigns?: Prisma.CommunicationCampaignCreateNestedManyWithoutCreatedByInput
   Address?: Prisma.AddressCreateNestedOneWithoutUserInput
-  branch: Prisma.BranchCreateNestedOneWithoutUserInput
+  branch?: Prisma.BranchCreateNestedOneWithoutUserInput
   Role?: Prisma.RoleCreateNestedOneWithoutUserInput
 }
 
@@ -4142,7 +4904,7 @@ export type UserUncheckedCreateWithoutAuthActionTokensInput = {
   email: string
   password: string
   username: string
-  branchId: string
+  branchId?: string | null
   addressId?: string | null
   roleId?: string | null
   isActive?: boolean
@@ -4155,6 +4917,8 @@ export type UserUncheckedCreateWithoutAuthActionTokensInput = {
   deletedAt?: Date | string | null
   accessHistories?: Prisma.AccessHistoryUncheckedCreateNestedManyWithoutUserInput
   audits?: Prisma.AuditUncheckedCreateNestedManyWithoutUserInput
+  platformAdminActions?: Prisma.PlatformAdminAuditUncheckedCreateNestedManyWithoutActorInput
+  platformAdminTargets?: Prisma.PlatformAdminAuditUncheckedCreateNestedManyWithoutTargetInput
   loginHistories?: Prisma.LoginHistoryUncheckedCreateNestedManyWithoutUserInput
   Person?: Prisma.PersonUncheckedCreateNestedManyWithoutUserInput
   Appointment?: Prisma.AppointmentUncheckedCreateNestedManyWithoutDoctorInput
@@ -4174,6 +4938,13 @@ export type UserUncheckedCreateWithoutAuthActionTokensInput = {
   UserRole?: Prisma.UserRoleUncheckedCreateNestedManyWithoutUserInput
   UserPermission?: Prisma.UserPermissionUncheckedCreateNestedManyWithoutUserInput
   refreshTokens?: Prisma.RefreshTokenUncheckedCreateNestedManyWithoutUserInput
+  requestedSubscriptionPayments?: Prisma.SubscriptionRequestUncheckedCreateNestedManyWithoutSubmittedByInput
+  reviewedSubscriptionPayments?: Prisma.SubscriptionRequestUncheckedCreateNestedManyWithoutReviewedByInput
+  approvedSubscriptions?: Prisma.ClinicSubscriptionUncheckedCreateNestedManyWithoutApprovedByInput
+  subscriptionAudits?: Prisma.SubscriptionAuditUncheckedCreateNestedManyWithoutActorInput
+  updatedSubscriptionSettings?: Prisma.SubscriptionSettingsUncheckedCreateNestedManyWithoutUpdatedByInput
+  assistantConversations?: Prisma.AssistantConversationUncheckedCreateNestedManyWithoutUserInput
+  assistantMessages?: Prisma.AssistantMessageUncheckedCreateNestedManyWithoutUserInput
   stockSales?: Prisma.StockSaleUncheckedCreateNestedManyWithoutSoldByInput
   createdCommunicationCampaigns?: Prisma.CommunicationCampaignUncheckedCreateNestedManyWithoutCreatedByInput
 }
@@ -4209,6 +4980,8 @@ export type UserUpdateWithoutAuthActionTokensInput = {
   deletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   accessHistories?: Prisma.AccessHistoryUpdateManyWithoutUserNestedInput
   audits?: Prisma.AuditUpdateManyWithoutUserNestedInput
+  platformAdminActions?: Prisma.PlatformAdminAuditUpdateManyWithoutActorNestedInput
+  platformAdminTargets?: Prisma.PlatformAdminAuditUpdateManyWithoutTargetNestedInput
   loginHistories?: Prisma.LoginHistoryUpdateManyWithoutUserNestedInput
   Person?: Prisma.PersonUpdateManyWithoutUserNestedInput
   Appointment?: Prisma.AppointmentUpdateManyWithoutDoctorNestedInput
@@ -4228,10 +5001,17 @@ export type UserUpdateWithoutAuthActionTokensInput = {
   UserRole?: Prisma.UserRoleUpdateManyWithoutUserNestedInput
   UserPermission?: Prisma.UserPermissionUpdateManyWithoutUserNestedInput
   refreshTokens?: Prisma.RefreshTokenUpdateManyWithoutUserNestedInput
+  requestedSubscriptionPayments?: Prisma.SubscriptionRequestUpdateManyWithoutSubmittedByNestedInput
+  reviewedSubscriptionPayments?: Prisma.SubscriptionRequestUpdateManyWithoutReviewedByNestedInput
+  approvedSubscriptions?: Prisma.ClinicSubscriptionUpdateManyWithoutApprovedByNestedInput
+  subscriptionAudits?: Prisma.SubscriptionAuditUpdateManyWithoutActorNestedInput
+  updatedSubscriptionSettings?: Prisma.SubscriptionSettingsUpdateManyWithoutUpdatedByNestedInput
+  assistantConversations?: Prisma.AssistantConversationUpdateManyWithoutUserNestedInput
+  assistantMessages?: Prisma.AssistantMessageUpdateManyWithoutUserNestedInput
   stockSales?: Prisma.StockSaleUpdateManyWithoutSoldByNestedInput
   createdCommunicationCampaigns?: Prisma.CommunicationCampaignUpdateManyWithoutCreatedByNestedInput
   Address?: Prisma.AddressUpdateOneWithoutUserNestedInput
-  branch?: Prisma.BranchUpdateOneRequiredWithoutUserNestedInput
+  branch?: Prisma.BranchUpdateOneWithoutUserNestedInput
   Role?: Prisma.RoleUpdateOneWithoutUserNestedInput
 }
 
@@ -4240,7 +5020,7 @@ export type UserUncheckedUpdateWithoutAuthActionTokensInput = {
   email?: Prisma.StringFieldUpdateOperationsInput | string
   password?: Prisma.StringFieldUpdateOperationsInput | string
   username?: Prisma.StringFieldUpdateOperationsInput | string
-  branchId?: Prisma.StringFieldUpdateOperationsInput | string
+  branchId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   addressId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   roleId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
@@ -4253,6 +5033,8 @@ export type UserUncheckedUpdateWithoutAuthActionTokensInput = {
   deletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   accessHistories?: Prisma.AccessHistoryUncheckedUpdateManyWithoutUserNestedInput
   audits?: Prisma.AuditUncheckedUpdateManyWithoutUserNestedInput
+  platformAdminActions?: Prisma.PlatformAdminAuditUncheckedUpdateManyWithoutActorNestedInput
+  platformAdminTargets?: Prisma.PlatformAdminAuditUncheckedUpdateManyWithoutTargetNestedInput
   loginHistories?: Prisma.LoginHistoryUncheckedUpdateManyWithoutUserNestedInput
   Person?: Prisma.PersonUncheckedUpdateManyWithoutUserNestedInput
   Appointment?: Prisma.AppointmentUncheckedUpdateManyWithoutDoctorNestedInput
@@ -4272,6 +5054,13 @@ export type UserUncheckedUpdateWithoutAuthActionTokensInput = {
   UserRole?: Prisma.UserRoleUncheckedUpdateManyWithoutUserNestedInput
   UserPermission?: Prisma.UserPermissionUncheckedUpdateManyWithoutUserNestedInput
   refreshTokens?: Prisma.RefreshTokenUncheckedUpdateManyWithoutUserNestedInput
+  requestedSubscriptionPayments?: Prisma.SubscriptionRequestUncheckedUpdateManyWithoutSubmittedByNestedInput
+  reviewedSubscriptionPayments?: Prisma.SubscriptionRequestUncheckedUpdateManyWithoutReviewedByNestedInput
+  approvedSubscriptions?: Prisma.ClinicSubscriptionUncheckedUpdateManyWithoutApprovedByNestedInput
+  subscriptionAudits?: Prisma.SubscriptionAuditUncheckedUpdateManyWithoutActorNestedInput
+  updatedSubscriptionSettings?: Prisma.SubscriptionSettingsUncheckedUpdateManyWithoutUpdatedByNestedInput
+  assistantConversations?: Prisma.AssistantConversationUncheckedUpdateManyWithoutUserNestedInput
+  assistantMessages?: Prisma.AssistantMessageUncheckedUpdateManyWithoutUserNestedInput
   stockSales?: Prisma.StockSaleUncheckedUpdateManyWithoutSoldByNestedInput
   createdCommunicationCampaigns?: Prisma.CommunicationCampaignUncheckedUpdateManyWithoutCreatedByNestedInput
 }
@@ -4291,6 +5080,8 @@ export type UserCreateWithoutConsultInput = {
   deletedAt?: Date | string | null
   accessHistories?: Prisma.AccessHistoryCreateNestedManyWithoutUserInput
   audits?: Prisma.AuditCreateNestedManyWithoutUserInput
+  platformAdminActions?: Prisma.PlatformAdminAuditCreateNestedManyWithoutActorInput
+  platformAdminTargets?: Prisma.PlatformAdminAuditCreateNestedManyWithoutTargetInput
   loginHistories?: Prisma.LoginHistoryCreateNestedManyWithoutUserInput
   Person?: Prisma.PersonCreateNestedManyWithoutUserInput
   Appointment?: Prisma.AppointmentCreateNestedManyWithoutDoctorInput
@@ -4310,10 +5101,17 @@ export type UserCreateWithoutConsultInput = {
   UserPermission?: Prisma.UserPermissionCreateNestedManyWithoutUserInput
   refreshTokens?: Prisma.RefreshTokenCreateNestedManyWithoutUserInput
   authActionTokens?: Prisma.AuthActionTokenCreateNestedManyWithoutUserInput
+  requestedSubscriptionPayments?: Prisma.SubscriptionRequestCreateNestedManyWithoutSubmittedByInput
+  reviewedSubscriptionPayments?: Prisma.SubscriptionRequestCreateNestedManyWithoutReviewedByInput
+  approvedSubscriptions?: Prisma.ClinicSubscriptionCreateNestedManyWithoutApprovedByInput
+  subscriptionAudits?: Prisma.SubscriptionAuditCreateNestedManyWithoutActorInput
+  updatedSubscriptionSettings?: Prisma.SubscriptionSettingsCreateNestedManyWithoutUpdatedByInput
+  assistantConversations?: Prisma.AssistantConversationCreateNestedManyWithoutUserInput
+  assistantMessages?: Prisma.AssistantMessageCreateNestedManyWithoutUserInput
   stockSales?: Prisma.StockSaleCreateNestedManyWithoutSoldByInput
   createdCommunicationCampaigns?: Prisma.CommunicationCampaignCreateNestedManyWithoutCreatedByInput
   Address?: Prisma.AddressCreateNestedOneWithoutUserInput
-  branch: Prisma.BranchCreateNestedOneWithoutUserInput
+  branch?: Prisma.BranchCreateNestedOneWithoutUserInput
   Role?: Prisma.RoleCreateNestedOneWithoutUserInput
 }
 
@@ -4322,7 +5120,7 @@ export type UserUncheckedCreateWithoutConsultInput = {
   email: string
   password: string
   username: string
-  branchId: string
+  branchId?: string | null
   addressId?: string | null
   roleId?: string | null
   isActive?: boolean
@@ -4335,6 +5133,8 @@ export type UserUncheckedCreateWithoutConsultInput = {
   deletedAt?: Date | string | null
   accessHistories?: Prisma.AccessHistoryUncheckedCreateNestedManyWithoutUserInput
   audits?: Prisma.AuditUncheckedCreateNestedManyWithoutUserInput
+  platformAdminActions?: Prisma.PlatformAdminAuditUncheckedCreateNestedManyWithoutActorInput
+  platformAdminTargets?: Prisma.PlatformAdminAuditUncheckedCreateNestedManyWithoutTargetInput
   loginHistories?: Prisma.LoginHistoryUncheckedCreateNestedManyWithoutUserInput
   Person?: Prisma.PersonUncheckedCreateNestedManyWithoutUserInput
   Appointment?: Prisma.AppointmentUncheckedCreateNestedManyWithoutDoctorInput
@@ -4354,6 +5154,13 @@ export type UserUncheckedCreateWithoutConsultInput = {
   UserPermission?: Prisma.UserPermissionUncheckedCreateNestedManyWithoutUserInput
   refreshTokens?: Prisma.RefreshTokenUncheckedCreateNestedManyWithoutUserInput
   authActionTokens?: Prisma.AuthActionTokenUncheckedCreateNestedManyWithoutUserInput
+  requestedSubscriptionPayments?: Prisma.SubscriptionRequestUncheckedCreateNestedManyWithoutSubmittedByInput
+  reviewedSubscriptionPayments?: Prisma.SubscriptionRequestUncheckedCreateNestedManyWithoutReviewedByInput
+  approvedSubscriptions?: Prisma.ClinicSubscriptionUncheckedCreateNestedManyWithoutApprovedByInput
+  subscriptionAudits?: Prisma.SubscriptionAuditUncheckedCreateNestedManyWithoutActorInput
+  updatedSubscriptionSettings?: Prisma.SubscriptionSettingsUncheckedCreateNestedManyWithoutUpdatedByInput
+  assistantConversations?: Prisma.AssistantConversationUncheckedCreateNestedManyWithoutUserInput
+  assistantMessages?: Prisma.AssistantMessageUncheckedCreateNestedManyWithoutUserInput
   stockSales?: Prisma.StockSaleUncheckedCreateNestedManyWithoutSoldByInput
   createdCommunicationCampaigns?: Prisma.CommunicationCampaignUncheckedCreateNestedManyWithoutCreatedByInput
 }
@@ -4389,6 +5196,8 @@ export type UserUpdateWithoutConsultInput = {
   deletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   accessHistories?: Prisma.AccessHistoryUpdateManyWithoutUserNestedInput
   audits?: Prisma.AuditUpdateManyWithoutUserNestedInput
+  platformAdminActions?: Prisma.PlatformAdminAuditUpdateManyWithoutActorNestedInput
+  platformAdminTargets?: Prisma.PlatformAdminAuditUpdateManyWithoutTargetNestedInput
   loginHistories?: Prisma.LoginHistoryUpdateManyWithoutUserNestedInput
   Person?: Prisma.PersonUpdateManyWithoutUserNestedInput
   Appointment?: Prisma.AppointmentUpdateManyWithoutDoctorNestedInput
@@ -4408,10 +5217,17 @@ export type UserUpdateWithoutConsultInput = {
   UserPermission?: Prisma.UserPermissionUpdateManyWithoutUserNestedInput
   refreshTokens?: Prisma.RefreshTokenUpdateManyWithoutUserNestedInput
   authActionTokens?: Prisma.AuthActionTokenUpdateManyWithoutUserNestedInput
+  requestedSubscriptionPayments?: Prisma.SubscriptionRequestUpdateManyWithoutSubmittedByNestedInput
+  reviewedSubscriptionPayments?: Prisma.SubscriptionRequestUpdateManyWithoutReviewedByNestedInput
+  approvedSubscriptions?: Prisma.ClinicSubscriptionUpdateManyWithoutApprovedByNestedInput
+  subscriptionAudits?: Prisma.SubscriptionAuditUpdateManyWithoutActorNestedInput
+  updatedSubscriptionSettings?: Prisma.SubscriptionSettingsUpdateManyWithoutUpdatedByNestedInput
+  assistantConversations?: Prisma.AssistantConversationUpdateManyWithoutUserNestedInput
+  assistantMessages?: Prisma.AssistantMessageUpdateManyWithoutUserNestedInput
   stockSales?: Prisma.StockSaleUpdateManyWithoutSoldByNestedInput
   createdCommunicationCampaigns?: Prisma.CommunicationCampaignUpdateManyWithoutCreatedByNestedInput
   Address?: Prisma.AddressUpdateOneWithoutUserNestedInput
-  branch?: Prisma.BranchUpdateOneRequiredWithoutUserNestedInput
+  branch?: Prisma.BranchUpdateOneWithoutUserNestedInput
   Role?: Prisma.RoleUpdateOneWithoutUserNestedInput
 }
 
@@ -4420,7 +5236,7 @@ export type UserUncheckedUpdateWithoutConsultInput = {
   email?: Prisma.StringFieldUpdateOperationsInput | string
   password?: Prisma.StringFieldUpdateOperationsInput | string
   username?: Prisma.StringFieldUpdateOperationsInput | string
-  branchId?: Prisma.StringFieldUpdateOperationsInput | string
+  branchId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   addressId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   roleId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
@@ -4433,6 +5249,8 @@ export type UserUncheckedUpdateWithoutConsultInput = {
   deletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   accessHistories?: Prisma.AccessHistoryUncheckedUpdateManyWithoutUserNestedInput
   audits?: Prisma.AuditUncheckedUpdateManyWithoutUserNestedInput
+  platformAdminActions?: Prisma.PlatformAdminAuditUncheckedUpdateManyWithoutActorNestedInput
+  platformAdminTargets?: Prisma.PlatformAdminAuditUncheckedUpdateManyWithoutTargetNestedInput
   loginHistories?: Prisma.LoginHistoryUncheckedUpdateManyWithoutUserNestedInput
   Person?: Prisma.PersonUncheckedUpdateManyWithoutUserNestedInput
   Appointment?: Prisma.AppointmentUncheckedUpdateManyWithoutDoctorNestedInput
@@ -4452,6 +5270,13 @@ export type UserUncheckedUpdateWithoutConsultInput = {
   UserPermission?: Prisma.UserPermissionUncheckedUpdateManyWithoutUserNestedInput
   refreshTokens?: Prisma.RefreshTokenUncheckedUpdateManyWithoutUserNestedInput
   authActionTokens?: Prisma.AuthActionTokenUncheckedUpdateManyWithoutUserNestedInput
+  requestedSubscriptionPayments?: Prisma.SubscriptionRequestUncheckedUpdateManyWithoutSubmittedByNestedInput
+  reviewedSubscriptionPayments?: Prisma.SubscriptionRequestUncheckedUpdateManyWithoutReviewedByNestedInput
+  approvedSubscriptions?: Prisma.ClinicSubscriptionUncheckedUpdateManyWithoutApprovedByNestedInput
+  subscriptionAudits?: Prisma.SubscriptionAuditUncheckedUpdateManyWithoutActorNestedInput
+  updatedSubscriptionSettings?: Prisma.SubscriptionSettingsUncheckedUpdateManyWithoutUpdatedByNestedInput
+  assistantConversations?: Prisma.AssistantConversationUncheckedUpdateManyWithoutUserNestedInput
+  assistantMessages?: Prisma.AssistantMessageUncheckedUpdateManyWithoutUserNestedInput
   stockSales?: Prisma.StockSaleUncheckedUpdateManyWithoutSoldByNestedInput
   createdCommunicationCampaigns?: Prisma.CommunicationCampaignUncheckedUpdateManyWithoutCreatedByNestedInput
 }
@@ -4471,6 +5296,8 @@ export type UserCreateWithoutClinicProccessesInput = {
   deletedAt?: Date | string | null
   accessHistories?: Prisma.AccessHistoryCreateNestedManyWithoutUserInput
   audits?: Prisma.AuditCreateNestedManyWithoutUserInput
+  platformAdminActions?: Prisma.PlatformAdminAuditCreateNestedManyWithoutActorInput
+  platformAdminTargets?: Prisma.PlatformAdminAuditCreateNestedManyWithoutTargetInput
   loginHistories?: Prisma.LoginHistoryCreateNestedManyWithoutUserInput
   Person?: Prisma.PersonCreateNestedManyWithoutUserInput
   Appointment?: Prisma.AppointmentCreateNestedManyWithoutDoctorInput
@@ -4490,10 +5317,17 @@ export type UserCreateWithoutClinicProccessesInput = {
   UserPermission?: Prisma.UserPermissionCreateNestedManyWithoutUserInput
   refreshTokens?: Prisma.RefreshTokenCreateNestedManyWithoutUserInput
   authActionTokens?: Prisma.AuthActionTokenCreateNestedManyWithoutUserInput
+  requestedSubscriptionPayments?: Prisma.SubscriptionRequestCreateNestedManyWithoutSubmittedByInput
+  reviewedSubscriptionPayments?: Prisma.SubscriptionRequestCreateNestedManyWithoutReviewedByInput
+  approvedSubscriptions?: Prisma.ClinicSubscriptionCreateNestedManyWithoutApprovedByInput
+  subscriptionAudits?: Prisma.SubscriptionAuditCreateNestedManyWithoutActorInput
+  updatedSubscriptionSettings?: Prisma.SubscriptionSettingsCreateNestedManyWithoutUpdatedByInput
+  assistantConversations?: Prisma.AssistantConversationCreateNestedManyWithoutUserInput
+  assistantMessages?: Prisma.AssistantMessageCreateNestedManyWithoutUserInput
   stockSales?: Prisma.StockSaleCreateNestedManyWithoutSoldByInput
   createdCommunicationCampaigns?: Prisma.CommunicationCampaignCreateNestedManyWithoutCreatedByInput
   Address?: Prisma.AddressCreateNestedOneWithoutUserInput
-  branch: Prisma.BranchCreateNestedOneWithoutUserInput
+  branch?: Prisma.BranchCreateNestedOneWithoutUserInput
   Role?: Prisma.RoleCreateNestedOneWithoutUserInput
 }
 
@@ -4502,7 +5336,7 @@ export type UserUncheckedCreateWithoutClinicProccessesInput = {
   email: string
   password: string
   username: string
-  branchId: string
+  branchId?: string | null
   addressId?: string | null
   roleId?: string | null
   isActive?: boolean
@@ -4515,6 +5349,8 @@ export type UserUncheckedCreateWithoutClinicProccessesInput = {
   deletedAt?: Date | string | null
   accessHistories?: Prisma.AccessHistoryUncheckedCreateNestedManyWithoutUserInput
   audits?: Prisma.AuditUncheckedCreateNestedManyWithoutUserInput
+  platformAdminActions?: Prisma.PlatformAdminAuditUncheckedCreateNestedManyWithoutActorInput
+  platformAdminTargets?: Prisma.PlatformAdminAuditUncheckedCreateNestedManyWithoutTargetInput
   loginHistories?: Prisma.LoginHistoryUncheckedCreateNestedManyWithoutUserInput
   Person?: Prisma.PersonUncheckedCreateNestedManyWithoutUserInput
   Appointment?: Prisma.AppointmentUncheckedCreateNestedManyWithoutDoctorInput
@@ -4534,6 +5370,13 @@ export type UserUncheckedCreateWithoutClinicProccessesInput = {
   UserPermission?: Prisma.UserPermissionUncheckedCreateNestedManyWithoutUserInput
   refreshTokens?: Prisma.RefreshTokenUncheckedCreateNestedManyWithoutUserInput
   authActionTokens?: Prisma.AuthActionTokenUncheckedCreateNestedManyWithoutUserInput
+  requestedSubscriptionPayments?: Prisma.SubscriptionRequestUncheckedCreateNestedManyWithoutSubmittedByInput
+  reviewedSubscriptionPayments?: Prisma.SubscriptionRequestUncheckedCreateNestedManyWithoutReviewedByInput
+  approvedSubscriptions?: Prisma.ClinicSubscriptionUncheckedCreateNestedManyWithoutApprovedByInput
+  subscriptionAudits?: Prisma.SubscriptionAuditUncheckedCreateNestedManyWithoutActorInput
+  updatedSubscriptionSettings?: Prisma.SubscriptionSettingsUncheckedCreateNestedManyWithoutUpdatedByInput
+  assistantConversations?: Prisma.AssistantConversationUncheckedCreateNestedManyWithoutUserInput
+  assistantMessages?: Prisma.AssistantMessageUncheckedCreateNestedManyWithoutUserInput
   stockSales?: Prisma.StockSaleUncheckedCreateNestedManyWithoutSoldByInput
   createdCommunicationCampaigns?: Prisma.CommunicationCampaignUncheckedCreateNestedManyWithoutCreatedByInput
 }
@@ -4569,6 +5412,8 @@ export type UserUpdateWithoutClinicProccessesInput = {
   deletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   accessHistories?: Prisma.AccessHistoryUpdateManyWithoutUserNestedInput
   audits?: Prisma.AuditUpdateManyWithoutUserNestedInput
+  platformAdminActions?: Prisma.PlatformAdminAuditUpdateManyWithoutActorNestedInput
+  platformAdminTargets?: Prisma.PlatformAdminAuditUpdateManyWithoutTargetNestedInput
   loginHistories?: Prisma.LoginHistoryUpdateManyWithoutUserNestedInput
   Person?: Prisma.PersonUpdateManyWithoutUserNestedInput
   Appointment?: Prisma.AppointmentUpdateManyWithoutDoctorNestedInput
@@ -4588,10 +5433,17 @@ export type UserUpdateWithoutClinicProccessesInput = {
   UserPermission?: Prisma.UserPermissionUpdateManyWithoutUserNestedInput
   refreshTokens?: Prisma.RefreshTokenUpdateManyWithoutUserNestedInput
   authActionTokens?: Prisma.AuthActionTokenUpdateManyWithoutUserNestedInput
+  requestedSubscriptionPayments?: Prisma.SubscriptionRequestUpdateManyWithoutSubmittedByNestedInput
+  reviewedSubscriptionPayments?: Prisma.SubscriptionRequestUpdateManyWithoutReviewedByNestedInput
+  approvedSubscriptions?: Prisma.ClinicSubscriptionUpdateManyWithoutApprovedByNestedInput
+  subscriptionAudits?: Prisma.SubscriptionAuditUpdateManyWithoutActorNestedInput
+  updatedSubscriptionSettings?: Prisma.SubscriptionSettingsUpdateManyWithoutUpdatedByNestedInput
+  assistantConversations?: Prisma.AssistantConversationUpdateManyWithoutUserNestedInput
+  assistantMessages?: Prisma.AssistantMessageUpdateManyWithoutUserNestedInput
   stockSales?: Prisma.StockSaleUpdateManyWithoutSoldByNestedInput
   createdCommunicationCampaigns?: Prisma.CommunicationCampaignUpdateManyWithoutCreatedByNestedInput
   Address?: Prisma.AddressUpdateOneWithoutUserNestedInput
-  branch?: Prisma.BranchUpdateOneRequiredWithoutUserNestedInput
+  branch?: Prisma.BranchUpdateOneWithoutUserNestedInput
   Role?: Prisma.RoleUpdateOneWithoutUserNestedInput
 }
 
@@ -4600,7 +5452,7 @@ export type UserUncheckedUpdateWithoutClinicProccessesInput = {
   email?: Prisma.StringFieldUpdateOperationsInput | string
   password?: Prisma.StringFieldUpdateOperationsInput | string
   username?: Prisma.StringFieldUpdateOperationsInput | string
-  branchId?: Prisma.StringFieldUpdateOperationsInput | string
+  branchId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   addressId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   roleId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
@@ -4613,6 +5465,8 @@ export type UserUncheckedUpdateWithoutClinicProccessesInput = {
   deletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   accessHistories?: Prisma.AccessHistoryUncheckedUpdateManyWithoutUserNestedInput
   audits?: Prisma.AuditUncheckedUpdateManyWithoutUserNestedInput
+  platformAdminActions?: Prisma.PlatformAdminAuditUncheckedUpdateManyWithoutActorNestedInput
+  platformAdminTargets?: Prisma.PlatformAdminAuditUncheckedUpdateManyWithoutTargetNestedInput
   loginHistories?: Prisma.LoginHistoryUncheckedUpdateManyWithoutUserNestedInput
   Person?: Prisma.PersonUncheckedUpdateManyWithoutUserNestedInput
   Appointment?: Prisma.AppointmentUncheckedUpdateManyWithoutDoctorNestedInput
@@ -4632,6 +5486,13 @@ export type UserUncheckedUpdateWithoutClinicProccessesInput = {
   UserPermission?: Prisma.UserPermissionUncheckedUpdateManyWithoutUserNestedInput
   refreshTokens?: Prisma.RefreshTokenUncheckedUpdateManyWithoutUserNestedInput
   authActionTokens?: Prisma.AuthActionTokenUncheckedUpdateManyWithoutUserNestedInput
+  requestedSubscriptionPayments?: Prisma.SubscriptionRequestUncheckedUpdateManyWithoutSubmittedByNestedInput
+  reviewedSubscriptionPayments?: Prisma.SubscriptionRequestUncheckedUpdateManyWithoutReviewedByNestedInput
+  approvedSubscriptions?: Prisma.ClinicSubscriptionUncheckedUpdateManyWithoutApprovedByNestedInput
+  subscriptionAudits?: Prisma.SubscriptionAuditUncheckedUpdateManyWithoutActorNestedInput
+  updatedSubscriptionSettings?: Prisma.SubscriptionSettingsUncheckedUpdateManyWithoutUpdatedByNestedInput
+  assistantConversations?: Prisma.AssistantConversationUncheckedUpdateManyWithoutUserNestedInput
+  assistantMessages?: Prisma.AssistantMessageUncheckedUpdateManyWithoutUserNestedInput
   stockSales?: Prisma.StockSaleUncheckedUpdateManyWithoutSoldByNestedInput
   createdCommunicationCampaigns?: Prisma.CommunicationCampaignUncheckedUpdateManyWithoutCreatedByNestedInput
 }
@@ -4651,6 +5512,8 @@ export type UserCreateWithoutDiagnosticsInput = {
   deletedAt?: Date | string | null
   accessHistories?: Prisma.AccessHistoryCreateNestedManyWithoutUserInput
   audits?: Prisma.AuditCreateNestedManyWithoutUserInput
+  platformAdminActions?: Prisma.PlatformAdminAuditCreateNestedManyWithoutActorInput
+  platformAdminTargets?: Prisma.PlatformAdminAuditCreateNestedManyWithoutTargetInput
   loginHistories?: Prisma.LoginHistoryCreateNestedManyWithoutUserInput
   Person?: Prisma.PersonCreateNestedManyWithoutUserInput
   Appointment?: Prisma.AppointmentCreateNestedManyWithoutDoctorInput
@@ -4670,10 +5533,17 @@ export type UserCreateWithoutDiagnosticsInput = {
   UserPermission?: Prisma.UserPermissionCreateNestedManyWithoutUserInput
   refreshTokens?: Prisma.RefreshTokenCreateNestedManyWithoutUserInput
   authActionTokens?: Prisma.AuthActionTokenCreateNestedManyWithoutUserInput
+  requestedSubscriptionPayments?: Prisma.SubscriptionRequestCreateNestedManyWithoutSubmittedByInput
+  reviewedSubscriptionPayments?: Prisma.SubscriptionRequestCreateNestedManyWithoutReviewedByInput
+  approvedSubscriptions?: Prisma.ClinicSubscriptionCreateNestedManyWithoutApprovedByInput
+  subscriptionAudits?: Prisma.SubscriptionAuditCreateNestedManyWithoutActorInput
+  updatedSubscriptionSettings?: Prisma.SubscriptionSettingsCreateNestedManyWithoutUpdatedByInput
+  assistantConversations?: Prisma.AssistantConversationCreateNestedManyWithoutUserInput
+  assistantMessages?: Prisma.AssistantMessageCreateNestedManyWithoutUserInput
   stockSales?: Prisma.StockSaleCreateNestedManyWithoutSoldByInput
   createdCommunicationCampaigns?: Prisma.CommunicationCampaignCreateNestedManyWithoutCreatedByInput
   Address?: Prisma.AddressCreateNestedOneWithoutUserInput
-  branch: Prisma.BranchCreateNestedOneWithoutUserInput
+  branch?: Prisma.BranchCreateNestedOneWithoutUserInput
   Role?: Prisma.RoleCreateNestedOneWithoutUserInput
 }
 
@@ -4682,7 +5552,7 @@ export type UserUncheckedCreateWithoutDiagnosticsInput = {
   email: string
   password: string
   username: string
-  branchId: string
+  branchId?: string | null
   addressId?: string | null
   roleId?: string | null
   isActive?: boolean
@@ -4695,6 +5565,8 @@ export type UserUncheckedCreateWithoutDiagnosticsInput = {
   deletedAt?: Date | string | null
   accessHistories?: Prisma.AccessHistoryUncheckedCreateNestedManyWithoutUserInput
   audits?: Prisma.AuditUncheckedCreateNestedManyWithoutUserInput
+  platformAdminActions?: Prisma.PlatformAdminAuditUncheckedCreateNestedManyWithoutActorInput
+  platformAdminTargets?: Prisma.PlatformAdminAuditUncheckedCreateNestedManyWithoutTargetInput
   loginHistories?: Prisma.LoginHistoryUncheckedCreateNestedManyWithoutUserInput
   Person?: Prisma.PersonUncheckedCreateNestedManyWithoutUserInput
   Appointment?: Prisma.AppointmentUncheckedCreateNestedManyWithoutDoctorInput
@@ -4714,6 +5586,13 @@ export type UserUncheckedCreateWithoutDiagnosticsInput = {
   UserPermission?: Prisma.UserPermissionUncheckedCreateNestedManyWithoutUserInput
   refreshTokens?: Prisma.RefreshTokenUncheckedCreateNestedManyWithoutUserInput
   authActionTokens?: Prisma.AuthActionTokenUncheckedCreateNestedManyWithoutUserInput
+  requestedSubscriptionPayments?: Prisma.SubscriptionRequestUncheckedCreateNestedManyWithoutSubmittedByInput
+  reviewedSubscriptionPayments?: Prisma.SubscriptionRequestUncheckedCreateNestedManyWithoutReviewedByInput
+  approvedSubscriptions?: Prisma.ClinicSubscriptionUncheckedCreateNestedManyWithoutApprovedByInput
+  subscriptionAudits?: Prisma.SubscriptionAuditUncheckedCreateNestedManyWithoutActorInput
+  updatedSubscriptionSettings?: Prisma.SubscriptionSettingsUncheckedCreateNestedManyWithoutUpdatedByInput
+  assistantConversations?: Prisma.AssistantConversationUncheckedCreateNestedManyWithoutUserInput
+  assistantMessages?: Prisma.AssistantMessageUncheckedCreateNestedManyWithoutUserInput
   stockSales?: Prisma.StockSaleUncheckedCreateNestedManyWithoutSoldByInput
   createdCommunicationCampaigns?: Prisma.CommunicationCampaignUncheckedCreateNestedManyWithoutCreatedByInput
 }
@@ -4749,6 +5628,8 @@ export type UserUpdateWithoutDiagnosticsInput = {
   deletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   accessHistories?: Prisma.AccessHistoryUpdateManyWithoutUserNestedInput
   audits?: Prisma.AuditUpdateManyWithoutUserNestedInput
+  platformAdminActions?: Prisma.PlatformAdminAuditUpdateManyWithoutActorNestedInput
+  platformAdminTargets?: Prisma.PlatformAdminAuditUpdateManyWithoutTargetNestedInput
   loginHistories?: Prisma.LoginHistoryUpdateManyWithoutUserNestedInput
   Person?: Prisma.PersonUpdateManyWithoutUserNestedInput
   Appointment?: Prisma.AppointmentUpdateManyWithoutDoctorNestedInput
@@ -4768,10 +5649,17 @@ export type UserUpdateWithoutDiagnosticsInput = {
   UserPermission?: Prisma.UserPermissionUpdateManyWithoutUserNestedInput
   refreshTokens?: Prisma.RefreshTokenUpdateManyWithoutUserNestedInput
   authActionTokens?: Prisma.AuthActionTokenUpdateManyWithoutUserNestedInput
+  requestedSubscriptionPayments?: Prisma.SubscriptionRequestUpdateManyWithoutSubmittedByNestedInput
+  reviewedSubscriptionPayments?: Prisma.SubscriptionRequestUpdateManyWithoutReviewedByNestedInput
+  approvedSubscriptions?: Prisma.ClinicSubscriptionUpdateManyWithoutApprovedByNestedInput
+  subscriptionAudits?: Prisma.SubscriptionAuditUpdateManyWithoutActorNestedInput
+  updatedSubscriptionSettings?: Prisma.SubscriptionSettingsUpdateManyWithoutUpdatedByNestedInput
+  assistantConversations?: Prisma.AssistantConversationUpdateManyWithoutUserNestedInput
+  assistantMessages?: Prisma.AssistantMessageUpdateManyWithoutUserNestedInput
   stockSales?: Prisma.StockSaleUpdateManyWithoutSoldByNestedInput
   createdCommunicationCampaigns?: Prisma.CommunicationCampaignUpdateManyWithoutCreatedByNestedInput
   Address?: Prisma.AddressUpdateOneWithoutUserNestedInput
-  branch?: Prisma.BranchUpdateOneRequiredWithoutUserNestedInput
+  branch?: Prisma.BranchUpdateOneWithoutUserNestedInput
   Role?: Prisma.RoleUpdateOneWithoutUserNestedInput
 }
 
@@ -4780,7 +5668,7 @@ export type UserUncheckedUpdateWithoutDiagnosticsInput = {
   email?: Prisma.StringFieldUpdateOperationsInput | string
   password?: Prisma.StringFieldUpdateOperationsInput | string
   username?: Prisma.StringFieldUpdateOperationsInput | string
-  branchId?: Prisma.StringFieldUpdateOperationsInput | string
+  branchId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   addressId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   roleId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
@@ -4793,6 +5681,8 @@ export type UserUncheckedUpdateWithoutDiagnosticsInput = {
   deletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   accessHistories?: Prisma.AccessHistoryUncheckedUpdateManyWithoutUserNestedInput
   audits?: Prisma.AuditUncheckedUpdateManyWithoutUserNestedInput
+  platformAdminActions?: Prisma.PlatformAdminAuditUncheckedUpdateManyWithoutActorNestedInput
+  platformAdminTargets?: Prisma.PlatformAdminAuditUncheckedUpdateManyWithoutTargetNestedInput
   loginHistories?: Prisma.LoginHistoryUncheckedUpdateManyWithoutUserNestedInput
   Person?: Prisma.PersonUncheckedUpdateManyWithoutUserNestedInput
   Appointment?: Prisma.AppointmentUncheckedUpdateManyWithoutDoctorNestedInput
@@ -4812,6 +5702,13 @@ export type UserUncheckedUpdateWithoutDiagnosticsInput = {
   UserPermission?: Prisma.UserPermissionUncheckedUpdateManyWithoutUserNestedInput
   refreshTokens?: Prisma.RefreshTokenUncheckedUpdateManyWithoutUserNestedInput
   authActionTokens?: Prisma.AuthActionTokenUncheckedUpdateManyWithoutUserNestedInput
+  requestedSubscriptionPayments?: Prisma.SubscriptionRequestUncheckedUpdateManyWithoutSubmittedByNestedInput
+  reviewedSubscriptionPayments?: Prisma.SubscriptionRequestUncheckedUpdateManyWithoutReviewedByNestedInput
+  approvedSubscriptions?: Prisma.ClinicSubscriptionUncheckedUpdateManyWithoutApprovedByNestedInput
+  subscriptionAudits?: Prisma.SubscriptionAuditUncheckedUpdateManyWithoutActorNestedInput
+  updatedSubscriptionSettings?: Prisma.SubscriptionSettingsUncheckedUpdateManyWithoutUpdatedByNestedInput
+  assistantConversations?: Prisma.AssistantConversationUncheckedUpdateManyWithoutUserNestedInput
+  assistantMessages?: Prisma.AssistantMessageUncheckedUpdateManyWithoutUserNestedInput
   stockSales?: Prisma.StockSaleUncheckedUpdateManyWithoutSoldByNestedInput
   createdCommunicationCampaigns?: Prisma.CommunicationCampaignUncheckedUpdateManyWithoutCreatedByNestedInput
 }
@@ -4831,6 +5728,8 @@ export type UserCreateWithoutPatientPrescriptionsInput = {
   deletedAt?: Date | string | null
   accessHistories?: Prisma.AccessHistoryCreateNestedManyWithoutUserInput
   audits?: Prisma.AuditCreateNestedManyWithoutUserInput
+  platformAdminActions?: Prisma.PlatformAdminAuditCreateNestedManyWithoutActorInput
+  platformAdminTargets?: Prisma.PlatformAdminAuditCreateNestedManyWithoutTargetInput
   loginHistories?: Prisma.LoginHistoryCreateNestedManyWithoutUserInput
   Person?: Prisma.PersonCreateNestedManyWithoutUserInput
   Appointment?: Prisma.AppointmentCreateNestedManyWithoutDoctorInput
@@ -4850,10 +5749,17 @@ export type UserCreateWithoutPatientPrescriptionsInput = {
   UserPermission?: Prisma.UserPermissionCreateNestedManyWithoutUserInput
   refreshTokens?: Prisma.RefreshTokenCreateNestedManyWithoutUserInput
   authActionTokens?: Prisma.AuthActionTokenCreateNestedManyWithoutUserInput
+  requestedSubscriptionPayments?: Prisma.SubscriptionRequestCreateNestedManyWithoutSubmittedByInput
+  reviewedSubscriptionPayments?: Prisma.SubscriptionRequestCreateNestedManyWithoutReviewedByInput
+  approvedSubscriptions?: Prisma.ClinicSubscriptionCreateNestedManyWithoutApprovedByInput
+  subscriptionAudits?: Prisma.SubscriptionAuditCreateNestedManyWithoutActorInput
+  updatedSubscriptionSettings?: Prisma.SubscriptionSettingsCreateNestedManyWithoutUpdatedByInput
+  assistantConversations?: Prisma.AssistantConversationCreateNestedManyWithoutUserInput
+  assistantMessages?: Prisma.AssistantMessageCreateNestedManyWithoutUserInput
   stockSales?: Prisma.StockSaleCreateNestedManyWithoutSoldByInput
   createdCommunicationCampaigns?: Prisma.CommunicationCampaignCreateNestedManyWithoutCreatedByInput
   Address?: Prisma.AddressCreateNestedOneWithoutUserInput
-  branch: Prisma.BranchCreateNestedOneWithoutUserInput
+  branch?: Prisma.BranchCreateNestedOneWithoutUserInput
   Role?: Prisma.RoleCreateNestedOneWithoutUserInput
 }
 
@@ -4862,7 +5768,7 @@ export type UserUncheckedCreateWithoutPatientPrescriptionsInput = {
   email: string
   password: string
   username: string
-  branchId: string
+  branchId?: string | null
   addressId?: string | null
   roleId?: string | null
   isActive?: boolean
@@ -4875,6 +5781,8 @@ export type UserUncheckedCreateWithoutPatientPrescriptionsInput = {
   deletedAt?: Date | string | null
   accessHistories?: Prisma.AccessHistoryUncheckedCreateNestedManyWithoutUserInput
   audits?: Prisma.AuditUncheckedCreateNestedManyWithoutUserInput
+  platformAdminActions?: Prisma.PlatformAdminAuditUncheckedCreateNestedManyWithoutActorInput
+  platformAdminTargets?: Prisma.PlatformAdminAuditUncheckedCreateNestedManyWithoutTargetInput
   loginHistories?: Prisma.LoginHistoryUncheckedCreateNestedManyWithoutUserInput
   Person?: Prisma.PersonUncheckedCreateNestedManyWithoutUserInput
   Appointment?: Prisma.AppointmentUncheckedCreateNestedManyWithoutDoctorInput
@@ -4894,6 +5802,13 @@ export type UserUncheckedCreateWithoutPatientPrescriptionsInput = {
   UserPermission?: Prisma.UserPermissionUncheckedCreateNestedManyWithoutUserInput
   refreshTokens?: Prisma.RefreshTokenUncheckedCreateNestedManyWithoutUserInput
   authActionTokens?: Prisma.AuthActionTokenUncheckedCreateNestedManyWithoutUserInput
+  requestedSubscriptionPayments?: Prisma.SubscriptionRequestUncheckedCreateNestedManyWithoutSubmittedByInput
+  reviewedSubscriptionPayments?: Prisma.SubscriptionRequestUncheckedCreateNestedManyWithoutReviewedByInput
+  approvedSubscriptions?: Prisma.ClinicSubscriptionUncheckedCreateNestedManyWithoutApprovedByInput
+  subscriptionAudits?: Prisma.SubscriptionAuditUncheckedCreateNestedManyWithoutActorInput
+  updatedSubscriptionSettings?: Prisma.SubscriptionSettingsUncheckedCreateNestedManyWithoutUpdatedByInput
+  assistantConversations?: Prisma.AssistantConversationUncheckedCreateNestedManyWithoutUserInput
+  assistantMessages?: Prisma.AssistantMessageUncheckedCreateNestedManyWithoutUserInput
   stockSales?: Prisma.StockSaleUncheckedCreateNestedManyWithoutSoldByInput
   createdCommunicationCampaigns?: Prisma.CommunicationCampaignUncheckedCreateNestedManyWithoutCreatedByInput
 }
@@ -4929,6 +5844,8 @@ export type UserUpdateWithoutPatientPrescriptionsInput = {
   deletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   accessHistories?: Prisma.AccessHistoryUpdateManyWithoutUserNestedInput
   audits?: Prisma.AuditUpdateManyWithoutUserNestedInput
+  platformAdminActions?: Prisma.PlatformAdminAuditUpdateManyWithoutActorNestedInput
+  platformAdminTargets?: Prisma.PlatformAdminAuditUpdateManyWithoutTargetNestedInput
   loginHistories?: Prisma.LoginHistoryUpdateManyWithoutUserNestedInput
   Person?: Prisma.PersonUpdateManyWithoutUserNestedInput
   Appointment?: Prisma.AppointmentUpdateManyWithoutDoctorNestedInput
@@ -4948,10 +5865,17 @@ export type UserUpdateWithoutPatientPrescriptionsInput = {
   UserPermission?: Prisma.UserPermissionUpdateManyWithoutUserNestedInput
   refreshTokens?: Prisma.RefreshTokenUpdateManyWithoutUserNestedInput
   authActionTokens?: Prisma.AuthActionTokenUpdateManyWithoutUserNestedInput
+  requestedSubscriptionPayments?: Prisma.SubscriptionRequestUpdateManyWithoutSubmittedByNestedInput
+  reviewedSubscriptionPayments?: Prisma.SubscriptionRequestUpdateManyWithoutReviewedByNestedInput
+  approvedSubscriptions?: Prisma.ClinicSubscriptionUpdateManyWithoutApprovedByNestedInput
+  subscriptionAudits?: Prisma.SubscriptionAuditUpdateManyWithoutActorNestedInput
+  updatedSubscriptionSettings?: Prisma.SubscriptionSettingsUpdateManyWithoutUpdatedByNestedInput
+  assistantConversations?: Prisma.AssistantConversationUpdateManyWithoutUserNestedInput
+  assistantMessages?: Prisma.AssistantMessageUpdateManyWithoutUserNestedInput
   stockSales?: Prisma.StockSaleUpdateManyWithoutSoldByNestedInput
   createdCommunicationCampaigns?: Prisma.CommunicationCampaignUpdateManyWithoutCreatedByNestedInput
   Address?: Prisma.AddressUpdateOneWithoutUserNestedInput
-  branch?: Prisma.BranchUpdateOneRequiredWithoutUserNestedInput
+  branch?: Prisma.BranchUpdateOneWithoutUserNestedInput
   Role?: Prisma.RoleUpdateOneWithoutUserNestedInput
 }
 
@@ -4960,7 +5884,7 @@ export type UserUncheckedUpdateWithoutPatientPrescriptionsInput = {
   email?: Prisma.StringFieldUpdateOperationsInput | string
   password?: Prisma.StringFieldUpdateOperationsInput | string
   username?: Prisma.StringFieldUpdateOperationsInput | string
-  branchId?: Prisma.StringFieldUpdateOperationsInput | string
+  branchId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   addressId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   roleId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
@@ -4973,6 +5897,8 @@ export type UserUncheckedUpdateWithoutPatientPrescriptionsInput = {
   deletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   accessHistories?: Prisma.AccessHistoryUncheckedUpdateManyWithoutUserNestedInput
   audits?: Prisma.AuditUncheckedUpdateManyWithoutUserNestedInput
+  platformAdminActions?: Prisma.PlatformAdminAuditUncheckedUpdateManyWithoutActorNestedInput
+  platformAdminTargets?: Prisma.PlatformAdminAuditUncheckedUpdateManyWithoutTargetNestedInput
   loginHistories?: Prisma.LoginHistoryUncheckedUpdateManyWithoutUserNestedInput
   Person?: Prisma.PersonUncheckedUpdateManyWithoutUserNestedInput
   Appointment?: Prisma.AppointmentUncheckedUpdateManyWithoutDoctorNestedInput
@@ -4992,6 +5918,13 @@ export type UserUncheckedUpdateWithoutPatientPrescriptionsInput = {
   UserPermission?: Prisma.UserPermissionUncheckedUpdateManyWithoutUserNestedInput
   refreshTokens?: Prisma.RefreshTokenUncheckedUpdateManyWithoutUserNestedInput
   authActionTokens?: Prisma.AuthActionTokenUncheckedUpdateManyWithoutUserNestedInput
+  requestedSubscriptionPayments?: Prisma.SubscriptionRequestUncheckedUpdateManyWithoutSubmittedByNestedInput
+  reviewedSubscriptionPayments?: Prisma.SubscriptionRequestUncheckedUpdateManyWithoutReviewedByNestedInput
+  approvedSubscriptions?: Prisma.ClinicSubscriptionUncheckedUpdateManyWithoutApprovedByNestedInput
+  subscriptionAudits?: Prisma.SubscriptionAuditUncheckedUpdateManyWithoutActorNestedInput
+  updatedSubscriptionSettings?: Prisma.SubscriptionSettingsUncheckedUpdateManyWithoutUpdatedByNestedInput
+  assistantConversations?: Prisma.AssistantConversationUncheckedUpdateManyWithoutUserNestedInput
+  assistantMessages?: Prisma.AssistantMessageUncheckedUpdateManyWithoutUserNestedInput
   stockSales?: Prisma.StockSaleUncheckedUpdateManyWithoutSoldByNestedInput
   createdCommunicationCampaigns?: Prisma.CommunicationCampaignUncheckedUpdateManyWithoutCreatedByNestedInput
 }
@@ -5011,6 +5944,8 @@ export type UserCreateWithoutXrayAnalysesInput = {
   deletedAt?: Date | string | null
   accessHistories?: Prisma.AccessHistoryCreateNestedManyWithoutUserInput
   audits?: Prisma.AuditCreateNestedManyWithoutUserInput
+  platformAdminActions?: Prisma.PlatformAdminAuditCreateNestedManyWithoutActorInput
+  platformAdminTargets?: Prisma.PlatformAdminAuditCreateNestedManyWithoutTargetInput
   loginHistories?: Prisma.LoginHistoryCreateNestedManyWithoutUserInput
   Person?: Prisma.PersonCreateNestedManyWithoutUserInput
   Appointment?: Prisma.AppointmentCreateNestedManyWithoutDoctorInput
@@ -5030,10 +5965,17 @@ export type UserCreateWithoutXrayAnalysesInput = {
   UserPermission?: Prisma.UserPermissionCreateNestedManyWithoutUserInput
   refreshTokens?: Prisma.RefreshTokenCreateNestedManyWithoutUserInput
   authActionTokens?: Prisma.AuthActionTokenCreateNestedManyWithoutUserInput
+  requestedSubscriptionPayments?: Prisma.SubscriptionRequestCreateNestedManyWithoutSubmittedByInput
+  reviewedSubscriptionPayments?: Prisma.SubscriptionRequestCreateNestedManyWithoutReviewedByInput
+  approvedSubscriptions?: Prisma.ClinicSubscriptionCreateNestedManyWithoutApprovedByInput
+  subscriptionAudits?: Prisma.SubscriptionAuditCreateNestedManyWithoutActorInput
+  updatedSubscriptionSettings?: Prisma.SubscriptionSettingsCreateNestedManyWithoutUpdatedByInput
+  assistantConversations?: Prisma.AssistantConversationCreateNestedManyWithoutUserInput
+  assistantMessages?: Prisma.AssistantMessageCreateNestedManyWithoutUserInput
   stockSales?: Prisma.StockSaleCreateNestedManyWithoutSoldByInput
   createdCommunicationCampaigns?: Prisma.CommunicationCampaignCreateNestedManyWithoutCreatedByInput
   Address?: Prisma.AddressCreateNestedOneWithoutUserInput
-  branch: Prisma.BranchCreateNestedOneWithoutUserInput
+  branch?: Prisma.BranchCreateNestedOneWithoutUserInput
   Role?: Prisma.RoleCreateNestedOneWithoutUserInput
 }
 
@@ -5042,7 +5984,7 @@ export type UserUncheckedCreateWithoutXrayAnalysesInput = {
   email: string
   password: string
   username: string
-  branchId: string
+  branchId?: string | null
   addressId?: string | null
   roleId?: string | null
   isActive?: boolean
@@ -5055,6 +5997,8 @@ export type UserUncheckedCreateWithoutXrayAnalysesInput = {
   deletedAt?: Date | string | null
   accessHistories?: Prisma.AccessHistoryUncheckedCreateNestedManyWithoutUserInput
   audits?: Prisma.AuditUncheckedCreateNestedManyWithoutUserInput
+  platformAdminActions?: Prisma.PlatformAdminAuditUncheckedCreateNestedManyWithoutActorInput
+  platformAdminTargets?: Prisma.PlatformAdminAuditUncheckedCreateNestedManyWithoutTargetInput
   loginHistories?: Prisma.LoginHistoryUncheckedCreateNestedManyWithoutUserInput
   Person?: Prisma.PersonUncheckedCreateNestedManyWithoutUserInput
   Appointment?: Prisma.AppointmentUncheckedCreateNestedManyWithoutDoctorInput
@@ -5074,6 +6018,13 @@ export type UserUncheckedCreateWithoutXrayAnalysesInput = {
   UserPermission?: Prisma.UserPermissionUncheckedCreateNestedManyWithoutUserInput
   refreshTokens?: Prisma.RefreshTokenUncheckedCreateNestedManyWithoutUserInput
   authActionTokens?: Prisma.AuthActionTokenUncheckedCreateNestedManyWithoutUserInput
+  requestedSubscriptionPayments?: Prisma.SubscriptionRequestUncheckedCreateNestedManyWithoutSubmittedByInput
+  reviewedSubscriptionPayments?: Prisma.SubscriptionRequestUncheckedCreateNestedManyWithoutReviewedByInput
+  approvedSubscriptions?: Prisma.ClinicSubscriptionUncheckedCreateNestedManyWithoutApprovedByInput
+  subscriptionAudits?: Prisma.SubscriptionAuditUncheckedCreateNestedManyWithoutActorInput
+  updatedSubscriptionSettings?: Prisma.SubscriptionSettingsUncheckedCreateNestedManyWithoutUpdatedByInput
+  assistantConversations?: Prisma.AssistantConversationUncheckedCreateNestedManyWithoutUserInput
+  assistantMessages?: Prisma.AssistantMessageUncheckedCreateNestedManyWithoutUserInput
   stockSales?: Prisma.StockSaleUncheckedCreateNestedManyWithoutSoldByInput
   createdCommunicationCampaigns?: Prisma.CommunicationCampaignUncheckedCreateNestedManyWithoutCreatedByInput
 }
@@ -5109,6 +6060,8 @@ export type UserUpdateWithoutXrayAnalysesInput = {
   deletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   accessHistories?: Prisma.AccessHistoryUpdateManyWithoutUserNestedInput
   audits?: Prisma.AuditUpdateManyWithoutUserNestedInput
+  platformAdminActions?: Prisma.PlatformAdminAuditUpdateManyWithoutActorNestedInput
+  platformAdminTargets?: Prisma.PlatformAdminAuditUpdateManyWithoutTargetNestedInput
   loginHistories?: Prisma.LoginHistoryUpdateManyWithoutUserNestedInput
   Person?: Prisma.PersonUpdateManyWithoutUserNestedInput
   Appointment?: Prisma.AppointmentUpdateManyWithoutDoctorNestedInput
@@ -5128,10 +6081,17 @@ export type UserUpdateWithoutXrayAnalysesInput = {
   UserPermission?: Prisma.UserPermissionUpdateManyWithoutUserNestedInput
   refreshTokens?: Prisma.RefreshTokenUpdateManyWithoutUserNestedInput
   authActionTokens?: Prisma.AuthActionTokenUpdateManyWithoutUserNestedInput
+  requestedSubscriptionPayments?: Prisma.SubscriptionRequestUpdateManyWithoutSubmittedByNestedInput
+  reviewedSubscriptionPayments?: Prisma.SubscriptionRequestUpdateManyWithoutReviewedByNestedInput
+  approvedSubscriptions?: Prisma.ClinicSubscriptionUpdateManyWithoutApprovedByNestedInput
+  subscriptionAudits?: Prisma.SubscriptionAuditUpdateManyWithoutActorNestedInput
+  updatedSubscriptionSettings?: Prisma.SubscriptionSettingsUpdateManyWithoutUpdatedByNestedInput
+  assistantConversations?: Prisma.AssistantConversationUpdateManyWithoutUserNestedInput
+  assistantMessages?: Prisma.AssistantMessageUpdateManyWithoutUserNestedInput
   stockSales?: Prisma.StockSaleUpdateManyWithoutSoldByNestedInput
   createdCommunicationCampaigns?: Prisma.CommunicationCampaignUpdateManyWithoutCreatedByNestedInput
   Address?: Prisma.AddressUpdateOneWithoutUserNestedInput
-  branch?: Prisma.BranchUpdateOneRequiredWithoutUserNestedInput
+  branch?: Prisma.BranchUpdateOneWithoutUserNestedInput
   Role?: Prisma.RoleUpdateOneWithoutUserNestedInput
 }
 
@@ -5140,7 +6100,7 @@ export type UserUncheckedUpdateWithoutXrayAnalysesInput = {
   email?: Prisma.StringFieldUpdateOperationsInput | string
   password?: Prisma.StringFieldUpdateOperationsInput | string
   username?: Prisma.StringFieldUpdateOperationsInput | string
-  branchId?: Prisma.StringFieldUpdateOperationsInput | string
+  branchId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   addressId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   roleId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
@@ -5153,6 +6113,8 @@ export type UserUncheckedUpdateWithoutXrayAnalysesInput = {
   deletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   accessHistories?: Prisma.AccessHistoryUncheckedUpdateManyWithoutUserNestedInput
   audits?: Prisma.AuditUncheckedUpdateManyWithoutUserNestedInput
+  platformAdminActions?: Prisma.PlatformAdminAuditUncheckedUpdateManyWithoutActorNestedInput
+  platformAdminTargets?: Prisma.PlatformAdminAuditUncheckedUpdateManyWithoutTargetNestedInput
   loginHistories?: Prisma.LoginHistoryUncheckedUpdateManyWithoutUserNestedInput
   Person?: Prisma.PersonUncheckedUpdateManyWithoutUserNestedInput
   Appointment?: Prisma.AppointmentUncheckedUpdateManyWithoutDoctorNestedInput
@@ -5172,6 +6134,13 @@ export type UserUncheckedUpdateWithoutXrayAnalysesInput = {
   UserPermission?: Prisma.UserPermissionUncheckedUpdateManyWithoutUserNestedInput
   refreshTokens?: Prisma.RefreshTokenUncheckedUpdateManyWithoutUserNestedInput
   authActionTokens?: Prisma.AuthActionTokenUncheckedUpdateManyWithoutUserNestedInput
+  requestedSubscriptionPayments?: Prisma.SubscriptionRequestUncheckedUpdateManyWithoutSubmittedByNestedInput
+  reviewedSubscriptionPayments?: Prisma.SubscriptionRequestUncheckedUpdateManyWithoutReviewedByNestedInput
+  approvedSubscriptions?: Prisma.ClinicSubscriptionUncheckedUpdateManyWithoutApprovedByNestedInput
+  subscriptionAudits?: Prisma.SubscriptionAuditUncheckedUpdateManyWithoutActorNestedInput
+  updatedSubscriptionSettings?: Prisma.SubscriptionSettingsUncheckedUpdateManyWithoutUpdatedByNestedInput
+  assistantConversations?: Prisma.AssistantConversationUncheckedUpdateManyWithoutUserNestedInput
+  assistantMessages?: Prisma.AssistantMessageUncheckedUpdateManyWithoutUserNestedInput
   stockSales?: Prisma.StockSaleUncheckedUpdateManyWithoutSoldByNestedInput
   createdCommunicationCampaigns?: Prisma.CommunicationCampaignUncheckedUpdateManyWithoutCreatedByNestedInput
 }
@@ -5191,6 +6160,8 @@ export type UserCreateWithoutAuthoredPatientDocumentsInput = {
   deletedAt?: Date | string | null
   accessHistories?: Prisma.AccessHistoryCreateNestedManyWithoutUserInput
   audits?: Prisma.AuditCreateNestedManyWithoutUserInput
+  platformAdminActions?: Prisma.PlatformAdminAuditCreateNestedManyWithoutActorInput
+  platformAdminTargets?: Prisma.PlatformAdminAuditCreateNestedManyWithoutTargetInput
   loginHistories?: Prisma.LoginHistoryCreateNestedManyWithoutUserInput
   Person?: Prisma.PersonCreateNestedManyWithoutUserInput
   Appointment?: Prisma.AppointmentCreateNestedManyWithoutDoctorInput
@@ -5210,10 +6181,17 @@ export type UserCreateWithoutAuthoredPatientDocumentsInput = {
   UserPermission?: Prisma.UserPermissionCreateNestedManyWithoutUserInput
   refreshTokens?: Prisma.RefreshTokenCreateNestedManyWithoutUserInput
   authActionTokens?: Prisma.AuthActionTokenCreateNestedManyWithoutUserInput
+  requestedSubscriptionPayments?: Prisma.SubscriptionRequestCreateNestedManyWithoutSubmittedByInput
+  reviewedSubscriptionPayments?: Prisma.SubscriptionRequestCreateNestedManyWithoutReviewedByInput
+  approvedSubscriptions?: Prisma.ClinicSubscriptionCreateNestedManyWithoutApprovedByInput
+  subscriptionAudits?: Prisma.SubscriptionAuditCreateNestedManyWithoutActorInput
+  updatedSubscriptionSettings?: Prisma.SubscriptionSettingsCreateNestedManyWithoutUpdatedByInput
+  assistantConversations?: Prisma.AssistantConversationCreateNestedManyWithoutUserInput
+  assistantMessages?: Prisma.AssistantMessageCreateNestedManyWithoutUserInput
   stockSales?: Prisma.StockSaleCreateNestedManyWithoutSoldByInput
   createdCommunicationCampaigns?: Prisma.CommunicationCampaignCreateNestedManyWithoutCreatedByInput
   Address?: Prisma.AddressCreateNestedOneWithoutUserInput
-  branch: Prisma.BranchCreateNestedOneWithoutUserInput
+  branch?: Prisma.BranchCreateNestedOneWithoutUserInput
   Role?: Prisma.RoleCreateNestedOneWithoutUserInput
 }
 
@@ -5222,7 +6200,7 @@ export type UserUncheckedCreateWithoutAuthoredPatientDocumentsInput = {
   email: string
   password: string
   username: string
-  branchId: string
+  branchId?: string | null
   addressId?: string | null
   roleId?: string | null
   isActive?: boolean
@@ -5235,6 +6213,8 @@ export type UserUncheckedCreateWithoutAuthoredPatientDocumentsInput = {
   deletedAt?: Date | string | null
   accessHistories?: Prisma.AccessHistoryUncheckedCreateNestedManyWithoutUserInput
   audits?: Prisma.AuditUncheckedCreateNestedManyWithoutUserInput
+  platformAdminActions?: Prisma.PlatformAdminAuditUncheckedCreateNestedManyWithoutActorInput
+  platformAdminTargets?: Prisma.PlatformAdminAuditUncheckedCreateNestedManyWithoutTargetInput
   loginHistories?: Prisma.LoginHistoryUncheckedCreateNestedManyWithoutUserInput
   Person?: Prisma.PersonUncheckedCreateNestedManyWithoutUserInput
   Appointment?: Prisma.AppointmentUncheckedCreateNestedManyWithoutDoctorInput
@@ -5254,6 +6234,13 @@ export type UserUncheckedCreateWithoutAuthoredPatientDocumentsInput = {
   UserPermission?: Prisma.UserPermissionUncheckedCreateNestedManyWithoutUserInput
   refreshTokens?: Prisma.RefreshTokenUncheckedCreateNestedManyWithoutUserInput
   authActionTokens?: Prisma.AuthActionTokenUncheckedCreateNestedManyWithoutUserInput
+  requestedSubscriptionPayments?: Prisma.SubscriptionRequestUncheckedCreateNestedManyWithoutSubmittedByInput
+  reviewedSubscriptionPayments?: Prisma.SubscriptionRequestUncheckedCreateNestedManyWithoutReviewedByInput
+  approvedSubscriptions?: Prisma.ClinicSubscriptionUncheckedCreateNestedManyWithoutApprovedByInput
+  subscriptionAudits?: Prisma.SubscriptionAuditUncheckedCreateNestedManyWithoutActorInput
+  updatedSubscriptionSettings?: Prisma.SubscriptionSettingsUncheckedCreateNestedManyWithoutUpdatedByInput
+  assistantConversations?: Prisma.AssistantConversationUncheckedCreateNestedManyWithoutUserInput
+  assistantMessages?: Prisma.AssistantMessageUncheckedCreateNestedManyWithoutUserInput
   stockSales?: Prisma.StockSaleUncheckedCreateNestedManyWithoutSoldByInput
   createdCommunicationCampaigns?: Prisma.CommunicationCampaignUncheckedCreateNestedManyWithoutCreatedByInput
 }
@@ -5289,6 +6276,8 @@ export type UserUpdateWithoutAuthoredPatientDocumentsInput = {
   deletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   accessHistories?: Prisma.AccessHistoryUpdateManyWithoutUserNestedInput
   audits?: Prisma.AuditUpdateManyWithoutUserNestedInput
+  platformAdminActions?: Prisma.PlatformAdminAuditUpdateManyWithoutActorNestedInput
+  platformAdminTargets?: Prisma.PlatformAdminAuditUpdateManyWithoutTargetNestedInput
   loginHistories?: Prisma.LoginHistoryUpdateManyWithoutUserNestedInput
   Person?: Prisma.PersonUpdateManyWithoutUserNestedInput
   Appointment?: Prisma.AppointmentUpdateManyWithoutDoctorNestedInput
@@ -5308,10 +6297,17 @@ export type UserUpdateWithoutAuthoredPatientDocumentsInput = {
   UserPermission?: Prisma.UserPermissionUpdateManyWithoutUserNestedInput
   refreshTokens?: Prisma.RefreshTokenUpdateManyWithoutUserNestedInput
   authActionTokens?: Prisma.AuthActionTokenUpdateManyWithoutUserNestedInput
+  requestedSubscriptionPayments?: Prisma.SubscriptionRequestUpdateManyWithoutSubmittedByNestedInput
+  reviewedSubscriptionPayments?: Prisma.SubscriptionRequestUpdateManyWithoutReviewedByNestedInput
+  approvedSubscriptions?: Prisma.ClinicSubscriptionUpdateManyWithoutApprovedByNestedInput
+  subscriptionAudits?: Prisma.SubscriptionAuditUpdateManyWithoutActorNestedInput
+  updatedSubscriptionSettings?: Prisma.SubscriptionSettingsUpdateManyWithoutUpdatedByNestedInput
+  assistantConversations?: Prisma.AssistantConversationUpdateManyWithoutUserNestedInput
+  assistantMessages?: Prisma.AssistantMessageUpdateManyWithoutUserNestedInput
   stockSales?: Prisma.StockSaleUpdateManyWithoutSoldByNestedInput
   createdCommunicationCampaigns?: Prisma.CommunicationCampaignUpdateManyWithoutCreatedByNestedInput
   Address?: Prisma.AddressUpdateOneWithoutUserNestedInput
-  branch?: Prisma.BranchUpdateOneRequiredWithoutUserNestedInput
+  branch?: Prisma.BranchUpdateOneWithoutUserNestedInput
   Role?: Prisma.RoleUpdateOneWithoutUserNestedInput
 }
 
@@ -5320,7 +6316,7 @@ export type UserUncheckedUpdateWithoutAuthoredPatientDocumentsInput = {
   email?: Prisma.StringFieldUpdateOperationsInput | string
   password?: Prisma.StringFieldUpdateOperationsInput | string
   username?: Prisma.StringFieldUpdateOperationsInput | string
-  branchId?: Prisma.StringFieldUpdateOperationsInput | string
+  branchId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   addressId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   roleId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
@@ -5333,6 +6329,8 @@ export type UserUncheckedUpdateWithoutAuthoredPatientDocumentsInput = {
   deletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   accessHistories?: Prisma.AccessHistoryUncheckedUpdateManyWithoutUserNestedInput
   audits?: Prisma.AuditUncheckedUpdateManyWithoutUserNestedInput
+  platformAdminActions?: Prisma.PlatformAdminAuditUncheckedUpdateManyWithoutActorNestedInput
+  platformAdminTargets?: Prisma.PlatformAdminAuditUncheckedUpdateManyWithoutTargetNestedInput
   loginHistories?: Prisma.LoginHistoryUncheckedUpdateManyWithoutUserNestedInput
   Person?: Prisma.PersonUncheckedUpdateManyWithoutUserNestedInput
   Appointment?: Prisma.AppointmentUncheckedUpdateManyWithoutDoctorNestedInput
@@ -5352,6 +6350,13 @@ export type UserUncheckedUpdateWithoutAuthoredPatientDocumentsInput = {
   UserPermission?: Prisma.UserPermissionUncheckedUpdateManyWithoutUserNestedInput
   refreshTokens?: Prisma.RefreshTokenUncheckedUpdateManyWithoutUserNestedInput
   authActionTokens?: Prisma.AuthActionTokenUncheckedUpdateManyWithoutUserNestedInput
+  requestedSubscriptionPayments?: Prisma.SubscriptionRequestUncheckedUpdateManyWithoutSubmittedByNestedInput
+  reviewedSubscriptionPayments?: Prisma.SubscriptionRequestUncheckedUpdateManyWithoutReviewedByNestedInput
+  approvedSubscriptions?: Prisma.ClinicSubscriptionUncheckedUpdateManyWithoutApprovedByNestedInput
+  subscriptionAudits?: Prisma.SubscriptionAuditUncheckedUpdateManyWithoutActorNestedInput
+  updatedSubscriptionSettings?: Prisma.SubscriptionSettingsUncheckedUpdateManyWithoutUpdatedByNestedInput
+  assistantConversations?: Prisma.AssistantConversationUncheckedUpdateManyWithoutUserNestedInput
+  assistantMessages?: Prisma.AssistantMessageUncheckedUpdateManyWithoutUserNestedInput
   stockSales?: Prisma.StockSaleUncheckedUpdateManyWithoutSoldByNestedInput
   createdCommunicationCampaigns?: Prisma.CommunicationCampaignUncheckedUpdateManyWithoutCreatedByNestedInput
 }
@@ -5370,6 +6375,8 @@ export type UserCreateWithoutAuditsInput = {
   updatedAt?: Date | string
   deletedAt?: Date | string | null
   accessHistories?: Prisma.AccessHistoryCreateNestedManyWithoutUserInput
+  platformAdminActions?: Prisma.PlatformAdminAuditCreateNestedManyWithoutActorInput
+  platformAdminTargets?: Prisma.PlatformAdminAuditCreateNestedManyWithoutTargetInput
   loginHistories?: Prisma.LoginHistoryCreateNestedManyWithoutUserInput
   Person?: Prisma.PersonCreateNestedManyWithoutUserInput
   Appointment?: Prisma.AppointmentCreateNestedManyWithoutDoctorInput
@@ -5390,10 +6397,17 @@ export type UserCreateWithoutAuditsInput = {
   UserPermission?: Prisma.UserPermissionCreateNestedManyWithoutUserInput
   refreshTokens?: Prisma.RefreshTokenCreateNestedManyWithoutUserInput
   authActionTokens?: Prisma.AuthActionTokenCreateNestedManyWithoutUserInput
+  requestedSubscriptionPayments?: Prisma.SubscriptionRequestCreateNestedManyWithoutSubmittedByInput
+  reviewedSubscriptionPayments?: Prisma.SubscriptionRequestCreateNestedManyWithoutReviewedByInput
+  approvedSubscriptions?: Prisma.ClinicSubscriptionCreateNestedManyWithoutApprovedByInput
+  subscriptionAudits?: Prisma.SubscriptionAuditCreateNestedManyWithoutActorInput
+  updatedSubscriptionSettings?: Prisma.SubscriptionSettingsCreateNestedManyWithoutUpdatedByInput
+  assistantConversations?: Prisma.AssistantConversationCreateNestedManyWithoutUserInput
+  assistantMessages?: Prisma.AssistantMessageCreateNestedManyWithoutUserInput
   stockSales?: Prisma.StockSaleCreateNestedManyWithoutSoldByInput
   createdCommunicationCampaigns?: Prisma.CommunicationCampaignCreateNestedManyWithoutCreatedByInput
   Address?: Prisma.AddressCreateNestedOneWithoutUserInput
-  branch: Prisma.BranchCreateNestedOneWithoutUserInput
+  branch?: Prisma.BranchCreateNestedOneWithoutUserInput
   Role?: Prisma.RoleCreateNestedOneWithoutUserInput
 }
 
@@ -5402,7 +6416,7 @@ export type UserUncheckedCreateWithoutAuditsInput = {
   email: string
   password: string
   username: string
-  branchId: string
+  branchId?: string | null
   addressId?: string | null
   roleId?: string | null
   isActive?: boolean
@@ -5414,6 +6428,8 @@ export type UserUncheckedCreateWithoutAuditsInput = {
   updatedAt?: Date | string
   deletedAt?: Date | string | null
   accessHistories?: Prisma.AccessHistoryUncheckedCreateNestedManyWithoutUserInput
+  platformAdminActions?: Prisma.PlatformAdminAuditUncheckedCreateNestedManyWithoutActorInput
+  platformAdminTargets?: Prisma.PlatformAdminAuditUncheckedCreateNestedManyWithoutTargetInput
   loginHistories?: Prisma.LoginHistoryUncheckedCreateNestedManyWithoutUserInput
   Person?: Prisma.PersonUncheckedCreateNestedManyWithoutUserInput
   Appointment?: Prisma.AppointmentUncheckedCreateNestedManyWithoutDoctorInput
@@ -5434,6 +6450,13 @@ export type UserUncheckedCreateWithoutAuditsInput = {
   UserPermission?: Prisma.UserPermissionUncheckedCreateNestedManyWithoutUserInput
   refreshTokens?: Prisma.RefreshTokenUncheckedCreateNestedManyWithoutUserInput
   authActionTokens?: Prisma.AuthActionTokenUncheckedCreateNestedManyWithoutUserInput
+  requestedSubscriptionPayments?: Prisma.SubscriptionRequestUncheckedCreateNestedManyWithoutSubmittedByInput
+  reviewedSubscriptionPayments?: Prisma.SubscriptionRequestUncheckedCreateNestedManyWithoutReviewedByInput
+  approvedSubscriptions?: Prisma.ClinicSubscriptionUncheckedCreateNestedManyWithoutApprovedByInput
+  subscriptionAudits?: Prisma.SubscriptionAuditUncheckedCreateNestedManyWithoutActorInput
+  updatedSubscriptionSettings?: Prisma.SubscriptionSettingsUncheckedCreateNestedManyWithoutUpdatedByInput
+  assistantConversations?: Prisma.AssistantConversationUncheckedCreateNestedManyWithoutUserInput
+  assistantMessages?: Prisma.AssistantMessageUncheckedCreateNestedManyWithoutUserInput
   stockSales?: Prisma.StockSaleUncheckedCreateNestedManyWithoutSoldByInput
   createdCommunicationCampaigns?: Prisma.CommunicationCampaignUncheckedCreateNestedManyWithoutCreatedByInput
 }
@@ -5468,6 +6491,8 @@ export type UserUpdateWithoutAuditsInput = {
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   deletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   accessHistories?: Prisma.AccessHistoryUpdateManyWithoutUserNestedInput
+  platformAdminActions?: Prisma.PlatformAdminAuditUpdateManyWithoutActorNestedInput
+  platformAdminTargets?: Prisma.PlatformAdminAuditUpdateManyWithoutTargetNestedInput
   loginHistories?: Prisma.LoginHistoryUpdateManyWithoutUserNestedInput
   Person?: Prisma.PersonUpdateManyWithoutUserNestedInput
   Appointment?: Prisma.AppointmentUpdateManyWithoutDoctorNestedInput
@@ -5488,10 +6513,17 @@ export type UserUpdateWithoutAuditsInput = {
   UserPermission?: Prisma.UserPermissionUpdateManyWithoutUserNestedInput
   refreshTokens?: Prisma.RefreshTokenUpdateManyWithoutUserNestedInput
   authActionTokens?: Prisma.AuthActionTokenUpdateManyWithoutUserNestedInput
+  requestedSubscriptionPayments?: Prisma.SubscriptionRequestUpdateManyWithoutSubmittedByNestedInput
+  reviewedSubscriptionPayments?: Prisma.SubscriptionRequestUpdateManyWithoutReviewedByNestedInput
+  approvedSubscriptions?: Prisma.ClinicSubscriptionUpdateManyWithoutApprovedByNestedInput
+  subscriptionAudits?: Prisma.SubscriptionAuditUpdateManyWithoutActorNestedInput
+  updatedSubscriptionSettings?: Prisma.SubscriptionSettingsUpdateManyWithoutUpdatedByNestedInput
+  assistantConversations?: Prisma.AssistantConversationUpdateManyWithoutUserNestedInput
+  assistantMessages?: Prisma.AssistantMessageUpdateManyWithoutUserNestedInput
   stockSales?: Prisma.StockSaleUpdateManyWithoutSoldByNestedInput
   createdCommunicationCampaigns?: Prisma.CommunicationCampaignUpdateManyWithoutCreatedByNestedInput
   Address?: Prisma.AddressUpdateOneWithoutUserNestedInput
-  branch?: Prisma.BranchUpdateOneRequiredWithoutUserNestedInput
+  branch?: Prisma.BranchUpdateOneWithoutUserNestedInput
   Role?: Prisma.RoleUpdateOneWithoutUserNestedInput
 }
 
@@ -5500,7 +6532,7 @@ export type UserUncheckedUpdateWithoutAuditsInput = {
   email?: Prisma.StringFieldUpdateOperationsInput | string
   password?: Prisma.StringFieldUpdateOperationsInput | string
   username?: Prisma.StringFieldUpdateOperationsInput | string
-  branchId?: Prisma.StringFieldUpdateOperationsInput | string
+  branchId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   addressId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   roleId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
@@ -5512,6 +6544,8 @@ export type UserUncheckedUpdateWithoutAuditsInput = {
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   deletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   accessHistories?: Prisma.AccessHistoryUncheckedUpdateManyWithoutUserNestedInput
+  platformAdminActions?: Prisma.PlatformAdminAuditUncheckedUpdateManyWithoutActorNestedInput
+  platformAdminTargets?: Prisma.PlatformAdminAuditUncheckedUpdateManyWithoutTargetNestedInput
   loginHistories?: Prisma.LoginHistoryUncheckedUpdateManyWithoutUserNestedInput
   Person?: Prisma.PersonUncheckedUpdateManyWithoutUserNestedInput
   Appointment?: Prisma.AppointmentUncheckedUpdateManyWithoutDoctorNestedInput
@@ -5532,6 +6566,13 @@ export type UserUncheckedUpdateWithoutAuditsInput = {
   UserPermission?: Prisma.UserPermissionUncheckedUpdateManyWithoutUserNestedInput
   refreshTokens?: Prisma.RefreshTokenUncheckedUpdateManyWithoutUserNestedInput
   authActionTokens?: Prisma.AuthActionTokenUncheckedUpdateManyWithoutUserNestedInput
+  requestedSubscriptionPayments?: Prisma.SubscriptionRequestUncheckedUpdateManyWithoutSubmittedByNestedInput
+  reviewedSubscriptionPayments?: Prisma.SubscriptionRequestUncheckedUpdateManyWithoutReviewedByNestedInput
+  approvedSubscriptions?: Prisma.ClinicSubscriptionUncheckedUpdateManyWithoutApprovedByNestedInput
+  subscriptionAudits?: Prisma.SubscriptionAuditUncheckedUpdateManyWithoutActorNestedInput
+  updatedSubscriptionSettings?: Prisma.SubscriptionSettingsUncheckedUpdateManyWithoutUpdatedByNestedInput
+  assistantConversations?: Prisma.AssistantConversationUncheckedUpdateManyWithoutUserNestedInput
+  assistantMessages?: Prisma.AssistantMessageUncheckedUpdateManyWithoutUserNestedInput
   stockSales?: Prisma.StockSaleUncheckedUpdateManyWithoutSoldByNestedInput
   createdCommunicationCampaigns?: Prisma.CommunicationCampaignUncheckedUpdateManyWithoutCreatedByNestedInput
 }
@@ -5551,6 +6592,8 @@ export type UserCreateWithoutLoginHistoriesInput = {
   deletedAt?: Date | string | null
   accessHistories?: Prisma.AccessHistoryCreateNestedManyWithoutUserInput
   audits?: Prisma.AuditCreateNestedManyWithoutUserInput
+  platformAdminActions?: Prisma.PlatformAdminAuditCreateNestedManyWithoutActorInput
+  platformAdminTargets?: Prisma.PlatformAdminAuditCreateNestedManyWithoutTargetInput
   Person?: Prisma.PersonCreateNestedManyWithoutUserInput
   Appointment?: Prisma.AppointmentCreateNestedManyWithoutDoctorInput
   appointments?: Prisma.AppointmentCreateNestedManyWithoutUserInput
@@ -5570,10 +6613,17 @@ export type UserCreateWithoutLoginHistoriesInput = {
   UserPermission?: Prisma.UserPermissionCreateNestedManyWithoutUserInput
   refreshTokens?: Prisma.RefreshTokenCreateNestedManyWithoutUserInput
   authActionTokens?: Prisma.AuthActionTokenCreateNestedManyWithoutUserInput
+  requestedSubscriptionPayments?: Prisma.SubscriptionRequestCreateNestedManyWithoutSubmittedByInput
+  reviewedSubscriptionPayments?: Prisma.SubscriptionRequestCreateNestedManyWithoutReviewedByInput
+  approvedSubscriptions?: Prisma.ClinicSubscriptionCreateNestedManyWithoutApprovedByInput
+  subscriptionAudits?: Prisma.SubscriptionAuditCreateNestedManyWithoutActorInput
+  updatedSubscriptionSettings?: Prisma.SubscriptionSettingsCreateNestedManyWithoutUpdatedByInput
+  assistantConversations?: Prisma.AssistantConversationCreateNestedManyWithoutUserInput
+  assistantMessages?: Prisma.AssistantMessageCreateNestedManyWithoutUserInput
   stockSales?: Prisma.StockSaleCreateNestedManyWithoutSoldByInput
   createdCommunicationCampaigns?: Prisma.CommunicationCampaignCreateNestedManyWithoutCreatedByInput
   Address?: Prisma.AddressCreateNestedOneWithoutUserInput
-  branch: Prisma.BranchCreateNestedOneWithoutUserInput
+  branch?: Prisma.BranchCreateNestedOneWithoutUserInput
   Role?: Prisma.RoleCreateNestedOneWithoutUserInput
 }
 
@@ -5582,7 +6632,7 @@ export type UserUncheckedCreateWithoutLoginHistoriesInput = {
   email: string
   password: string
   username: string
-  branchId: string
+  branchId?: string | null
   addressId?: string | null
   roleId?: string | null
   isActive?: boolean
@@ -5595,6 +6645,8 @@ export type UserUncheckedCreateWithoutLoginHistoriesInput = {
   deletedAt?: Date | string | null
   accessHistories?: Prisma.AccessHistoryUncheckedCreateNestedManyWithoutUserInput
   audits?: Prisma.AuditUncheckedCreateNestedManyWithoutUserInput
+  platformAdminActions?: Prisma.PlatformAdminAuditUncheckedCreateNestedManyWithoutActorInput
+  platformAdminTargets?: Prisma.PlatformAdminAuditUncheckedCreateNestedManyWithoutTargetInput
   Person?: Prisma.PersonUncheckedCreateNestedManyWithoutUserInput
   Appointment?: Prisma.AppointmentUncheckedCreateNestedManyWithoutDoctorInput
   appointments?: Prisma.AppointmentUncheckedCreateNestedManyWithoutUserInput
@@ -5614,6 +6666,13 @@ export type UserUncheckedCreateWithoutLoginHistoriesInput = {
   UserPermission?: Prisma.UserPermissionUncheckedCreateNestedManyWithoutUserInput
   refreshTokens?: Prisma.RefreshTokenUncheckedCreateNestedManyWithoutUserInput
   authActionTokens?: Prisma.AuthActionTokenUncheckedCreateNestedManyWithoutUserInput
+  requestedSubscriptionPayments?: Prisma.SubscriptionRequestUncheckedCreateNestedManyWithoutSubmittedByInput
+  reviewedSubscriptionPayments?: Prisma.SubscriptionRequestUncheckedCreateNestedManyWithoutReviewedByInput
+  approvedSubscriptions?: Prisma.ClinicSubscriptionUncheckedCreateNestedManyWithoutApprovedByInput
+  subscriptionAudits?: Prisma.SubscriptionAuditUncheckedCreateNestedManyWithoutActorInput
+  updatedSubscriptionSettings?: Prisma.SubscriptionSettingsUncheckedCreateNestedManyWithoutUpdatedByInput
+  assistantConversations?: Prisma.AssistantConversationUncheckedCreateNestedManyWithoutUserInput
+  assistantMessages?: Prisma.AssistantMessageUncheckedCreateNestedManyWithoutUserInput
   stockSales?: Prisma.StockSaleUncheckedCreateNestedManyWithoutSoldByInput
   createdCommunicationCampaigns?: Prisma.CommunicationCampaignUncheckedCreateNestedManyWithoutCreatedByInput
 }
@@ -5649,6 +6708,8 @@ export type UserUpdateWithoutLoginHistoriesInput = {
   deletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   accessHistories?: Prisma.AccessHistoryUpdateManyWithoutUserNestedInput
   audits?: Prisma.AuditUpdateManyWithoutUserNestedInput
+  platformAdminActions?: Prisma.PlatformAdminAuditUpdateManyWithoutActorNestedInput
+  platformAdminTargets?: Prisma.PlatformAdminAuditUpdateManyWithoutTargetNestedInput
   Person?: Prisma.PersonUpdateManyWithoutUserNestedInput
   Appointment?: Prisma.AppointmentUpdateManyWithoutDoctorNestedInput
   appointments?: Prisma.AppointmentUpdateManyWithoutUserNestedInput
@@ -5668,10 +6729,17 @@ export type UserUpdateWithoutLoginHistoriesInput = {
   UserPermission?: Prisma.UserPermissionUpdateManyWithoutUserNestedInput
   refreshTokens?: Prisma.RefreshTokenUpdateManyWithoutUserNestedInput
   authActionTokens?: Prisma.AuthActionTokenUpdateManyWithoutUserNestedInput
+  requestedSubscriptionPayments?: Prisma.SubscriptionRequestUpdateManyWithoutSubmittedByNestedInput
+  reviewedSubscriptionPayments?: Prisma.SubscriptionRequestUpdateManyWithoutReviewedByNestedInput
+  approvedSubscriptions?: Prisma.ClinicSubscriptionUpdateManyWithoutApprovedByNestedInput
+  subscriptionAudits?: Prisma.SubscriptionAuditUpdateManyWithoutActorNestedInput
+  updatedSubscriptionSettings?: Prisma.SubscriptionSettingsUpdateManyWithoutUpdatedByNestedInput
+  assistantConversations?: Prisma.AssistantConversationUpdateManyWithoutUserNestedInput
+  assistantMessages?: Prisma.AssistantMessageUpdateManyWithoutUserNestedInput
   stockSales?: Prisma.StockSaleUpdateManyWithoutSoldByNestedInput
   createdCommunicationCampaigns?: Prisma.CommunicationCampaignUpdateManyWithoutCreatedByNestedInput
   Address?: Prisma.AddressUpdateOneWithoutUserNestedInput
-  branch?: Prisma.BranchUpdateOneRequiredWithoutUserNestedInput
+  branch?: Prisma.BranchUpdateOneWithoutUserNestedInput
   Role?: Prisma.RoleUpdateOneWithoutUserNestedInput
 }
 
@@ -5680,7 +6748,7 @@ export type UserUncheckedUpdateWithoutLoginHistoriesInput = {
   email?: Prisma.StringFieldUpdateOperationsInput | string
   password?: Prisma.StringFieldUpdateOperationsInput | string
   username?: Prisma.StringFieldUpdateOperationsInput | string
-  branchId?: Prisma.StringFieldUpdateOperationsInput | string
+  branchId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   addressId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   roleId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
@@ -5693,6 +6761,8 @@ export type UserUncheckedUpdateWithoutLoginHistoriesInput = {
   deletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   accessHistories?: Prisma.AccessHistoryUncheckedUpdateManyWithoutUserNestedInput
   audits?: Prisma.AuditUncheckedUpdateManyWithoutUserNestedInput
+  platformAdminActions?: Prisma.PlatformAdminAuditUncheckedUpdateManyWithoutActorNestedInput
+  platformAdminTargets?: Prisma.PlatformAdminAuditUncheckedUpdateManyWithoutTargetNestedInput
   Person?: Prisma.PersonUncheckedUpdateManyWithoutUserNestedInput
   Appointment?: Prisma.AppointmentUncheckedUpdateManyWithoutDoctorNestedInput
   appointments?: Prisma.AppointmentUncheckedUpdateManyWithoutUserNestedInput
@@ -5712,6 +6782,13 @@ export type UserUncheckedUpdateWithoutLoginHistoriesInput = {
   UserPermission?: Prisma.UserPermissionUncheckedUpdateManyWithoutUserNestedInput
   refreshTokens?: Prisma.RefreshTokenUncheckedUpdateManyWithoutUserNestedInput
   authActionTokens?: Prisma.AuthActionTokenUncheckedUpdateManyWithoutUserNestedInput
+  requestedSubscriptionPayments?: Prisma.SubscriptionRequestUncheckedUpdateManyWithoutSubmittedByNestedInput
+  reviewedSubscriptionPayments?: Prisma.SubscriptionRequestUncheckedUpdateManyWithoutReviewedByNestedInput
+  approvedSubscriptions?: Prisma.ClinicSubscriptionUncheckedUpdateManyWithoutApprovedByNestedInput
+  subscriptionAudits?: Prisma.SubscriptionAuditUncheckedUpdateManyWithoutActorNestedInput
+  updatedSubscriptionSettings?: Prisma.SubscriptionSettingsUncheckedUpdateManyWithoutUpdatedByNestedInput
+  assistantConversations?: Prisma.AssistantConversationUncheckedUpdateManyWithoutUserNestedInput
+  assistantMessages?: Prisma.AssistantMessageUncheckedUpdateManyWithoutUserNestedInput
   stockSales?: Prisma.StockSaleUncheckedUpdateManyWithoutSoldByNestedInput
   createdCommunicationCampaigns?: Prisma.CommunicationCampaignUncheckedUpdateManyWithoutCreatedByNestedInput
 }
@@ -5730,6 +6807,8 @@ export type UserCreateWithoutAccessHistoriesInput = {
   updatedAt?: Date | string
   deletedAt?: Date | string | null
   audits?: Prisma.AuditCreateNestedManyWithoutUserInput
+  platformAdminActions?: Prisma.PlatformAdminAuditCreateNestedManyWithoutActorInput
+  platformAdminTargets?: Prisma.PlatformAdminAuditCreateNestedManyWithoutTargetInput
   loginHistories?: Prisma.LoginHistoryCreateNestedManyWithoutUserInput
   Person?: Prisma.PersonCreateNestedManyWithoutUserInput
   Appointment?: Prisma.AppointmentCreateNestedManyWithoutDoctorInput
@@ -5750,10 +6829,17 @@ export type UserCreateWithoutAccessHistoriesInput = {
   UserPermission?: Prisma.UserPermissionCreateNestedManyWithoutUserInput
   refreshTokens?: Prisma.RefreshTokenCreateNestedManyWithoutUserInput
   authActionTokens?: Prisma.AuthActionTokenCreateNestedManyWithoutUserInput
+  requestedSubscriptionPayments?: Prisma.SubscriptionRequestCreateNestedManyWithoutSubmittedByInput
+  reviewedSubscriptionPayments?: Prisma.SubscriptionRequestCreateNestedManyWithoutReviewedByInput
+  approvedSubscriptions?: Prisma.ClinicSubscriptionCreateNestedManyWithoutApprovedByInput
+  subscriptionAudits?: Prisma.SubscriptionAuditCreateNestedManyWithoutActorInput
+  updatedSubscriptionSettings?: Prisma.SubscriptionSettingsCreateNestedManyWithoutUpdatedByInput
+  assistantConversations?: Prisma.AssistantConversationCreateNestedManyWithoutUserInput
+  assistantMessages?: Prisma.AssistantMessageCreateNestedManyWithoutUserInput
   stockSales?: Prisma.StockSaleCreateNestedManyWithoutSoldByInput
   createdCommunicationCampaigns?: Prisma.CommunicationCampaignCreateNestedManyWithoutCreatedByInput
   Address?: Prisma.AddressCreateNestedOneWithoutUserInput
-  branch: Prisma.BranchCreateNestedOneWithoutUserInput
+  branch?: Prisma.BranchCreateNestedOneWithoutUserInput
   Role?: Prisma.RoleCreateNestedOneWithoutUserInput
 }
 
@@ -5762,7 +6848,7 @@ export type UserUncheckedCreateWithoutAccessHistoriesInput = {
   email: string
   password: string
   username: string
-  branchId: string
+  branchId?: string | null
   addressId?: string | null
   roleId?: string | null
   isActive?: boolean
@@ -5774,6 +6860,8 @@ export type UserUncheckedCreateWithoutAccessHistoriesInput = {
   updatedAt?: Date | string
   deletedAt?: Date | string | null
   audits?: Prisma.AuditUncheckedCreateNestedManyWithoutUserInput
+  platformAdminActions?: Prisma.PlatformAdminAuditUncheckedCreateNestedManyWithoutActorInput
+  platformAdminTargets?: Prisma.PlatformAdminAuditUncheckedCreateNestedManyWithoutTargetInput
   loginHistories?: Prisma.LoginHistoryUncheckedCreateNestedManyWithoutUserInput
   Person?: Prisma.PersonUncheckedCreateNestedManyWithoutUserInput
   Appointment?: Prisma.AppointmentUncheckedCreateNestedManyWithoutDoctorInput
@@ -5794,6 +6882,13 @@ export type UserUncheckedCreateWithoutAccessHistoriesInput = {
   UserPermission?: Prisma.UserPermissionUncheckedCreateNestedManyWithoutUserInput
   refreshTokens?: Prisma.RefreshTokenUncheckedCreateNestedManyWithoutUserInput
   authActionTokens?: Prisma.AuthActionTokenUncheckedCreateNestedManyWithoutUserInput
+  requestedSubscriptionPayments?: Prisma.SubscriptionRequestUncheckedCreateNestedManyWithoutSubmittedByInput
+  reviewedSubscriptionPayments?: Prisma.SubscriptionRequestUncheckedCreateNestedManyWithoutReviewedByInput
+  approvedSubscriptions?: Prisma.ClinicSubscriptionUncheckedCreateNestedManyWithoutApprovedByInput
+  subscriptionAudits?: Prisma.SubscriptionAuditUncheckedCreateNestedManyWithoutActorInput
+  updatedSubscriptionSettings?: Prisma.SubscriptionSettingsUncheckedCreateNestedManyWithoutUpdatedByInput
+  assistantConversations?: Prisma.AssistantConversationUncheckedCreateNestedManyWithoutUserInput
+  assistantMessages?: Prisma.AssistantMessageUncheckedCreateNestedManyWithoutUserInput
   stockSales?: Prisma.StockSaleUncheckedCreateNestedManyWithoutSoldByInput
   createdCommunicationCampaigns?: Prisma.CommunicationCampaignUncheckedCreateNestedManyWithoutCreatedByInput
 }
@@ -5828,6 +6923,8 @@ export type UserUpdateWithoutAccessHistoriesInput = {
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   deletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   audits?: Prisma.AuditUpdateManyWithoutUserNestedInput
+  platformAdminActions?: Prisma.PlatformAdminAuditUpdateManyWithoutActorNestedInput
+  platformAdminTargets?: Prisma.PlatformAdminAuditUpdateManyWithoutTargetNestedInput
   loginHistories?: Prisma.LoginHistoryUpdateManyWithoutUserNestedInput
   Person?: Prisma.PersonUpdateManyWithoutUserNestedInput
   Appointment?: Prisma.AppointmentUpdateManyWithoutDoctorNestedInput
@@ -5848,10 +6945,17 @@ export type UserUpdateWithoutAccessHistoriesInput = {
   UserPermission?: Prisma.UserPermissionUpdateManyWithoutUserNestedInput
   refreshTokens?: Prisma.RefreshTokenUpdateManyWithoutUserNestedInput
   authActionTokens?: Prisma.AuthActionTokenUpdateManyWithoutUserNestedInput
+  requestedSubscriptionPayments?: Prisma.SubscriptionRequestUpdateManyWithoutSubmittedByNestedInput
+  reviewedSubscriptionPayments?: Prisma.SubscriptionRequestUpdateManyWithoutReviewedByNestedInput
+  approvedSubscriptions?: Prisma.ClinicSubscriptionUpdateManyWithoutApprovedByNestedInput
+  subscriptionAudits?: Prisma.SubscriptionAuditUpdateManyWithoutActorNestedInput
+  updatedSubscriptionSettings?: Prisma.SubscriptionSettingsUpdateManyWithoutUpdatedByNestedInput
+  assistantConversations?: Prisma.AssistantConversationUpdateManyWithoutUserNestedInput
+  assistantMessages?: Prisma.AssistantMessageUpdateManyWithoutUserNestedInput
   stockSales?: Prisma.StockSaleUpdateManyWithoutSoldByNestedInput
   createdCommunicationCampaigns?: Prisma.CommunicationCampaignUpdateManyWithoutCreatedByNestedInput
   Address?: Prisma.AddressUpdateOneWithoutUserNestedInput
-  branch?: Prisma.BranchUpdateOneRequiredWithoutUserNestedInput
+  branch?: Prisma.BranchUpdateOneWithoutUserNestedInput
   Role?: Prisma.RoleUpdateOneWithoutUserNestedInput
 }
 
@@ -5860,7 +6964,7 @@ export type UserUncheckedUpdateWithoutAccessHistoriesInput = {
   email?: Prisma.StringFieldUpdateOperationsInput | string
   password?: Prisma.StringFieldUpdateOperationsInput | string
   username?: Prisma.StringFieldUpdateOperationsInput | string
-  branchId?: Prisma.StringFieldUpdateOperationsInput | string
+  branchId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   addressId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   roleId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
@@ -5872,6 +6976,8 @@ export type UserUncheckedUpdateWithoutAccessHistoriesInput = {
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   deletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   audits?: Prisma.AuditUncheckedUpdateManyWithoutUserNestedInput
+  platformAdminActions?: Prisma.PlatformAdminAuditUncheckedUpdateManyWithoutActorNestedInput
+  platformAdminTargets?: Prisma.PlatformAdminAuditUncheckedUpdateManyWithoutTargetNestedInput
   loginHistories?: Prisma.LoginHistoryUncheckedUpdateManyWithoutUserNestedInput
   Person?: Prisma.PersonUncheckedUpdateManyWithoutUserNestedInput
   Appointment?: Prisma.AppointmentUncheckedUpdateManyWithoutDoctorNestedInput
@@ -5892,6 +6998,1957 @@ export type UserUncheckedUpdateWithoutAccessHistoriesInput = {
   UserPermission?: Prisma.UserPermissionUncheckedUpdateManyWithoutUserNestedInput
   refreshTokens?: Prisma.RefreshTokenUncheckedUpdateManyWithoutUserNestedInput
   authActionTokens?: Prisma.AuthActionTokenUncheckedUpdateManyWithoutUserNestedInput
+  requestedSubscriptionPayments?: Prisma.SubscriptionRequestUncheckedUpdateManyWithoutSubmittedByNestedInput
+  reviewedSubscriptionPayments?: Prisma.SubscriptionRequestUncheckedUpdateManyWithoutReviewedByNestedInput
+  approvedSubscriptions?: Prisma.ClinicSubscriptionUncheckedUpdateManyWithoutApprovedByNestedInput
+  subscriptionAudits?: Prisma.SubscriptionAuditUncheckedUpdateManyWithoutActorNestedInput
+  updatedSubscriptionSettings?: Prisma.SubscriptionSettingsUncheckedUpdateManyWithoutUpdatedByNestedInput
+  assistantConversations?: Prisma.AssistantConversationUncheckedUpdateManyWithoutUserNestedInput
+  assistantMessages?: Prisma.AssistantMessageUncheckedUpdateManyWithoutUserNestedInput
+  stockSales?: Prisma.StockSaleUncheckedUpdateManyWithoutSoldByNestedInput
+  createdCommunicationCampaigns?: Prisma.CommunicationCampaignUncheckedUpdateManyWithoutCreatedByNestedInput
+}
+
+export type UserCreateWithoutApprovedSubscriptionsInput = {
+  id?: string
+  email: string
+  password: string
+  username: string
+  isActive?: boolean
+  phoneNumber?: number | null
+  countryCode?: string | null
+  isPhoneVerified?: boolean
+  isEmailVerified?: boolean
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  deletedAt?: Date | string | null
+  accessHistories?: Prisma.AccessHistoryCreateNestedManyWithoutUserInput
+  audits?: Prisma.AuditCreateNestedManyWithoutUserInput
+  platformAdminActions?: Prisma.PlatformAdminAuditCreateNestedManyWithoutActorInput
+  platformAdminTargets?: Prisma.PlatformAdminAuditCreateNestedManyWithoutTargetInput
+  loginHistories?: Prisma.LoginHistoryCreateNestedManyWithoutUserInput
+  Person?: Prisma.PersonCreateNestedManyWithoutUserInput
+  Appointment?: Prisma.AppointmentCreateNestedManyWithoutDoctorInput
+  appointments?: Prisma.AppointmentCreateNestedManyWithoutUserInput
+  clinicProccesses?: Prisma.ClinicProccessCreateNestedManyWithoutDoctorInput
+  Consult?: Prisma.ConsultCreateNestedManyWithoutDoctorInput
+  diagnostics?: Prisma.DiagnosticCreateNestedManyWithoutDoctorInput
+  doctorProfile?: Prisma.DoctorProfileCreateNestedOneWithoutUserInput
+  conversationsStarted?: Prisma.ChatConversationCreateNestedManyWithoutStarterInput
+  conversationsReceived?: Prisma.ChatConversationCreateNestedManyWithoutRecipientInput
+  chatMessages?: Prisma.ChatMessageCreateNestedManyWithoutAuthorInput
+  treatmentPlans?: Prisma.TreatmentPlanCreateNestedManyWithoutDoctorInput
+  patientPrescriptions?: Prisma.PatientPrescriptionCreateNestedManyWithoutDoctorInput
+  xrayAnalyses?: Prisma.XRayAnalysisCreateNestedManyWithoutAnalyzedByInput
+  authoredPatientDocuments?: Prisma.PatientDocumentCreateNestedManyWithoutAuthorInput
+  UserBranch?: Prisma.UserBranchCreateNestedManyWithoutUserInput
+  UserRole?: Prisma.UserRoleCreateNestedManyWithoutUserInput
+  UserPermission?: Prisma.UserPermissionCreateNestedManyWithoutUserInput
+  refreshTokens?: Prisma.RefreshTokenCreateNestedManyWithoutUserInput
+  authActionTokens?: Prisma.AuthActionTokenCreateNestedManyWithoutUserInput
+  requestedSubscriptionPayments?: Prisma.SubscriptionRequestCreateNestedManyWithoutSubmittedByInput
+  reviewedSubscriptionPayments?: Prisma.SubscriptionRequestCreateNestedManyWithoutReviewedByInput
+  subscriptionAudits?: Prisma.SubscriptionAuditCreateNestedManyWithoutActorInput
+  updatedSubscriptionSettings?: Prisma.SubscriptionSettingsCreateNestedManyWithoutUpdatedByInput
+  assistantConversations?: Prisma.AssistantConversationCreateNestedManyWithoutUserInput
+  assistantMessages?: Prisma.AssistantMessageCreateNestedManyWithoutUserInput
+  stockSales?: Prisma.StockSaleCreateNestedManyWithoutSoldByInput
+  createdCommunicationCampaigns?: Prisma.CommunicationCampaignCreateNestedManyWithoutCreatedByInput
+  Address?: Prisma.AddressCreateNestedOneWithoutUserInput
+  branch?: Prisma.BranchCreateNestedOneWithoutUserInput
+  Role?: Prisma.RoleCreateNestedOneWithoutUserInput
+}
+
+export type UserUncheckedCreateWithoutApprovedSubscriptionsInput = {
+  id?: string
+  email: string
+  password: string
+  username: string
+  branchId?: string | null
+  addressId?: string | null
+  roleId?: string | null
+  isActive?: boolean
+  phoneNumber?: number | null
+  countryCode?: string | null
+  isPhoneVerified?: boolean
+  isEmailVerified?: boolean
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  deletedAt?: Date | string | null
+  accessHistories?: Prisma.AccessHistoryUncheckedCreateNestedManyWithoutUserInput
+  audits?: Prisma.AuditUncheckedCreateNestedManyWithoutUserInput
+  platformAdminActions?: Prisma.PlatformAdminAuditUncheckedCreateNestedManyWithoutActorInput
+  platformAdminTargets?: Prisma.PlatformAdminAuditUncheckedCreateNestedManyWithoutTargetInput
+  loginHistories?: Prisma.LoginHistoryUncheckedCreateNestedManyWithoutUserInput
+  Person?: Prisma.PersonUncheckedCreateNestedManyWithoutUserInput
+  Appointment?: Prisma.AppointmentUncheckedCreateNestedManyWithoutDoctorInput
+  appointments?: Prisma.AppointmentUncheckedCreateNestedManyWithoutUserInput
+  clinicProccesses?: Prisma.ClinicProccessUncheckedCreateNestedManyWithoutDoctorInput
+  Consult?: Prisma.ConsultUncheckedCreateNestedManyWithoutDoctorInput
+  diagnostics?: Prisma.DiagnosticUncheckedCreateNestedManyWithoutDoctorInput
+  doctorProfile?: Prisma.DoctorProfileUncheckedCreateNestedOneWithoutUserInput
+  conversationsStarted?: Prisma.ChatConversationUncheckedCreateNestedManyWithoutStarterInput
+  conversationsReceived?: Prisma.ChatConversationUncheckedCreateNestedManyWithoutRecipientInput
+  chatMessages?: Prisma.ChatMessageUncheckedCreateNestedManyWithoutAuthorInput
+  treatmentPlans?: Prisma.TreatmentPlanUncheckedCreateNestedManyWithoutDoctorInput
+  patientPrescriptions?: Prisma.PatientPrescriptionUncheckedCreateNestedManyWithoutDoctorInput
+  xrayAnalyses?: Prisma.XRayAnalysisUncheckedCreateNestedManyWithoutAnalyzedByInput
+  authoredPatientDocuments?: Prisma.PatientDocumentUncheckedCreateNestedManyWithoutAuthorInput
+  UserBranch?: Prisma.UserBranchUncheckedCreateNestedManyWithoutUserInput
+  UserRole?: Prisma.UserRoleUncheckedCreateNestedManyWithoutUserInput
+  UserPermission?: Prisma.UserPermissionUncheckedCreateNestedManyWithoutUserInput
+  refreshTokens?: Prisma.RefreshTokenUncheckedCreateNestedManyWithoutUserInput
+  authActionTokens?: Prisma.AuthActionTokenUncheckedCreateNestedManyWithoutUserInput
+  requestedSubscriptionPayments?: Prisma.SubscriptionRequestUncheckedCreateNestedManyWithoutSubmittedByInput
+  reviewedSubscriptionPayments?: Prisma.SubscriptionRequestUncheckedCreateNestedManyWithoutReviewedByInput
+  subscriptionAudits?: Prisma.SubscriptionAuditUncheckedCreateNestedManyWithoutActorInput
+  updatedSubscriptionSettings?: Prisma.SubscriptionSettingsUncheckedCreateNestedManyWithoutUpdatedByInput
+  assistantConversations?: Prisma.AssistantConversationUncheckedCreateNestedManyWithoutUserInput
+  assistantMessages?: Prisma.AssistantMessageUncheckedCreateNestedManyWithoutUserInput
+  stockSales?: Prisma.StockSaleUncheckedCreateNestedManyWithoutSoldByInput
+  createdCommunicationCampaigns?: Prisma.CommunicationCampaignUncheckedCreateNestedManyWithoutCreatedByInput
+}
+
+export type UserCreateOrConnectWithoutApprovedSubscriptionsInput = {
+  where: Prisma.UserWhereUniqueInput
+  create: Prisma.XOR<Prisma.UserCreateWithoutApprovedSubscriptionsInput, Prisma.UserUncheckedCreateWithoutApprovedSubscriptionsInput>
+}
+
+export type UserUpsertWithoutApprovedSubscriptionsInput = {
+  update: Prisma.XOR<Prisma.UserUpdateWithoutApprovedSubscriptionsInput, Prisma.UserUncheckedUpdateWithoutApprovedSubscriptionsInput>
+  create: Prisma.XOR<Prisma.UserCreateWithoutApprovedSubscriptionsInput, Prisma.UserUncheckedCreateWithoutApprovedSubscriptionsInput>
+  where?: Prisma.UserWhereInput
+}
+
+export type UserUpdateToOneWithWhereWithoutApprovedSubscriptionsInput = {
+  where?: Prisma.UserWhereInput
+  data: Prisma.XOR<Prisma.UserUpdateWithoutApprovedSubscriptionsInput, Prisma.UserUncheckedUpdateWithoutApprovedSubscriptionsInput>
+}
+
+export type UserUpdateWithoutApprovedSubscriptionsInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  email?: Prisma.StringFieldUpdateOperationsInput | string
+  password?: Prisma.StringFieldUpdateOperationsInput | string
+  username?: Prisma.StringFieldUpdateOperationsInput | string
+  isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  phoneNumber?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  countryCode?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  isPhoneVerified?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  isEmailVerified?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  deletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  accessHistories?: Prisma.AccessHistoryUpdateManyWithoutUserNestedInput
+  audits?: Prisma.AuditUpdateManyWithoutUserNestedInput
+  platformAdminActions?: Prisma.PlatformAdminAuditUpdateManyWithoutActorNestedInput
+  platformAdminTargets?: Prisma.PlatformAdminAuditUpdateManyWithoutTargetNestedInput
+  loginHistories?: Prisma.LoginHistoryUpdateManyWithoutUserNestedInput
+  Person?: Prisma.PersonUpdateManyWithoutUserNestedInput
+  Appointment?: Prisma.AppointmentUpdateManyWithoutDoctorNestedInput
+  appointments?: Prisma.AppointmentUpdateManyWithoutUserNestedInput
+  clinicProccesses?: Prisma.ClinicProccessUpdateManyWithoutDoctorNestedInput
+  Consult?: Prisma.ConsultUpdateManyWithoutDoctorNestedInput
+  diagnostics?: Prisma.DiagnosticUpdateManyWithoutDoctorNestedInput
+  doctorProfile?: Prisma.DoctorProfileUpdateOneWithoutUserNestedInput
+  conversationsStarted?: Prisma.ChatConversationUpdateManyWithoutStarterNestedInput
+  conversationsReceived?: Prisma.ChatConversationUpdateManyWithoutRecipientNestedInput
+  chatMessages?: Prisma.ChatMessageUpdateManyWithoutAuthorNestedInput
+  treatmentPlans?: Prisma.TreatmentPlanUpdateManyWithoutDoctorNestedInput
+  patientPrescriptions?: Prisma.PatientPrescriptionUpdateManyWithoutDoctorNestedInput
+  xrayAnalyses?: Prisma.XRayAnalysisUpdateManyWithoutAnalyzedByNestedInput
+  authoredPatientDocuments?: Prisma.PatientDocumentUpdateManyWithoutAuthorNestedInput
+  UserBranch?: Prisma.UserBranchUpdateManyWithoutUserNestedInput
+  UserRole?: Prisma.UserRoleUpdateManyWithoutUserNestedInput
+  UserPermission?: Prisma.UserPermissionUpdateManyWithoutUserNestedInput
+  refreshTokens?: Prisma.RefreshTokenUpdateManyWithoutUserNestedInput
+  authActionTokens?: Prisma.AuthActionTokenUpdateManyWithoutUserNestedInput
+  requestedSubscriptionPayments?: Prisma.SubscriptionRequestUpdateManyWithoutSubmittedByNestedInput
+  reviewedSubscriptionPayments?: Prisma.SubscriptionRequestUpdateManyWithoutReviewedByNestedInput
+  subscriptionAudits?: Prisma.SubscriptionAuditUpdateManyWithoutActorNestedInput
+  updatedSubscriptionSettings?: Prisma.SubscriptionSettingsUpdateManyWithoutUpdatedByNestedInput
+  assistantConversations?: Prisma.AssistantConversationUpdateManyWithoutUserNestedInput
+  assistantMessages?: Prisma.AssistantMessageUpdateManyWithoutUserNestedInput
+  stockSales?: Prisma.StockSaleUpdateManyWithoutSoldByNestedInput
+  createdCommunicationCampaigns?: Prisma.CommunicationCampaignUpdateManyWithoutCreatedByNestedInput
+  Address?: Prisma.AddressUpdateOneWithoutUserNestedInput
+  branch?: Prisma.BranchUpdateOneWithoutUserNestedInput
+  Role?: Prisma.RoleUpdateOneWithoutUserNestedInput
+}
+
+export type UserUncheckedUpdateWithoutApprovedSubscriptionsInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  email?: Prisma.StringFieldUpdateOperationsInput | string
+  password?: Prisma.StringFieldUpdateOperationsInput | string
+  username?: Prisma.StringFieldUpdateOperationsInput | string
+  branchId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  addressId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  roleId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  phoneNumber?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  countryCode?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  isPhoneVerified?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  isEmailVerified?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  deletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  accessHistories?: Prisma.AccessHistoryUncheckedUpdateManyWithoutUserNestedInput
+  audits?: Prisma.AuditUncheckedUpdateManyWithoutUserNestedInput
+  platformAdminActions?: Prisma.PlatformAdminAuditUncheckedUpdateManyWithoutActorNestedInput
+  platformAdminTargets?: Prisma.PlatformAdminAuditUncheckedUpdateManyWithoutTargetNestedInput
+  loginHistories?: Prisma.LoginHistoryUncheckedUpdateManyWithoutUserNestedInput
+  Person?: Prisma.PersonUncheckedUpdateManyWithoutUserNestedInput
+  Appointment?: Prisma.AppointmentUncheckedUpdateManyWithoutDoctorNestedInput
+  appointments?: Prisma.AppointmentUncheckedUpdateManyWithoutUserNestedInput
+  clinicProccesses?: Prisma.ClinicProccessUncheckedUpdateManyWithoutDoctorNestedInput
+  Consult?: Prisma.ConsultUncheckedUpdateManyWithoutDoctorNestedInput
+  diagnostics?: Prisma.DiagnosticUncheckedUpdateManyWithoutDoctorNestedInput
+  doctorProfile?: Prisma.DoctorProfileUncheckedUpdateOneWithoutUserNestedInput
+  conversationsStarted?: Prisma.ChatConversationUncheckedUpdateManyWithoutStarterNestedInput
+  conversationsReceived?: Prisma.ChatConversationUncheckedUpdateManyWithoutRecipientNestedInput
+  chatMessages?: Prisma.ChatMessageUncheckedUpdateManyWithoutAuthorNestedInput
+  treatmentPlans?: Prisma.TreatmentPlanUncheckedUpdateManyWithoutDoctorNestedInput
+  patientPrescriptions?: Prisma.PatientPrescriptionUncheckedUpdateManyWithoutDoctorNestedInput
+  xrayAnalyses?: Prisma.XRayAnalysisUncheckedUpdateManyWithoutAnalyzedByNestedInput
+  authoredPatientDocuments?: Prisma.PatientDocumentUncheckedUpdateManyWithoutAuthorNestedInput
+  UserBranch?: Prisma.UserBranchUncheckedUpdateManyWithoutUserNestedInput
+  UserRole?: Prisma.UserRoleUncheckedUpdateManyWithoutUserNestedInput
+  UserPermission?: Prisma.UserPermissionUncheckedUpdateManyWithoutUserNestedInput
+  refreshTokens?: Prisma.RefreshTokenUncheckedUpdateManyWithoutUserNestedInput
+  authActionTokens?: Prisma.AuthActionTokenUncheckedUpdateManyWithoutUserNestedInput
+  requestedSubscriptionPayments?: Prisma.SubscriptionRequestUncheckedUpdateManyWithoutSubmittedByNestedInput
+  reviewedSubscriptionPayments?: Prisma.SubscriptionRequestUncheckedUpdateManyWithoutReviewedByNestedInput
+  subscriptionAudits?: Prisma.SubscriptionAuditUncheckedUpdateManyWithoutActorNestedInput
+  updatedSubscriptionSettings?: Prisma.SubscriptionSettingsUncheckedUpdateManyWithoutUpdatedByNestedInput
+  assistantConversations?: Prisma.AssistantConversationUncheckedUpdateManyWithoutUserNestedInput
+  assistantMessages?: Prisma.AssistantMessageUncheckedUpdateManyWithoutUserNestedInput
+  stockSales?: Prisma.StockSaleUncheckedUpdateManyWithoutSoldByNestedInput
+  createdCommunicationCampaigns?: Prisma.CommunicationCampaignUncheckedUpdateManyWithoutCreatedByNestedInput
+}
+
+export type UserCreateWithoutRequestedSubscriptionPaymentsInput = {
+  id?: string
+  email: string
+  password: string
+  username: string
+  isActive?: boolean
+  phoneNumber?: number | null
+  countryCode?: string | null
+  isPhoneVerified?: boolean
+  isEmailVerified?: boolean
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  deletedAt?: Date | string | null
+  accessHistories?: Prisma.AccessHistoryCreateNestedManyWithoutUserInput
+  audits?: Prisma.AuditCreateNestedManyWithoutUserInput
+  platformAdminActions?: Prisma.PlatformAdminAuditCreateNestedManyWithoutActorInput
+  platformAdminTargets?: Prisma.PlatformAdminAuditCreateNestedManyWithoutTargetInput
+  loginHistories?: Prisma.LoginHistoryCreateNestedManyWithoutUserInput
+  Person?: Prisma.PersonCreateNestedManyWithoutUserInput
+  Appointment?: Prisma.AppointmentCreateNestedManyWithoutDoctorInput
+  appointments?: Prisma.AppointmentCreateNestedManyWithoutUserInput
+  clinicProccesses?: Prisma.ClinicProccessCreateNestedManyWithoutDoctorInput
+  Consult?: Prisma.ConsultCreateNestedManyWithoutDoctorInput
+  diagnostics?: Prisma.DiagnosticCreateNestedManyWithoutDoctorInput
+  doctorProfile?: Prisma.DoctorProfileCreateNestedOneWithoutUserInput
+  conversationsStarted?: Prisma.ChatConversationCreateNestedManyWithoutStarterInput
+  conversationsReceived?: Prisma.ChatConversationCreateNestedManyWithoutRecipientInput
+  chatMessages?: Prisma.ChatMessageCreateNestedManyWithoutAuthorInput
+  treatmentPlans?: Prisma.TreatmentPlanCreateNestedManyWithoutDoctorInput
+  patientPrescriptions?: Prisma.PatientPrescriptionCreateNestedManyWithoutDoctorInput
+  xrayAnalyses?: Prisma.XRayAnalysisCreateNestedManyWithoutAnalyzedByInput
+  authoredPatientDocuments?: Prisma.PatientDocumentCreateNestedManyWithoutAuthorInput
+  UserBranch?: Prisma.UserBranchCreateNestedManyWithoutUserInput
+  UserRole?: Prisma.UserRoleCreateNestedManyWithoutUserInput
+  UserPermission?: Prisma.UserPermissionCreateNestedManyWithoutUserInput
+  refreshTokens?: Prisma.RefreshTokenCreateNestedManyWithoutUserInput
+  authActionTokens?: Prisma.AuthActionTokenCreateNestedManyWithoutUserInput
+  reviewedSubscriptionPayments?: Prisma.SubscriptionRequestCreateNestedManyWithoutReviewedByInput
+  approvedSubscriptions?: Prisma.ClinicSubscriptionCreateNestedManyWithoutApprovedByInput
+  subscriptionAudits?: Prisma.SubscriptionAuditCreateNestedManyWithoutActorInput
+  updatedSubscriptionSettings?: Prisma.SubscriptionSettingsCreateNestedManyWithoutUpdatedByInput
+  assistantConversations?: Prisma.AssistantConversationCreateNestedManyWithoutUserInput
+  assistantMessages?: Prisma.AssistantMessageCreateNestedManyWithoutUserInput
+  stockSales?: Prisma.StockSaleCreateNestedManyWithoutSoldByInput
+  createdCommunicationCampaigns?: Prisma.CommunicationCampaignCreateNestedManyWithoutCreatedByInput
+  Address?: Prisma.AddressCreateNestedOneWithoutUserInput
+  branch?: Prisma.BranchCreateNestedOneWithoutUserInput
+  Role?: Prisma.RoleCreateNestedOneWithoutUserInput
+}
+
+export type UserUncheckedCreateWithoutRequestedSubscriptionPaymentsInput = {
+  id?: string
+  email: string
+  password: string
+  username: string
+  branchId?: string | null
+  addressId?: string | null
+  roleId?: string | null
+  isActive?: boolean
+  phoneNumber?: number | null
+  countryCode?: string | null
+  isPhoneVerified?: boolean
+  isEmailVerified?: boolean
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  deletedAt?: Date | string | null
+  accessHistories?: Prisma.AccessHistoryUncheckedCreateNestedManyWithoutUserInput
+  audits?: Prisma.AuditUncheckedCreateNestedManyWithoutUserInput
+  platformAdminActions?: Prisma.PlatformAdminAuditUncheckedCreateNestedManyWithoutActorInput
+  platformAdminTargets?: Prisma.PlatformAdminAuditUncheckedCreateNestedManyWithoutTargetInput
+  loginHistories?: Prisma.LoginHistoryUncheckedCreateNestedManyWithoutUserInput
+  Person?: Prisma.PersonUncheckedCreateNestedManyWithoutUserInput
+  Appointment?: Prisma.AppointmentUncheckedCreateNestedManyWithoutDoctorInput
+  appointments?: Prisma.AppointmentUncheckedCreateNestedManyWithoutUserInput
+  clinicProccesses?: Prisma.ClinicProccessUncheckedCreateNestedManyWithoutDoctorInput
+  Consult?: Prisma.ConsultUncheckedCreateNestedManyWithoutDoctorInput
+  diagnostics?: Prisma.DiagnosticUncheckedCreateNestedManyWithoutDoctorInput
+  doctorProfile?: Prisma.DoctorProfileUncheckedCreateNestedOneWithoutUserInput
+  conversationsStarted?: Prisma.ChatConversationUncheckedCreateNestedManyWithoutStarterInput
+  conversationsReceived?: Prisma.ChatConversationUncheckedCreateNestedManyWithoutRecipientInput
+  chatMessages?: Prisma.ChatMessageUncheckedCreateNestedManyWithoutAuthorInput
+  treatmentPlans?: Prisma.TreatmentPlanUncheckedCreateNestedManyWithoutDoctorInput
+  patientPrescriptions?: Prisma.PatientPrescriptionUncheckedCreateNestedManyWithoutDoctorInput
+  xrayAnalyses?: Prisma.XRayAnalysisUncheckedCreateNestedManyWithoutAnalyzedByInput
+  authoredPatientDocuments?: Prisma.PatientDocumentUncheckedCreateNestedManyWithoutAuthorInput
+  UserBranch?: Prisma.UserBranchUncheckedCreateNestedManyWithoutUserInput
+  UserRole?: Prisma.UserRoleUncheckedCreateNestedManyWithoutUserInput
+  UserPermission?: Prisma.UserPermissionUncheckedCreateNestedManyWithoutUserInput
+  refreshTokens?: Prisma.RefreshTokenUncheckedCreateNestedManyWithoutUserInput
+  authActionTokens?: Prisma.AuthActionTokenUncheckedCreateNestedManyWithoutUserInput
+  reviewedSubscriptionPayments?: Prisma.SubscriptionRequestUncheckedCreateNestedManyWithoutReviewedByInput
+  approvedSubscriptions?: Prisma.ClinicSubscriptionUncheckedCreateNestedManyWithoutApprovedByInput
+  subscriptionAudits?: Prisma.SubscriptionAuditUncheckedCreateNestedManyWithoutActorInput
+  updatedSubscriptionSettings?: Prisma.SubscriptionSettingsUncheckedCreateNestedManyWithoutUpdatedByInput
+  assistantConversations?: Prisma.AssistantConversationUncheckedCreateNestedManyWithoutUserInput
+  assistantMessages?: Prisma.AssistantMessageUncheckedCreateNestedManyWithoutUserInput
+  stockSales?: Prisma.StockSaleUncheckedCreateNestedManyWithoutSoldByInput
+  createdCommunicationCampaigns?: Prisma.CommunicationCampaignUncheckedCreateNestedManyWithoutCreatedByInput
+}
+
+export type UserCreateOrConnectWithoutRequestedSubscriptionPaymentsInput = {
+  where: Prisma.UserWhereUniqueInput
+  create: Prisma.XOR<Prisma.UserCreateWithoutRequestedSubscriptionPaymentsInput, Prisma.UserUncheckedCreateWithoutRequestedSubscriptionPaymentsInput>
+}
+
+export type UserCreateWithoutReviewedSubscriptionPaymentsInput = {
+  id?: string
+  email: string
+  password: string
+  username: string
+  isActive?: boolean
+  phoneNumber?: number | null
+  countryCode?: string | null
+  isPhoneVerified?: boolean
+  isEmailVerified?: boolean
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  deletedAt?: Date | string | null
+  accessHistories?: Prisma.AccessHistoryCreateNestedManyWithoutUserInput
+  audits?: Prisma.AuditCreateNestedManyWithoutUserInput
+  platformAdminActions?: Prisma.PlatformAdminAuditCreateNestedManyWithoutActorInput
+  platformAdminTargets?: Prisma.PlatformAdminAuditCreateNestedManyWithoutTargetInput
+  loginHistories?: Prisma.LoginHistoryCreateNestedManyWithoutUserInput
+  Person?: Prisma.PersonCreateNestedManyWithoutUserInput
+  Appointment?: Prisma.AppointmentCreateNestedManyWithoutDoctorInput
+  appointments?: Prisma.AppointmentCreateNestedManyWithoutUserInput
+  clinicProccesses?: Prisma.ClinicProccessCreateNestedManyWithoutDoctorInput
+  Consult?: Prisma.ConsultCreateNestedManyWithoutDoctorInput
+  diagnostics?: Prisma.DiagnosticCreateNestedManyWithoutDoctorInput
+  doctorProfile?: Prisma.DoctorProfileCreateNestedOneWithoutUserInput
+  conversationsStarted?: Prisma.ChatConversationCreateNestedManyWithoutStarterInput
+  conversationsReceived?: Prisma.ChatConversationCreateNestedManyWithoutRecipientInput
+  chatMessages?: Prisma.ChatMessageCreateNestedManyWithoutAuthorInput
+  treatmentPlans?: Prisma.TreatmentPlanCreateNestedManyWithoutDoctorInput
+  patientPrescriptions?: Prisma.PatientPrescriptionCreateNestedManyWithoutDoctorInput
+  xrayAnalyses?: Prisma.XRayAnalysisCreateNestedManyWithoutAnalyzedByInput
+  authoredPatientDocuments?: Prisma.PatientDocumentCreateNestedManyWithoutAuthorInput
+  UserBranch?: Prisma.UserBranchCreateNestedManyWithoutUserInput
+  UserRole?: Prisma.UserRoleCreateNestedManyWithoutUserInput
+  UserPermission?: Prisma.UserPermissionCreateNestedManyWithoutUserInput
+  refreshTokens?: Prisma.RefreshTokenCreateNestedManyWithoutUserInput
+  authActionTokens?: Prisma.AuthActionTokenCreateNestedManyWithoutUserInput
+  requestedSubscriptionPayments?: Prisma.SubscriptionRequestCreateNestedManyWithoutSubmittedByInput
+  approvedSubscriptions?: Prisma.ClinicSubscriptionCreateNestedManyWithoutApprovedByInput
+  subscriptionAudits?: Prisma.SubscriptionAuditCreateNestedManyWithoutActorInput
+  updatedSubscriptionSettings?: Prisma.SubscriptionSettingsCreateNestedManyWithoutUpdatedByInput
+  assistantConversations?: Prisma.AssistantConversationCreateNestedManyWithoutUserInput
+  assistantMessages?: Prisma.AssistantMessageCreateNestedManyWithoutUserInput
+  stockSales?: Prisma.StockSaleCreateNestedManyWithoutSoldByInput
+  createdCommunicationCampaigns?: Prisma.CommunicationCampaignCreateNestedManyWithoutCreatedByInput
+  Address?: Prisma.AddressCreateNestedOneWithoutUserInput
+  branch?: Prisma.BranchCreateNestedOneWithoutUserInput
+  Role?: Prisma.RoleCreateNestedOneWithoutUserInput
+}
+
+export type UserUncheckedCreateWithoutReviewedSubscriptionPaymentsInput = {
+  id?: string
+  email: string
+  password: string
+  username: string
+  branchId?: string | null
+  addressId?: string | null
+  roleId?: string | null
+  isActive?: boolean
+  phoneNumber?: number | null
+  countryCode?: string | null
+  isPhoneVerified?: boolean
+  isEmailVerified?: boolean
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  deletedAt?: Date | string | null
+  accessHistories?: Prisma.AccessHistoryUncheckedCreateNestedManyWithoutUserInput
+  audits?: Prisma.AuditUncheckedCreateNestedManyWithoutUserInput
+  platformAdminActions?: Prisma.PlatformAdminAuditUncheckedCreateNestedManyWithoutActorInput
+  platformAdminTargets?: Prisma.PlatformAdminAuditUncheckedCreateNestedManyWithoutTargetInput
+  loginHistories?: Prisma.LoginHistoryUncheckedCreateNestedManyWithoutUserInput
+  Person?: Prisma.PersonUncheckedCreateNestedManyWithoutUserInput
+  Appointment?: Prisma.AppointmentUncheckedCreateNestedManyWithoutDoctorInput
+  appointments?: Prisma.AppointmentUncheckedCreateNestedManyWithoutUserInput
+  clinicProccesses?: Prisma.ClinicProccessUncheckedCreateNestedManyWithoutDoctorInput
+  Consult?: Prisma.ConsultUncheckedCreateNestedManyWithoutDoctorInput
+  diagnostics?: Prisma.DiagnosticUncheckedCreateNestedManyWithoutDoctorInput
+  doctorProfile?: Prisma.DoctorProfileUncheckedCreateNestedOneWithoutUserInput
+  conversationsStarted?: Prisma.ChatConversationUncheckedCreateNestedManyWithoutStarterInput
+  conversationsReceived?: Prisma.ChatConversationUncheckedCreateNestedManyWithoutRecipientInput
+  chatMessages?: Prisma.ChatMessageUncheckedCreateNestedManyWithoutAuthorInput
+  treatmentPlans?: Prisma.TreatmentPlanUncheckedCreateNestedManyWithoutDoctorInput
+  patientPrescriptions?: Prisma.PatientPrescriptionUncheckedCreateNestedManyWithoutDoctorInput
+  xrayAnalyses?: Prisma.XRayAnalysisUncheckedCreateNestedManyWithoutAnalyzedByInput
+  authoredPatientDocuments?: Prisma.PatientDocumentUncheckedCreateNestedManyWithoutAuthorInput
+  UserBranch?: Prisma.UserBranchUncheckedCreateNestedManyWithoutUserInput
+  UserRole?: Prisma.UserRoleUncheckedCreateNestedManyWithoutUserInput
+  UserPermission?: Prisma.UserPermissionUncheckedCreateNestedManyWithoutUserInput
+  refreshTokens?: Prisma.RefreshTokenUncheckedCreateNestedManyWithoutUserInput
+  authActionTokens?: Prisma.AuthActionTokenUncheckedCreateNestedManyWithoutUserInput
+  requestedSubscriptionPayments?: Prisma.SubscriptionRequestUncheckedCreateNestedManyWithoutSubmittedByInput
+  approvedSubscriptions?: Prisma.ClinicSubscriptionUncheckedCreateNestedManyWithoutApprovedByInput
+  subscriptionAudits?: Prisma.SubscriptionAuditUncheckedCreateNestedManyWithoutActorInput
+  updatedSubscriptionSettings?: Prisma.SubscriptionSettingsUncheckedCreateNestedManyWithoutUpdatedByInput
+  assistantConversations?: Prisma.AssistantConversationUncheckedCreateNestedManyWithoutUserInput
+  assistantMessages?: Prisma.AssistantMessageUncheckedCreateNestedManyWithoutUserInput
+  stockSales?: Prisma.StockSaleUncheckedCreateNestedManyWithoutSoldByInput
+  createdCommunicationCampaigns?: Prisma.CommunicationCampaignUncheckedCreateNestedManyWithoutCreatedByInput
+}
+
+export type UserCreateOrConnectWithoutReviewedSubscriptionPaymentsInput = {
+  where: Prisma.UserWhereUniqueInput
+  create: Prisma.XOR<Prisma.UserCreateWithoutReviewedSubscriptionPaymentsInput, Prisma.UserUncheckedCreateWithoutReviewedSubscriptionPaymentsInput>
+}
+
+export type UserUpsertWithoutRequestedSubscriptionPaymentsInput = {
+  update: Prisma.XOR<Prisma.UserUpdateWithoutRequestedSubscriptionPaymentsInput, Prisma.UserUncheckedUpdateWithoutRequestedSubscriptionPaymentsInput>
+  create: Prisma.XOR<Prisma.UserCreateWithoutRequestedSubscriptionPaymentsInput, Prisma.UserUncheckedCreateWithoutRequestedSubscriptionPaymentsInput>
+  where?: Prisma.UserWhereInput
+}
+
+export type UserUpdateToOneWithWhereWithoutRequestedSubscriptionPaymentsInput = {
+  where?: Prisma.UserWhereInput
+  data: Prisma.XOR<Prisma.UserUpdateWithoutRequestedSubscriptionPaymentsInput, Prisma.UserUncheckedUpdateWithoutRequestedSubscriptionPaymentsInput>
+}
+
+export type UserUpdateWithoutRequestedSubscriptionPaymentsInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  email?: Prisma.StringFieldUpdateOperationsInput | string
+  password?: Prisma.StringFieldUpdateOperationsInput | string
+  username?: Prisma.StringFieldUpdateOperationsInput | string
+  isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  phoneNumber?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  countryCode?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  isPhoneVerified?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  isEmailVerified?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  deletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  accessHistories?: Prisma.AccessHistoryUpdateManyWithoutUserNestedInput
+  audits?: Prisma.AuditUpdateManyWithoutUserNestedInput
+  platformAdminActions?: Prisma.PlatformAdminAuditUpdateManyWithoutActorNestedInput
+  platformAdminTargets?: Prisma.PlatformAdminAuditUpdateManyWithoutTargetNestedInput
+  loginHistories?: Prisma.LoginHistoryUpdateManyWithoutUserNestedInput
+  Person?: Prisma.PersonUpdateManyWithoutUserNestedInput
+  Appointment?: Prisma.AppointmentUpdateManyWithoutDoctorNestedInput
+  appointments?: Prisma.AppointmentUpdateManyWithoutUserNestedInput
+  clinicProccesses?: Prisma.ClinicProccessUpdateManyWithoutDoctorNestedInput
+  Consult?: Prisma.ConsultUpdateManyWithoutDoctorNestedInput
+  diagnostics?: Prisma.DiagnosticUpdateManyWithoutDoctorNestedInput
+  doctorProfile?: Prisma.DoctorProfileUpdateOneWithoutUserNestedInput
+  conversationsStarted?: Prisma.ChatConversationUpdateManyWithoutStarterNestedInput
+  conversationsReceived?: Prisma.ChatConversationUpdateManyWithoutRecipientNestedInput
+  chatMessages?: Prisma.ChatMessageUpdateManyWithoutAuthorNestedInput
+  treatmentPlans?: Prisma.TreatmentPlanUpdateManyWithoutDoctorNestedInput
+  patientPrescriptions?: Prisma.PatientPrescriptionUpdateManyWithoutDoctorNestedInput
+  xrayAnalyses?: Prisma.XRayAnalysisUpdateManyWithoutAnalyzedByNestedInput
+  authoredPatientDocuments?: Prisma.PatientDocumentUpdateManyWithoutAuthorNestedInput
+  UserBranch?: Prisma.UserBranchUpdateManyWithoutUserNestedInput
+  UserRole?: Prisma.UserRoleUpdateManyWithoutUserNestedInput
+  UserPermission?: Prisma.UserPermissionUpdateManyWithoutUserNestedInput
+  refreshTokens?: Prisma.RefreshTokenUpdateManyWithoutUserNestedInput
+  authActionTokens?: Prisma.AuthActionTokenUpdateManyWithoutUserNestedInput
+  reviewedSubscriptionPayments?: Prisma.SubscriptionRequestUpdateManyWithoutReviewedByNestedInput
+  approvedSubscriptions?: Prisma.ClinicSubscriptionUpdateManyWithoutApprovedByNestedInput
+  subscriptionAudits?: Prisma.SubscriptionAuditUpdateManyWithoutActorNestedInput
+  updatedSubscriptionSettings?: Prisma.SubscriptionSettingsUpdateManyWithoutUpdatedByNestedInput
+  assistantConversations?: Prisma.AssistantConversationUpdateManyWithoutUserNestedInput
+  assistantMessages?: Prisma.AssistantMessageUpdateManyWithoutUserNestedInput
+  stockSales?: Prisma.StockSaleUpdateManyWithoutSoldByNestedInput
+  createdCommunicationCampaigns?: Prisma.CommunicationCampaignUpdateManyWithoutCreatedByNestedInput
+  Address?: Prisma.AddressUpdateOneWithoutUserNestedInput
+  branch?: Prisma.BranchUpdateOneWithoutUserNestedInput
+  Role?: Prisma.RoleUpdateOneWithoutUserNestedInput
+}
+
+export type UserUncheckedUpdateWithoutRequestedSubscriptionPaymentsInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  email?: Prisma.StringFieldUpdateOperationsInput | string
+  password?: Prisma.StringFieldUpdateOperationsInput | string
+  username?: Prisma.StringFieldUpdateOperationsInput | string
+  branchId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  addressId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  roleId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  phoneNumber?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  countryCode?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  isPhoneVerified?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  isEmailVerified?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  deletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  accessHistories?: Prisma.AccessHistoryUncheckedUpdateManyWithoutUserNestedInput
+  audits?: Prisma.AuditUncheckedUpdateManyWithoutUserNestedInput
+  platformAdminActions?: Prisma.PlatformAdminAuditUncheckedUpdateManyWithoutActorNestedInput
+  platformAdminTargets?: Prisma.PlatformAdminAuditUncheckedUpdateManyWithoutTargetNestedInput
+  loginHistories?: Prisma.LoginHistoryUncheckedUpdateManyWithoutUserNestedInput
+  Person?: Prisma.PersonUncheckedUpdateManyWithoutUserNestedInput
+  Appointment?: Prisma.AppointmentUncheckedUpdateManyWithoutDoctorNestedInput
+  appointments?: Prisma.AppointmentUncheckedUpdateManyWithoutUserNestedInput
+  clinicProccesses?: Prisma.ClinicProccessUncheckedUpdateManyWithoutDoctorNestedInput
+  Consult?: Prisma.ConsultUncheckedUpdateManyWithoutDoctorNestedInput
+  diagnostics?: Prisma.DiagnosticUncheckedUpdateManyWithoutDoctorNestedInput
+  doctorProfile?: Prisma.DoctorProfileUncheckedUpdateOneWithoutUserNestedInput
+  conversationsStarted?: Prisma.ChatConversationUncheckedUpdateManyWithoutStarterNestedInput
+  conversationsReceived?: Prisma.ChatConversationUncheckedUpdateManyWithoutRecipientNestedInput
+  chatMessages?: Prisma.ChatMessageUncheckedUpdateManyWithoutAuthorNestedInput
+  treatmentPlans?: Prisma.TreatmentPlanUncheckedUpdateManyWithoutDoctorNestedInput
+  patientPrescriptions?: Prisma.PatientPrescriptionUncheckedUpdateManyWithoutDoctorNestedInput
+  xrayAnalyses?: Prisma.XRayAnalysisUncheckedUpdateManyWithoutAnalyzedByNestedInput
+  authoredPatientDocuments?: Prisma.PatientDocumentUncheckedUpdateManyWithoutAuthorNestedInput
+  UserBranch?: Prisma.UserBranchUncheckedUpdateManyWithoutUserNestedInput
+  UserRole?: Prisma.UserRoleUncheckedUpdateManyWithoutUserNestedInput
+  UserPermission?: Prisma.UserPermissionUncheckedUpdateManyWithoutUserNestedInput
+  refreshTokens?: Prisma.RefreshTokenUncheckedUpdateManyWithoutUserNestedInput
+  authActionTokens?: Prisma.AuthActionTokenUncheckedUpdateManyWithoutUserNestedInput
+  reviewedSubscriptionPayments?: Prisma.SubscriptionRequestUncheckedUpdateManyWithoutReviewedByNestedInput
+  approvedSubscriptions?: Prisma.ClinicSubscriptionUncheckedUpdateManyWithoutApprovedByNestedInput
+  subscriptionAudits?: Prisma.SubscriptionAuditUncheckedUpdateManyWithoutActorNestedInput
+  updatedSubscriptionSettings?: Prisma.SubscriptionSettingsUncheckedUpdateManyWithoutUpdatedByNestedInput
+  assistantConversations?: Prisma.AssistantConversationUncheckedUpdateManyWithoutUserNestedInput
+  assistantMessages?: Prisma.AssistantMessageUncheckedUpdateManyWithoutUserNestedInput
+  stockSales?: Prisma.StockSaleUncheckedUpdateManyWithoutSoldByNestedInput
+  createdCommunicationCampaigns?: Prisma.CommunicationCampaignUncheckedUpdateManyWithoutCreatedByNestedInput
+}
+
+export type UserUpsertWithoutReviewedSubscriptionPaymentsInput = {
+  update: Prisma.XOR<Prisma.UserUpdateWithoutReviewedSubscriptionPaymentsInput, Prisma.UserUncheckedUpdateWithoutReviewedSubscriptionPaymentsInput>
+  create: Prisma.XOR<Prisma.UserCreateWithoutReviewedSubscriptionPaymentsInput, Prisma.UserUncheckedCreateWithoutReviewedSubscriptionPaymentsInput>
+  where?: Prisma.UserWhereInput
+}
+
+export type UserUpdateToOneWithWhereWithoutReviewedSubscriptionPaymentsInput = {
+  where?: Prisma.UserWhereInput
+  data: Prisma.XOR<Prisma.UserUpdateWithoutReviewedSubscriptionPaymentsInput, Prisma.UserUncheckedUpdateWithoutReviewedSubscriptionPaymentsInput>
+}
+
+export type UserUpdateWithoutReviewedSubscriptionPaymentsInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  email?: Prisma.StringFieldUpdateOperationsInput | string
+  password?: Prisma.StringFieldUpdateOperationsInput | string
+  username?: Prisma.StringFieldUpdateOperationsInput | string
+  isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  phoneNumber?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  countryCode?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  isPhoneVerified?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  isEmailVerified?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  deletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  accessHistories?: Prisma.AccessHistoryUpdateManyWithoutUserNestedInput
+  audits?: Prisma.AuditUpdateManyWithoutUserNestedInput
+  platformAdminActions?: Prisma.PlatformAdminAuditUpdateManyWithoutActorNestedInput
+  platformAdminTargets?: Prisma.PlatformAdminAuditUpdateManyWithoutTargetNestedInput
+  loginHistories?: Prisma.LoginHistoryUpdateManyWithoutUserNestedInput
+  Person?: Prisma.PersonUpdateManyWithoutUserNestedInput
+  Appointment?: Prisma.AppointmentUpdateManyWithoutDoctorNestedInput
+  appointments?: Prisma.AppointmentUpdateManyWithoutUserNestedInput
+  clinicProccesses?: Prisma.ClinicProccessUpdateManyWithoutDoctorNestedInput
+  Consult?: Prisma.ConsultUpdateManyWithoutDoctorNestedInput
+  diagnostics?: Prisma.DiagnosticUpdateManyWithoutDoctorNestedInput
+  doctorProfile?: Prisma.DoctorProfileUpdateOneWithoutUserNestedInput
+  conversationsStarted?: Prisma.ChatConversationUpdateManyWithoutStarterNestedInput
+  conversationsReceived?: Prisma.ChatConversationUpdateManyWithoutRecipientNestedInput
+  chatMessages?: Prisma.ChatMessageUpdateManyWithoutAuthorNestedInput
+  treatmentPlans?: Prisma.TreatmentPlanUpdateManyWithoutDoctorNestedInput
+  patientPrescriptions?: Prisma.PatientPrescriptionUpdateManyWithoutDoctorNestedInput
+  xrayAnalyses?: Prisma.XRayAnalysisUpdateManyWithoutAnalyzedByNestedInput
+  authoredPatientDocuments?: Prisma.PatientDocumentUpdateManyWithoutAuthorNestedInput
+  UserBranch?: Prisma.UserBranchUpdateManyWithoutUserNestedInput
+  UserRole?: Prisma.UserRoleUpdateManyWithoutUserNestedInput
+  UserPermission?: Prisma.UserPermissionUpdateManyWithoutUserNestedInput
+  refreshTokens?: Prisma.RefreshTokenUpdateManyWithoutUserNestedInput
+  authActionTokens?: Prisma.AuthActionTokenUpdateManyWithoutUserNestedInput
+  requestedSubscriptionPayments?: Prisma.SubscriptionRequestUpdateManyWithoutSubmittedByNestedInput
+  approvedSubscriptions?: Prisma.ClinicSubscriptionUpdateManyWithoutApprovedByNestedInput
+  subscriptionAudits?: Prisma.SubscriptionAuditUpdateManyWithoutActorNestedInput
+  updatedSubscriptionSettings?: Prisma.SubscriptionSettingsUpdateManyWithoutUpdatedByNestedInput
+  assistantConversations?: Prisma.AssistantConversationUpdateManyWithoutUserNestedInput
+  assistantMessages?: Prisma.AssistantMessageUpdateManyWithoutUserNestedInput
+  stockSales?: Prisma.StockSaleUpdateManyWithoutSoldByNestedInput
+  createdCommunicationCampaigns?: Prisma.CommunicationCampaignUpdateManyWithoutCreatedByNestedInput
+  Address?: Prisma.AddressUpdateOneWithoutUserNestedInput
+  branch?: Prisma.BranchUpdateOneWithoutUserNestedInput
+  Role?: Prisma.RoleUpdateOneWithoutUserNestedInput
+}
+
+export type UserUncheckedUpdateWithoutReviewedSubscriptionPaymentsInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  email?: Prisma.StringFieldUpdateOperationsInput | string
+  password?: Prisma.StringFieldUpdateOperationsInput | string
+  username?: Prisma.StringFieldUpdateOperationsInput | string
+  branchId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  addressId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  roleId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  phoneNumber?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  countryCode?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  isPhoneVerified?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  isEmailVerified?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  deletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  accessHistories?: Prisma.AccessHistoryUncheckedUpdateManyWithoutUserNestedInput
+  audits?: Prisma.AuditUncheckedUpdateManyWithoutUserNestedInput
+  platformAdminActions?: Prisma.PlatformAdminAuditUncheckedUpdateManyWithoutActorNestedInput
+  platformAdminTargets?: Prisma.PlatformAdminAuditUncheckedUpdateManyWithoutTargetNestedInput
+  loginHistories?: Prisma.LoginHistoryUncheckedUpdateManyWithoutUserNestedInput
+  Person?: Prisma.PersonUncheckedUpdateManyWithoutUserNestedInput
+  Appointment?: Prisma.AppointmentUncheckedUpdateManyWithoutDoctorNestedInput
+  appointments?: Prisma.AppointmentUncheckedUpdateManyWithoutUserNestedInput
+  clinicProccesses?: Prisma.ClinicProccessUncheckedUpdateManyWithoutDoctorNestedInput
+  Consult?: Prisma.ConsultUncheckedUpdateManyWithoutDoctorNestedInput
+  diagnostics?: Prisma.DiagnosticUncheckedUpdateManyWithoutDoctorNestedInput
+  doctorProfile?: Prisma.DoctorProfileUncheckedUpdateOneWithoutUserNestedInput
+  conversationsStarted?: Prisma.ChatConversationUncheckedUpdateManyWithoutStarterNestedInput
+  conversationsReceived?: Prisma.ChatConversationUncheckedUpdateManyWithoutRecipientNestedInput
+  chatMessages?: Prisma.ChatMessageUncheckedUpdateManyWithoutAuthorNestedInput
+  treatmentPlans?: Prisma.TreatmentPlanUncheckedUpdateManyWithoutDoctorNestedInput
+  patientPrescriptions?: Prisma.PatientPrescriptionUncheckedUpdateManyWithoutDoctorNestedInput
+  xrayAnalyses?: Prisma.XRayAnalysisUncheckedUpdateManyWithoutAnalyzedByNestedInput
+  authoredPatientDocuments?: Prisma.PatientDocumentUncheckedUpdateManyWithoutAuthorNestedInput
+  UserBranch?: Prisma.UserBranchUncheckedUpdateManyWithoutUserNestedInput
+  UserRole?: Prisma.UserRoleUncheckedUpdateManyWithoutUserNestedInput
+  UserPermission?: Prisma.UserPermissionUncheckedUpdateManyWithoutUserNestedInput
+  refreshTokens?: Prisma.RefreshTokenUncheckedUpdateManyWithoutUserNestedInput
+  authActionTokens?: Prisma.AuthActionTokenUncheckedUpdateManyWithoutUserNestedInput
+  requestedSubscriptionPayments?: Prisma.SubscriptionRequestUncheckedUpdateManyWithoutSubmittedByNestedInput
+  approvedSubscriptions?: Prisma.ClinicSubscriptionUncheckedUpdateManyWithoutApprovedByNestedInput
+  subscriptionAudits?: Prisma.SubscriptionAuditUncheckedUpdateManyWithoutActorNestedInput
+  updatedSubscriptionSettings?: Prisma.SubscriptionSettingsUncheckedUpdateManyWithoutUpdatedByNestedInput
+  assistantConversations?: Prisma.AssistantConversationUncheckedUpdateManyWithoutUserNestedInput
+  assistantMessages?: Prisma.AssistantMessageUncheckedUpdateManyWithoutUserNestedInput
+  stockSales?: Prisma.StockSaleUncheckedUpdateManyWithoutSoldByNestedInput
+  createdCommunicationCampaigns?: Prisma.CommunicationCampaignUncheckedUpdateManyWithoutCreatedByNestedInput
+}
+
+export type UserCreateWithoutSubscriptionAuditsInput = {
+  id?: string
+  email: string
+  password: string
+  username: string
+  isActive?: boolean
+  phoneNumber?: number | null
+  countryCode?: string | null
+  isPhoneVerified?: boolean
+  isEmailVerified?: boolean
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  deletedAt?: Date | string | null
+  accessHistories?: Prisma.AccessHistoryCreateNestedManyWithoutUserInput
+  audits?: Prisma.AuditCreateNestedManyWithoutUserInput
+  platformAdminActions?: Prisma.PlatformAdminAuditCreateNestedManyWithoutActorInput
+  platformAdminTargets?: Prisma.PlatformAdminAuditCreateNestedManyWithoutTargetInput
+  loginHistories?: Prisma.LoginHistoryCreateNestedManyWithoutUserInput
+  Person?: Prisma.PersonCreateNestedManyWithoutUserInput
+  Appointment?: Prisma.AppointmentCreateNestedManyWithoutDoctorInput
+  appointments?: Prisma.AppointmentCreateNestedManyWithoutUserInput
+  clinicProccesses?: Prisma.ClinicProccessCreateNestedManyWithoutDoctorInput
+  Consult?: Prisma.ConsultCreateNestedManyWithoutDoctorInput
+  diagnostics?: Prisma.DiagnosticCreateNestedManyWithoutDoctorInput
+  doctorProfile?: Prisma.DoctorProfileCreateNestedOneWithoutUserInput
+  conversationsStarted?: Prisma.ChatConversationCreateNestedManyWithoutStarterInput
+  conversationsReceived?: Prisma.ChatConversationCreateNestedManyWithoutRecipientInput
+  chatMessages?: Prisma.ChatMessageCreateNestedManyWithoutAuthorInput
+  treatmentPlans?: Prisma.TreatmentPlanCreateNestedManyWithoutDoctorInput
+  patientPrescriptions?: Prisma.PatientPrescriptionCreateNestedManyWithoutDoctorInput
+  xrayAnalyses?: Prisma.XRayAnalysisCreateNestedManyWithoutAnalyzedByInput
+  authoredPatientDocuments?: Prisma.PatientDocumentCreateNestedManyWithoutAuthorInput
+  UserBranch?: Prisma.UserBranchCreateNestedManyWithoutUserInput
+  UserRole?: Prisma.UserRoleCreateNestedManyWithoutUserInput
+  UserPermission?: Prisma.UserPermissionCreateNestedManyWithoutUserInput
+  refreshTokens?: Prisma.RefreshTokenCreateNestedManyWithoutUserInput
+  authActionTokens?: Prisma.AuthActionTokenCreateNestedManyWithoutUserInput
+  requestedSubscriptionPayments?: Prisma.SubscriptionRequestCreateNestedManyWithoutSubmittedByInput
+  reviewedSubscriptionPayments?: Prisma.SubscriptionRequestCreateNestedManyWithoutReviewedByInput
+  approvedSubscriptions?: Prisma.ClinicSubscriptionCreateNestedManyWithoutApprovedByInput
+  updatedSubscriptionSettings?: Prisma.SubscriptionSettingsCreateNestedManyWithoutUpdatedByInput
+  assistantConversations?: Prisma.AssistantConversationCreateNestedManyWithoutUserInput
+  assistantMessages?: Prisma.AssistantMessageCreateNestedManyWithoutUserInput
+  stockSales?: Prisma.StockSaleCreateNestedManyWithoutSoldByInput
+  createdCommunicationCampaigns?: Prisma.CommunicationCampaignCreateNestedManyWithoutCreatedByInput
+  Address?: Prisma.AddressCreateNestedOneWithoutUserInput
+  branch?: Prisma.BranchCreateNestedOneWithoutUserInput
+  Role?: Prisma.RoleCreateNestedOneWithoutUserInput
+}
+
+export type UserUncheckedCreateWithoutSubscriptionAuditsInput = {
+  id?: string
+  email: string
+  password: string
+  username: string
+  branchId?: string | null
+  addressId?: string | null
+  roleId?: string | null
+  isActive?: boolean
+  phoneNumber?: number | null
+  countryCode?: string | null
+  isPhoneVerified?: boolean
+  isEmailVerified?: boolean
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  deletedAt?: Date | string | null
+  accessHistories?: Prisma.AccessHistoryUncheckedCreateNestedManyWithoutUserInput
+  audits?: Prisma.AuditUncheckedCreateNestedManyWithoutUserInput
+  platformAdminActions?: Prisma.PlatformAdminAuditUncheckedCreateNestedManyWithoutActorInput
+  platformAdminTargets?: Prisma.PlatformAdminAuditUncheckedCreateNestedManyWithoutTargetInput
+  loginHistories?: Prisma.LoginHistoryUncheckedCreateNestedManyWithoutUserInput
+  Person?: Prisma.PersonUncheckedCreateNestedManyWithoutUserInput
+  Appointment?: Prisma.AppointmentUncheckedCreateNestedManyWithoutDoctorInput
+  appointments?: Prisma.AppointmentUncheckedCreateNestedManyWithoutUserInput
+  clinicProccesses?: Prisma.ClinicProccessUncheckedCreateNestedManyWithoutDoctorInput
+  Consult?: Prisma.ConsultUncheckedCreateNestedManyWithoutDoctorInput
+  diagnostics?: Prisma.DiagnosticUncheckedCreateNestedManyWithoutDoctorInput
+  doctorProfile?: Prisma.DoctorProfileUncheckedCreateNestedOneWithoutUserInput
+  conversationsStarted?: Prisma.ChatConversationUncheckedCreateNestedManyWithoutStarterInput
+  conversationsReceived?: Prisma.ChatConversationUncheckedCreateNestedManyWithoutRecipientInput
+  chatMessages?: Prisma.ChatMessageUncheckedCreateNestedManyWithoutAuthorInput
+  treatmentPlans?: Prisma.TreatmentPlanUncheckedCreateNestedManyWithoutDoctorInput
+  patientPrescriptions?: Prisma.PatientPrescriptionUncheckedCreateNestedManyWithoutDoctorInput
+  xrayAnalyses?: Prisma.XRayAnalysisUncheckedCreateNestedManyWithoutAnalyzedByInput
+  authoredPatientDocuments?: Prisma.PatientDocumentUncheckedCreateNestedManyWithoutAuthorInput
+  UserBranch?: Prisma.UserBranchUncheckedCreateNestedManyWithoutUserInput
+  UserRole?: Prisma.UserRoleUncheckedCreateNestedManyWithoutUserInput
+  UserPermission?: Prisma.UserPermissionUncheckedCreateNestedManyWithoutUserInput
+  refreshTokens?: Prisma.RefreshTokenUncheckedCreateNestedManyWithoutUserInput
+  authActionTokens?: Prisma.AuthActionTokenUncheckedCreateNestedManyWithoutUserInput
+  requestedSubscriptionPayments?: Prisma.SubscriptionRequestUncheckedCreateNestedManyWithoutSubmittedByInput
+  reviewedSubscriptionPayments?: Prisma.SubscriptionRequestUncheckedCreateNestedManyWithoutReviewedByInput
+  approvedSubscriptions?: Prisma.ClinicSubscriptionUncheckedCreateNestedManyWithoutApprovedByInput
+  updatedSubscriptionSettings?: Prisma.SubscriptionSettingsUncheckedCreateNestedManyWithoutUpdatedByInput
+  assistantConversations?: Prisma.AssistantConversationUncheckedCreateNestedManyWithoutUserInput
+  assistantMessages?: Prisma.AssistantMessageUncheckedCreateNestedManyWithoutUserInput
+  stockSales?: Prisma.StockSaleUncheckedCreateNestedManyWithoutSoldByInput
+  createdCommunicationCampaigns?: Prisma.CommunicationCampaignUncheckedCreateNestedManyWithoutCreatedByInput
+}
+
+export type UserCreateOrConnectWithoutSubscriptionAuditsInput = {
+  where: Prisma.UserWhereUniqueInput
+  create: Prisma.XOR<Prisma.UserCreateWithoutSubscriptionAuditsInput, Prisma.UserUncheckedCreateWithoutSubscriptionAuditsInput>
+}
+
+export type UserUpsertWithoutSubscriptionAuditsInput = {
+  update: Prisma.XOR<Prisma.UserUpdateWithoutSubscriptionAuditsInput, Prisma.UserUncheckedUpdateWithoutSubscriptionAuditsInput>
+  create: Prisma.XOR<Prisma.UserCreateWithoutSubscriptionAuditsInput, Prisma.UserUncheckedCreateWithoutSubscriptionAuditsInput>
+  where?: Prisma.UserWhereInput
+}
+
+export type UserUpdateToOneWithWhereWithoutSubscriptionAuditsInput = {
+  where?: Prisma.UserWhereInput
+  data: Prisma.XOR<Prisma.UserUpdateWithoutSubscriptionAuditsInput, Prisma.UserUncheckedUpdateWithoutSubscriptionAuditsInput>
+}
+
+export type UserUpdateWithoutSubscriptionAuditsInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  email?: Prisma.StringFieldUpdateOperationsInput | string
+  password?: Prisma.StringFieldUpdateOperationsInput | string
+  username?: Prisma.StringFieldUpdateOperationsInput | string
+  isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  phoneNumber?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  countryCode?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  isPhoneVerified?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  isEmailVerified?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  deletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  accessHistories?: Prisma.AccessHistoryUpdateManyWithoutUserNestedInput
+  audits?: Prisma.AuditUpdateManyWithoutUserNestedInput
+  platformAdminActions?: Prisma.PlatformAdminAuditUpdateManyWithoutActorNestedInput
+  platformAdminTargets?: Prisma.PlatformAdminAuditUpdateManyWithoutTargetNestedInput
+  loginHistories?: Prisma.LoginHistoryUpdateManyWithoutUserNestedInput
+  Person?: Prisma.PersonUpdateManyWithoutUserNestedInput
+  Appointment?: Prisma.AppointmentUpdateManyWithoutDoctorNestedInput
+  appointments?: Prisma.AppointmentUpdateManyWithoutUserNestedInput
+  clinicProccesses?: Prisma.ClinicProccessUpdateManyWithoutDoctorNestedInput
+  Consult?: Prisma.ConsultUpdateManyWithoutDoctorNestedInput
+  diagnostics?: Prisma.DiagnosticUpdateManyWithoutDoctorNestedInput
+  doctorProfile?: Prisma.DoctorProfileUpdateOneWithoutUserNestedInput
+  conversationsStarted?: Prisma.ChatConversationUpdateManyWithoutStarterNestedInput
+  conversationsReceived?: Prisma.ChatConversationUpdateManyWithoutRecipientNestedInput
+  chatMessages?: Prisma.ChatMessageUpdateManyWithoutAuthorNestedInput
+  treatmentPlans?: Prisma.TreatmentPlanUpdateManyWithoutDoctorNestedInput
+  patientPrescriptions?: Prisma.PatientPrescriptionUpdateManyWithoutDoctorNestedInput
+  xrayAnalyses?: Prisma.XRayAnalysisUpdateManyWithoutAnalyzedByNestedInput
+  authoredPatientDocuments?: Prisma.PatientDocumentUpdateManyWithoutAuthorNestedInput
+  UserBranch?: Prisma.UserBranchUpdateManyWithoutUserNestedInput
+  UserRole?: Prisma.UserRoleUpdateManyWithoutUserNestedInput
+  UserPermission?: Prisma.UserPermissionUpdateManyWithoutUserNestedInput
+  refreshTokens?: Prisma.RefreshTokenUpdateManyWithoutUserNestedInput
+  authActionTokens?: Prisma.AuthActionTokenUpdateManyWithoutUserNestedInput
+  requestedSubscriptionPayments?: Prisma.SubscriptionRequestUpdateManyWithoutSubmittedByNestedInput
+  reviewedSubscriptionPayments?: Prisma.SubscriptionRequestUpdateManyWithoutReviewedByNestedInput
+  approvedSubscriptions?: Prisma.ClinicSubscriptionUpdateManyWithoutApprovedByNestedInput
+  updatedSubscriptionSettings?: Prisma.SubscriptionSettingsUpdateManyWithoutUpdatedByNestedInput
+  assistantConversations?: Prisma.AssistantConversationUpdateManyWithoutUserNestedInput
+  assistantMessages?: Prisma.AssistantMessageUpdateManyWithoutUserNestedInput
+  stockSales?: Prisma.StockSaleUpdateManyWithoutSoldByNestedInput
+  createdCommunicationCampaigns?: Prisma.CommunicationCampaignUpdateManyWithoutCreatedByNestedInput
+  Address?: Prisma.AddressUpdateOneWithoutUserNestedInput
+  branch?: Prisma.BranchUpdateOneWithoutUserNestedInput
+  Role?: Prisma.RoleUpdateOneWithoutUserNestedInput
+}
+
+export type UserUncheckedUpdateWithoutSubscriptionAuditsInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  email?: Prisma.StringFieldUpdateOperationsInput | string
+  password?: Prisma.StringFieldUpdateOperationsInput | string
+  username?: Prisma.StringFieldUpdateOperationsInput | string
+  branchId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  addressId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  roleId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  phoneNumber?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  countryCode?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  isPhoneVerified?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  isEmailVerified?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  deletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  accessHistories?: Prisma.AccessHistoryUncheckedUpdateManyWithoutUserNestedInput
+  audits?: Prisma.AuditUncheckedUpdateManyWithoutUserNestedInput
+  platformAdminActions?: Prisma.PlatformAdminAuditUncheckedUpdateManyWithoutActorNestedInput
+  platformAdminTargets?: Prisma.PlatformAdminAuditUncheckedUpdateManyWithoutTargetNestedInput
+  loginHistories?: Prisma.LoginHistoryUncheckedUpdateManyWithoutUserNestedInput
+  Person?: Prisma.PersonUncheckedUpdateManyWithoutUserNestedInput
+  Appointment?: Prisma.AppointmentUncheckedUpdateManyWithoutDoctorNestedInput
+  appointments?: Prisma.AppointmentUncheckedUpdateManyWithoutUserNestedInput
+  clinicProccesses?: Prisma.ClinicProccessUncheckedUpdateManyWithoutDoctorNestedInput
+  Consult?: Prisma.ConsultUncheckedUpdateManyWithoutDoctorNestedInput
+  diagnostics?: Prisma.DiagnosticUncheckedUpdateManyWithoutDoctorNestedInput
+  doctorProfile?: Prisma.DoctorProfileUncheckedUpdateOneWithoutUserNestedInput
+  conversationsStarted?: Prisma.ChatConversationUncheckedUpdateManyWithoutStarterNestedInput
+  conversationsReceived?: Prisma.ChatConversationUncheckedUpdateManyWithoutRecipientNestedInput
+  chatMessages?: Prisma.ChatMessageUncheckedUpdateManyWithoutAuthorNestedInput
+  treatmentPlans?: Prisma.TreatmentPlanUncheckedUpdateManyWithoutDoctorNestedInput
+  patientPrescriptions?: Prisma.PatientPrescriptionUncheckedUpdateManyWithoutDoctorNestedInput
+  xrayAnalyses?: Prisma.XRayAnalysisUncheckedUpdateManyWithoutAnalyzedByNestedInput
+  authoredPatientDocuments?: Prisma.PatientDocumentUncheckedUpdateManyWithoutAuthorNestedInput
+  UserBranch?: Prisma.UserBranchUncheckedUpdateManyWithoutUserNestedInput
+  UserRole?: Prisma.UserRoleUncheckedUpdateManyWithoutUserNestedInput
+  UserPermission?: Prisma.UserPermissionUncheckedUpdateManyWithoutUserNestedInput
+  refreshTokens?: Prisma.RefreshTokenUncheckedUpdateManyWithoutUserNestedInput
+  authActionTokens?: Prisma.AuthActionTokenUncheckedUpdateManyWithoutUserNestedInput
+  requestedSubscriptionPayments?: Prisma.SubscriptionRequestUncheckedUpdateManyWithoutSubmittedByNestedInput
+  reviewedSubscriptionPayments?: Prisma.SubscriptionRequestUncheckedUpdateManyWithoutReviewedByNestedInput
+  approvedSubscriptions?: Prisma.ClinicSubscriptionUncheckedUpdateManyWithoutApprovedByNestedInput
+  updatedSubscriptionSettings?: Prisma.SubscriptionSettingsUncheckedUpdateManyWithoutUpdatedByNestedInput
+  assistantConversations?: Prisma.AssistantConversationUncheckedUpdateManyWithoutUserNestedInput
+  assistantMessages?: Prisma.AssistantMessageUncheckedUpdateManyWithoutUserNestedInput
+  stockSales?: Prisma.StockSaleUncheckedUpdateManyWithoutSoldByNestedInput
+  createdCommunicationCampaigns?: Prisma.CommunicationCampaignUncheckedUpdateManyWithoutCreatedByNestedInput
+}
+
+export type UserCreateWithoutPlatformAdminActionsInput = {
+  id?: string
+  email: string
+  password: string
+  username: string
+  isActive?: boolean
+  phoneNumber?: number | null
+  countryCode?: string | null
+  isPhoneVerified?: boolean
+  isEmailVerified?: boolean
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  deletedAt?: Date | string | null
+  accessHistories?: Prisma.AccessHistoryCreateNestedManyWithoutUserInput
+  audits?: Prisma.AuditCreateNestedManyWithoutUserInput
+  platformAdminTargets?: Prisma.PlatformAdminAuditCreateNestedManyWithoutTargetInput
+  loginHistories?: Prisma.LoginHistoryCreateNestedManyWithoutUserInput
+  Person?: Prisma.PersonCreateNestedManyWithoutUserInput
+  Appointment?: Prisma.AppointmentCreateNestedManyWithoutDoctorInput
+  appointments?: Prisma.AppointmentCreateNestedManyWithoutUserInput
+  clinicProccesses?: Prisma.ClinicProccessCreateNestedManyWithoutDoctorInput
+  Consult?: Prisma.ConsultCreateNestedManyWithoutDoctorInput
+  diagnostics?: Prisma.DiagnosticCreateNestedManyWithoutDoctorInput
+  doctorProfile?: Prisma.DoctorProfileCreateNestedOneWithoutUserInput
+  conversationsStarted?: Prisma.ChatConversationCreateNestedManyWithoutStarterInput
+  conversationsReceived?: Prisma.ChatConversationCreateNestedManyWithoutRecipientInput
+  chatMessages?: Prisma.ChatMessageCreateNestedManyWithoutAuthorInput
+  treatmentPlans?: Prisma.TreatmentPlanCreateNestedManyWithoutDoctorInput
+  patientPrescriptions?: Prisma.PatientPrescriptionCreateNestedManyWithoutDoctorInput
+  xrayAnalyses?: Prisma.XRayAnalysisCreateNestedManyWithoutAnalyzedByInput
+  authoredPatientDocuments?: Prisma.PatientDocumentCreateNestedManyWithoutAuthorInput
+  UserBranch?: Prisma.UserBranchCreateNestedManyWithoutUserInput
+  UserRole?: Prisma.UserRoleCreateNestedManyWithoutUserInput
+  UserPermission?: Prisma.UserPermissionCreateNestedManyWithoutUserInput
+  refreshTokens?: Prisma.RefreshTokenCreateNestedManyWithoutUserInput
+  authActionTokens?: Prisma.AuthActionTokenCreateNestedManyWithoutUserInput
+  requestedSubscriptionPayments?: Prisma.SubscriptionRequestCreateNestedManyWithoutSubmittedByInput
+  reviewedSubscriptionPayments?: Prisma.SubscriptionRequestCreateNestedManyWithoutReviewedByInput
+  approvedSubscriptions?: Prisma.ClinicSubscriptionCreateNestedManyWithoutApprovedByInput
+  subscriptionAudits?: Prisma.SubscriptionAuditCreateNestedManyWithoutActorInput
+  updatedSubscriptionSettings?: Prisma.SubscriptionSettingsCreateNestedManyWithoutUpdatedByInput
+  assistantConversations?: Prisma.AssistantConversationCreateNestedManyWithoutUserInput
+  assistantMessages?: Prisma.AssistantMessageCreateNestedManyWithoutUserInput
+  stockSales?: Prisma.StockSaleCreateNestedManyWithoutSoldByInput
+  createdCommunicationCampaigns?: Prisma.CommunicationCampaignCreateNestedManyWithoutCreatedByInput
+  Address?: Prisma.AddressCreateNestedOneWithoutUserInput
+  branch?: Prisma.BranchCreateNestedOneWithoutUserInput
+  Role?: Prisma.RoleCreateNestedOneWithoutUserInput
+}
+
+export type UserUncheckedCreateWithoutPlatformAdminActionsInput = {
+  id?: string
+  email: string
+  password: string
+  username: string
+  branchId?: string | null
+  addressId?: string | null
+  roleId?: string | null
+  isActive?: boolean
+  phoneNumber?: number | null
+  countryCode?: string | null
+  isPhoneVerified?: boolean
+  isEmailVerified?: boolean
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  deletedAt?: Date | string | null
+  accessHistories?: Prisma.AccessHistoryUncheckedCreateNestedManyWithoutUserInput
+  audits?: Prisma.AuditUncheckedCreateNestedManyWithoutUserInput
+  platformAdminTargets?: Prisma.PlatformAdminAuditUncheckedCreateNestedManyWithoutTargetInput
+  loginHistories?: Prisma.LoginHistoryUncheckedCreateNestedManyWithoutUserInput
+  Person?: Prisma.PersonUncheckedCreateNestedManyWithoutUserInput
+  Appointment?: Prisma.AppointmentUncheckedCreateNestedManyWithoutDoctorInput
+  appointments?: Prisma.AppointmentUncheckedCreateNestedManyWithoutUserInput
+  clinicProccesses?: Prisma.ClinicProccessUncheckedCreateNestedManyWithoutDoctorInput
+  Consult?: Prisma.ConsultUncheckedCreateNestedManyWithoutDoctorInput
+  diagnostics?: Prisma.DiagnosticUncheckedCreateNestedManyWithoutDoctorInput
+  doctorProfile?: Prisma.DoctorProfileUncheckedCreateNestedOneWithoutUserInput
+  conversationsStarted?: Prisma.ChatConversationUncheckedCreateNestedManyWithoutStarterInput
+  conversationsReceived?: Prisma.ChatConversationUncheckedCreateNestedManyWithoutRecipientInput
+  chatMessages?: Prisma.ChatMessageUncheckedCreateNestedManyWithoutAuthorInput
+  treatmentPlans?: Prisma.TreatmentPlanUncheckedCreateNestedManyWithoutDoctorInput
+  patientPrescriptions?: Prisma.PatientPrescriptionUncheckedCreateNestedManyWithoutDoctorInput
+  xrayAnalyses?: Prisma.XRayAnalysisUncheckedCreateNestedManyWithoutAnalyzedByInput
+  authoredPatientDocuments?: Prisma.PatientDocumentUncheckedCreateNestedManyWithoutAuthorInput
+  UserBranch?: Prisma.UserBranchUncheckedCreateNestedManyWithoutUserInput
+  UserRole?: Prisma.UserRoleUncheckedCreateNestedManyWithoutUserInput
+  UserPermission?: Prisma.UserPermissionUncheckedCreateNestedManyWithoutUserInput
+  refreshTokens?: Prisma.RefreshTokenUncheckedCreateNestedManyWithoutUserInput
+  authActionTokens?: Prisma.AuthActionTokenUncheckedCreateNestedManyWithoutUserInput
+  requestedSubscriptionPayments?: Prisma.SubscriptionRequestUncheckedCreateNestedManyWithoutSubmittedByInput
+  reviewedSubscriptionPayments?: Prisma.SubscriptionRequestUncheckedCreateNestedManyWithoutReviewedByInput
+  approvedSubscriptions?: Prisma.ClinicSubscriptionUncheckedCreateNestedManyWithoutApprovedByInput
+  subscriptionAudits?: Prisma.SubscriptionAuditUncheckedCreateNestedManyWithoutActorInput
+  updatedSubscriptionSettings?: Prisma.SubscriptionSettingsUncheckedCreateNestedManyWithoutUpdatedByInput
+  assistantConversations?: Prisma.AssistantConversationUncheckedCreateNestedManyWithoutUserInput
+  assistantMessages?: Prisma.AssistantMessageUncheckedCreateNestedManyWithoutUserInput
+  stockSales?: Prisma.StockSaleUncheckedCreateNestedManyWithoutSoldByInput
+  createdCommunicationCampaigns?: Prisma.CommunicationCampaignUncheckedCreateNestedManyWithoutCreatedByInput
+}
+
+export type UserCreateOrConnectWithoutPlatformAdminActionsInput = {
+  where: Prisma.UserWhereUniqueInput
+  create: Prisma.XOR<Prisma.UserCreateWithoutPlatformAdminActionsInput, Prisma.UserUncheckedCreateWithoutPlatformAdminActionsInput>
+}
+
+export type UserCreateWithoutPlatformAdminTargetsInput = {
+  id?: string
+  email: string
+  password: string
+  username: string
+  isActive?: boolean
+  phoneNumber?: number | null
+  countryCode?: string | null
+  isPhoneVerified?: boolean
+  isEmailVerified?: boolean
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  deletedAt?: Date | string | null
+  accessHistories?: Prisma.AccessHistoryCreateNestedManyWithoutUserInput
+  audits?: Prisma.AuditCreateNestedManyWithoutUserInput
+  platformAdminActions?: Prisma.PlatformAdminAuditCreateNestedManyWithoutActorInput
+  loginHistories?: Prisma.LoginHistoryCreateNestedManyWithoutUserInput
+  Person?: Prisma.PersonCreateNestedManyWithoutUserInput
+  Appointment?: Prisma.AppointmentCreateNestedManyWithoutDoctorInput
+  appointments?: Prisma.AppointmentCreateNestedManyWithoutUserInput
+  clinicProccesses?: Prisma.ClinicProccessCreateNestedManyWithoutDoctorInput
+  Consult?: Prisma.ConsultCreateNestedManyWithoutDoctorInput
+  diagnostics?: Prisma.DiagnosticCreateNestedManyWithoutDoctorInput
+  doctorProfile?: Prisma.DoctorProfileCreateNestedOneWithoutUserInput
+  conversationsStarted?: Prisma.ChatConversationCreateNestedManyWithoutStarterInput
+  conversationsReceived?: Prisma.ChatConversationCreateNestedManyWithoutRecipientInput
+  chatMessages?: Prisma.ChatMessageCreateNestedManyWithoutAuthorInput
+  treatmentPlans?: Prisma.TreatmentPlanCreateNestedManyWithoutDoctorInput
+  patientPrescriptions?: Prisma.PatientPrescriptionCreateNestedManyWithoutDoctorInput
+  xrayAnalyses?: Prisma.XRayAnalysisCreateNestedManyWithoutAnalyzedByInput
+  authoredPatientDocuments?: Prisma.PatientDocumentCreateNestedManyWithoutAuthorInput
+  UserBranch?: Prisma.UserBranchCreateNestedManyWithoutUserInput
+  UserRole?: Prisma.UserRoleCreateNestedManyWithoutUserInput
+  UserPermission?: Prisma.UserPermissionCreateNestedManyWithoutUserInput
+  refreshTokens?: Prisma.RefreshTokenCreateNestedManyWithoutUserInput
+  authActionTokens?: Prisma.AuthActionTokenCreateNestedManyWithoutUserInput
+  requestedSubscriptionPayments?: Prisma.SubscriptionRequestCreateNestedManyWithoutSubmittedByInput
+  reviewedSubscriptionPayments?: Prisma.SubscriptionRequestCreateNestedManyWithoutReviewedByInput
+  approvedSubscriptions?: Prisma.ClinicSubscriptionCreateNestedManyWithoutApprovedByInput
+  subscriptionAudits?: Prisma.SubscriptionAuditCreateNestedManyWithoutActorInput
+  updatedSubscriptionSettings?: Prisma.SubscriptionSettingsCreateNestedManyWithoutUpdatedByInput
+  assistantConversations?: Prisma.AssistantConversationCreateNestedManyWithoutUserInput
+  assistantMessages?: Prisma.AssistantMessageCreateNestedManyWithoutUserInput
+  stockSales?: Prisma.StockSaleCreateNestedManyWithoutSoldByInput
+  createdCommunicationCampaigns?: Prisma.CommunicationCampaignCreateNestedManyWithoutCreatedByInput
+  Address?: Prisma.AddressCreateNestedOneWithoutUserInput
+  branch?: Prisma.BranchCreateNestedOneWithoutUserInput
+  Role?: Prisma.RoleCreateNestedOneWithoutUserInput
+}
+
+export type UserUncheckedCreateWithoutPlatformAdminTargetsInput = {
+  id?: string
+  email: string
+  password: string
+  username: string
+  branchId?: string | null
+  addressId?: string | null
+  roleId?: string | null
+  isActive?: boolean
+  phoneNumber?: number | null
+  countryCode?: string | null
+  isPhoneVerified?: boolean
+  isEmailVerified?: boolean
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  deletedAt?: Date | string | null
+  accessHistories?: Prisma.AccessHistoryUncheckedCreateNestedManyWithoutUserInput
+  audits?: Prisma.AuditUncheckedCreateNestedManyWithoutUserInput
+  platformAdminActions?: Prisma.PlatformAdminAuditUncheckedCreateNestedManyWithoutActorInput
+  loginHistories?: Prisma.LoginHistoryUncheckedCreateNestedManyWithoutUserInput
+  Person?: Prisma.PersonUncheckedCreateNestedManyWithoutUserInput
+  Appointment?: Prisma.AppointmentUncheckedCreateNestedManyWithoutDoctorInput
+  appointments?: Prisma.AppointmentUncheckedCreateNestedManyWithoutUserInput
+  clinicProccesses?: Prisma.ClinicProccessUncheckedCreateNestedManyWithoutDoctorInput
+  Consult?: Prisma.ConsultUncheckedCreateNestedManyWithoutDoctorInput
+  diagnostics?: Prisma.DiagnosticUncheckedCreateNestedManyWithoutDoctorInput
+  doctorProfile?: Prisma.DoctorProfileUncheckedCreateNestedOneWithoutUserInput
+  conversationsStarted?: Prisma.ChatConversationUncheckedCreateNestedManyWithoutStarterInput
+  conversationsReceived?: Prisma.ChatConversationUncheckedCreateNestedManyWithoutRecipientInput
+  chatMessages?: Prisma.ChatMessageUncheckedCreateNestedManyWithoutAuthorInput
+  treatmentPlans?: Prisma.TreatmentPlanUncheckedCreateNestedManyWithoutDoctorInput
+  patientPrescriptions?: Prisma.PatientPrescriptionUncheckedCreateNestedManyWithoutDoctorInput
+  xrayAnalyses?: Prisma.XRayAnalysisUncheckedCreateNestedManyWithoutAnalyzedByInput
+  authoredPatientDocuments?: Prisma.PatientDocumentUncheckedCreateNestedManyWithoutAuthorInput
+  UserBranch?: Prisma.UserBranchUncheckedCreateNestedManyWithoutUserInput
+  UserRole?: Prisma.UserRoleUncheckedCreateNestedManyWithoutUserInput
+  UserPermission?: Prisma.UserPermissionUncheckedCreateNestedManyWithoutUserInput
+  refreshTokens?: Prisma.RefreshTokenUncheckedCreateNestedManyWithoutUserInput
+  authActionTokens?: Prisma.AuthActionTokenUncheckedCreateNestedManyWithoutUserInput
+  requestedSubscriptionPayments?: Prisma.SubscriptionRequestUncheckedCreateNestedManyWithoutSubmittedByInput
+  reviewedSubscriptionPayments?: Prisma.SubscriptionRequestUncheckedCreateNestedManyWithoutReviewedByInput
+  approvedSubscriptions?: Prisma.ClinicSubscriptionUncheckedCreateNestedManyWithoutApprovedByInput
+  subscriptionAudits?: Prisma.SubscriptionAuditUncheckedCreateNestedManyWithoutActorInput
+  updatedSubscriptionSettings?: Prisma.SubscriptionSettingsUncheckedCreateNestedManyWithoutUpdatedByInput
+  assistantConversations?: Prisma.AssistantConversationUncheckedCreateNestedManyWithoutUserInput
+  assistantMessages?: Prisma.AssistantMessageUncheckedCreateNestedManyWithoutUserInput
+  stockSales?: Prisma.StockSaleUncheckedCreateNestedManyWithoutSoldByInput
+  createdCommunicationCampaigns?: Prisma.CommunicationCampaignUncheckedCreateNestedManyWithoutCreatedByInput
+}
+
+export type UserCreateOrConnectWithoutPlatformAdminTargetsInput = {
+  where: Prisma.UserWhereUniqueInput
+  create: Prisma.XOR<Prisma.UserCreateWithoutPlatformAdminTargetsInput, Prisma.UserUncheckedCreateWithoutPlatformAdminTargetsInput>
+}
+
+export type UserUpsertWithoutPlatformAdminActionsInput = {
+  update: Prisma.XOR<Prisma.UserUpdateWithoutPlatformAdminActionsInput, Prisma.UserUncheckedUpdateWithoutPlatformAdminActionsInput>
+  create: Prisma.XOR<Prisma.UserCreateWithoutPlatformAdminActionsInput, Prisma.UserUncheckedCreateWithoutPlatformAdminActionsInput>
+  where?: Prisma.UserWhereInput
+}
+
+export type UserUpdateToOneWithWhereWithoutPlatformAdminActionsInput = {
+  where?: Prisma.UserWhereInput
+  data: Prisma.XOR<Prisma.UserUpdateWithoutPlatformAdminActionsInput, Prisma.UserUncheckedUpdateWithoutPlatformAdminActionsInput>
+}
+
+export type UserUpdateWithoutPlatformAdminActionsInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  email?: Prisma.StringFieldUpdateOperationsInput | string
+  password?: Prisma.StringFieldUpdateOperationsInput | string
+  username?: Prisma.StringFieldUpdateOperationsInput | string
+  isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  phoneNumber?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  countryCode?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  isPhoneVerified?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  isEmailVerified?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  deletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  accessHistories?: Prisma.AccessHistoryUpdateManyWithoutUserNestedInput
+  audits?: Prisma.AuditUpdateManyWithoutUserNestedInput
+  platformAdminTargets?: Prisma.PlatformAdminAuditUpdateManyWithoutTargetNestedInput
+  loginHistories?: Prisma.LoginHistoryUpdateManyWithoutUserNestedInput
+  Person?: Prisma.PersonUpdateManyWithoutUserNestedInput
+  Appointment?: Prisma.AppointmentUpdateManyWithoutDoctorNestedInput
+  appointments?: Prisma.AppointmentUpdateManyWithoutUserNestedInput
+  clinicProccesses?: Prisma.ClinicProccessUpdateManyWithoutDoctorNestedInput
+  Consult?: Prisma.ConsultUpdateManyWithoutDoctorNestedInput
+  diagnostics?: Prisma.DiagnosticUpdateManyWithoutDoctorNestedInput
+  doctorProfile?: Prisma.DoctorProfileUpdateOneWithoutUserNestedInput
+  conversationsStarted?: Prisma.ChatConversationUpdateManyWithoutStarterNestedInput
+  conversationsReceived?: Prisma.ChatConversationUpdateManyWithoutRecipientNestedInput
+  chatMessages?: Prisma.ChatMessageUpdateManyWithoutAuthorNestedInput
+  treatmentPlans?: Prisma.TreatmentPlanUpdateManyWithoutDoctorNestedInput
+  patientPrescriptions?: Prisma.PatientPrescriptionUpdateManyWithoutDoctorNestedInput
+  xrayAnalyses?: Prisma.XRayAnalysisUpdateManyWithoutAnalyzedByNestedInput
+  authoredPatientDocuments?: Prisma.PatientDocumentUpdateManyWithoutAuthorNestedInput
+  UserBranch?: Prisma.UserBranchUpdateManyWithoutUserNestedInput
+  UserRole?: Prisma.UserRoleUpdateManyWithoutUserNestedInput
+  UserPermission?: Prisma.UserPermissionUpdateManyWithoutUserNestedInput
+  refreshTokens?: Prisma.RefreshTokenUpdateManyWithoutUserNestedInput
+  authActionTokens?: Prisma.AuthActionTokenUpdateManyWithoutUserNestedInput
+  requestedSubscriptionPayments?: Prisma.SubscriptionRequestUpdateManyWithoutSubmittedByNestedInput
+  reviewedSubscriptionPayments?: Prisma.SubscriptionRequestUpdateManyWithoutReviewedByNestedInput
+  approvedSubscriptions?: Prisma.ClinicSubscriptionUpdateManyWithoutApprovedByNestedInput
+  subscriptionAudits?: Prisma.SubscriptionAuditUpdateManyWithoutActorNestedInput
+  updatedSubscriptionSettings?: Prisma.SubscriptionSettingsUpdateManyWithoutUpdatedByNestedInput
+  assistantConversations?: Prisma.AssistantConversationUpdateManyWithoutUserNestedInput
+  assistantMessages?: Prisma.AssistantMessageUpdateManyWithoutUserNestedInput
+  stockSales?: Prisma.StockSaleUpdateManyWithoutSoldByNestedInput
+  createdCommunicationCampaigns?: Prisma.CommunicationCampaignUpdateManyWithoutCreatedByNestedInput
+  Address?: Prisma.AddressUpdateOneWithoutUserNestedInput
+  branch?: Prisma.BranchUpdateOneWithoutUserNestedInput
+  Role?: Prisma.RoleUpdateOneWithoutUserNestedInput
+}
+
+export type UserUncheckedUpdateWithoutPlatformAdminActionsInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  email?: Prisma.StringFieldUpdateOperationsInput | string
+  password?: Prisma.StringFieldUpdateOperationsInput | string
+  username?: Prisma.StringFieldUpdateOperationsInput | string
+  branchId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  addressId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  roleId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  phoneNumber?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  countryCode?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  isPhoneVerified?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  isEmailVerified?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  deletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  accessHistories?: Prisma.AccessHistoryUncheckedUpdateManyWithoutUserNestedInput
+  audits?: Prisma.AuditUncheckedUpdateManyWithoutUserNestedInput
+  platformAdminTargets?: Prisma.PlatformAdminAuditUncheckedUpdateManyWithoutTargetNestedInput
+  loginHistories?: Prisma.LoginHistoryUncheckedUpdateManyWithoutUserNestedInput
+  Person?: Prisma.PersonUncheckedUpdateManyWithoutUserNestedInput
+  Appointment?: Prisma.AppointmentUncheckedUpdateManyWithoutDoctorNestedInput
+  appointments?: Prisma.AppointmentUncheckedUpdateManyWithoutUserNestedInput
+  clinicProccesses?: Prisma.ClinicProccessUncheckedUpdateManyWithoutDoctorNestedInput
+  Consult?: Prisma.ConsultUncheckedUpdateManyWithoutDoctorNestedInput
+  diagnostics?: Prisma.DiagnosticUncheckedUpdateManyWithoutDoctorNestedInput
+  doctorProfile?: Prisma.DoctorProfileUncheckedUpdateOneWithoutUserNestedInput
+  conversationsStarted?: Prisma.ChatConversationUncheckedUpdateManyWithoutStarterNestedInput
+  conversationsReceived?: Prisma.ChatConversationUncheckedUpdateManyWithoutRecipientNestedInput
+  chatMessages?: Prisma.ChatMessageUncheckedUpdateManyWithoutAuthorNestedInput
+  treatmentPlans?: Prisma.TreatmentPlanUncheckedUpdateManyWithoutDoctorNestedInput
+  patientPrescriptions?: Prisma.PatientPrescriptionUncheckedUpdateManyWithoutDoctorNestedInput
+  xrayAnalyses?: Prisma.XRayAnalysisUncheckedUpdateManyWithoutAnalyzedByNestedInput
+  authoredPatientDocuments?: Prisma.PatientDocumentUncheckedUpdateManyWithoutAuthorNestedInput
+  UserBranch?: Prisma.UserBranchUncheckedUpdateManyWithoutUserNestedInput
+  UserRole?: Prisma.UserRoleUncheckedUpdateManyWithoutUserNestedInput
+  UserPermission?: Prisma.UserPermissionUncheckedUpdateManyWithoutUserNestedInput
+  refreshTokens?: Prisma.RefreshTokenUncheckedUpdateManyWithoutUserNestedInput
+  authActionTokens?: Prisma.AuthActionTokenUncheckedUpdateManyWithoutUserNestedInput
+  requestedSubscriptionPayments?: Prisma.SubscriptionRequestUncheckedUpdateManyWithoutSubmittedByNestedInput
+  reviewedSubscriptionPayments?: Prisma.SubscriptionRequestUncheckedUpdateManyWithoutReviewedByNestedInput
+  approvedSubscriptions?: Prisma.ClinicSubscriptionUncheckedUpdateManyWithoutApprovedByNestedInput
+  subscriptionAudits?: Prisma.SubscriptionAuditUncheckedUpdateManyWithoutActorNestedInput
+  updatedSubscriptionSettings?: Prisma.SubscriptionSettingsUncheckedUpdateManyWithoutUpdatedByNestedInput
+  assistantConversations?: Prisma.AssistantConversationUncheckedUpdateManyWithoutUserNestedInput
+  assistantMessages?: Prisma.AssistantMessageUncheckedUpdateManyWithoutUserNestedInput
+  stockSales?: Prisma.StockSaleUncheckedUpdateManyWithoutSoldByNestedInput
+  createdCommunicationCampaigns?: Prisma.CommunicationCampaignUncheckedUpdateManyWithoutCreatedByNestedInput
+}
+
+export type UserUpsertWithoutPlatformAdminTargetsInput = {
+  update: Prisma.XOR<Prisma.UserUpdateWithoutPlatformAdminTargetsInput, Prisma.UserUncheckedUpdateWithoutPlatformAdminTargetsInput>
+  create: Prisma.XOR<Prisma.UserCreateWithoutPlatformAdminTargetsInput, Prisma.UserUncheckedCreateWithoutPlatformAdminTargetsInput>
+  where?: Prisma.UserWhereInput
+}
+
+export type UserUpdateToOneWithWhereWithoutPlatformAdminTargetsInput = {
+  where?: Prisma.UserWhereInput
+  data: Prisma.XOR<Prisma.UserUpdateWithoutPlatformAdminTargetsInput, Prisma.UserUncheckedUpdateWithoutPlatformAdminTargetsInput>
+}
+
+export type UserUpdateWithoutPlatformAdminTargetsInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  email?: Prisma.StringFieldUpdateOperationsInput | string
+  password?: Prisma.StringFieldUpdateOperationsInput | string
+  username?: Prisma.StringFieldUpdateOperationsInput | string
+  isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  phoneNumber?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  countryCode?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  isPhoneVerified?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  isEmailVerified?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  deletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  accessHistories?: Prisma.AccessHistoryUpdateManyWithoutUserNestedInput
+  audits?: Prisma.AuditUpdateManyWithoutUserNestedInput
+  platformAdminActions?: Prisma.PlatformAdminAuditUpdateManyWithoutActorNestedInput
+  loginHistories?: Prisma.LoginHistoryUpdateManyWithoutUserNestedInput
+  Person?: Prisma.PersonUpdateManyWithoutUserNestedInput
+  Appointment?: Prisma.AppointmentUpdateManyWithoutDoctorNestedInput
+  appointments?: Prisma.AppointmentUpdateManyWithoutUserNestedInput
+  clinicProccesses?: Prisma.ClinicProccessUpdateManyWithoutDoctorNestedInput
+  Consult?: Prisma.ConsultUpdateManyWithoutDoctorNestedInput
+  diagnostics?: Prisma.DiagnosticUpdateManyWithoutDoctorNestedInput
+  doctorProfile?: Prisma.DoctorProfileUpdateOneWithoutUserNestedInput
+  conversationsStarted?: Prisma.ChatConversationUpdateManyWithoutStarterNestedInput
+  conversationsReceived?: Prisma.ChatConversationUpdateManyWithoutRecipientNestedInput
+  chatMessages?: Prisma.ChatMessageUpdateManyWithoutAuthorNestedInput
+  treatmentPlans?: Prisma.TreatmentPlanUpdateManyWithoutDoctorNestedInput
+  patientPrescriptions?: Prisma.PatientPrescriptionUpdateManyWithoutDoctorNestedInput
+  xrayAnalyses?: Prisma.XRayAnalysisUpdateManyWithoutAnalyzedByNestedInput
+  authoredPatientDocuments?: Prisma.PatientDocumentUpdateManyWithoutAuthorNestedInput
+  UserBranch?: Prisma.UserBranchUpdateManyWithoutUserNestedInput
+  UserRole?: Prisma.UserRoleUpdateManyWithoutUserNestedInput
+  UserPermission?: Prisma.UserPermissionUpdateManyWithoutUserNestedInput
+  refreshTokens?: Prisma.RefreshTokenUpdateManyWithoutUserNestedInput
+  authActionTokens?: Prisma.AuthActionTokenUpdateManyWithoutUserNestedInput
+  requestedSubscriptionPayments?: Prisma.SubscriptionRequestUpdateManyWithoutSubmittedByNestedInput
+  reviewedSubscriptionPayments?: Prisma.SubscriptionRequestUpdateManyWithoutReviewedByNestedInput
+  approvedSubscriptions?: Prisma.ClinicSubscriptionUpdateManyWithoutApprovedByNestedInput
+  subscriptionAudits?: Prisma.SubscriptionAuditUpdateManyWithoutActorNestedInput
+  updatedSubscriptionSettings?: Prisma.SubscriptionSettingsUpdateManyWithoutUpdatedByNestedInput
+  assistantConversations?: Prisma.AssistantConversationUpdateManyWithoutUserNestedInput
+  assistantMessages?: Prisma.AssistantMessageUpdateManyWithoutUserNestedInput
+  stockSales?: Prisma.StockSaleUpdateManyWithoutSoldByNestedInput
+  createdCommunicationCampaigns?: Prisma.CommunicationCampaignUpdateManyWithoutCreatedByNestedInput
+  Address?: Prisma.AddressUpdateOneWithoutUserNestedInput
+  branch?: Prisma.BranchUpdateOneWithoutUserNestedInput
+  Role?: Prisma.RoleUpdateOneWithoutUserNestedInput
+}
+
+export type UserUncheckedUpdateWithoutPlatformAdminTargetsInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  email?: Prisma.StringFieldUpdateOperationsInput | string
+  password?: Prisma.StringFieldUpdateOperationsInput | string
+  username?: Prisma.StringFieldUpdateOperationsInput | string
+  branchId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  addressId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  roleId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  phoneNumber?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  countryCode?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  isPhoneVerified?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  isEmailVerified?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  deletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  accessHistories?: Prisma.AccessHistoryUncheckedUpdateManyWithoutUserNestedInput
+  audits?: Prisma.AuditUncheckedUpdateManyWithoutUserNestedInput
+  platformAdminActions?: Prisma.PlatformAdminAuditUncheckedUpdateManyWithoutActorNestedInput
+  loginHistories?: Prisma.LoginHistoryUncheckedUpdateManyWithoutUserNestedInput
+  Person?: Prisma.PersonUncheckedUpdateManyWithoutUserNestedInput
+  Appointment?: Prisma.AppointmentUncheckedUpdateManyWithoutDoctorNestedInput
+  appointments?: Prisma.AppointmentUncheckedUpdateManyWithoutUserNestedInput
+  clinicProccesses?: Prisma.ClinicProccessUncheckedUpdateManyWithoutDoctorNestedInput
+  Consult?: Prisma.ConsultUncheckedUpdateManyWithoutDoctorNestedInput
+  diagnostics?: Prisma.DiagnosticUncheckedUpdateManyWithoutDoctorNestedInput
+  doctorProfile?: Prisma.DoctorProfileUncheckedUpdateOneWithoutUserNestedInput
+  conversationsStarted?: Prisma.ChatConversationUncheckedUpdateManyWithoutStarterNestedInput
+  conversationsReceived?: Prisma.ChatConversationUncheckedUpdateManyWithoutRecipientNestedInput
+  chatMessages?: Prisma.ChatMessageUncheckedUpdateManyWithoutAuthorNestedInput
+  treatmentPlans?: Prisma.TreatmentPlanUncheckedUpdateManyWithoutDoctorNestedInput
+  patientPrescriptions?: Prisma.PatientPrescriptionUncheckedUpdateManyWithoutDoctorNestedInput
+  xrayAnalyses?: Prisma.XRayAnalysisUncheckedUpdateManyWithoutAnalyzedByNestedInput
+  authoredPatientDocuments?: Prisma.PatientDocumentUncheckedUpdateManyWithoutAuthorNestedInput
+  UserBranch?: Prisma.UserBranchUncheckedUpdateManyWithoutUserNestedInput
+  UserRole?: Prisma.UserRoleUncheckedUpdateManyWithoutUserNestedInput
+  UserPermission?: Prisma.UserPermissionUncheckedUpdateManyWithoutUserNestedInput
+  refreshTokens?: Prisma.RefreshTokenUncheckedUpdateManyWithoutUserNestedInput
+  authActionTokens?: Prisma.AuthActionTokenUncheckedUpdateManyWithoutUserNestedInput
+  requestedSubscriptionPayments?: Prisma.SubscriptionRequestUncheckedUpdateManyWithoutSubmittedByNestedInput
+  reviewedSubscriptionPayments?: Prisma.SubscriptionRequestUncheckedUpdateManyWithoutReviewedByNestedInput
+  approvedSubscriptions?: Prisma.ClinicSubscriptionUncheckedUpdateManyWithoutApprovedByNestedInput
+  subscriptionAudits?: Prisma.SubscriptionAuditUncheckedUpdateManyWithoutActorNestedInput
+  updatedSubscriptionSettings?: Prisma.SubscriptionSettingsUncheckedUpdateManyWithoutUpdatedByNestedInput
+  assistantConversations?: Prisma.AssistantConversationUncheckedUpdateManyWithoutUserNestedInput
+  assistantMessages?: Prisma.AssistantMessageUncheckedUpdateManyWithoutUserNestedInput
+  stockSales?: Prisma.StockSaleUncheckedUpdateManyWithoutSoldByNestedInput
+  createdCommunicationCampaigns?: Prisma.CommunicationCampaignUncheckedUpdateManyWithoutCreatedByNestedInput
+}
+
+export type UserCreateWithoutUpdatedSubscriptionSettingsInput = {
+  id?: string
+  email: string
+  password: string
+  username: string
+  isActive?: boolean
+  phoneNumber?: number | null
+  countryCode?: string | null
+  isPhoneVerified?: boolean
+  isEmailVerified?: boolean
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  deletedAt?: Date | string | null
+  accessHistories?: Prisma.AccessHistoryCreateNestedManyWithoutUserInput
+  audits?: Prisma.AuditCreateNestedManyWithoutUserInput
+  platformAdminActions?: Prisma.PlatformAdminAuditCreateNestedManyWithoutActorInput
+  platformAdminTargets?: Prisma.PlatformAdminAuditCreateNestedManyWithoutTargetInput
+  loginHistories?: Prisma.LoginHistoryCreateNestedManyWithoutUserInput
+  Person?: Prisma.PersonCreateNestedManyWithoutUserInput
+  Appointment?: Prisma.AppointmentCreateNestedManyWithoutDoctorInput
+  appointments?: Prisma.AppointmentCreateNestedManyWithoutUserInput
+  clinicProccesses?: Prisma.ClinicProccessCreateNestedManyWithoutDoctorInput
+  Consult?: Prisma.ConsultCreateNestedManyWithoutDoctorInput
+  diagnostics?: Prisma.DiagnosticCreateNestedManyWithoutDoctorInput
+  doctorProfile?: Prisma.DoctorProfileCreateNestedOneWithoutUserInput
+  conversationsStarted?: Prisma.ChatConversationCreateNestedManyWithoutStarterInput
+  conversationsReceived?: Prisma.ChatConversationCreateNestedManyWithoutRecipientInput
+  chatMessages?: Prisma.ChatMessageCreateNestedManyWithoutAuthorInput
+  treatmentPlans?: Prisma.TreatmentPlanCreateNestedManyWithoutDoctorInput
+  patientPrescriptions?: Prisma.PatientPrescriptionCreateNestedManyWithoutDoctorInput
+  xrayAnalyses?: Prisma.XRayAnalysisCreateNestedManyWithoutAnalyzedByInput
+  authoredPatientDocuments?: Prisma.PatientDocumentCreateNestedManyWithoutAuthorInput
+  UserBranch?: Prisma.UserBranchCreateNestedManyWithoutUserInput
+  UserRole?: Prisma.UserRoleCreateNestedManyWithoutUserInput
+  UserPermission?: Prisma.UserPermissionCreateNestedManyWithoutUserInput
+  refreshTokens?: Prisma.RefreshTokenCreateNestedManyWithoutUserInput
+  authActionTokens?: Prisma.AuthActionTokenCreateNestedManyWithoutUserInput
+  requestedSubscriptionPayments?: Prisma.SubscriptionRequestCreateNestedManyWithoutSubmittedByInput
+  reviewedSubscriptionPayments?: Prisma.SubscriptionRequestCreateNestedManyWithoutReviewedByInput
+  approvedSubscriptions?: Prisma.ClinicSubscriptionCreateNestedManyWithoutApprovedByInput
+  subscriptionAudits?: Prisma.SubscriptionAuditCreateNestedManyWithoutActorInput
+  assistantConversations?: Prisma.AssistantConversationCreateNestedManyWithoutUserInput
+  assistantMessages?: Prisma.AssistantMessageCreateNestedManyWithoutUserInput
+  stockSales?: Prisma.StockSaleCreateNestedManyWithoutSoldByInput
+  createdCommunicationCampaigns?: Prisma.CommunicationCampaignCreateNestedManyWithoutCreatedByInput
+  Address?: Prisma.AddressCreateNestedOneWithoutUserInput
+  branch?: Prisma.BranchCreateNestedOneWithoutUserInput
+  Role?: Prisma.RoleCreateNestedOneWithoutUserInput
+}
+
+export type UserUncheckedCreateWithoutUpdatedSubscriptionSettingsInput = {
+  id?: string
+  email: string
+  password: string
+  username: string
+  branchId?: string | null
+  addressId?: string | null
+  roleId?: string | null
+  isActive?: boolean
+  phoneNumber?: number | null
+  countryCode?: string | null
+  isPhoneVerified?: boolean
+  isEmailVerified?: boolean
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  deletedAt?: Date | string | null
+  accessHistories?: Prisma.AccessHistoryUncheckedCreateNestedManyWithoutUserInput
+  audits?: Prisma.AuditUncheckedCreateNestedManyWithoutUserInput
+  platformAdminActions?: Prisma.PlatformAdminAuditUncheckedCreateNestedManyWithoutActorInput
+  platformAdminTargets?: Prisma.PlatformAdminAuditUncheckedCreateNestedManyWithoutTargetInput
+  loginHistories?: Prisma.LoginHistoryUncheckedCreateNestedManyWithoutUserInput
+  Person?: Prisma.PersonUncheckedCreateNestedManyWithoutUserInput
+  Appointment?: Prisma.AppointmentUncheckedCreateNestedManyWithoutDoctorInput
+  appointments?: Prisma.AppointmentUncheckedCreateNestedManyWithoutUserInput
+  clinicProccesses?: Prisma.ClinicProccessUncheckedCreateNestedManyWithoutDoctorInput
+  Consult?: Prisma.ConsultUncheckedCreateNestedManyWithoutDoctorInput
+  diagnostics?: Prisma.DiagnosticUncheckedCreateNestedManyWithoutDoctorInput
+  doctorProfile?: Prisma.DoctorProfileUncheckedCreateNestedOneWithoutUserInput
+  conversationsStarted?: Prisma.ChatConversationUncheckedCreateNestedManyWithoutStarterInput
+  conversationsReceived?: Prisma.ChatConversationUncheckedCreateNestedManyWithoutRecipientInput
+  chatMessages?: Prisma.ChatMessageUncheckedCreateNestedManyWithoutAuthorInput
+  treatmentPlans?: Prisma.TreatmentPlanUncheckedCreateNestedManyWithoutDoctorInput
+  patientPrescriptions?: Prisma.PatientPrescriptionUncheckedCreateNestedManyWithoutDoctorInput
+  xrayAnalyses?: Prisma.XRayAnalysisUncheckedCreateNestedManyWithoutAnalyzedByInput
+  authoredPatientDocuments?: Prisma.PatientDocumentUncheckedCreateNestedManyWithoutAuthorInput
+  UserBranch?: Prisma.UserBranchUncheckedCreateNestedManyWithoutUserInput
+  UserRole?: Prisma.UserRoleUncheckedCreateNestedManyWithoutUserInput
+  UserPermission?: Prisma.UserPermissionUncheckedCreateNestedManyWithoutUserInput
+  refreshTokens?: Prisma.RefreshTokenUncheckedCreateNestedManyWithoutUserInput
+  authActionTokens?: Prisma.AuthActionTokenUncheckedCreateNestedManyWithoutUserInput
+  requestedSubscriptionPayments?: Prisma.SubscriptionRequestUncheckedCreateNestedManyWithoutSubmittedByInput
+  reviewedSubscriptionPayments?: Prisma.SubscriptionRequestUncheckedCreateNestedManyWithoutReviewedByInput
+  approvedSubscriptions?: Prisma.ClinicSubscriptionUncheckedCreateNestedManyWithoutApprovedByInput
+  subscriptionAudits?: Prisma.SubscriptionAuditUncheckedCreateNestedManyWithoutActorInput
+  assistantConversations?: Prisma.AssistantConversationUncheckedCreateNestedManyWithoutUserInput
+  assistantMessages?: Prisma.AssistantMessageUncheckedCreateNestedManyWithoutUserInput
+  stockSales?: Prisma.StockSaleUncheckedCreateNestedManyWithoutSoldByInput
+  createdCommunicationCampaigns?: Prisma.CommunicationCampaignUncheckedCreateNestedManyWithoutCreatedByInput
+}
+
+export type UserCreateOrConnectWithoutUpdatedSubscriptionSettingsInput = {
+  where: Prisma.UserWhereUniqueInput
+  create: Prisma.XOR<Prisma.UserCreateWithoutUpdatedSubscriptionSettingsInput, Prisma.UserUncheckedCreateWithoutUpdatedSubscriptionSettingsInput>
+}
+
+export type UserUpsertWithoutUpdatedSubscriptionSettingsInput = {
+  update: Prisma.XOR<Prisma.UserUpdateWithoutUpdatedSubscriptionSettingsInput, Prisma.UserUncheckedUpdateWithoutUpdatedSubscriptionSettingsInput>
+  create: Prisma.XOR<Prisma.UserCreateWithoutUpdatedSubscriptionSettingsInput, Prisma.UserUncheckedCreateWithoutUpdatedSubscriptionSettingsInput>
+  where?: Prisma.UserWhereInput
+}
+
+export type UserUpdateToOneWithWhereWithoutUpdatedSubscriptionSettingsInput = {
+  where?: Prisma.UserWhereInput
+  data: Prisma.XOR<Prisma.UserUpdateWithoutUpdatedSubscriptionSettingsInput, Prisma.UserUncheckedUpdateWithoutUpdatedSubscriptionSettingsInput>
+}
+
+export type UserUpdateWithoutUpdatedSubscriptionSettingsInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  email?: Prisma.StringFieldUpdateOperationsInput | string
+  password?: Prisma.StringFieldUpdateOperationsInput | string
+  username?: Prisma.StringFieldUpdateOperationsInput | string
+  isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  phoneNumber?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  countryCode?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  isPhoneVerified?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  isEmailVerified?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  deletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  accessHistories?: Prisma.AccessHistoryUpdateManyWithoutUserNestedInput
+  audits?: Prisma.AuditUpdateManyWithoutUserNestedInput
+  platformAdminActions?: Prisma.PlatformAdminAuditUpdateManyWithoutActorNestedInput
+  platformAdminTargets?: Prisma.PlatformAdminAuditUpdateManyWithoutTargetNestedInput
+  loginHistories?: Prisma.LoginHistoryUpdateManyWithoutUserNestedInput
+  Person?: Prisma.PersonUpdateManyWithoutUserNestedInput
+  Appointment?: Prisma.AppointmentUpdateManyWithoutDoctorNestedInput
+  appointments?: Prisma.AppointmentUpdateManyWithoutUserNestedInput
+  clinicProccesses?: Prisma.ClinicProccessUpdateManyWithoutDoctorNestedInput
+  Consult?: Prisma.ConsultUpdateManyWithoutDoctorNestedInput
+  diagnostics?: Prisma.DiagnosticUpdateManyWithoutDoctorNestedInput
+  doctorProfile?: Prisma.DoctorProfileUpdateOneWithoutUserNestedInput
+  conversationsStarted?: Prisma.ChatConversationUpdateManyWithoutStarterNestedInput
+  conversationsReceived?: Prisma.ChatConversationUpdateManyWithoutRecipientNestedInput
+  chatMessages?: Prisma.ChatMessageUpdateManyWithoutAuthorNestedInput
+  treatmentPlans?: Prisma.TreatmentPlanUpdateManyWithoutDoctorNestedInput
+  patientPrescriptions?: Prisma.PatientPrescriptionUpdateManyWithoutDoctorNestedInput
+  xrayAnalyses?: Prisma.XRayAnalysisUpdateManyWithoutAnalyzedByNestedInput
+  authoredPatientDocuments?: Prisma.PatientDocumentUpdateManyWithoutAuthorNestedInput
+  UserBranch?: Prisma.UserBranchUpdateManyWithoutUserNestedInput
+  UserRole?: Prisma.UserRoleUpdateManyWithoutUserNestedInput
+  UserPermission?: Prisma.UserPermissionUpdateManyWithoutUserNestedInput
+  refreshTokens?: Prisma.RefreshTokenUpdateManyWithoutUserNestedInput
+  authActionTokens?: Prisma.AuthActionTokenUpdateManyWithoutUserNestedInput
+  requestedSubscriptionPayments?: Prisma.SubscriptionRequestUpdateManyWithoutSubmittedByNestedInput
+  reviewedSubscriptionPayments?: Prisma.SubscriptionRequestUpdateManyWithoutReviewedByNestedInput
+  approvedSubscriptions?: Prisma.ClinicSubscriptionUpdateManyWithoutApprovedByNestedInput
+  subscriptionAudits?: Prisma.SubscriptionAuditUpdateManyWithoutActorNestedInput
+  assistantConversations?: Prisma.AssistantConversationUpdateManyWithoutUserNestedInput
+  assistantMessages?: Prisma.AssistantMessageUpdateManyWithoutUserNestedInput
+  stockSales?: Prisma.StockSaleUpdateManyWithoutSoldByNestedInput
+  createdCommunicationCampaigns?: Prisma.CommunicationCampaignUpdateManyWithoutCreatedByNestedInput
+  Address?: Prisma.AddressUpdateOneWithoutUserNestedInput
+  branch?: Prisma.BranchUpdateOneWithoutUserNestedInput
+  Role?: Prisma.RoleUpdateOneWithoutUserNestedInput
+}
+
+export type UserUncheckedUpdateWithoutUpdatedSubscriptionSettingsInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  email?: Prisma.StringFieldUpdateOperationsInput | string
+  password?: Prisma.StringFieldUpdateOperationsInput | string
+  username?: Prisma.StringFieldUpdateOperationsInput | string
+  branchId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  addressId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  roleId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  phoneNumber?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  countryCode?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  isPhoneVerified?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  isEmailVerified?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  deletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  accessHistories?: Prisma.AccessHistoryUncheckedUpdateManyWithoutUserNestedInput
+  audits?: Prisma.AuditUncheckedUpdateManyWithoutUserNestedInput
+  platformAdminActions?: Prisma.PlatformAdminAuditUncheckedUpdateManyWithoutActorNestedInput
+  platformAdminTargets?: Prisma.PlatformAdminAuditUncheckedUpdateManyWithoutTargetNestedInput
+  loginHistories?: Prisma.LoginHistoryUncheckedUpdateManyWithoutUserNestedInput
+  Person?: Prisma.PersonUncheckedUpdateManyWithoutUserNestedInput
+  Appointment?: Prisma.AppointmentUncheckedUpdateManyWithoutDoctorNestedInput
+  appointments?: Prisma.AppointmentUncheckedUpdateManyWithoutUserNestedInput
+  clinicProccesses?: Prisma.ClinicProccessUncheckedUpdateManyWithoutDoctorNestedInput
+  Consult?: Prisma.ConsultUncheckedUpdateManyWithoutDoctorNestedInput
+  diagnostics?: Prisma.DiagnosticUncheckedUpdateManyWithoutDoctorNestedInput
+  doctorProfile?: Prisma.DoctorProfileUncheckedUpdateOneWithoutUserNestedInput
+  conversationsStarted?: Prisma.ChatConversationUncheckedUpdateManyWithoutStarterNestedInput
+  conversationsReceived?: Prisma.ChatConversationUncheckedUpdateManyWithoutRecipientNestedInput
+  chatMessages?: Prisma.ChatMessageUncheckedUpdateManyWithoutAuthorNestedInput
+  treatmentPlans?: Prisma.TreatmentPlanUncheckedUpdateManyWithoutDoctorNestedInput
+  patientPrescriptions?: Prisma.PatientPrescriptionUncheckedUpdateManyWithoutDoctorNestedInput
+  xrayAnalyses?: Prisma.XRayAnalysisUncheckedUpdateManyWithoutAnalyzedByNestedInput
+  authoredPatientDocuments?: Prisma.PatientDocumentUncheckedUpdateManyWithoutAuthorNestedInput
+  UserBranch?: Prisma.UserBranchUncheckedUpdateManyWithoutUserNestedInput
+  UserRole?: Prisma.UserRoleUncheckedUpdateManyWithoutUserNestedInput
+  UserPermission?: Prisma.UserPermissionUncheckedUpdateManyWithoutUserNestedInput
+  refreshTokens?: Prisma.RefreshTokenUncheckedUpdateManyWithoutUserNestedInput
+  authActionTokens?: Prisma.AuthActionTokenUncheckedUpdateManyWithoutUserNestedInput
+  requestedSubscriptionPayments?: Prisma.SubscriptionRequestUncheckedUpdateManyWithoutSubmittedByNestedInput
+  reviewedSubscriptionPayments?: Prisma.SubscriptionRequestUncheckedUpdateManyWithoutReviewedByNestedInput
+  approvedSubscriptions?: Prisma.ClinicSubscriptionUncheckedUpdateManyWithoutApprovedByNestedInput
+  subscriptionAudits?: Prisma.SubscriptionAuditUncheckedUpdateManyWithoutActorNestedInput
+  assistantConversations?: Prisma.AssistantConversationUncheckedUpdateManyWithoutUserNestedInput
+  assistantMessages?: Prisma.AssistantMessageUncheckedUpdateManyWithoutUserNestedInput
+  stockSales?: Prisma.StockSaleUncheckedUpdateManyWithoutSoldByNestedInput
+  createdCommunicationCampaigns?: Prisma.CommunicationCampaignUncheckedUpdateManyWithoutCreatedByNestedInput
+}
+
+export type UserCreateWithoutAssistantConversationsInput = {
+  id?: string
+  email: string
+  password: string
+  username: string
+  isActive?: boolean
+  phoneNumber?: number | null
+  countryCode?: string | null
+  isPhoneVerified?: boolean
+  isEmailVerified?: boolean
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  deletedAt?: Date | string | null
+  accessHistories?: Prisma.AccessHistoryCreateNestedManyWithoutUserInput
+  audits?: Prisma.AuditCreateNestedManyWithoutUserInput
+  platformAdminActions?: Prisma.PlatformAdminAuditCreateNestedManyWithoutActorInput
+  platformAdminTargets?: Prisma.PlatformAdminAuditCreateNestedManyWithoutTargetInput
+  loginHistories?: Prisma.LoginHistoryCreateNestedManyWithoutUserInput
+  Person?: Prisma.PersonCreateNestedManyWithoutUserInput
+  Appointment?: Prisma.AppointmentCreateNestedManyWithoutDoctorInput
+  appointments?: Prisma.AppointmentCreateNestedManyWithoutUserInput
+  clinicProccesses?: Prisma.ClinicProccessCreateNestedManyWithoutDoctorInput
+  Consult?: Prisma.ConsultCreateNestedManyWithoutDoctorInput
+  diagnostics?: Prisma.DiagnosticCreateNestedManyWithoutDoctorInput
+  doctorProfile?: Prisma.DoctorProfileCreateNestedOneWithoutUserInput
+  conversationsStarted?: Prisma.ChatConversationCreateNestedManyWithoutStarterInput
+  conversationsReceived?: Prisma.ChatConversationCreateNestedManyWithoutRecipientInput
+  chatMessages?: Prisma.ChatMessageCreateNestedManyWithoutAuthorInput
+  treatmentPlans?: Prisma.TreatmentPlanCreateNestedManyWithoutDoctorInput
+  patientPrescriptions?: Prisma.PatientPrescriptionCreateNestedManyWithoutDoctorInput
+  xrayAnalyses?: Prisma.XRayAnalysisCreateNestedManyWithoutAnalyzedByInput
+  authoredPatientDocuments?: Prisma.PatientDocumentCreateNestedManyWithoutAuthorInput
+  UserBranch?: Prisma.UserBranchCreateNestedManyWithoutUserInput
+  UserRole?: Prisma.UserRoleCreateNestedManyWithoutUserInput
+  UserPermission?: Prisma.UserPermissionCreateNestedManyWithoutUserInput
+  refreshTokens?: Prisma.RefreshTokenCreateNestedManyWithoutUserInput
+  authActionTokens?: Prisma.AuthActionTokenCreateNestedManyWithoutUserInput
+  requestedSubscriptionPayments?: Prisma.SubscriptionRequestCreateNestedManyWithoutSubmittedByInput
+  reviewedSubscriptionPayments?: Prisma.SubscriptionRequestCreateNestedManyWithoutReviewedByInput
+  approvedSubscriptions?: Prisma.ClinicSubscriptionCreateNestedManyWithoutApprovedByInput
+  subscriptionAudits?: Prisma.SubscriptionAuditCreateNestedManyWithoutActorInput
+  updatedSubscriptionSettings?: Prisma.SubscriptionSettingsCreateNestedManyWithoutUpdatedByInput
+  assistantMessages?: Prisma.AssistantMessageCreateNestedManyWithoutUserInput
+  stockSales?: Prisma.StockSaleCreateNestedManyWithoutSoldByInput
+  createdCommunicationCampaigns?: Prisma.CommunicationCampaignCreateNestedManyWithoutCreatedByInput
+  Address?: Prisma.AddressCreateNestedOneWithoutUserInput
+  branch?: Prisma.BranchCreateNestedOneWithoutUserInput
+  Role?: Prisma.RoleCreateNestedOneWithoutUserInput
+}
+
+export type UserUncheckedCreateWithoutAssistantConversationsInput = {
+  id?: string
+  email: string
+  password: string
+  username: string
+  branchId?: string | null
+  addressId?: string | null
+  roleId?: string | null
+  isActive?: boolean
+  phoneNumber?: number | null
+  countryCode?: string | null
+  isPhoneVerified?: boolean
+  isEmailVerified?: boolean
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  deletedAt?: Date | string | null
+  accessHistories?: Prisma.AccessHistoryUncheckedCreateNestedManyWithoutUserInput
+  audits?: Prisma.AuditUncheckedCreateNestedManyWithoutUserInput
+  platformAdminActions?: Prisma.PlatformAdminAuditUncheckedCreateNestedManyWithoutActorInput
+  platformAdminTargets?: Prisma.PlatformAdminAuditUncheckedCreateNestedManyWithoutTargetInput
+  loginHistories?: Prisma.LoginHistoryUncheckedCreateNestedManyWithoutUserInput
+  Person?: Prisma.PersonUncheckedCreateNestedManyWithoutUserInput
+  Appointment?: Prisma.AppointmentUncheckedCreateNestedManyWithoutDoctorInput
+  appointments?: Prisma.AppointmentUncheckedCreateNestedManyWithoutUserInput
+  clinicProccesses?: Prisma.ClinicProccessUncheckedCreateNestedManyWithoutDoctorInput
+  Consult?: Prisma.ConsultUncheckedCreateNestedManyWithoutDoctorInput
+  diagnostics?: Prisma.DiagnosticUncheckedCreateNestedManyWithoutDoctorInput
+  doctorProfile?: Prisma.DoctorProfileUncheckedCreateNestedOneWithoutUserInput
+  conversationsStarted?: Prisma.ChatConversationUncheckedCreateNestedManyWithoutStarterInput
+  conversationsReceived?: Prisma.ChatConversationUncheckedCreateNestedManyWithoutRecipientInput
+  chatMessages?: Prisma.ChatMessageUncheckedCreateNestedManyWithoutAuthorInput
+  treatmentPlans?: Prisma.TreatmentPlanUncheckedCreateNestedManyWithoutDoctorInput
+  patientPrescriptions?: Prisma.PatientPrescriptionUncheckedCreateNestedManyWithoutDoctorInput
+  xrayAnalyses?: Prisma.XRayAnalysisUncheckedCreateNestedManyWithoutAnalyzedByInput
+  authoredPatientDocuments?: Prisma.PatientDocumentUncheckedCreateNestedManyWithoutAuthorInput
+  UserBranch?: Prisma.UserBranchUncheckedCreateNestedManyWithoutUserInput
+  UserRole?: Prisma.UserRoleUncheckedCreateNestedManyWithoutUserInput
+  UserPermission?: Prisma.UserPermissionUncheckedCreateNestedManyWithoutUserInput
+  refreshTokens?: Prisma.RefreshTokenUncheckedCreateNestedManyWithoutUserInput
+  authActionTokens?: Prisma.AuthActionTokenUncheckedCreateNestedManyWithoutUserInput
+  requestedSubscriptionPayments?: Prisma.SubscriptionRequestUncheckedCreateNestedManyWithoutSubmittedByInput
+  reviewedSubscriptionPayments?: Prisma.SubscriptionRequestUncheckedCreateNestedManyWithoutReviewedByInput
+  approvedSubscriptions?: Prisma.ClinicSubscriptionUncheckedCreateNestedManyWithoutApprovedByInput
+  subscriptionAudits?: Prisma.SubscriptionAuditUncheckedCreateNestedManyWithoutActorInput
+  updatedSubscriptionSettings?: Prisma.SubscriptionSettingsUncheckedCreateNestedManyWithoutUpdatedByInput
+  assistantMessages?: Prisma.AssistantMessageUncheckedCreateNestedManyWithoutUserInput
+  stockSales?: Prisma.StockSaleUncheckedCreateNestedManyWithoutSoldByInput
+  createdCommunicationCampaigns?: Prisma.CommunicationCampaignUncheckedCreateNestedManyWithoutCreatedByInput
+}
+
+export type UserCreateOrConnectWithoutAssistantConversationsInput = {
+  where: Prisma.UserWhereUniqueInput
+  create: Prisma.XOR<Prisma.UserCreateWithoutAssistantConversationsInput, Prisma.UserUncheckedCreateWithoutAssistantConversationsInput>
+}
+
+export type UserUpsertWithoutAssistantConversationsInput = {
+  update: Prisma.XOR<Prisma.UserUpdateWithoutAssistantConversationsInput, Prisma.UserUncheckedUpdateWithoutAssistantConversationsInput>
+  create: Prisma.XOR<Prisma.UserCreateWithoutAssistantConversationsInput, Prisma.UserUncheckedCreateWithoutAssistantConversationsInput>
+  where?: Prisma.UserWhereInput
+}
+
+export type UserUpdateToOneWithWhereWithoutAssistantConversationsInput = {
+  where?: Prisma.UserWhereInput
+  data: Prisma.XOR<Prisma.UserUpdateWithoutAssistantConversationsInput, Prisma.UserUncheckedUpdateWithoutAssistantConversationsInput>
+}
+
+export type UserUpdateWithoutAssistantConversationsInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  email?: Prisma.StringFieldUpdateOperationsInput | string
+  password?: Prisma.StringFieldUpdateOperationsInput | string
+  username?: Prisma.StringFieldUpdateOperationsInput | string
+  isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  phoneNumber?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  countryCode?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  isPhoneVerified?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  isEmailVerified?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  deletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  accessHistories?: Prisma.AccessHistoryUpdateManyWithoutUserNestedInput
+  audits?: Prisma.AuditUpdateManyWithoutUserNestedInput
+  platformAdminActions?: Prisma.PlatformAdminAuditUpdateManyWithoutActorNestedInput
+  platformAdminTargets?: Prisma.PlatformAdminAuditUpdateManyWithoutTargetNestedInput
+  loginHistories?: Prisma.LoginHistoryUpdateManyWithoutUserNestedInput
+  Person?: Prisma.PersonUpdateManyWithoutUserNestedInput
+  Appointment?: Prisma.AppointmentUpdateManyWithoutDoctorNestedInput
+  appointments?: Prisma.AppointmentUpdateManyWithoutUserNestedInput
+  clinicProccesses?: Prisma.ClinicProccessUpdateManyWithoutDoctorNestedInput
+  Consult?: Prisma.ConsultUpdateManyWithoutDoctorNestedInput
+  diagnostics?: Prisma.DiagnosticUpdateManyWithoutDoctorNestedInput
+  doctorProfile?: Prisma.DoctorProfileUpdateOneWithoutUserNestedInput
+  conversationsStarted?: Prisma.ChatConversationUpdateManyWithoutStarterNestedInput
+  conversationsReceived?: Prisma.ChatConversationUpdateManyWithoutRecipientNestedInput
+  chatMessages?: Prisma.ChatMessageUpdateManyWithoutAuthorNestedInput
+  treatmentPlans?: Prisma.TreatmentPlanUpdateManyWithoutDoctorNestedInput
+  patientPrescriptions?: Prisma.PatientPrescriptionUpdateManyWithoutDoctorNestedInput
+  xrayAnalyses?: Prisma.XRayAnalysisUpdateManyWithoutAnalyzedByNestedInput
+  authoredPatientDocuments?: Prisma.PatientDocumentUpdateManyWithoutAuthorNestedInput
+  UserBranch?: Prisma.UserBranchUpdateManyWithoutUserNestedInput
+  UserRole?: Prisma.UserRoleUpdateManyWithoutUserNestedInput
+  UserPermission?: Prisma.UserPermissionUpdateManyWithoutUserNestedInput
+  refreshTokens?: Prisma.RefreshTokenUpdateManyWithoutUserNestedInput
+  authActionTokens?: Prisma.AuthActionTokenUpdateManyWithoutUserNestedInput
+  requestedSubscriptionPayments?: Prisma.SubscriptionRequestUpdateManyWithoutSubmittedByNestedInput
+  reviewedSubscriptionPayments?: Prisma.SubscriptionRequestUpdateManyWithoutReviewedByNestedInput
+  approvedSubscriptions?: Prisma.ClinicSubscriptionUpdateManyWithoutApprovedByNestedInput
+  subscriptionAudits?: Prisma.SubscriptionAuditUpdateManyWithoutActorNestedInput
+  updatedSubscriptionSettings?: Prisma.SubscriptionSettingsUpdateManyWithoutUpdatedByNestedInput
+  assistantMessages?: Prisma.AssistantMessageUpdateManyWithoutUserNestedInput
+  stockSales?: Prisma.StockSaleUpdateManyWithoutSoldByNestedInput
+  createdCommunicationCampaigns?: Prisma.CommunicationCampaignUpdateManyWithoutCreatedByNestedInput
+  Address?: Prisma.AddressUpdateOneWithoutUserNestedInput
+  branch?: Prisma.BranchUpdateOneWithoutUserNestedInput
+  Role?: Prisma.RoleUpdateOneWithoutUserNestedInput
+}
+
+export type UserUncheckedUpdateWithoutAssistantConversationsInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  email?: Prisma.StringFieldUpdateOperationsInput | string
+  password?: Prisma.StringFieldUpdateOperationsInput | string
+  username?: Prisma.StringFieldUpdateOperationsInput | string
+  branchId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  addressId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  roleId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  phoneNumber?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  countryCode?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  isPhoneVerified?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  isEmailVerified?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  deletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  accessHistories?: Prisma.AccessHistoryUncheckedUpdateManyWithoutUserNestedInput
+  audits?: Prisma.AuditUncheckedUpdateManyWithoutUserNestedInput
+  platformAdminActions?: Prisma.PlatformAdminAuditUncheckedUpdateManyWithoutActorNestedInput
+  platformAdminTargets?: Prisma.PlatformAdminAuditUncheckedUpdateManyWithoutTargetNestedInput
+  loginHistories?: Prisma.LoginHistoryUncheckedUpdateManyWithoutUserNestedInput
+  Person?: Prisma.PersonUncheckedUpdateManyWithoutUserNestedInput
+  Appointment?: Prisma.AppointmentUncheckedUpdateManyWithoutDoctorNestedInput
+  appointments?: Prisma.AppointmentUncheckedUpdateManyWithoutUserNestedInput
+  clinicProccesses?: Prisma.ClinicProccessUncheckedUpdateManyWithoutDoctorNestedInput
+  Consult?: Prisma.ConsultUncheckedUpdateManyWithoutDoctorNestedInput
+  diagnostics?: Prisma.DiagnosticUncheckedUpdateManyWithoutDoctorNestedInput
+  doctorProfile?: Prisma.DoctorProfileUncheckedUpdateOneWithoutUserNestedInput
+  conversationsStarted?: Prisma.ChatConversationUncheckedUpdateManyWithoutStarterNestedInput
+  conversationsReceived?: Prisma.ChatConversationUncheckedUpdateManyWithoutRecipientNestedInput
+  chatMessages?: Prisma.ChatMessageUncheckedUpdateManyWithoutAuthorNestedInput
+  treatmentPlans?: Prisma.TreatmentPlanUncheckedUpdateManyWithoutDoctorNestedInput
+  patientPrescriptions?: Prisma.PatientPrescriptionUncheckedUpdateManyWithoutDoctorNestedInput
+  xrayAnalyses?: Prisma.XRayAnalysisUncheckedUpdateManyWithoutAnalyzedByNestedInput
+  authoredPatientDocuments?: Prisma.PatientDocumentUncheckedUpdateManyWithoutAuthorNestedInput
+  UserBranch?: Prisma.UserBranchUncheckedUpdateManyWithoutUserNestedInput
+  UserRole?: Prisma.UserRoleUncheckedUpdateManyWithoutUserNestedInput
+  UserPermission?: Prisma.UserPermissionUncheckedUpdateManyWithoutUserNestedInput
+  refreshTokens?: Prisma.RefreshTokenUncheckedUpdateManyWithoutUserNestedInput
+  authActionTokens?: Prisma.AuthActionTokenUncheckedUpdateManyWithoutUserNestedInput
+  requestedSubscriptionPayments?: Prisma.SubscriptionRequestUncheckedUpdateManyWithoutSubmittedByNestedInput
+  reviewedSubscriptionPayments?: Prisma.SubscriptionRequestUncheckedUpdateManyWithoutReviewedByNestedInput
+  approvedSubscriptions?: Prisma.ClinicSubscriptionUncheckedUpdateManyWithoutApprovedByNestedInput
+  subscriptionAudits?: Prisma.SubscriptionAuditUncheckedUpdateManyWithoutActorNestedInput
+  updatedSubscriptionSettings?: Prisma.SubscriptionSettingsUncheckedUpdateManyWithoutUpdatedByNestedInput
+  assistantMessages?: Prisma.AssistantMessageUncheckedUpdateManyWithoutUserNestedInput
+  stockSales?: Prisma.StockSaleUncheckedUpdateManyWithoutSoldByNestedInput
+  createdCommunicationCampaigns?: Prisma.CommunicationCampaignUncheckedUpdateManyWithoutCreatedByNestedInput
+}
+
+export type UserCreateWithoutAssistantMessagesInput = {
+  id?: string
+  email: string
+  password: string
+  username: string
+  isActive?: boolean
+  phoneNumber?: number | null
+  countryCode?: string | null
+  isPhoneVerified?: boolean
+  isEmailVerified?: boolean
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  deletedAt?: Date | string | null
+  accessHistories?: Prisma.AccessHistoryCreateNestedManyWithoutUserInput
+  audits?: Prisma.AuditCreateNestedManyWithoutUserInput
+  platformAdminActions?: Prisma.PlatformAdminAuditCreateNestedManyWithoutActorInput
+  platformAdminTargets?: Prisma.PlatformAdminAuditCreateNestedManyWithoutTargetInput
+  loginHistories?: Prisma.LoginHistoryCreateNestedManyWithoutUserInput
+  Person?: Prisma.PersonCreateNestedManyWithoutUserInput
+  Appointment?: Prisma.AppointmentCreateNestedManyWithoutDoctorInput
+  appointments?: Prisma.AppointmentCreateNestedManyWithoutUserInput
+  clinicProccesses?: Prisma.ClinicProccessCreateNestedManyWithoutDoctorInput
+  Consult?: Prisma.ConsultCreateNestedManyWithoutDoctorInput
+  diagnostics?: Prisma.DiagnosticCreateNestedManyWithoutDoctorInput
+  doctorProfile?: Prisma.DoctorProfileCreateNestedOneWithoutUserInput
+  conversationsStarted?: Prisma.ChatConversationCreateNestedManyWithoutStarterInput
+  conversationsReceived?: Prisma.ChatConversationCreateNestedManyWithoutRecipientInput
+  chatMessages?: Prisma.ChatMessageCreateNestedManyWithoutAuthorInput
+  treatmentPlans?: Prisma.TreatmentPlanCreateNestedManyWithoutDoctorInput
+  patientPrescriptions?: Prisma.PatientPrescriptionCreateNestedManyWithoutDoctorInput
+  xrayAnalyses?: Prisma.XRayAnalysisCreateNestedManyWithoutAnalyzedByInput
+  authoredPatientDocuments?: Prisma.PatientDocumentCreateNestedManyWithoutAuthorInput
+  UserBranch?: Prisma.UserBranchCreateNestedManyWithoutUserInput
+  UserRole?: Prisma.UserRoleCreateNestedManyWithoutUserInput
+  UserPermission?: Prisma.UserPermissionCreateNestedManyWithoutUserInput
+  refreshTokens?: Prisma.RefreshTokenCreateNestedManyWithoutUserInput
+  authActionTokens?: Prisma.AuthActionTokenCreateNestedManyWithoutUserInput
+  requestedSubscriptionPayments?: Prisma.SubscriptionRequestCreateNestedManyWithoutSubmittedByInput
+  reviewedSubscriptionPayments?: Prisma.SubscriptionRequestCreateNestedManyWithoutReviewedByInput
+  approvedSubscriptions?: Prisma.ClinicSubscriptionCreateNestedManyWithoutApprovedByInput
+  subscriptionAudits?: Prisma.SubscriptionAuditCreateNestedManyWithoutActorInput
+  updatedSubscriptionSettings?: Prisma.SubscriptionSettingsCreateNestedManyWithoutUpdatedByInput
+  assistantConversations?: Prisma.AssistantConversationCreateNestedManyWithoutUserInput
+  stockSales?: Prisma.StockSaleCreateNestedManyWithoutSoldByInput
+  createdCommunicationCampaigns?: Prisma.CommunicationCampaignCreateNestedManyWithoutCreatedByInput
+  Address?: Prisma.AddressCreateNestedOneWithoutUserInput
+  branch?: Prisma.BranchCreateNestedOneWithoutUserInput
+  Role?: Prisma.RoleCreateNestedOneWithoutUserInput
+}
+
+export type UserUncheckedCreateWithoutAssistantMessagesInput = {
+  id?: string
+  email: string
+  password: string
+  username: string
+  branchId?: string | null
+  addressId?: string | null
+  roleId?: string | null
+  isActive?: boolean
+  phoneNumber?: number | null
+  countryCode?: string | null
+  isPhoneVerified?: boolean
+  isEmailVerified?: boolean
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  deletedAt?: Date | string | null
+  accessHistories?: Prisma.AccessHistoryUncheckedCreateNestedManyWithoutUserInput
+  audits?: Prisma.AuditUncheckedCreateNestedManyWithoutUserInput
+  platformAdminActions?: Prisma.PlatformAdminAuditUncheckedCreateNestedManyWithoutActorInput
+  platformAdminTargets?: Prisma.PlatformAdminAuditUncheckedCreateNestedManyWithoutTargetInput
+  loginHistories?: Prisma.LoginHistoryUncheckedCreateNestedManyWithoutUserInput
+  Person?: Prisma.PersonUncheckedCreateNestedManyWithoutUserInput
+  Appointment?: Prisma.AppointmentUncheckedCreateNestedManyWithoutDoctorInput
+  appointments?: Prisma.AppointmentUncheckedCreateNestedManyWithoutUserInput
+  clinicProccesses?: Prisma.ClinicProccessUncheckedCreateNestedManyWithoutDoctorInput
+  Consult?: Prisma.ConsultUncheckedCreateNestedManyWithoutDoctorInput
+  diagnostics?: Prisma.DiagnosticUncheckedCreateNestedManyWithoutDoctorInput
+  doctorProfile?: Prisma.DoctorProfileUncheckedCreateNestedOneWithoutUserInput
+  conversationsStarted?: Prisma.ChatConversationUncheckedCreateNestedManyWithoutStarterInput
+  conversationsReceived?: Prisma.ChatConversationUncheckedCreateNestedManyWithoutRecipientInput
+  chatMessages?: Prisma.ChatMessageUncheckedCreateNestedManyWithoutAuthorInput
+  treatmentPlans?: Prisma.TreatmentPlanUncheckedCreateNestedManyWithoutDoctorInput
+  patientPrescriptions?: Prisma.PatientPrescriptionUncheckedCreateNestedManyWithoutDoctorInput
+  xrayAnalyses?: Prisma.XRayAnalysisUncheckedCreateNestedManyWithoutAnalyzedByInput
+  authoredPatientDocuments?: Prisma.PatientDocumentUncheckedCreateNestedManyWithoutAuthorInput
+  UserBranch?: Prisma.UserBranchUncheckedCreateNestedManyWithoutUserInput
+  UserRole?: Prisma.UserRoleUncheckedCreateNestedManyWithoutUserInput
+  UserPermission?: Prisma.UserPermissionUncheckedCreateNestedManyWithoutUserInput
+  refreshTokens?: Prisma.RefreshTokenUncheckedCreateNestedManyWithoutUserInput
+  authActionTokens?: Prisma.AuthActionTokenUncheckedCreateNestedManyWithoutUserInput
+  requestedSubscriptionPayments?: Prisma.SubscriptionRequestUncheckedCreateNestedManyWithoutSubmittedByInput
+  reviewedSubscriptionPayments?: Prisma.SubscriptionRequestUncheckedCreateNestedManyWithoutReviewedByInput
+  approvedSubscriptions?: Prisma.ClinicSubscriptionUncheckedCreateNestedManyWithoutApprovedByInput
+  subscriptionAudits?: Prisma.SubscriptionAuditUncheckedCreateNestedManyWithoutActorInput
+  updatedSubscriptionSettings?: Prisma.SubscriptionSettingsUncheckedCreateNestedManyWithoutUpdatedByInput
+  assistantConversations?: Prisma.AssistantConversationUncheckedCreateNestedManyWithoutUserInput
+  stockSales?: Prisma.StockSaleUncheckedCreateNestedManyWithoutSoldByInput
+  createdCommunicationCampaigns?: Prisma.CommunicationCampaignUncheckedCreateNestedManyWithoutCreatedByInput
+}
+
+export type UserCreateOrConnectWithoutAssistantMessagesInput = {
+  where: Prisma.UserWhereUniqueInput
+  create: Prisma.XOR<Prisma.UserCreateWithoutAssistantMessagesInput, Prisma.UserUncheckedCreateWithoutAssistantMessagesInput>
+}
+
+export type UserUpsertWithoutAssistantMessagesInput = {
+  update: Prisma.XOR<Prisma.UserUpdateWithoutAssistantMessagesInput, Prisma.UserUncheckedUpdateWithoutAssistantMessagesInput>
+  create: Prisma.XOR<Prisma.UserCreateWithoutAssistantMessagesInput, Prisma.UserUncheckedCreateWithoutAssistantMessagesInput>
+  where?: Prisma.UserWhereInput
+}
+
+export type UserUpdateToOneWithWhereWithoutAssistantMessagesInput = {
+  where?: Prisma.UserWhereInput
+  data: Prisma.XOR<Prisma.UserUpdateWithoutAssistantMessagesInput, Prisma.UserUncheckedUpdateWithoutAssistantMessagesInput>
+}
+
+export type UserUpdateWithoutAssistantMessagesInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  email?: Prisma.StringFieldUpdateOperationsInput | string
+  password?: Prisma.StringFieldUpdateOperationsInput | string
+  username?: Prisma.StringFieldUpdateOperationsInput | string
+  isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  phoneNumber?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  countryCode?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  isPhoneVerified?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  isEmailVerified?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  deletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  accessHistories?: Prisma.AccessHistoryUpdateManyWithoutUserNestedInput
+  audits?: Prisma.AuditUpdateManyWithoutUserNestedInput
+  platformAdminActions?: Prisma.PlatformAdminAuditUpdateManyWithoutActorNestedInput
+  platformAdminTargets?: Prisma.PlatformAdminAuditUpdateManyWithoutTargetNestedInput
+  loginHistories?: Prisma.LoginHistoryUpdateManyWithoutUserNestedInput
+  Person?: Prisma.PersonUpdateManyWithoutUserNestedInput
+  Appointment?: Prisma.AppointmentUpdateManyWithoutDoctorNestedInput
+  appointments?: Prisma.AppointmentUpdateManyWithoutUserNestedInput
+  clinicProccesses?: Prisma.ClinicProccessUpdateManyWithoutDoctorNestedInput
+  Consult?: Prisma.ConsultUpdateManyWithoutDoctorNestedInput
+  diagnostics?: Prisma.DiagnosticUpdateManyWithoutDoctorNestedInput
+  doctorProfile?: Prisma.DoctorProfileUpdateOneWithoutUserNestedInput
+  conversationsStarted?: Prisma.ChatConversationUpdateManyWithoutStarterNestedInput
+  conversationsReceived?: Prisma.ChatConversationUpdateManyWithoutRecipientNestedInput
+  chatMessages?: Prisma.ChatMessageUpdateManyWithoutAuthorNestedInput
+  treatmentPlans?: Prisma.TreatmentPlanUpdateManyWithoutDoctorNestedInput
+  patientPrescriptions?: Prisma.PatientPrescriptionUpdateManyWithoutDoctorNestedInput
+  xrayAnalyses?: Prisma.XRayAnalysisUpdateManyWithoutAnalyzedByNestedInput
+  authoredPatientDocuments?: Prisma.PatientDocumentUpdateManyWithoutAuthorNestedInput
+  UserBranch?: Prisma.UserBranchUpdateManyWithoutUserNestedInput
+  UserRole?: Prisma.UserRoleUpdateManyWithoutUserNestedInput
+  UserPermission?: Prisma.UserPermissionUpdateManyWithoutUserNestedInput
+  refreshTokens?: Prisma.RefreshTokenUpdateManyWithoutUserNestedInput
+  authActionTokens?: Prisma.AuthActionTokenUpdateManyWithoutUserNestedInput
+  requestedSubscriptionPayments?: Prisma.SubscriptionRequestUpdateManyWithoutSubmittedByNestedInput
+  reviewedSubscriptionPayments?: Prisma.SubscriptionRequestUpdateManyWithoutReviewedByNestedInput
+  approvedSubscriptions?: Prisma.ClinicSubscriptionUpdateManyWithoutApprovedByNestedInput
+  subscriptionAudits?: Prisma.SubscriptionAuditUpdateManyWithoutActorNestedInput
+  updatedSubscriptionSettings?: Prisma.SubscriptionSettingsUpdateManyWithoutUpdatedByNestedInput
+  assistantConversations?: Prisma.AssistantConversationUpdateManyWithoutUserNestedInput
+  stockSales?: Prisma.StockSaleUpdateManyWithoutSoldByNestedInput
+  createdCommunicationCampaigns?: Prisma.CommunicationCampaignUpdateManyWithoutCreatedByNestedInput
+  Address?: Prisma.AddressUpdateOneWithoutUserNestedInput
+  branch?: Prisma.BranchUpdateOneWithoutUserNestedInput
+  Role?: Prisma.RoleUpdateOneWithoutUserNestedInput
+}
+
+export type UserUncheckedUpdateWithoutAssistantMessagesInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  email?: Prisma.StringFieldUpdateOperationsInput | string
+  password?: Prisma.StringFieldUpdateOperationsInput | string
+  username?: Prisma.StringFieldUpdateOperationsInput | string
+  branchId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  addressId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  roleId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  phoneNumber?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  countryCode?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  isPhoneVerified?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  isEmailVerified?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  deletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  accessHistories?: Prisma.AccessHistoryUncheckedUpdateManyWithoutUserNestedInput
+  audits?: Prisma.AuditUncheckedUpdateManyWithoutUserNestedInput
+  platformAdminActions?: Prisma.PlatformAdminAuditUncheckedUpdateManyWithoutActorNestedInput
+  platformAdminTargets?: Prisma.PlatformAdminAuditUncheckedUpdateManyWithoutTargetNestedInput
+  loginHistories?: Prisma.LoginHistoryUncheckedUpdateManyWithoutUserNestedInput
+  Person?: Prisma.PersonUncheckedUpdateManyWithoutUserNestedInput
+  Appointment?: Prisma.AppointmentUncheckedUpdateManyWithoutDoctorNestedInput
+  appointments?: Prisma.AppointmentUncheckedUpdateManyWithoutUserNestedInput
+  clinicProccesses?: Prisma.ClinicProccessUncheckedUpdateManyWithoutDoctorNestedInput
+  Consult?: Prisma.ConsultUncheckedUpdateManyWithoutDoctorNestedInput
+  diagnostics?: Prisma.DiagnosticUncheckedUpdateManyWithoutDoctorNestedInput
+  doctorProfile?: Prisma.DoctorProfileUncheckedUpdateOneWithoutUserNestedInput
+  conversationsStarted?: Prisma.ChatConversationUncheckedUpdateManyWithoutStarterNestedInput
+  conversationsReceived?: Prisma.ChatConversationUncheckedUpdateManyWithoutRecipientNestedInput
+  chatMessages?: Prisma.ChatMessageUncheckedUpdateManyWithoutAuthorNestedInput
+  treatmentPlans?: Prisma.TreatmentPlanUncheckedUpdateManyWithoutDoctorNestedInput
+  patientPrescriptions?: Prisma.PatientPrescriptionUncheckedUpdateManyWithoutDoctorNestedInput
+  xrayAnalyses?: Prisma.XRayAnalysisUncheckedUpdateManyWithoutAnalyzedByNestedInput
+  authoredPatientDocuments?: Prisma.PatientDocumentUncheckedUpdateManyWithoutAuthorNestedInput
+  UserBranch?: Prisma.UserBranchUncheckedUpdateManyWithoutUserNestedInput
+  UserRole?: Prisma.UserRoleUncheckedUpdateManyWithoutUserNestedInput
+  UserPermission?: Prisma.UserPermissionUncheckedUpdateManyWithoutUserNestedInput
+  refreshTokens?: Prisma.RefreshTokenUncheckedUpdateManyWithoutUserNestedInput
+  authActionTokens?: Prisma.AuthActionTokenUncheckedUpdateManyWithoutUserNestedInput
+  requestedSubscriptionPayments?: Prisma.SubscriptionRequestUncheckedUpdateManyWithoutSubmittedByNestedInput
+  reviewedSubscriptionPayments?: Prisma.SubscriptionRequestUncheckedUpdateManyWithoutReviewedByNestedInput
+  approvedSubscriptions?: Prisma.ClinicSubscriptionUncheckedUpdateManyWithoutApprovedByNestedInput
+  subscriptionAudits?: Prisma.SubscriptionAuditUncheckedUpdateManyWithoutActorNestedInput
+  updatedSubscriptionSettings?: Prisma.SubscriptionSettingsUncheckedUpdateManyWithoutUpdatedByNestedInput
+  assistantConversations?: Prisma.AssistantConversationUncheckedUpdateManyWithoutUserNestedInput
   stockSales?: Prisma.StockSaleUncheckedUpdateManyWithoutSoldByNestedInput
   createdCommunicationCampaigns?: Prisma.CommunicationCampaignUncheckedUpdateManyWithoutCreatedByNestedInput
 }
@@ -5901,7 +8958,7 @@ export type UserCreateManyAddressInput = {
   email: string
   password: string
   username: string
-  branchId: string
+  branchId?: string | null
   roleId?: string | null
   isActive?: boolean
   phoneNumber?: number | null
@@ -5928,6 +8985,8 @@ export type UserUpdateWithoutAddressInput = {
   deletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   accessHistories?: Prisma.AccessHistoryUpdateManyWithoutUserNestedInput
   audits?: Prisma.AuditUpdateManyWithoutUserNestedInput
+  platformAdminActions?: Prisma.PlatformAdminAuditUpdateManyWithoutActorNestedInput
+  platformAdminTargets?: Prisma.PlatformAdminAuditUpdateManyWithoutTargetNestedInput
   loginHistories?: Prisma.LoginHistoryUpdateManyWithoutUserNestedInput
   Person?: Prisma.PersonUpdateManyWithoutUserNestedInput
   Appointment?: Prisma.AppointmentUpdateManyWithoutDoctorNestedInput
@@ -5948,9 +9007,16 @@ export type UserUpdateWithoutAddressInput = {
   UserPermission?: Prisma.UserPermissionUpdateManyWithoutUserNestedInput
   refreshTokens?: Prisma.RefreshTokenUpdateManyWithoutUserNestedInput
   authActionTokens?: Prisma.AuthActionTokenUpdateManyWithoutUserNestedInput
+  requestedSubscriptionPayments?: Prisma.SubscriptionRequestUpdateManyWithoutSubmittedByNestedInput
+  reviewedSubscriptionPayments?: Prisma.SubscriptionRequestUpdateManyWithoutReviewedByNestedInput
+  approvedSubscriptions?: Prisma.ClinicSubscriptionUpdateManyWithoutApprovedByNestedInput
+  subscriptionAudits?: Prisma.SubscriptionAuditUpdateManyWithoutActorNestedInput
+  updatedSubscriptionSettings?: Prisma.SubscriptionSettingsUpdateManyWithoutUpdatedByNestedInput
+  assistantConversations?: Prisma.AssistantConversationUpdateManyWithoutUserNestedInput
+  assistantMessages?: Prisma.AssistantMessageUpdateManyWithoutUserNestedInput
   stockSales?: Prisma.StockSaleUpdateManyWithoutSoldByNestedInput
   createdCommunicationCampaigns?: Prisma.CommunicationCampaignUpdateManyWithoutCreatedByNestedInput
-  branch?: Prisma.BranchUpdateOneRequiredWithoutUserNestedInput
+  branch?: Prisma.BranchUpdateOneWithoutUserNestedInput
   Role?: Prisma.RoleUpdateOneWithoutUserNestedInput
 }
 
@@ -5959,7 +9025,7 @@ export type UserUncheckedUpdateWithoutAddressInput = {
   email?: Prisma.StringFieldUpdateOperationsInput | string
   password?: Prisma.StringFieldUpdateOperationsInput | string
   username?: Prisma.StringFieldUpdateOperationsInput | string
-  branchId?: Prisma.StringFieldUpdateOperationsInput | string
+  branchId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   roleId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
   phoneNumber?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
@@ -5971,6 +9037,8 @@ export type UserUncheckedUpdateWithoutAddressInput = {
   deletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   accessHistories?: Prisma.AccessHistoryUncheckedUpdateManyWithoutUserNestedInput
   audits?: Prisma.AuditUncheckedUpdateManyWithoutUserNestedInput
+  platformAdminActions?: Prisma.PlatformAdminAuditUncheckedUpdateManyWithoutActorNestedInput
+  platformAdminTargets?: Prisma.PlatformAdminAuditUncheckedUpdateManyWithoutTargetNestedInput
   loginHistories?: Prisma.LoginHistoryUncheckedUpdateManyWithoutUserNestedInput
   Person?: Prisma.PersonUncheckedUpdateManyWithoutUserNestedInput
   Appointment?: Prisma.AppointmentUncheckedUpdateManyWithoutDoctorNestedInput
@@ -5991,6 +9059,13 @@ export type UserUncheckedUpdateWithoutAddressInput = {
   UserPermission?: Prisma.UserPermissionUncheckedUpdateManyWithoutUserNestedInput
   refreshTokens?: Prisma.RefreshTokenUncheckedUpdateManyWithoutUserNestedInput
   authActionTokens?: Prisma.AuthActionTokenUncheckedUpdateManyWithoutUserNestedInput
+  requestedSubscriptionPayments?: Prisma.SubscriptionRequestUncheckedUpdateManyWithoutSubmittedByNestedInput
+  reviewedSubscriptionPayments?: Prisma.SubscriptionRequestUncheckedUpdateManyWithoutReviewedByNestedInput
+  approvedSubscriptions?: Prisma.ClinicSubscriptionUncheckedUpdateManyWithoutApprovedByNestedInput
+  subscriptionAudits?: Prisma.SubscriptionAuditUncheckedUpdateManyWithoutActorNestedInput
+  updatedSubscriptionSettings?: Prisma.SubscriptionSettingsUncheckedUpdateManyWithoutUpdatedByNestedInput
+  assistantConversations?: Prisma.AssistantConversationUncheckedUpdateManyWithoutUserNestedInput
+  assistantMessages?: Prisma.AssistantMessageUncheckedUpdateManyWithoutUserNestedInput
   stockSales?: Prisma.StockSaleUncheckedUpdateManyWithoutSoldByNestedInput
   createdCommunicationCampaigns?: Prisma.CommunicationCampaignUncheckedUpdateManyWithoutCreatedByNestedInput
 }
@@ -6000,7 +9075,7 @@ export type UserUncheckedUpdateManyWithoutAddressInput = {
   email?: Prisma.StringFieldUpdateOperationsInput | string
   password?: Prisma.StringFieldUpdateOperationsInput | string
   username?: Prisma.StringFieldUpdateOperationsInput | string
-  branchId?: Prisma.StringFieldUpdateOperationsInput | string
+  branchId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   roleId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
   phoneNumber?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
@@ -6044,6 +9119,8 @@ export type UserUpdateWithoutBranchInput = {
   deletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   accessHistories?: Prisma.AccessHistoryUpdateManyWithoutUserNestedInput
   audits?: Prisma.AuditUpdateManyWithoutUserNestedInput
+  platformAdminActions?: Prisma.PlatformAdminAuditUpdateManyWithoutActorNestedInput
+  platformAdminTargets?: Prisma.PlatformAdminAuditUpdateManyWithoutTargetNestedInput
   loginHistories?: Prisma.LoginHistoryUpdateManyWithoutUserNestedInput
   Person?: Prisma.PersonUpdateManyWithoutUserNestedInput
   Appointment?: Prisma.AppointmentUpdateManyWithoutDoctorNestedInput
@@ -6064,6 +9141,13 @@ export type UserUpdateWithoutBranchInput = {
   UserPermission?: Prisma.UserPermissionUpdateManyWithoutUserNestedInput
   refreshTokens?: Prisma.RefreshTokenUpdateManyWithoutUserNestedInput
   authActionTokens?: Prisma.AuthActionTokenUpdateManyWithoutUserNestedInput
+  requestedSubscriptionPayments?: Prisma.SubscriptionRequestUpdateManyWithoutSubmittedByNestedInput
+  reviewedSubscriptionPayments?: Prisma.SubscriptionRequestUpdateManyWithoutReviewedByNestedInput
+  approvedSubscriptions?: Prisma.ClinicSubscriptionUpdateManyWithoutApprovedByNestedInput
+  subscriptionAudits?: Prisma.SubscriptionAuditUpdateManyWithoutActorNestedInput
+  updatedSubscriptionSettings?: Prisma.SubscriptionSettingsUpdateManyWithoutUpdatedByNestedInput
+  assistantConversations?: Prisma.AssistantConversationUpdateManyWithoutUserNestedInput
+  assistantMessages?: Prisma.AssistantMessageUpdateManyWithoutUserNestedInput
   stockSales?: Prisma.StockSaleUpdateManyWithoutSoldByNestedInput
   createdCommunicationCampaigns?: Prisma.CommunicationCampaignUpdateManyWithoutCreatedByNestedInput
   Address?: Prisma.AddressUpdateOneWithoutUserNestedInput
@@ -6087,6 +9171,8 @@ export type UserUncheckedUpdateWithoutBranchInput = {
   deletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   accessHistories?: Prisma.AccessHistoryUncheckedUpdateManyWithoutUserNestedInput
   audits?: Prisma.AuditUncheckedUpdateManyWithoutUserNestedInput
+  platformAdminActions?: Prisma.PlatformAdminAuditUncheckedUpdateManyWithoutActorNestedInput
+  platformAdminTargets?: Prisma.PlatformAdminAuditUncheckedUpdateManyWithoutTargetNestedInput
   loginHistories?: Prisma.LoginHistoryUncheckedUpdateManyWithoutUserNestedInput
   Person?: Prisma.PersonUncheckedUpdateManyWithoutUserNestedInput
   Appointment?: Prisma.AppointmentUncheckedUpdateManyWithoutDoctorNestedInput
@@ -6107,6 +9193,13 @@ export type UserUncheckedUpdateWithoutBranchInput = {
   UserPermission?: Prisma.UserPermissionUncheckedUpdateManyWithoutUserNestedInput
   refreshTokens?: Prisma.RefreshTokenUncheckedUpdateManyWithoutUserNestedInput
   authActionTokens?: Prisma.AuthActionTokenUncheckedUpdateManyWithoutUserNestedInput
+  requestedSubscriptionPayments?: Prisma.SubscriptionRequestUncheckedUpdateManyWithoutSubmittedByNestedInput
+  reviewedSubscriptionPayments?: Prisma.SubscriptionRequestUncheckedUpdateManyWithoutReviewedByNestedInput
+  approvedSubscriptions?: Prisma.ClinicSubscriptionUncheckedUpdateManyWithoutApprovedByNestedInput
+  subscriptionAudits?: Prisma.SubscriptionAuditUncheckedUpdateManyWithoutActorNestedInput
+  updatedSubscriptionSettings?: Prisma.SubscriptionSettingsUncheckedUpdateManyWithoutUpdatedByNestedInput
+  assistantConversations?: Prisma.AssistantConversationUncheckedUpdateManyWithoutUserNestedInput
+  assistantMessages?: Prisma.AssistantMessageUncheckedUpdateManyWithoutUserNestedInput
   stockSales?: Prisma.StockSaleUncheckedUpdateManyWithoutSoldByNestedInput
   createdCommunicationCampaigns?: Prisma.CommunicationCampaignUncheckedUpdateManyWithoutCreatedByNestedInput
 }
@@ -6133,7 +9226,7 @@ export type UserCreateManyRoleInput = {
   email: string
   password: string
   username: string
-  branchId: string
+  branchId?: string | null
   addressId?: string | null
   isActive?: boolean
   phoneNumber?: number | null
@@ -6160,6 +9253,8 @@ export type UserUpdateWithoutRoleInput = {
   deletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   accessHistories?: Prisma.AccessHistoryUpdateManyWithoutUserNestedInput
   audits?: Prisma.AuditUpdateManyWithoutUserNestedInput
+  platformAdminActions?: Prisma.PlatformAdminAuditUpdateManyWithoutActorNestedInput
+  platformAdminTargets?: Prisma.PlatformAdminAuditUpdateManyWithoutTargetNestedInput
   loginHistories?: Prisma.LoginHistoryUpdateManyWithoutUserNestedInput
   Person?: Prisma.PersonUpdateManyWithoutUserNestedInput
   Appointment?: Prisma.AppointmentUpdateManyWithoutDoctorNestedInput
@@ -6180,10 +9275,17 @@ export type UserUpdateWithoutRoleInput = {
   UserPermission?: Prisma.UserPermissionUpdateManyWithoutUserNestedInput
   refreshTokens?: Prisma.RefreshTokenUpdateManyWithoutUserNestedInput
   authActionTokens?: Prisma.AuthActionTokenUpdateManyWithoutUserNestedInput
+  requestedSubscriptionPayments?: Prisma.SubscriptionRequestUpdateManyWithoutSubmittedByNestedInput
+  reviewedSubscriptionPayments?: Prisma.SubscriptionRequestUpdateManyWithoutReviewedByNestedInput
+  approvedSubscriptions?: Prisma.ClinicSubscriptionUpdateManyWithoutApprovedByNestedInput
+  subscriptionAudits?: Prisma.SubscriptionAuditUpdateManyWithoutActorNestedInput
+  updatedSubscriptionSettings?: Prisma.SubscriptionSettingsUpdateManyWithoutUpdatedByNestedInput
+  assistantConversations?: Prisma.AssistantConversationUpdateManyWithoutUserNestedInput
+  assistantMessages?: Prisma.AssistantMessageUpdateManyWithoutUserNestedInput
   stockSales?: Prisma.StockSaleUpdateManyWithoutSoldByNestedInput
   createdCommunicationCampaigns?: Prisma.CommunicationCampaignUpdateManyWithoutCreatedByNestedInput
   Address?: Prisma.AddressUpdateOneWithoutUserNestedInput
-  branch?: Prisma.BranchUpdateOneRequiredWithoutUserNestedInput
+  branch?: Prisma.BranchUpdateOneWithoutUserNestedInput
 }
 
 export type UserUncheckedUpdateWithoutRoleInput = {
@@ -6191,7 +9293,7 @@ export type UserUncheckedUpdateWithoutRoleInput = {
   email?: Prisma.StringFieldUpdateOperationsInput | string
   password?: Prisma.StringFieldUpdateOperationsInput | string
   username?: Prisma.StringFieldUpdateOperationsInput | string
-  branchId?: Prisma.StringFieldUpdateOperationsInput | string
+  branchId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   addressId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
   phoneNumber?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
@@ -6203,6 +9305,8 @@ export type UserUncheckedUpdateWithoutRoleInput = {
   deletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   accessHistories?: Prisma.AccessHistoryUncheckedUpdateManyWithoutUserNestedInput
   audits?: Prisma.AuditUncheckedUpdateManyWithoutUserNestedInput
+  platformAdminActions?: Prisma.PlatformAdminAuditUncheckedUpdateManyWithoutActorNestedInput
+  platformAdminTargets?: Prisma.PlatformAdminAuditUncheckedUpdateManyWithoutTargetNestedInput
   loginHistories?: Prisma.LoginHistoryUncheckedUpdateManyWithoutUserNestedInput
   Person?: Prisma.PersonUncheckedUpdateManyWithoutUserNestedInput
   Appointment?: Prisma.AppointmentUncheckedUpdateManyWithoutDoctorNestedInput
@@ -6223,6 +9327,13 @@ export type UserUncheckedUpdateWithoutRoleInput = {
   UserPermission?: Prisma.UserPermissionUncheckedUpdateManyWithoutUserNestedInput
   refreshTokens?: Prisma.RefreshTokenUncheckedUpdateManyWithoutUserNestedInput
   authActionTokens?: Prisma.AuthActionTokenUncheckedUpdateManyWithoutUserNestedInput
+  requestedSubscriptionPayments?: Prisma.SubscriptionRequestUncheckedUpdateManyWithoutSubmittedByNestedInput
+  reviewedSubscriptionPayments?: Prisma.SubscriptionRequestUncheckedUpdateManyWithoutReviewedByNestedInput
+  approvedSubscriptions?: Prisma.ClinicSubscriptionUncheckedUpdateManyWithoutApprovedByNestedInput
+  subscriptionAudits?: Prisma.SubscriptionAuditUncheckedUpdateManyWithoutActorNestedInput
+  updatedSubscriptionSettings?: Prisma.SubscriptionSettingsUncheckedUpdateManyWithoutUpdatedByNestedInput
+  assistantConversations?: Prisma.AssistantConversationUncheckedUpdateManyWithoutUserNestedInput
+  assistantMessages?: Prisma.AssistantMessageUncheckedUpdateManyWithoutUserNestedInput
   stockSales?: Prisma.StockSaleUncheckedUpdateManyWithoutSoldByNestedInput
   createdCommunicationCampaigns?: Prisma.CommunicationCampaignUncheckedUpdateManyWithoutCreatedByNestedInput
 }
@@ -6232,7 +9343,7 @@ export type UserUncheckedUpdateManyWithoutRoleInput = {
   email?: Prisma.StringFieldUpdateOperationsInput | string
   password?: Prisma.StringFieldUpdateOperationsInput | string
   username?: Prisma.StringFieldUpdateOperationsInput | string
-  branchId?: Prisma.StringFieldUpdateOperationsInput | string
+  branchId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   addressId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
   phoneNumber?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
@@ -6252,6 +9363,8 @@ export type UserUncheckedUpdateManyWithoutRoleInput = {
 export type UserCountOutputType = {
   accessHistories: number
   audits: number
+  platformAdminActions: number
+  platformAdminTargets: number
   loginHistories: number
   Person: number
   Appointment: number
@@ -6271,6 +9384,13 @@ export type UserCountOutputType = {
   UserPermission: number
   refreshTokens: number
   authActionTokens: number
+  requestedSubscriptionPayments: number
+  reviewedSubscriptionPayments: number
+  approvedSubscriptions: number
+  subscriptionAudits: number
+  updatedSubscriptionSettings: number
+  assistantConversations: number
+  assistantMessages: number
   stockSales: number
   createdCommunicationCampaigns: number
 }
@@ -6278,6 +9398,8 @@ export type UserCountOutputType = {
 export type UserCountOutputTypeSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   accessHistories?: boolean | UserCountOutputTypeCountAccessHistoriesArgs
   audits?: boolean | UserCountOutputTypeCountAuditsArgs
+  platformAdminActions?: boolean | UserCountOutputTypeCountPlatformAdminActionsArgs
+  platformAdminTargets?: boolean | UserCountOutputTypeCountPlatformAdminTargetsArgs
   loginHistories?: boolean | UserCountOutputTypeCountLoginHistoriesArgs
   Person?: boolean | UserCountOutputTypeCountPersonArgs
   Appointment?: boolean | UserCountOutputTypeCountAppointmentArgs
@@ -6297,6 +9419,13 @@ export type UserCountOutputTypeSelect<ExtArgs extends runtime.Types.Extensions.I
   UserPermission?: boolean | UserCountOutputTypeCountUserPermissionArgs
   refreshTokens?: boolean | UserCountOutputTypeCountRefreshTokensArgs
   authActionTokens?: boolean | UserCountOutputTypeCountAuthActionTokensArgs
+  requestedSubscriptionPayments?: boolean | UserCountOutputTypeCountRequestedSubscriptionPaymentsArgs
+  reviewedSubscriptionPayments?: boolean | UserCountOutputTypeCountReviewedSubscriptionPaymentsArgs
+  approvedSubscriptions?: boolean | UserCountOutputTypeCountApprovedSubscriptionsArgs
+  subscriptionAudits?: boolean | UserCountOutputTypeCountSubscriptionAuditsArgs
+  updatedSubscriptionSettings?: boolean | UserCountOutputTypeCountUpdatedSubscriptionSettingsArgs
+  assistantConversations?: boolean | UserCountOutputTypeCountAssistantConversationsArgs
+  assistantMessages?: boolean | UserCountOutputTypeCountAssistantMessagesArgs
   stockSales?: boolean | UserCountOutputTypeCountStockSalesArgs
   createdCommunicationCampaigns?: boolean | UserCountOutputTypeCountCreatedCommunicationCampaignsArgs
 }
@@ -6323,6 +9452,20 @@ export type UserCountOutputTypeCountAccessHistoriesArgs<ExtArgs extends runtime.
  */
 export type UserCountOutputTypeCountAuditsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   where?: Prisma.AuditWhereInput
+}
+
+/**
+ * UserCountOutputType without action
+ */
+export type UserCountOutputTypeCountPlatformAdminActionsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  where?: Prisma.PlatformAdminAuditWhereInput
+}
+
+/**
+ * UserCountOutputType without action
+ */
+export type UserCountOutputTypeCountPlatformAdminTargetsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  where?: Prisma.PlatformAdminAuditWhereInput
 }
 
 /**
@@ -6461,6 +9604,55 @@ export type UserCountOutputTypeCountAuthActionTokensArgs<ExtArgs extends runtime
 /**
  * UserCountOutputType without action
  */
+export type UserCountOutputTypeCountRequestedSubscriptionPaymentsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  where?: Prisma.SubscriptionRequestWhereInput
+}
+
+/**
+ * UserCountOutputType without action
+ */
+export type UserCountOutputTypeCountReviewedSubscriptionPaymentsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  where?: Prisma.SubscriptionRequestWhereInput
+}
+
+/**
+ * UserCountOutputType without action
+ */
+export type UserCountOutputTypeCountApprovedSubscriptionsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  where?: Prisma.ClinicSubscriptionWhereInput
+}
+
+/**
+ * UserCountOutputType without action
+ */
+export type UserCountOutputTypeCountSubscriptionAuditsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  where?: Prisma.SubscriptionAuditWhereInput
+}
+
+/**
+ * UserCountOutputType without action
+ */
+export type UserCountOutputTypeCountUpdatedSubscriptionSettingsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  where?: Prisma.SubscriptionSettingsWhereInput
+}
+
+/**
+ * UserCountOutputType without action
+ */
+export type UserCountOutputTypeCountAssistantConversationsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  where?: Prisma.AssistantConversationWhereInput
+}
+
+/**
+ * UserCountOutputType without action
+ */
+export type UserCountOutputTypeCountAssistantMessagesArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  where?: Prisma.AssistantMessageWhereInput
+}
+
+/**
+ * UserCountOutputType without action
+ */
 export type UserCountOutputTypeCountStockSalesArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   where?: Prisma.StockSaleWhereInput
 }
@@ -6491,6 +9683,8 @@ export type UserSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = r
   deletedAt?: boolean
   accessHistories?: boolean | Prisma.User$accessHistoriesArgs<ExtArgs>
   audits?: boolean | Prisma.User$auditsArgs<ExtArgs>
+  platformAdminActions?: boolean | Prisma.User$platformAdminActionsArgs<ExtArgs>
+  platformAdminTargets?: boolean | Prisma.User$platformAdminTargetsArgs<ExtArgs>
   loginHistories?: boolean | Prisma.User$loginHistoriesArgs<ExtArgs>
   Person?: boolean | Prisma.User$PersonArgs<ExtArgs>
   Appointment?: boolean | Prisma.User$AppointmentArgs<ExtArgs>
@@ -6511,10 +9705,17 @@ export type UserSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = r
   UserPermission?: boolean | Prisma.User$UserPermissionArgs<ExtArgs>
   refreshTokens?: boolean | Prisma.User$refreshTokensArgs<ExtArgs>
   authActionTokens?: boolean | Prisma.User$authActionTokensArgs<ExtArgs>
+  requestedSubscriptionPayments?: boolean | Prisma.User$requestedSubscriptionPaymentsArgs<ExtArgs>
+  reviewedSubscriptionPayments?: boolean | Prisma.User$reviewedSubscriptionPaymentsArgs<ExtArgs>
+  approvedSubscriptions?: boolean | Prisma.User$approvedSubscriptionsArgs<ExtArgs>
+  subscriptionAudits?: boolean | Prisma.User$subscriptionAuditsArgs<ExtArgs>
+  updatedSubscriptionSettings?: boolean | Prisma.User$updatedSubscriptionSettingsArgs<ExtArgs>
+  assistantConversations?: boolean | Prisma.User$assistantConversationsArgs<ExtArgs>
+  assistantMessages?: boolean | Prisma.User$assistantMessagesArgs<ExtArgs>
   stockSales?: boolean | Prisma.User$stockSalesArgs<ExtArgs>
   createdCommunicationCampaigns?: boolean | Prisma.User$createdCommunicationCampaignsArgs<ExtArgs>
   Address?: boolean | Prisma.User$AddressArgs<ExtArgs>
-  branch?: boolean | Prisma.BranchDefaultArgs<ExtArgs>
+  branch?: boolean | Prisma.User$branchArgs<ExtArgs>
   Role?: boolean | Prisma.User$RoleArgs<ExtArgs>
   _count?: boolean | Prisma.UserCountOutputTypeDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["user"]>
@@ -6536,7 +9737,7 @@ export type UserSelectCreateManyAndReturn<ExtArgs extends runtime.Types.Extensio
   updatedAt?: boolean
   deletedAt?: boolean
   Address?: boolean | Prisma.User$AddressArgs<ExtArgs>
-  branch?: boolean | Prisma.BranchDefaultArgs<ExtArgs>
+  branch?: boolean | Prisma.User$branchArgs<ExtArgs>
   Role?: boolean | Prisma.User$RoleArgs<ExtArgs>
 }, ExtArgs["result"]["user"]>
 
@@ -6557,7 +9758,7 @@ export type UserSelectUpdateManyAndReturn<ExtArgs extends runtime.Types.Extensio
   updatedAt?: boolean
   deletedAt?: boolean
   Address?: boolean | Prisma.User$AddressArgs<ExtArgs>
-  branch?: boolean | Prisma.BranchDefaultArgs<ExtArgs>
+  branch?: boolean | Prisma.User$branchArgs<ExtArgs>
   Role?: boolean | Prisma.User$RoleArgs<ExtArgs>
 }, ExtArgs["result"]["user"]>
 
@@ -6583,6 +9784,8 @@ export type UserOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = run
 export type UserInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   accessHistories?: boolean | Prisma.User$accessHistoriesArgs<ExtArgs>
   audits?: boolean | Prisma.User$auditsArgs<ExtArgs>
+  platformAdminActions?: boolean | Prisma.User$platformAdminActionsArgs<ExtArgs>
+  platformAdminTargets?: boolean | Prisma.User$platformAdminTargetsArgs<ExtArgs>
   loginHistories?: boolean | Prisma.User$loginHistoriesArgs<ExtArgs>
   Person?: boolean | Prisma.User$PersonArgs<ExtArgs>
   Appointment?: boolean | Prisma.User$AppointmentArgs<ExtArgs>
@@ -6603,21 +9806,28 @@ export type UserInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = 
   UserPermission?: boolean | Prisma.User$UserPermissionArgs<ExtArgs>
   refreshTokens?: boolean | Prisma.User$refreshTokensArgs<ExtArgs>
   authActionTokens?: boolean | Prisma.User$authActionTokensArgs<ExtArgs>
+  requestedSubscriptionPayments?: boolean | Prisma.User$requestedSubscriptionPaymentsArgs<ExtArgs>
+  reviewedSubscriptionPayments?: boolean | Prisma.User$reviewedSubscriptionPaymentsArgs<ExtArgs>
+  approvedSubscriptions?: boolean | Prisma.User$approvedSubscriptionsArgs<ExtArgs>
+  subscriptionAudits?: boolean | Prisma.User$subscriptionAuditsArgs<ExtArgs>
+  updatedSubscriptionSettings?: boolean | Prisma.User$updatedSubscriptionSettingsArgs<ExtArgs>
+  assistantConversations?: boolean | Prisma.User$assistantConversationsArgs<ExtArgs>
+  assistantMessages?: boolean | Prisma.User$assistantMessagesArgs<ExtArgs>
   stockSales?: boolean | Prisma.User$stockSalesArgs<ExtArgs>
   createdCommunicationCampaigns?: boolean | Prisma.User$createdCommunicationCampaignsArgs<ExtArgs>
   Address?: boolean | Prisma.User$AddressArgs<ExtArgs>
-  branch?: boolean | Prisma.BranchDefaultArgs<ExtArgs>
+  branch?: boolean | Prisma.User$branchArgs<ExtArgs>
   Role?: boolean | Prisma.User$RoleArgs<ExtArgs>
   _count?: boolean | Prisma.UserCountOutputTypeDefaultArgs<ExtArgs>
 }
 export type UserIncludeCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   Address?: boolean | Prisma.User$AddressArgs<ExtArgs>
-  branch?: boolean | Prisma.BranchDefaultArgs<ExtArgs>
+  branch?: boolean | Prisma.User$branchArgs<ExtArgs>
   Role?: boolean | Prisma.User$RoleArgs<ExtArgs>
 }
 export type UserIncludeUpdateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   Address?: boolean | Prisma.User$AddressArgs<ExtArgs>
-  branch?: boolean | Prisma.BranchDefaultArgs<ExtArgs>
+  branch?: boolean | Prisma.User$branchArgs<ExtArgs>
   Role?: boolean | Prisma.User$RoleArgs<ExtArgs>
 }
 
@@ -6626,6 +9836,8 @@ export type $UserPayload<ExtArgs extends runtime.Types.Extensions.InternalArgs =
   objects: {
     accessHistories: Prisma.$AccessHistoryPayload<ExtArgs>[]
     audits: Prisma.$AuditPayload<ExtArgs>[]
+    platformAdminActions: Prisma.$PlatformAdminAuditPayload<ExtArgs>[]
+    platformAdminTargets: Prisma.$PlatformAdminAuditPayload<ExtArgs>[]
     loginHistories: Prisma.$LoginHistoryPayload<ExtArgs>[]
     Person: Prisma.$PersonPayload<ExtArgs>[]
     Appointment: Prisma.$AppointmentPayload<ExtArgs>[]
@@ -6646,10 +9858,17 @@ export type $UserPayload<ExtArgs extends runtime.Types.Extensions.InternalArgs =
     UserPermission: Prisma.$UserPermissionPayload<ExtArgs>[]
     refreshTokens: Prisma.$RefreshTokenPayload<ExtArgs>[]
     authActionTokens: Prisma.$AuthActionTokenPayload<ExtArgs>[]
+    requestedSubscriptionPayments: Prisma.$SubscriptionRequestPayload<ExtArgs>[]
+    reviewedSubscriptionPayments: Prisma.$SubscriptionRequestPayload<ExtArgs>[]
+    approvedSubscriptions: Prisma.$ClinicSubscriptionPayload<ExtArgs>[]
+    subscriptionAudits: Prisma.$SubscriptionAuditPayload<ExtArgs>[]
+    updatedSubscriptionSettings: Prisma.$SubscriptionSettingsPayload<ExtArgs>[]
+    assistantConversations: Prisma.$AssistantConversationPayload<ExtArgs>[]
+    assistantMessages: Prisma.$AssistantMessagePayload<ExtArgs>[]
     stockSales: Prisma.$StockSalePayload<ExtArgs>[]
     createdCommunicationCampaigns: Prisma.$CommunicationCampaignPayload<ExtArgs>[]
     Address: Prisma.$AddressPayload<ExtArgs> | null
-    branch: Prisma.$BranchPayload<ExtArgs>
+    branch: Prisma.$BranchPayload<ExtArgs> | null
     Role: Prisma.$RolePayload<ExtArgs> | null
   }
   scalars: runtime.Types.Extensions.GetPayloadResult<{
@@ -6657,7 +9876,7 @@ export type $UserPayload<ExtArgs extends runtime.Types.Extensions.InternalArgs =
     email: string
     password: string
     username: string
-    branchId: string
+    branchId: string | null
     addressId: string | null
     roleId: string | null
     isActive: boolean
@@ -7064,6 +10283,8 @@ export interface Prisma__UserClient<T, Null = never, ExtArgs extends runtime.Typ
   readonly [Symbol.toStringTag]: "PrismaPromise"
   accessHistories<T extends Prisma.User$accessHistoriesArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.User$accessHistoriesArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$AccessHistoryPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   audits<T extends Prisma.User$auditsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.User$auditsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$AuditPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+  platformAdminActions<T extends Prisma.User$platformAdminActionsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.User$platformAdminActionsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$PlatformAdminAuditPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+  platformAdminTargets<T extends Prisma.User$platformAdminTargetsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.User$platformAdminTargetsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$PlatformAdminAuditPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   loginHistories<T extends Prisma.User$loginHistoriesArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.User$loginHistoriesArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$LoginHistoryPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   Person<T extends Prisma.User$PersonArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.User$PersonArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$PersonPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   Appointment<T extends Prisma.User$AppointmentArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.User$AppointmentArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$AppointmentPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
@@ -7084,10 +10305,17 @@ export interface Prisma__UserClient<T, Null = never, ExtArgs extends runtime.Typ
   UserPermission<T extends Prisma.User$UserPermissionArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.User$UserPermissionArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$UserPermissionPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   refreshTokens<T extends Prisma.User$refreshTokensArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.User$refreshTokensArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$RefreshTokenPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   authActionTokens<T extends Prisma.User$authActionTokensArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.User$authActionTokensArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$AuthActionTokenPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+  requestedSubscriptionPayments<T extends Prisma.User$requestedSubscriptionPaymentsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.User$requestedSubscriptionPaymentsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$SubscriptionRequestPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+  reviewedSubscriptionPayments<T extends Prisma.User$reviewedSubscriptionPaymentsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.User$reviewedSubscriptionPaymentsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$SubscriptionRequestPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+  approvedSubscriptions<T extends Prisma.User$approvedSubscriptionsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.User$approvedSubscriptionsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$ClinicSubscriptionPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+  subscriptionAudits<T extends Prisma.User$subscriptionAuditsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.User$subscriptionAuditsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$SubscriptionAuditPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+  updatedSubscriptionSettings<T extends Prisma.User$updatedSubscriptionSettingsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.User$updatedSubscriptionSettingsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$SubscriptionSettingsPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+  assistantConversations<T extends Prisma.User$assistantConversationsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.User$assistantConversationsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$AssistantConversationPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+  assistantMessages<T extends Prisma.User$assistantMessagesArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.User$assistantMessagesArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$AssistantMessagePayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   stockSales<T extends Prisma.User$stockSalesArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.User$stockSalesArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$StockSalePayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   createdCommunicationCampaigns<T extends Prisma.User$createdCommunicationCampaignsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.User$createdCommunicationCampaignsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$CommunicationCampaignPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   Address<T extends Prisma.User$AddressArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.User$AddressArgs<ExtArgs>>): Prisma.Prisma__AddressClient<runtime.Types.Result.GetResult<Prisma.$AddressPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
-  branch<T extends Prisma.BranchDefaultArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.BranchDefaultArgs<ExtArgs>>): Prisma.Prisma__BranchClient<runtime.Types.Result.GetResult<Prisma.$BranchPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
+  branch<T extends Prisma.User$branchArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.User$branchArgs<ExtArgs>>): Prisma.Prisma__BranchClient<runtime.Types.Result.GetResult<Prisma.$BranchPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
   Role<T extends Prisma.User$RoleArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.User$RoleArgs<ExtArgs>>): Prisma.Prisma__RoleClient<runtime.Types.Result.GetResult<Prisma.$RolePayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
   /**
    * Attaches callbacks for the resolution and/or rejection of the Promise.
@@ -7577,6 +10805,54 @@ export type User$auditsArgs<ExtArgs extends runtime.Types.Extensions.InternalArg
 }
 
 /**
+ * User.platformAdminActions
+ */
+export type User$platformAdminActionsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the PlatformAdminAudit
+   */
+  select?: Prisma.PlatformAdminAuditSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the PlatformAdminAudit
+   */
+  omit?: Prisma.PlatformAdminAuditOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.PlatformAdminAuditInclude<ExtArgs> | null
+  where?: Prisma.PlatformAdminAuditWhereInput
+  orderBy?: Prisma.PlatformAdminAuditOrderByWithRelationInput | Prisma.PlatformAdminAuditOrderByWithRelationInput[]
+  cursor?: Prisma.PlatformAdminAuditWhereUniqueInput
+  take?: number
+  skip?: number
+  distinct?: Prisma.PlatformAdminAuditScalarFieldEnum | Prisma.PlatformAdminAuditScalarFieldEnum[]
+}
+
+/**
+ * User.platformAdminTargets
+ */
+export type User$platformAdminTargetsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the PlatformAdminAudit
+   */
+  select?: Prisma.PlatformAdminAuditSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the PlatformAdminAudit
+   */
+  omit?: Prisma.PlatformAdminAuditOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.PlatformAdminAuditInclude<ExtArgs> | null
+  where?: Prisma.PlatformAdminAuditWhereInput
+  orderBy?: Prisma.PlatformAdminAuditOrderByWithRelationInput | Prisma.PlatformAdminAuditOrderByWithRelationInput[]
+  cursor?: Prisma.PlatformAdminAuditWhereUniqueInput
+  take?: number
+  skip?: number
+  distinct?: Prisma.PlatformAdminAuditScalarFieldEnum | Prisma.PlatformAdminAuditScalarFieldEnum[]
+}
+
+/**
  * User.loginHistories
  */
 export type User$loginHistoriesArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
@@ -8052,6 +11328,174 @@ export type User$authActionTokensArgs<ExtArgs extends runtime.Types.Extensions.I
 }
 
 /**
+ * User.requestedSubscriptionPayments
+ */
+export type User$requestedSubscriptionPaymentsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the SubscriptionRequest
+   */
+  select?: Prisma.SubscriptionRequestSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the SubscriptionRequest
+   */
+  omit?: Prisma.SubscriptionRequestOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.SubscriptionRequestInclude<ExtArgs> | null
+  where?: Prisma.SubscriptionRequestWhereInput
+  orderBy?: Prisma.SubscriptionRequestOrderByWithRelationInput | Prisma.SubscriptionRequestOrderByWithRelationInput[]
+  cursor?: Prisma.SubscriptionRequestWhereUniqueInput
+  take?: number
+  skip?: number
+  distinct?: Prisma.SubscriptionRequestScalarFieldEnum | Prisma.SubscriptionRequestScalarFieldEnum[]
+}
+
+/**
+ * User.reviewedSubscriptionPayments
+ */
+export type User$reviewedSubscriptionPaymentsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the SubscriptionRequest
+   */
+  select?: Prisma.SubscriptionRequestSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the SubscriptionRequest
+   */
+  omit?: Prisma.SubscriptionRequestOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.SubscriptionRequestInclude<ExtArgs> | null
+  where?: Prisma.SubscriptionRequestWhereInput
+  orderBy?: Prisma.SubscriptionRequestOrderByWithRelationInput | Prisma.SubscriptionRequestOrderByWithRelationInput[]
+  cursor?: Prisma.SubscriptionRequestWhereUniqueInput
+  take?: number
+  skip?: number
+  distinct?: Prisma.SubscriptionRequestScalarFieldEnum | Prisma.SubscriptionRequestScalarFieldEnum[]
+}
+
+/**
+ * User.approvedSubscriptions
+ */
+export type User$approvedSubscriptionsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the ClinicSubscription
+   */
+  select?: Prisma.ClinicSubscriptionSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the ClinicSubscription
+   */
+  omit?: Prisma.ClinicSubscriptionOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.ClinicSubscriptionInclude<ExtArgs> | null
+  where?: Prisma.ClinicSubscriptionWhereInput
+  orderBy?: Prisma.ClinicSubscriptionOrderByWithRelationInput | Prisma.ClinicSubscriptionOrderByWithRelationInput[]
+  cursor?: Prisma.ClinicSubscriptionWhereUniqueInput
+  take?: number
+  skip?: number
+  distinct?: Prisma.ClinicSubscriptionScalarFieldEnum | Prisma.ClinicSubscriptionScalarFieldEnum[]
+}
+
+/**
+ * User.subscriptionAudits
+ */
+export type User$subscriptionAuditsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the SubscriptionAudit
+   */
+  select?: Prisma.SubscriptionAuditSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the SubscriptionAudit
+   */
+  omit?: Prisma.SubscriptionAuditOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.SubscriptionAuditInclude<ExtArgs> | null
+  where?: Prisma.SubscriptionAuditWhereInput
+  orderBy?: Prisma.SubscriptionAuditOrderByWithRelationInput | Prisma.SubscriptionAuditOrderByWithRelationInput[]
+  cursor?: Prisma.SubscriptionAuditWhereUniqueInput
+  take?: number
+  skip?: number
+  distinct?: Prisma.SubscriptionAuditScalarFieldEnum | Prisma.SubscriptionAuditScalarFieldEnum[]
+}
+
+/**
+ * User.updatedSubscriptionSettings
+ */
+export type User$updatedSubscriptionSettingsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the SubscriptionSettings
+   */
+  select?: Prisma.SubscriptionSettingsSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the SubscriptionSettings
+   */
+  omit?: Prisma.SubscriptionSettingsOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.SubscriptionSettingsInclude<ExtArgs> | null
+  where?: Prisma.SubscriptionSettingsWhereInput
+  orderBy?: Prisma.SubscriptionSettingsOrderByWithRelationInput | Prisma.SubscriptionSettingsOrderByWithRelationInput[]
+  cursor?: Prisma.SubscriptionSettingsWhereUniqueInput
+  take?: number
+  skip?: number
+  distinct?: Prisma.SubscriptionSettingsScalarFieldEnum | Prisma.SubscriptionSettingsScalarFieldEnum[]
+}
+
+/**
+ * User.assistantConversations
+ */
+export type User$assistantConversationsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the AssistantConversation
+   */
+  select?: Prisma.AssistantConversationSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the AssistantConversation
+   */
+  omit?: Prisma.AssistantConversationOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.AssistantConversationInclude<ExtArgs> | null
+  where?: Prisma.AssistantConversationWhereInput
+  orderBy?: Prisma.AssistantConversationOrderByWithRelationInput | Prisma.AssistantConversationOrderByWithRelationInput[]
+  cursor?: Prisma.AssistantConversationWhereUniqueInput
+  take?: number
+  skip?: number
+  distinct?: Prisma.AssistantConversationScalarFieldEnum | Prisma.AssistantConversationScalarFieldEnum[]
+}
+
+/**
+ * User.assistantMessages
+ */
+export type User$assistantMessagesArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the AssistantMessage
+   */
+  select?: Prisma.AssistantMessageSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the AssistantMessage
+   */
+  omit?: Prisma.AssistantMessageOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.AssistantMessageInclude<ExtArgs> | null
+  where?: Prisma.AssistantMessageWhereInput
+  orderBy?: Prisma.AssistantMessageOrderByWithRelationInput | Prisma.AssistantMessageOrderByWithRelationInput[]
+  cursor?: Prisma.AssistantMessageWhereUniqueInput
+  take?: number
+  skip?: number
+  distinct?: Prisma.AssistantMessageScalarFieldEnum | Prisma.AssistantMessageScalarFieldEnum[]
+}
+
+/**
  * User.stockSales
  */
 export type User$stockSalesArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
@@ -8116,6 +11560,25 @@ export type User$AddressArgs<ExtArgs extends runtime.Types.Extensions.InternalAr
    */
   include?: Prisma.AddressInclude<ExtArgs> | null
   where?: Prisma.AddressWhereInput
+}
+
+/**
+ * User.branch
+ */
+export type User$branchArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the Branch
+   */
+  select?: Prisma.BranchSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the Branch
+   */
+  omit?: Prisma.BranchOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.BranchInclude<ExtArgs> | null
+  where?: Prisma.BranchWhereInput
 }
 
 /**

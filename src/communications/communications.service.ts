@@ -20,7 +20,7 @@ export class CommunicationsService {
   constructor(
     private readonly prisma: PrismaService,
     private readonly delivery: CommunicationDeliveryService,
-  ) { }
+  ) {}
 
   async listCampaigns(user: AuthUser) {
     this.ensureAdmin(user);
@@ -43,7 +43,11 @@ export class CommunicationsService {
     });
   }
 
-  async listAudience(user: AuthUser, channel: CampaignChannel, search?: string) {
+  async listAudience(
+    user: AuthUser,
+    channel: CampaignChannel,
+    search?: string,
+  ) {
     this.ensureAdmin(user);
     const patients = await this.prisma.person.findMany({
       where: {
@@ -52,8 +56,8 @@ export class CommunicationsService {
         isActive: true,
         Role: { slug: 'patient' },
         ...(channel === 'EMAIL'
-          ? { marketingEmailConsent: false }
-          : { marketingSmsConsent: false }),
+          ? { marketingEmailConsent: true }
+          : { marketingSmsConsent: true }),
         ...(search?.trim() && {
           OR: [
             { firstName: { contains: search.trim(), mode: 'insensitive' } },
@@ -76,7 +80,8 @@ export class CommunicationsService {
 
     return patients
       .map((patient) => {
-        const rawContact = channel === 'EMAIL' ? patient.email : patient.phoneNumber;
+        const rawContact =
+          channel === 'EMAIL' ? patient.email : patient.phoneNumber;
         if (!CommunicationDeliveryService.isValidContact(channel, rawContact)) {
           return null;
         }
@@ -116,8 +121,8 @@ export class CommunicationsService {
         isActive: true,
         Role: { slug: 'patient' },
         ...(input.channel === 'EMAIL'
-          ? { marketingEmailConsent: false }
-          : { marketingSmsConsent: false }),
+          ? { marketingEmailConsent: true }
+          : { marketingSmsConsent: true }),
       },
       select: {
         id: true,
@@ -127,10 +132,14 @@ export class CommunicationsService {
     });
     const recipients = patients
       .map((patient) => {
-        const rawContact = input.channel === 'EMAIL'
-          ? patient.email
-          : patient.phoneNumber;
-        if (!CommunicationDeliveryService.isValidContact(input.channel, rawContact)) {
+        const rawContact =
+          input.channel === 'EMAIL' ? patient.email : patient.phoneNumber;
+        if (
+          !CommunicationDeliveryService.isValidContact(
+            input.channel,
+            rawContact,
+          )
+        ) {
           return null;
         }
         return {
@@ -190,11 +199,8 @@ export class CommunicationsService {
       }
     }
 
-    const status = sentCount === 0
-      ? 'FAILED'
-      : failedCount > 0
-        ? 'PARTIAL'
-        : 'SENT';
+    const status =
+      sentCount === 0 ? 'FAILED' : failedCount > 0 ? 'PARTIAL' : 'SENT';
     return this.prisma.communicationCampaign.update({
       where: { id: campaign.id },
       data: {
@@ -221,7 +227,7 @@ export class CommunicationsService {
   async getMyMarketingConsent(user: AuthUser) {
     const patient = await this.findPatientConsentRecord(user);
     return {
-      marketingEmailConsent: patient.marketingSmsConsent,
+      marketingEmailConsent: patient.marketingEmailConsent,
       marketingEmailConsentUpdatedAt: patient.marketingEmailConsentUpdatedAt,
       marketingSmsConsent: patient.marketingSmsConsent,
       marketingSmsConsentUpdatedAt: patient.marketingSmsConsentUpdatedAt,
@@ -238,7 +244,7 @@ export class CommunicationsService {
       where: { id: patient.id },
       data: {
         marketingEmailConsent: input.marketingEmailConsent,
-        ...(input.marketingEmailConsent !== patient.marketingSmsConsent && {
+        ...(input.marketingEmailConsent !== patient.marketingEmailConsent && {
           marketingEmailConsentUpdatedAt: changedAt,
         }),
         marketingSmsConsent: input.marketingSmsConsent,
@@ -268,7 +274,7 @@ export class CommunicationsService {
       },
       select: {
         id: true,
-        marketingEmailConsent: false,
+        marketingEmailConsent: true,
         marketingEmailConsentUpdatedAt: true,
         marketingSmsConsent: true,
         marketingSmsConsentUpdatedAt: true,
@@ -280,7 +286,9 @@ export class CommunicationsService {
 
   private ensureAdmin(user: AuthUser) {
     if (user.role !== 'admin' && user.role !== 'administrator') {
-      throw new ForbiddenException('Only clinic administrators can manage campaigns');
+      throw new ForbiddenException(
+        'Only clinic administrators can manage campaigns',
+      );
     }
     if (!user.branchId) throw new NotFoundException('Clinic branch not found');
   }

@@ -37,19 +37,26 @@ inclua esses valores no controlo de versões. Para uploads, configure
 `R2_ENDPOINT`, `R2_BUCKET`, `R2_ACCESS_KEY_ID` e `R2_SECRET_ACCESS_KEY`. Os
 nomes `CLOUDFLARE_*` antigos continuam aceites como fallback. O bucket R2 deve
 permanecer privado; a API serve os ficheiros após validar a autorização.
-Se o endpoint R2 usar uma CA privada (por exemplo, devido à inspecção TLS da
-rede), configure `R2_TLS_CA_CERT` com o certificado PEM da CA raiz confiável,
-escapando as quebras de linha como `\n`. A configuração adiciona essa CA às
-raízes TLS predefinidas do Node e mantém a validação do certificado e hostname.
-Não use certificados de servidor nem desactive a validação.
+O endpoint R2 deve apresentar uma cadeia HTTPS confiável pelo Node.js. Se a
+validação TLS falhar, corrija o endpoint ou a cadeia de certificados; a API
+não aceita certificados autoassinados.
 
 Para email, configure `SMTP_USER` e `SMTP_PASSWORD` com as credenciais da caixa
 postal. O servidor de saída é `mail.aquatecnica.ao`, na porta 465 com SSL/TLS.
 As variáveis antigas `GMAIL_USER` e `GMAIL_APP_PASSWORD` continuam aceites como
-fallback. Em redes que inspeccionem TLS, configure opcionalmente
-`SMTP_TLS_CA_CERT` com o certificado PEM da CA raiz confiável, escapando as
-quebras de linha como `\n`. A verificação TLS mantém-se activa; não use
-certificados de servidor nem desactive a validação.
+fallback. O servidor SMTP deve apresentar uma cadeia de certificados confiável
+pelo Node.js; a validação TLS mantém-se activa.
+
+Para activar a gestão de subscrições, configure `CLAMAV_HOST` e `CLAMAV_PORT`
+para um serviço ClamAV acessível pela API. O envio de comprovativos falha de
+forma segura se o scanner não estiver configurado ou disponível. A seed cria
+ou actualiza o proprietário da plataforma com `DENTCARE_PLATFORM_OWNER_EMAIL`
+(por omissão, `luiscaputo.dev@gmail.com`) e exige
+`DENTCARE_PLATFORM_OWNER_PASSWORD` apenas quando a conta ainda não existe.
+Forneça a password como segredo do ambiente de execução; não a grave no código
+nem no repositório. A conta não pertence a uma sucursal. O proprietário configura
+os dados bancários e o prazo estimado de validação na área administrativa de
+subscrições.
 
 ```bash
 pnpm install
@@ -204,3 +211,5 @@ Node.js 22.6 ou superior:
 ```bash
 node --experimental-strip-types --test src/lib/pagination.test.mjs
 ```
+
+

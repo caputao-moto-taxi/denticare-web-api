@@ -20,7 +20,7 @@ export const appDocPassword = () => process.env.PASS_DOCS ?? 'password';
 export const corsOptions = {
   origin: '*',
   methods: 'GET,HEAD,PUT,PATCH,POST,DELETE',
-  allowedHeaders: 'Content-Type,Authorization',
+  allowedHeaders: ['Content-Type', 'Authorization', 'Idempotency-Key'],
   exposedHeaders: ['Content-Type', 'Authorization'],
   preflightContinue: false,
 };

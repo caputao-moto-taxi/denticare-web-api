@@ -33,6 +33,7 @@ export type HeadquarterMinAggregateOutputType = {
   description: string | null
   nif: string | null
   logo: string | null
+  isActive: boolean | null
   planId: string | null
   createdAt: Date | null
   updatedAt: Date | null
@@ -48,6 +49,7 @@ export type HeadquarterMaxAggregateOutputType = {
   description: string | null
   nif: string | null
   logo: string | null
+  isActive: boolean | null
   planId: string | null
   createdAt: Date | null
   updatedAt: Date | null
@@ -63,6 +65,7 @@ export type HeadquarterCountAggregateOutputType = {
   description: number
   nif: number
   logo: number
+  isActive: number
   planId: number
   createdAt: number
   updatedAt: number
@@ -80,6 +83,7 @@ export type HeadquarterMinAggregateInputType = {
   description?: true
   nif?: true
   logo?: true
+  isActive?: true
   planId?: true
   createdAt?: true
   updatedAt?: true
@@ -95,6 +99,7 @@ export type HeadquarterMaxAggregateInputType = {
   description?: true
   nif?: true
   logo?: true
+  isActive?: true
   planId?: true
   createdAt?: true
   updatedAt?: true
@@ -110,6 +115,7 @@ export type HeadquarterCountAggregateInputType = {
   description?: true
   nif?: true
   logo?: true
+  isActive?: true
   planId?: true
   createdAt?: true
   updatedAt?: true
@@ -198,6 +204,7 @@ export type HeadquarterGroupByOutputType = {
   description: string | null
   nif: string
   logo: string | null
+  isActive: boolean
   planId: string
   createdAt: Date
   updatedAt: Date
@@ -234,12 +241,18 @@ export type HeadquarterWhereInput = {
   description?: Prisma.StringNullableFilter<"Headquarter"> | string | null
   nif?: Prisma.StringFilter<"Headquarter"> | string
   logo?: Prisma.StringNullableFilter<"Headquarter"> | string | null
+  isActive?: Prisma.BoolFilter<"Headquarter"> | boolean
   planId?: Prisma.StringFilter<"Headquarter"> | string
   createdAt?: Prisma.DateTimeFilter<"Headquarter"> | Date | string
   updatedAt?: Prisma.DateTimeFilter<"Headquarter"> | Date | string
   deletedAt?: Prisma.DateTimeNullableFilter<"Headquarter"> | Date | string | null
   Branch?: Prisma.BranchListRelationFilter
   plan?: Prisma.XOR<Prisma.PlanScalarRelationFilter, Prisma.PlanWhereInput>
+  subscriptions?: Prisma.ClinicSubscriptionListRelationFilter
+  subscriptionRequests?: Prisma.SubscriptionRequestListRelationFilter
+  subscriptionAudits?: Prisma.SubscriptionAuditListRelationFilter
+  assistantConversations?: Prisma.AssistantConversationListRelationFilter
+  platformAdminAudits?: Prisma.PlatformAdminAuditListRelationFilter
 }
 
 export type HeadquarterOrderByWithRelationInput = {
@@ -251,12 +264,18 @@ export type HeadquarterOrderByWithRelationInput = {
   description?: Prisma.SortOrderInput | Prisma.SortOrder
   nif?: Prisma.SortOrder
   logo?: Prisma.SortOrderInput | Prisma.SortOrder
+  isActive?: Prisma.SortOrder
   planId?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
   deletedAt?: Prisma.SortOrderInput | Prisma.SortOrder
   Branch?: Prisma.BranchOrderByRelationAggregateInput
   plan?: Prisma.PlanOrderByWithRelationInput
+  subscriptions?: Prisma.ClinicSubscriptionOrderByRelationAggregateInput
+  subscriptionRequests?: Prisma.SubscriptionRequestOrderByRelationAggregateInput
+  subscriptionAudits?: Prisma.SubscriptionAuditOrderByRelationAggregateInput
+  assistantConversations?: Prisma.AssistantConversationOrderByRelationAggregateInput
+  platformAdminAudits?: Prisma.PlatformAdminAuditOrderByRelationAggregateInput
 }
 
 export type HeadquarterWhereUniqueInput = Prisma.AtLeast<{
@@ -271,12 +290,18 @@ export type HeadquarterWhereUniqueInput = Prisma.AtLeast<{
   description?: Prisma.StringNullableFilter<"Headquarter"> | string | null
   nif?: Prisma.StringFilter<"Headquarter"> | string
   logo?: Prisma.StringNullableFilter<"Headquarter"> | string | null
+  isActive?: Prisma.BoolFilter<"Headquarter"> | boolean
   planId?: Prisma.StringFilter<"Headquarter"> | string
   createdAt?: Prisma.DateTimeFilter<"Headquarter"> | Date | string
   updatedAt?: Prisma.DateTimeFilter<"Headquarter"> | Date | string
   deletedAt?: Prisma.DateTimeNullableFilter<"Headquarter"> | Date | string | null
   Branch?: Prisma.BranchListRelationFilter
   plan?: Prisma.XOR<Prisma.PlanScalarRelationFilter, Prisma.PlanWhereInput>
+  subscriptions?: Prisma.ClinicSubscriptionListRelationFilter
+  subscriptionRequests?: Prisma.SubscriptionRequestListRelationFilter
+  subscriptionAudits?: Prisma.SubscriptionAuditListRelationFilter
+  assistantConversations?: Prisma.AssistantConversationListRelationFilter
+  platformAdminAudits?: Prisma.PlatformAdminAuditListRelationFilter
 }, "id">
 
 export type HeadquarterOrderByWithAggregationInput = {
@@ -288,6 +313,7 @@ export type HeadquarterOrderByWithAggregationInput = {
   description?: Prisma.SortOrderInput | Prisma.SortOrder
   nif?: Prisma.SortOrder
   logo?: Prisma.SortOrderInput | Prisma.SortOrder
+  isActive?: Prisma.SortOrder
   planId?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
@@ -309,6 +335,7 @@ export type HeadquarterScalarWhereWithAggregatesInput = {
   description?: Prisma.StringNullableWithAggregatesFilter<"Headquarter"> | string | null
   nif?: Prisma.StringWithAggregatesFilter<"Headquarter"> | string
   logo?: Prisma.StringNullableWithAggregatesFilter<"Headquarter"> | string | null
+  isActive?: Prisma.BoolWithAggregatesFilter<"Headquarter"> | boolean
   planId?: Prisma.StringWithAggregatesFilter<"Headquarter"> | string
   createdAt?: Prisma.DateTimeWithAggregatesFilter<"Headquarter"> | Date | string
   updatedAt?: Prisma.DateTimeWithAggregatesFilter<"Headquarter"> | Date | string
@@ -324,11 +351,17 @@ export type HeadquarterCreateInput = {
   description?: string | null
   nif: string
   logo?: string | null
+  isActive?: boolean
   createdAt?: Date | string
   updatedAt?: Date | string
   deletedAt?: Date | string | null
   Branch?: Prisma.BranchCreateNestedManyWithoutHeadquarterInput
   plan: Prisma.PlanCreateNestedOneWithoutHeadquarterInput
+  subscriptions?: Prisma.ClinicSubscriptionCreateNestedManyWithoutHeadquarterInput
+  subscriptionRequests?: Prisma.SubscriptionRequestCreateNestedManyWithoutHeadquarterInput
+  subscriptionAudits?: Prisma.SubscriptionAuditCreateNestedManyWithoutHeadquarterInput
+  assistantConversations?: Prisma.AssistantConversationCreateNestedManyWithoutHeadquarterInput
+  platformAdminAudits?: Prisma.PlatformAdminAuditCreateNestedManyWithoutHeadquarterInput
 }
 
 export type HeadquarterUncheckedCreateInput = {
@@ -340,11 +373,17 @@ export type HeadquarterUncheckedCreateInput = {
   description?: string | null
   nif: string
   logo?: string | null
+  isActive?: boolean
   planId: string
   createdAt?: Date | string
   updatedAt?: Date | string
   deletedAt?: Date | string | null
   Branch?: Prisma.BranchUncheckedCreateNestedManyWithoutHeadquarterInput
+  subscriptions?: Prisma.ClinicSubscriptionUncheckedCreateNestedManyWithoutHeadquarterInput
+  subscriptionRequests?: Prisma.SubscriptionRequestUncheckedCreateNestedManyWithoutHeadquarterInput
+  subscriptionAudits?: Prisma.SubscriptionAuditUncheckedCreateNestedManyWithoutHeadquarterInput
+  assistantConversations?: Prisma.AssistantConversationUncheckedCreateNestedManyWithoutHeadquarterInput
+  platformAdminAudits?: Prisma.PlatformAdminAuditUncheckedCreateNestedManyWithoutHeadquarterInput
 }
 
 export type HeadquarterUpdateInput = {
@@ -356,11 +395,17 @@ export type HeadquarterUpdateInput = {
   description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   nif?: Prisma.StringFieldUpdateOperationsInput | string
   logo?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   deletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   Branch?: Prisma.BranchUpdateManyWithoutHeadquarterNestedInput
   plan?: Prisma.PlanUpdateOneRequiredWithoutHeadquarterNestedInput
+  subscriptions?: Prisma.ClinicSubscriptionUpdateManyWithoutHeadquarterNestedInput
+  subscriptionRequests?: Prisma.SubscriptionRequestUpdateManyWithoutHeadquarterNestedInput
+  subscriptionAudits?: Prisma.SubscriptionAuditUpdateManyWithoutHeadquarterNestedInput
+  assistantConversations?: Prisma.AssistantConversationUpdateManyWithoutHeadquarterNestedInput
+  platformAdminAudits?: Prisma.PlatformAdminAuditUpdateManyWithoutHeadquarterNestedInput
 }
 
 export type HeadquarterUncheckedUpdateInput = {
@@ -372,11 +417,17 @@ export type HeadquarterUncheckedUpdateInput = {
   description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   nif?: Prisma.StringFieldUpdateOperationsInput | string
   logo?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
   planId?: Prisma.StringFieldUpdateOperationsInput | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   deletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   Branch?: Prisma.BranchUncheckedUpdateManyWithoutHeadquarterNestedInput
+  subscriptions?: Prisma.ClinicSubscriptionUncheckedUpdateManyWithoutHeadquarterNestedInput
+  subscriptionRequests?: Prisma.SubscriptionRequestUncheckedUpdateManyWithoutHeadquarterNestedInput
+  subscriptionAudits?: Prisma.SubscriptionAuditUncheckedUpdateManyWithoutHeadquarterNestedInput
+  assistantConversations?: Prisma.AssistantConversationUncheckedUpdateManyWithoutHeadquarterNestedInput
+  platformAdminAudits?: Prisma.PlatformAdminAuditUncheckedUpdateManyWithoutHeadquarterNestedInput
 }
 
 export type HeadquarterCreateManyInput = {
@@ -388,6 +439,7 @@ export type HeadquarterCreateManyInput = {
   description?: string | null
   nif: string
   logo?: string | null
+  isActive?: boolean
   planId: string
   createdAt?: Date | string
   updatedAt?: Date | string
@@ -403,6 +455,7 @@ export type HeadquarterUpdateManyMutationInput = {
   description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   nif?: Prisma.StringFieldUpdateOperationsInput | string
   logo?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   deletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -417,6 +470,7 @@ export type HeadquarterUncheckedUpdateManyInput = {
   description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   nif?: Prisma.StringFieldUpdateOperationsInput | string
   logo?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
   planId?: Prisma.StringFieldUpdateOperationsInput | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -442,6 +496,7 @@ export type HeadquarterCountOrderByAggregateInput = {
   description?: Prisma.SortOrder
   nif?: Prisma.SortOrder
   logo?: Prisma.SortOrder
+  isActive?: Prisma.SortOrder
   planId?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
@@ -457,6 +512,7 @@ export type HeadquarterMaxOrderByAggregateInput = {
   description?: Prisma.SortOrder
   nif?: Prisma.SortOrder
   logo?: Prisma.SortOrder
+  isActive?: Prisma.SortOrder
   planId?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
@@ -472,6 +528,7 @@ export type HeadquarterMinOrderByAggregateInput = {
   description?: Prisma.SortOrder
   nif?: Prisma.SortOrder
   logo?: Prisma.SortOrder
+  isActive?: Prisma.SortOrder
   planId?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
@@ -539,6 +596,76 @@ export type HeadquarterUpdateOneRequiredWithoutBranchNestedInput = {
   update?: Prisma.XOR<Prisma.XOR<Prisma.HeadquarterUpdateToOneWithWhereWithoutBranchInput, Prisma.HeadquarterUpdateWithoutBranchInput>, Prisma.HeadquarterUncheckedUpdateWithoutBranchInput>
 }
 
+export type HeadquarterCreateNestedOneWithoutSubscriptionsInput = {
+  create?: Prisma.XOR<Prisma.HeadquarterCreateWithoutSubscriptionsInput, Prisma.HeadquarterUncheckedCreateWithoutSubscriptionsInput>
+  connectOrCreate?: Prisma.HeadquarterCreateOrConnectWithoutSubscriptionsInput
+  connect?: Prisma.HeadquarterWhereUniqueInput
+}
+
+export type HeadquarterUpdateOneRequiredWithoutSubscriptionsNestedInput = {
+  create?: Prisma.XOR<Prisma.HeadquarterCreateWithoutSubscriptionsInput, Prisma.HeadquarterUncheckedCreateWithoutSubscriptionsInput>
+  connectOrCreate?: Prisma.HeadquarterCreateOrConnectWithoutSubscriptionsInput
+  upsert?: Prisma.HeadquarterUpsertWithoutSubscriptionsInput
+  connect?: Prisma.HeadquarterWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.HeadquarterUpdateToOneWithWhereWithoutSubscriptionsInput, Prisma.HeadquarterUpdateWithoutSubscriptionsInput>, Prisma.HeadquarterUncheckedUpdateWithoutSubscriptionsInput>
+}
+
+export type HeadquarterCreateNestedOneWithoutSubscriptionRequestsInput = {
+  create?: Prisma.XOR<Prisma.HeadquarterCreateWithoutSubscriptionRequestsInput, Prisma.HeadquarterUncheckedCreateWithoutSubscriptionRequestsInput>
+  connectOrCreate?: Prisma.HeadquarterCreateOrConnectWithoutSubscriptionRequestsInput
+  connect?: Prisma.HeadquarterWhereUniqueInput
+}
+
+export type HeadquarterUpdateOneRequiredWithoutSubscriptionRequestsNestedInput = {
+  create?: Prisma.XOR<Prisma.HeadquarterCreateWithoutSubscriptionRequestsInput, Prisma.HeadquarterUncheckedCreateWithoutSubscriptionRequestsInput>
+  connectOrCreate?: Prisma.HeadquarterCreateOrConnectWithoutSubscriptionRequestsInput
+  upsert?: Prisma.HeadquarterUpsertWithoutSubscriptionRequestsInput
+  connect?: Prisma.HeadquarterWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.HeadquarterUpdateToOneWithWhereWithoutSubscriptionRequestsInput, Prisma.HeadquarterUpdateWithoutSubscriptionRequestsInput>, Prisma.HeadquarterUncheckedUpdateWithoutSubscriptionRequestsInput>
+}
+
+export type HeadquarterCreateNestedOneWithoutSubscriptionAuditsInput = {
+  create?: Prisma.XOR<Prisma.HeadquarterCreateWithoutSubscriptionAuditsInput, Prisma.HeadquarterUncheckedCreateWithoutSubscriptionAuditsInput>
+  connectOrCreate?: Prisma.HeadquarterCreateOrConnectWithoutSubscriptionAuditsInput
+  connect?: Prisma.HeadquarterWhereUniqueInput
+}
+
+export type HeadquarterUpdateOneRequiredWithoutSubscriptionAuditsNestedInput = {
+  create?: Prisma.XOR<Prisma.HeadquarterCreateWithoutSubscriptionAuditsInput, Prisma.HeadquarterUncheckedCreateWithoutSubscriptionAuditsInput>
+  connectOrCreate?: Prisma.HeadquarterCreateOrConnectWithoutSubscriptionAuditsInput
+  upsert?: Prisma.HeadquarterUpsertWithoutSubscriptionAuditsInput
+  connect?: Prisma.HeadquarterWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.HeadquarterUpdateToOneWithWhereWithoutSubscriptionAuditsInput, Prisma.HeadquarterUpdateWithoutSubscriptionAuditsInput>, Prisma.HeadquarterUncheckedUpdateWithoutSubscriptionAuditsInput>
+}
+
+export type HeadquarterCreateNestedOneWithoutPlatformAdminAuditsInput = {
+  create?: Prisma.XOR<Prisma.HeadquarterCreateWithoutPlatformAdminAuditsInput, Prisma.HeadquarterUncheckedCreateWithoutPlatformAdminAuditsInput>
+  connectOrCreate?: Prisma.HeadquarterCreateOrConnectWithoutPlatformAdminAuditsInput
+  connect?: Prisma.HeadquarterWhereUniqueInput
+}
+
+export type HeadquarterUpdateOneRequiredWithoutPlatformAdminAuditsNestedInput = {
+  create?: Prisma.XOR<Prisma.HeadquarterCreateWithoutPlatformAdminAuditsInput, Prisma.HeadquarterUncheckedCreateWithoutPlatformAdminAuditsInput>
+  connectOrCreate?: Prisma.HeadquarterCreateOrConnectWithoutPlatformAdminAuditsInput
+  upsert?: Prisma.HeadquarterUpsertWithoutPlatformAdminAuditsInput
+  connect?: Prisma.HeadquarterWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.HeadquarterUpdateToOneWithWhereWithoutPlatformAdminAuditsInput, Prisma.HeadquarterUpdateWithoutPlatformAdminAuditsInput>, Prisma.HeadquarterUncheckedUpdateWithoutPlatformAdminAuditsInput>
+}
+
+export type HeadquarterCreateNestedOneWithoutAssistantConversationsInput = {
+  create?: Prisma.XOR<Prisma.HeadquarterCreateWithoutAssistantConversationsInput, Prisma.HeadquarterUncheckedCreateWithoutAssistantConversationsInput>
+  connectOrCreate?: Prisma.HeadquarterCreateOrConnectWithoutAssistantConversationsInput
+  connect?: Prisma.HeadquarterWhereUniqueInput
+}
+
+export type HeadquarterUpdateOneRequiredWithoutAssistantConversationsNestedInput = {
+  create?: Prisma.XOR<Prisma.HeadquarterCreateWithoutAssistantConversationsInput, Prisma.HeadquarterUncheckedCreateWithoutAssistantConversationsInput>
+  connectOrCreate?: Prisma.HeadquarterCreateOrConnectWithoutAssistantConversationsInput
+  upsert?: Prisma.HeadquarterUpsertWithoutAssistantConversationsInput
+  connect?: Prisma.HeadquarterWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.HeadquarterUpdateToOneWithWhereWithoutAssistantConversationsInput, Prisma.HeadquarterUpdateWithoutAssistantConversationsInput>, Prisma.HeadquarterUncheckedUpdateWithoutAssistantConversationsInput>
+}
+
 export type HeadquarterCreateWithoutPlanInput = {
   id?: string
   name: string
@@ -548,10 +675,16 @@ export type HeadquarterCreateWithoutPlanInput = {
   description?: string | null
   nif: string
   logo?: string | null
+  isActive?: boolean
   createdAt?: Date | string
   updatedAt?: Date | string
   deletedAt?: Date | string | null
   Branch?: Prisma.BranchCreateNestedManyWithoutHeadquarterInput
+  subscriptions?: Prisma.ClinicSubscriptionCreateNestedManyWithoutHeadquarterInput
+  subscriptionRequests?: Prisma.SubscriptionRequestCreateNestedManyWithoutHeadquarterInput
+  subscriptionAudits?: Prisma.SubscriptionAuditCreateNestedManyWithoutHeadquarterInput
+  assistantConversations?: Prisma.AssistantConversationCreateNestedManyWithoutHeadquarterInput
+  platformAdminAudits?: Prisma.PlatformAdminAuditCreateNestedManyWithoutHeadquarterInput
 }
 
 export type HeadquarterUncheckedCreateWithoutPlanInput = {
@@ -563,10 +696,16 @@ export type HeadquarterUncheckedCreateWithoutPlanInput = {
   description?: string | null
   nif: string
   logo?: string | null
+  isActive?: boolean
   createdAt?: Date | string
   updatedAt?: Date | string
   deletedAt?: Date | string | null
   Branch?: Prisma.BranchUncheckedCreateNestedManyWithoutHeadquarterInput
+  subscriptions?: Prisma.ClinicSubscriptionUncheckedCreateNestedManyWithoutHeadquarterInput
+  subscriptionRequests?: Prisma.SubscriptionRequestUncheckedCreateNestedManyWithoutHeadquarterInput
+  subscriptionAudits?: Prisma.SubscriptionAuditUncheckedCreateNestedManyWithoutHeadquarterInput
+  assistantConversations?: Prisma.AssistantConversationUncheckedCreateNestedManyWithoutHeadquarterInput
+  platformAdminAudits?: Prisma.PlatformAdminAuditUncheckedCreateNestedManyWithoutHeadquarterInput
 }
 
 export type HeadquarterCreateOrConnectWithoutPlanInput = {
@@ -607,6 +746,7 @@ export type HeadquarterScalarWhereInput = {
   description?: Prisma.StringNullableFilter<"Headquarter"> | string | null
   nif?: Prisma.StringFilter<"Headquarter"> | string
   logo?: Prisma.StringNullableFilter<"Headquarter"> | string | null
+  isActive?: Prisma.BoolFilter<"Headquarter"> | boolean
   planId?: Prisma.StringFilter<"Headquarter"> | string
   createdAt?: Prisma.DateTimeFilter<"Headquarter"> | Date | string
   updatedAt?: Prisma.DateTimeFilter<"Headquarter"> | Date | string
@@ -622,10 +762,16 @@ export type HeadquarterCreateWithoutBranchInput = {
   description?: string | null
   nif: string
   logo?: string | null
+  isActive?: boolean
   createdAt?: Date | string
   updatedAt?: Date | string
   deletedAt?: Date | string | null
   plan: Prisma.PlanCreateNestedOneWithoutHeadquarterInput
+  subscriptions?: Prisma.ClinicSubscriptionCreateNestedManyWithoutHeadquarterInput
+  subscriptionRequests?: Prisma.SubscriptionRequestCreateNestedManyWithoutHeadquarterInput
+  subscriptionAudits?: Prisma.SubscriptionAuditCreateNestedManyWithoutHeadquarterInput
+  assistantConversations?: Prisma.AssistantConversationCreateNestedManyWithoutHeadquarterInput
+  platformAdminAudits?: Prisma.PlatformAdminAuditCreateNestedManyWithoutHeadquarterInput
 }
 
 export type HeadquarterUncheckedCreateWithoutBranchInput = {
@@ -637,10 +783,16 @@ export type HeadquarterUncheckedCreateWithoutBranchInput = {
   description?: string | null
   nif: string
   logo?: string | null
+  isActive?: boolean
   planId: string
   createdAt?: Date | string
   updatedAt?: Date | string
   deletedAt?: Date | string | null
+  subscriptions?: Prisma.ClinicSubscriptionUncheckedCreateNestedManyWithoutHeadquarterInput
+  subscriptionRequests?: Prisma.SubscriptionRequestUncheckedCreateNestedManyWithoutHeadquarterInput
+  subscriptionAudits?: Prisma.SubscriptionAuditUncheckedCreateNestedManyWithoutHeadquarterInput
+  assistantConversations?: Prisma.AssistantConversationUncheckedCreateNestedManyWithoutHeadquarterInput
+  platformAdminAudits?: Prisma.PlatformAdminAuditUncheckedCreateNestedManyWithoutHeadquarterInput
 }
 
 export type HeadquarterCreateOrConnectWithoutBranchInput = {
@@ -668,10 +820,16 @@ export type HeadquarterUpdateWithoutBranchInput = {
   description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   nif?: Prisma.StringFieldUpdateOperationsInput | string
   logo?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   deletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   plan?: Prisma.PlanUpdateOneRequiredWithoutHeadquarterNestedInput
+  subscriptions?: Prisma.ClinicSubscriptionUpdateManyWithoutHeadquarterNestedInput
+  subscriptionRequests?: Prisma.SubscriptionRequestUpdateManyWithoutHeadquarterNestedInput
+  subscriptionAudits?: Prisma.SubscriptionAuditUpdateManyWithoutHeadquarterNestedInput
+  assistantConversations?: Prisma.AssistantConversationUpdateManyWithoutHeadquarterNestedInput
+  platformAdminAudits?: Prisma.PlatformAdminAuditUpdateManyWithoutHeadquarterNestedInput
 }
 
 export type HeadquarterUncheckedUpdateWithoutBranchInput = {
@@ -683,10 +841,516 @@ export type HeadquarterUncheckedUpdateWithoutBranchInput = {
   description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   nif?: Prisma.StringFieldUpdateOperationsInput | string
   logo?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
   planId?: Prisma.StringFieldUpdateOperationsInput | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   deletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  subscriptions?: Prisma.ClinicSubscriptionUncheckedUpdateManyWithoutHeadquarterNestedInput
+  subscriptionRequests?: Prisma.SubscriptionRequestUncheckedUpdateManyWithoutHeadquarterNestedInput
+  subscriptionAudits?: Prisma.SubscriptionAuditUncheckedUpdateManyWithoutHeadquarterNestedInput
+  assistantConversations?: Prisma.AssistantConversationUncheckedUpdateManyWithoutHeadquarterNestedInput
+  platformAdminAudits?: Prisma.PlatformAdminAuditUncheckedUpdateManyWithoutHeadquarterNestedInput
+}
+
+export type HeadquarterCreateWithoutSubscriptionsInput = {
+  id?: string
+  name: string
+  address: string
+  email?: string | null
+  phone?: string | null
+  description?: string | null
+  nif: string
+  logo?: string | null
+  isActive?: boolean
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  deletedAt?: Date | string | null
+  Branch?: Prisma.BranchCreateNestedManyWithoutHeadquarterInput
+  plan: Prisma.PlanCreateNestedOneWithoutHeadquarterInput
+  subscriptionRequests?: Prisma.SubscriptionRequestCreateNestedManyWithoutHeadquarterInput
+  subscriptionAudits?: Prisma.SubscriptionAuditCreateNestedManyWithoutHeadquarterInput
+  assistantConversations?: Prisma.AssistantConversationCreateNestedManyWithoutHeadquarterInput
+  platformAdminAudits?: Prisma.PlatformAdminAuditCreateNestedManyWithoutHeadquarterInput
+}
+
+export type HeadquarterUncheckedCreateWithoutSubscriptionsInput = {
+  id?: string
+  name: string
+  address: string
+  email?: string | null
+  phone?: string | null
+  description?: string | null
+  nif: string
+  logo?: string | null
+  isActive?: boolean
+  planId: string
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  deletedAt?: Date | string | null
+  Branch?: Prisma.BranchUncheckedCreateNestedManyWithoutHeadquarterInput
+  subscriptionRequests?: Prisma.SubscriptionRequestUncheckedCreateNestedManyWithoutHeadquarterInput
+  subscriptionAudits?: Prisma.SubscriptionAuditUncheckedCreateNestedManyWithoutHeadquarterInput
+  assistantConversations?: Prisma.AssistantConversationUncheckedCreateNestedManyWithoutHeadquarterInput
+  platformAdminAudits?: Prisma.PlatformAdminAuditUncheckedCreateNestedManyWithoutHeadquarterInput
+}
+
+export type HeadquarterCreateOrConnectWithoutSubscriptionsInput = {
+  where: Prisma.HeadquarterWhereUniqueInput
+  create: Prisma.XOR<Prisma.HeadquarterCreateWithoutSubscriptionsInput, Prisma.HeadquarterUncheckedCreateWithoutSubscriptionsInput>
+}
+
+export type HeadquarterUpsertWithoutSubscriptionsInput = {
+  update: Prisma.XOR<Prisma.HeadquarterUpdateWithoutSubscriptionsInput, Prisma.HeadquarterUncheckedUpdateWithoutSubscriptionsInput>
+  create: Prisma.XOR<Prisma.HeadquarterCreateWithoutSubscriptionsInput, Prisma.HeadquarterUncheckedCreateWithoutSubscriptionsInput>
+  where?: Prisma.HeadquarterWhereInput
+}
+
+export type HeadquarterUpdateToOneWithWhereWithoutSubscriptionsInput = {
+  where?: Prisma.HeadquarterWhereInput
+  data: Prisma.XOR<Prisma.HeadquarterUpdateWithoutSubscriptionsInput, Prisma.HeadquarterUncheckedUpdateWithoutSubscriptionsInput>
+}
+
+export type HeadquarterUpdateWithoutSubscriptionsInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  address?: Prisma.StringFieldUpdateOperationsInput | string
+  email?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  phone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  nif?: Prisma.StringFieldUpdateOperationsInput | string
+  logo?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  deletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  Branch?: Prisma.BranchUpdateManyWithoutHeadquarterNestedInput
+  plan?: Prisma.PlanUpdateOneRequiredWithoutHeadquarterNestedInput
+  subscriptionRequests?: Prisma.SubscriptionRequestUpdateManyWithoutHeadquarterNestedInput
+  subscriptionAudits?: Prisma.SubscriptionAuditUpdateManyWithoutHeadquarterNestedInput
+  assistantConversations?: Prisma.AssistantConversationUpdateManyWithoutHeadquarterNestedInput
+  platformAdminAudits?: Prisma.PlatformAdminAuditUpdateManyWithoutHeadquarterNestedInput
+}
+
+export type HeadquarterUncheckedUpdateWithoutSubscriptionsInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  address?: Prisma.StringFieldUpdateOperationsInput | string
+  email?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  phone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  nif?: Prisma.StringFieldUpdateOperationsInput | string
+  logo?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  planId?: Prisma.StringFieldUpdateOperationsInput | string
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  deletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  Branch?: Prisma.BranchUncheckedUpdateManyWithoutHeadquarterNestedInput
+  subscriptionRequests?: Prisma.SubscriptionRequestUncheckedUpdateManyWithoutHeadquarterNestedInput
+  subscriptionAudits?: Prisma.SubscriptionAuditUncheckedUpdateManyWithoutHeadquarterNestedInput
+  assistantConversations?: Prisma.AssistantConversationUncheckedUpdateManyWithoutHeadquarterNestedInput
+  platformAdminAudits?: Prisma.PlatformAdminAuditUncheckedUpdateManyWithoutHeadquarterNestedInput
+}
+
+export type HeadquarterCreateWithoutSubscriptionRequestsInput = {
+  id?: string
+  name: string
+  address: string
+  email?: string | null
+  phone?: string | null
+  description?: string | null
+  nif: string
+  logo?: string | null
+  isActive?: boolean
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  deletedAt?: Date | string | null
+  Branch?: Prisma.BranchCreateNestedManyWithoutHeadquarterInput
+  plan: Prisma.PlanCreateNestedOneWithoutHeadquarterInput
+  subscriptions?: Prisma.ClinicSubscriptionCreateNestedManyWithoutHeadquarterInput
+  subscriptionAudits?: Prisma.SubscriptionAuditCreateNestedManyWithoutHeadquarterInput
+  assistantConversations?: Prisma.AssistantConversationCreateNestedManyWithoutHeadquarterInput
+  platformAdminAudits?: Prisma.PlatformAdminAuditCreateNestedManyWithoutHeadquarterInput
+}
+
+export type HeadquarterUncheckedCreateWithoutSubscriptionRequestsInput = {
+  id?: string
+  name: string
+  address: string
+  email?: string | null
+  phone?: string | null
+  description?: string | null
+  nif: string
+  logo?: string | null
+  isActive?: boolean
+  planId: string
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  deletedAt?: Date | string | null
+  Branch?: Prisma.BranchUncheckedCreateNestedManyWithoutHeadquarterInput
+  subscriptions?: Prisma.ClinicSubscriptionUncheckedCreateNestedManyWithoutHeadquarterInput
+  subscriptionAudits?: Prisma.SubscriptionAuditUncheckedCreateNestedManyWithoutHeadquarterInput
+  assistantConversations?: Prisma.AssistantConversationUncheckedCreateNestedManyWithoutHeadquarterInput
+  platformAdminAudits?: Prisma.PlatformAdminAuditUncheckedCreateNestedManyWithoutHeadquarterInput
+}
+
+export type HeadquarterCreateOrConnectWithoutSubscriptionRequestsInput = {
+  where: Prisma.HeadquarterWhereUniqueInput
+  create: Prisma.XOR<Prisma.HeadquarterCreateWithoutSubscriptionRequestsInput, Prisma.HeadquarterUncheckedCreateWithoutSubscriptionRequestsInput>
+}
+
+export type HeadquarterUpsertWithoutSubscriptionRequestsInput = {
+  update: Prisma.XOR<Prisma.HeadquarterUpdateWithoutSubscriptionRequestsInput, Prisma.HeadquarterUncheckedUpdateWithoutSubscriptionRequestsInput>
+  create: Prisma.XOR<Prisma.HeadquarterCreateWithoutSubscriptionRequestsInput, Prisma.HeadquarterUncheckedCreateWithoutSubscriptionRequestsInput>
+  where?: Prisma.HeadquarterWhereInput
+}
+
+export type HeadquarterUpdateToOneWithWhereWithoutSubscriptionRequestsInput = {
+  where?: Prisma.HeadquarterWhereInput
+  data: Prisma.XOR<Prisma.HeadquarterUpdateWithoutSubscriptionRequestsInput, Prisma.HeadquarterUncheckedUpdateWithoutSubscriptionRequestsInput>
+}
+
+export type HeadquarterUpdateWithoutSubscriptionRequestsInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  address?: Prisma.StringFieldUpdateOperationsInput | string
+  email?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  phone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  nif?: Prisma.StringFieldUpdateOperationsInput | string
+  logo?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  deletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  Branch?: Prisma.BranchUpdateManyWithoutHeadquarterNestedInput
+  plan?: Prisma.PlanUpdateOneRequiredWithoutHeadquarterNestedInput
+  subscriptions?: Prisma.ClinicSubscriptionUpdateManyWithoutHeadquarterNestedInput
+  subscriptionAudits?: Prisma.SubscriptionAuditUpdateManyWithoutHeadquarterNestedInput
+  assistantConversations?: Prisma.AssistantConversationUpdateManyWithoutHeadquarterNestedInput
+  platformAdminAudits?: Prisma.PlatformAdminAuditUpdateManyWithoutHeadquarterNestedInput
+}
+
+export type HeadquarterUncheckedUpdateWithoutSubscriptionRequestsInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  address?: Prisma.StringFieldUpdateOperationsInput | string
+  email?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  phone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  nif?: Prisma.StringFieldUpdateOperationsInput | string
+  logo?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  planId?: Prisma.StringFieldUpdateOperationsInput | string
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  deletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  Branch?: Prisma.BranchUncheckedUpdateManyWithoutHeadquarterNestedInput
+  subscriptions?: Prisma.ClinicSubscriptionUncheckedUpdateManyWithoutHeadquarterNestedInput
+  subscriptionAudits?: Prisma.SubscriptionAuditUncheckedUpdateManyWithoutHeadquarterNestedInput
+  assistantConversations?: Prisma.AssistantConversationUncheckedUpdateManyWithoutHeadquarterNestedInput
+  platformAdminAudits?: Prisma.PlatformAdminAuditUncheckedUpdateManyWithoutHeadquarterNestedInput
+}
+
+export type HeadquarterCreateWithoutSubscriptionAuditsInput = {
+  id?: string
+  name: string
+  address: string
+  email?: string | null
+  phone?: string | null
+  description?: string | null
+  nif: string
+  logo?: string | null
+  isActive?: boolean
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  deletedAt?: Date | string | null
+  Branch?: Prisma.BranchCreateNestedManyWithoutHeadquarterInput
+  plan: Prisma.PlanCreateNestedOneWithoutHeadquarterInput
+  subscriptions?: Prisma.ClinicSubscriptionCreateNestedManyWithoutHeadquarterInput
+  subscriptionRequests?: Prisma.SubscriptionRequestCreateNestedManyWithoutHeadquarterInput
+  assistantConversations?: Prisma.AssistantConversationCreateNestedManyWithoutHeadquarterInput
+  platformAdminAudits?: Prisma.PlatformAdminAuditCreateNestedManyWithoutHeadquarterInput
+}
+
+export type HeadquarterUncheckedCreateWithoutSubscriptionAuditsInput = {
+  id?: string
+  name: string
+  address: string
+  email?: string | null
+  phone?: string | null
+  description?: string | null
+  nif: string
+  logo?: string | null
+  isActive?: boolean
+  planId: string
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  deletedAt?: Date | string | null
+  Branch?: Prisma.BranchUncheckedCreateNestedManyWithoutHeadquarterInput
+  subscriptions?: Prisma.ClinicSubscriptionUncheckedCreateNestedManyWithoutHeadquarterInput
+  subscriptionRequests?: Prisma.SubscriptionRequestUncheckedCreateNestedManyWithoutHeadquarterInput
+  assistantConversations?: Prisma.AssistantConversationUncheckedCreateNestedManyWithoutHeadquarterInput
+  platformAdminAudits?: Prisma.PlatformAdminAuditUncheckedCreateNestedManyWithoutHeadquarterInput
+}
+
+export type HeadquarterCreateOrConnectWithoutSubscriptionAuditsInput = {
+  where: Prisma.HeadquarterWhereUniqueInput
+  create: Prisma.XOR<Prisma.HeadquarterCreateWithoutSubscriptionAuditsInput, Prisma.HeadquarterUncheckedCreateWithoutSubscriptionAuditsInput>
+}
+
+export type HeadquarterUpsertWithoutSubscriptionAuditsInput = {
+  update: Prisma.XOR<Prisma.HeadquarterUpdateWithoutSubscriptionAuditsInput, Prisma.HeadquarterUncheckedUpdateWithoutSubscriptionAuditsInput>
+  create: Prisma.XOR<Prisma.HeadquarterCreateWithoutSubscriptionAuditsInput, Prisma.HeadquarterUncheckedCreateWithoutSubscriptionAuditsInput>
+  where?: Prisma.HeadquarterWhereInput
+}
+
+export type HeadquarterUpdateToOneWithWhereWithoutSubscriptionAuditsInput = {
+  where?: Prisma.HeadquarterWhereInput
+  data: Prisma.XOR<Prisma.HeadquarterUpdateWithoutSubscriptionAuditsInput, Prisma.HeadquarterUncheckedUpdateWithoutSubscriptionAuditsInput>
+}
+
+export type HeadquarterUpdateWithoutSubscriptionAuditsInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  address?: Prisma.StringFieldUpdateOperationsInput | string
+  email?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  phone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  nif?: Prisma.StringFieldUpdateOperationsInput | string
+  logo?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  deletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  Branch?: Prisma.BranchUpdateManyWithoutHeadquarterNestedInput
+  plan?: Prisma.PlanUpdateOneRequiredWithoutHeadquarterNestedInput
+  subscriptions?: Prisma.ClinicSubscriptionUpdateManyWithoutHeadquarterNestedInput
+  subscriptionRequests?: Prisma.SubscriptionRequestUpdateManyWithoutHeadquarterNestedInput
+  assistantConversations?: Prisma.AssistantConversationUpdateManyWithoutHeadquarterNestedInput
+  platformAdminAudits?: Prisma.PlatformAdminAuditUpdateManyWithoutHeadquarterNestedInput
+}
+
+export type HeadquarterUncheckedUpdateWithoutSubscriptionAuditsInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  address?: Prisma.StringFieldUpdateOperationsInput | string
+  email?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  phone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  nif?: Prisma.StringFieldUpdateOperationsInput | string
+  logo?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  planId?: Prisma.StringFieldUpdateOperationsInput | string
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  deletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  Branch?: Prisma.BranchUncheckedUpdateManyWithoutHeadquarterNestedInput
+  subscriptions?: Prisma.ClinicSubscriptionUncheckedUpdateManyWithoutHeadquarterNestedInput
+  subscriptionRequests?: Prisma.SubscriptionRequestUncheckedUpdateManyWithoutHeadquarterNestedInput
+  assistantConversations?: Prisma.AssistantConversationUncheckedUpdateManyWithoutHeadquarterNestedInput
+  platformAdminAudits?: Prisma.PlatformAdminAuditUncheckedUpdateManyWithoutHeadquarterNestedInput
+}
+
+export type HeadquarterCreateWithoutPlatformAdminAuditsInput = {
+  id?: string
+  name: string
+  address: string
+  email?: string | null
+  phone?: string | null
+  description?: string | null
+  nif: string
+  logo?: string | null
+  isActive?: boolean
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  deletedAt?: Date | string | null
+  Branch?: Prisma.BranchCreateNestedManyWithoutHeadquarterInput
+  plan: Prisma.PlanCreateNestedOneWithoutHeadquarterInput
+  subscriptions?: Prisma.ClinicSubscriptionCreateNestedManyWithoutHeadquarterInput
+  subscriptionRequests?: Prisma.SubscriptionRequestCreateNestedManyWithoutHeadquarterInput
+  subscriptionAudits?: Prisma.SubscriptionAuditCreateNestedManyWithoutHeadquarterInput
+  assistantConversations?: Prisma.AssistantConversationCreateNestedManyWithoutHeadquarterInput
+}
+
+export type HeadquarterUncheckedCreateWithoutPlatformAdminAuditsInput = {
+  id?: string
+  name: string
+  address: string
+  email?: string | null
+  phone?: string | null
+  description?: string | null
+  nif: string
+  logo?: string | null
+  isActive?: boolean
+  planId: string
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  deletedAt?: Date | string | null
+  Branch?: Prisma.BranchUncheckedCreateNestedManyWithoutHeadquarterInput
+  subscriptions?: Prisma.ClinicSubscriptionUncheckedCreateNestedManyWithoutHeadquarterInput
+  subscriptionRequests?: Prisma.SubscriptionRequestUncheckedCreateNestedManyWithoutHeadquarterInput
+  subscriptionAudits?: Prisma.SubscriptionAuditUncheckedCreateNestedManyWithoutHeadquarterInput
+  assistantConversations?: Prisma.AssistantConversationUncheckedCreateNestedManyWithoutHeadquarterInput
+}
+
+export type HeadquarterCreateOrConnectWithoutPlatformAdminAuditsInput = {
+  where: Prisma.HeadquarterWhereUniqueInput
+  create: Prisma.XOR<Prisma.HeadquarterCreateWithoutPlatformAdminAuditsInput, Prisma.HeadquarterUncheckedCreateWithoutPlatformAdminAuditsInput>
+}
+
+export type HeadquarterUpsertWithoutPlatformAdminAuditsInput = {
+  update: Prisma.XOR<Prisma.HeadquarterUpdateWithoutPlatformAdminAuditsInput, Prisma.HeadquarterUncheckedUpdateWithoutPlatformAdminAuditsInput>
+  create: Prisma.XOR<Prisma.HeadquarterCreateWithoutPlatformAdminAuditsInput, Prisma.HeadquarterUncheckedCreateWithoutPlatformAdminAuditsInput>
+  where?: Prisma.HeadquarterWhereInput
+}
+
+export type HeadquarterUpdateToOneWithWhereWithoutPlatformAdminAuditsInput = {
+  where?: Prisma.HeadquarterWhereInput
+  data: Prisma.XOR<Prisma.HeadquarterUpdateWithoutPlatformAdminAuditsInput, Prisma.HeadquarterUncheckedUpdateWithoutPlatformAdminAuditsInput>
+}
+
+export type HeadquarterUpdateWithoutPlatformAdminAuditsInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  address?: Prisma.StringFieldUpdateOperationsInput | string
+  email?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  phone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  nif?: Prisma.StringFieldUpdateOperationsInput | string
+  logo?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  deletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  Branch?: Prisma.BranchUpdateManyWithoutHeadquarterNestedInput
+  plan?: Prisma.PlanUpdateOneRequiredWithoutHeadquarterNestedInput
+  subscriptions?: Prisma.ClinicSubscriptionUpdateManyWithoutHeadquarterNestedInput
+  subscriptionRequests?: Prisma.SubscriptionRequestUpdateManyWithoutHeadquarterNestedInput
+  subscriptionAudits?: Prisma.SubscriptionAuditUpdateManyWithoutHeadquarterNestedInput
+  assistantConversations?: Prisma.AssistantConversationUpdateManyWithoutHeadquarterNestedInput
+}
+
+export type HeadquarterUncheckedUpdateWithoutPlatformAdminAuditsInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  address?: Prisma.StringFieldUpdateOperationsInput | string
+  email?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  phone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  nif?: Prisma.StringFieldUpdateOperationsInput | string
+  logo?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  planId?: Prisma.StringFieldUpdateOperationsInput | string
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  deletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  Branch?: Prisma.BranchUncheckedUpdateManyWithoutHeadquarterNestedInput
+  subscriptions?: Prisma.ClinicSubscriptionUncheckedUpdateManyWithoutHeadquarterNestedInput
+  subscriptionRequests?: Prisma.SubscriptionRequestUncheckedUpdateManyWithoutHeadquarterNestedInput
+  subscriptionAudits?: Prisma.SubscriptionAuditUncheckedUpdateManyWithoutHeadquarterNestedInput
+  assistantConversations?: Prisma.AssistantConversationUncheckedUpdateManyWithoutHeadquarterNestedInput
+}
+
+export type HeadquarterCreateWithoutAssistantConversationsInput = {
+  id?: string
+  name: string
+  address: string
+  email?: string | null
+  phone?: string | null
+  description?: string | null
+  nif: string
+  logo?: string | null
+  isActive?: boolean
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  deletedAt?: Date | string | null
+  Branch?: Prisma.BranchCreateNestedManyWithoutHeadquarterInput
+  plan: Prisma.PlanCreateNestedOneWithoutHeadquarterInput
+  subscriptions?: Prisma.ClinicSubscriptionCreateNestedManyWithoutHeadquarterInput
+  subscriptionRequests?: Prisma.SubscriptionRequestCreateNestedManyWithoutHeadquarterInput
+  subscriptionAudits?: Prisma.SubscriptionAuditCreateNestedManyWithoutHeadquarterInput
+  platformAdminAudits?: Prisma.PlatformAdminAuditCreateNestedManyWithoutHeadquarterInput
+}
+
+export type HeadquarterUncheckedCreateWithoutAssistantConversationsInput = {
+  id?: string
+  name: string
+  address: string
+  email?: string | null
+  phone?: string | null
+  description?: string | null
+  nif: string
+  logo?: string | null
+  isActive?: boolean
+  planId: string
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  deletedAt?: Date | string | null
+  Branch?: Prisma.BranchUncheckedCreateNestedManyWithoutHeadquarterInput
+  subscriptions?: Prisma.ClinicSubscriptionUncheckedCreateNestedManyWithoutHeadquarterInput
+  subscriptionRequests?: Prisma.SubscriptionRequestUncheckedCreateNestedManyWithoutHeadquarterInput
+  subscriptionAudits?: Prisma.SubscriptionAuditUncheckedCreateNestedManyWithoutHeadquarterInput
+  platformAdminAudits?: Prisma.PlatformAdminAuditUncheckedCreateNestedManyWithoutHeadquarterInput
+}
+
+export type HeadquarterCreateOrConnectWithoutAssistantConversationsInput = {
+  where: Prisma.HeadquarterWhereUniqueInput
+  create: Prisma.XOR<Prisma.HeadquarterCreateWithoutAssistantConversationsInput, Prisma.HeadquarterUncheckedCreateWithoutAssistantConversationsInput>
+}
+
+export type HeadquarterUpsertWithoutAssistantConversationsInput = {
+  update: Prisma.XOR<Prisma.HeadquarterUpdateWithoutAssistantConversationsInput, Prisma.HeadquarterUncheckedUpdateWithoutAssistantConversationsInput>
+  create: Prisma.XOR<Prisma.HeadquarterCreateWithoutAssistantConversationsInput, Prisma.HeadquarterUncheckedCreateWithoutAssistantConversationsInput>
+  where?: Prisma.HeadquarterWhereInput
+}
+
+export type HeadquarterUpdateToOneWithWhereWithoutAssistantConversationsInput = {
+  where?: Prisma.HeadquarterWhereInput
+  data: Prisma.XOR<Prisma.HeadquarterUpdateWithoutAssistantConversationsInput, Prisma.HeadquarterUncheckedUpdateWithoutAssistantConversationsInput>
+}
+
+export type HeadquarterUpdateWithoutAssistantConversationsInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  address?: Prisma.StringFieldUpdateOperationsInput | string
+  email?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  phone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  nif?: Prisma.StringFieldUpdateOperationsInput | string
+  logo?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  deletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  Branch?: Prisma.BranchUpdateManyWithoutHeadquarterNestedInput
+  plan?: Prisma.PlanUpdateOneRequiredWithoutHeadquarterNestedInput
+  subscriptions?: Prisma.ClinicSubscriptionUpdateManyWithoutHeadquarterNestedInput
+  subscriptionRequests?: Prisma.SubscriptionRequestUpdateManyWithoutHeadquarterNestedInput
+  subscriptionAudits?: Prisma.SubscriptionAuditUpdateManyWithoutHeadquarterNestedInput
+  platformAdminAudits?: Prisma.PlatformAdminAuditUpdateManyWithoutHeadquarterNestedInput
+}
+
+export type HeadquarterUncheckedUpdateWithoutAssistantConversationsInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  address?: Prisma.StringFieldUpdateOperationsInput | string
+  email?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  phone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  nif?: Prisma.StringFieldUpdateOperationsInput | string
+  logo?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  planId?: Prisma.StringFieldUpdateOperationsInput | string
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  deletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  Branch?: Prisma.BranchUncheckedUpdateManyWithoutHeadquarterNestedInput
+  subscriptions?: Prisma.ClinicSubscriptionUncheckedUpdateManyWithoutHeadquarterNestedInput
+  subscriptionRequests?: Prisma.SubscriptionRequestUncheckedUpdateManyWithoutHeadquarterNestedInput
+  subscriptionAudits?: Prisma.SubscriptionAuditUncheckedUpdateManyWithoutHeadquarterNestedInput
+  platformAdminAudits?: Prisma.PlatformAdminAuditUncheckedUpdateManyWithoutHeadquarterNestedInput
 }
 
 export type HeadquarterCreateManyPlanInput = {
@@ -698,6 +1362,7 @@ export type HeadquarterCreateManyPlanInput = {
   description?: string | null
   nif: string
   logo?: string | null
+  isActive?: boolean
   createdAt?: Date | string
   updatedAt?: Date | string
   deletedAt?: Date | string | null
@@ -712,10 +1377,16 @@ export type HeadquarterUpdateWithoutPlanInput = {
   description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   nif?: Prisma.StringFieldUpdateOperationsInput | string
   logo?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   deletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   Branch?: Prisma.BranchUpdateManyWithoutHeadquarterNestedInput
+  subscriptions?: Prisma.ClinicSubscriptionUpdateManyWithoutHeadquarterNestedInput
+  subscriptionRequests?: Prisma.SubscriptionRequestUpdateManyWithoutHeadquarterNestedInput
+  subscriptionAudits?: Prisma.SubscriptionAuditUpdateManyWithoutHeadquarterNestedInput
+  assistantConversations?: Prisma.AssistantConversationUpdateManyWithoutHeadquarterNestedInput
+  platformAdminAudits?: Prisma.PlatformAdminAuditUpdateManyWithoutHeadquarterNestedInput
 }
 
 export type HeadquarterUncheckedUpdateWithoutPlanInput = {
@@ -727,10 +1398,16 @@ export type HeadquarterUncheckedUpdateWithoutPlanInput = {
   description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   nif?: Prisma.StringFieldUpdateOperationsInput | string
   logo?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   deletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   Branch?: Prisma.BranchUncheckedUpdateManyWithoutHeadquarterNestedInput
+  subscriptions?: Prisma.ClinicSubscriptionUncheckedUpdateManyWithoutHeadquarterNestedInput
+  subscriptionRequests?: Prisma.SubscriptionRequestUncheckedUpdateManyWithoutHeadquarterNestedInput
+  subscriptionAudits?: Prisma.SubscriptionAuditUncheckedUpdateManyWithoutHeadquarterNestedInput
+  assistantConversations?: Prisma.AssistantConversationUncheckedUpdateManyWithoutHeadquarterNestedInput
+  platformAdminAudits?: Prisma.PlatformAdminAuditUncheckedUpdateManyWithoutHeadquarterNestedInput
 }
 
 export type HeadquarterUncheckedUpdateManyWithoutPlanInput = {
@@ -742,6 +1419,7 @@ export type HeadquarterUncheckedUpdateManyWithoutPlanInput = {
   description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   nif?: Prisma.StringFieldUpdateOperationsInput | string
   logo?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   deletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -754,10 +1432,20 @@ export type HeadquarterUncheckedUpdateManyWithoutPlanInput = {
 
 export type HeadquarterCountOutputType = {
   Branch: number
+  subscriptions: number
+  subscriptionRequests: number
+  subscriptionAudits: number
+  assistantConversations: number
+  platformAdminAudits: number
 }
 
 export type HeadquarterCountOutputTypeSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   Branch?: boolean | HeadquarterCountOutputTypeCountBranchArgs
+  subscriptions?: boolean | HeadquarterCountOutputTypeCountSubscriptionsArgs
+  subscriptionRequests?: boolean | HeadquarterCountOutputTypeCountSubscriptionRequestsArgs
+  subscriptionAudits?: boolean | HeadquarterCountOutputTypeCountSubscriptionAuditsArgs
+  assistantConversations?: boolean | HeadquarterCountOutputTypeCountAssistantConversationsArgs
+  platformAdminAudits?: boolean | HeadquarterCountOutputTypeCountPlatformAdminAuditsArgs
 }
 
 /**
@@ -777,6 +1465,41 @@ export type HeadquarterCountOutputTypeCountBranchArgs<ExtArgs extends runtime.Ty
   where?: Prisma.BranchWhereInput
 }
 
+/**
+ * HeadquarterCountOutputType without action
+ */
+export type HeadquarterCountOutputTypeCountSubscriptionsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  where?: Prisma.ClinicSubscriptionWhereInput
+}
+
+/**
+ * HeadquarterCountOutputType without action
+ */
+export type HeadquarterCountOutputTypeCountSubscriptionRequestsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  where?: Prisma.SubscriptionRequestWhereInput
+}
+
+/**
+ * HeadquarterCountOutputType without action
+ */
+export type HeadquarterCountOutputTypeCountSubscriptionAuditsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  where?: Prisma.SubscriptionAuditWhereInput
+}
+
+/**
+ * HeadquarterCountOutputType without action
+ */
+export type HeadquarterCountOutputTypeCountAssistantConversationsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  where?: Prisma.AssistantConversationWhereInput
+}
+
+/**
+ * HeadquarterCountOutputType without action
+ */
+export type HeadquarterCountOutputTypeCountPlatformAdminAuditsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  where?: Prisma.PlatformAdminAuditWhereInput
+}
+
 
 export type HeadquarterSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
   id?: boolean
@@ -787,12 +1510,18 @@ export type HeadquarterSelect<ExtArgs extends runtime.Types.Extensions.InternalA
   description?: boolean
   nif?: boolean
   logo?: boolean
+  isActive?: boolean
   planId?: boolean
   createdAt?: boolean
   updatedAt?: boolean
   deletedAt?: boolean
   Branch?: boolean | Prisma.Headquarter$BranchArgs<ExtArgs>
   plan?: boolean | Prisma.PlanDefaultArgs<ExtArgs>
+  subscriptions?: boolean | Prisma.Headquarter$subscriptionsArgs<ExtArgs>
+  subscriptionRequests?: boolean | Prisma.Headquarter$subscriptionRequestsArgs<ExtArgs>
+  subscriptionAudits?: boolean | Prisma.Headquarter$subscriptionAuditsArgs<ExtArgs>
+  assistantConversations?: boolean | Prisma.Headquarter$assistantConversationsArgs<ExtArgs>
+  platformAdminAudits?: boolean | Prisma.Headquarter$platformAdminAuditsArgs<ExtArgs>
   _count?: boolean | Prisma.HeadquarterCountOutputTypeDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["headquarter"]>
 
@@ -805,6 +1534,7 @@ export type HeadquarterSelectCreateManyAndReturn<ExtArgs extends runtime.Types.E
   description?: boolean
   nif?: boolean
   logo?: boolean
+  isActive?: boolean
   planId?: boolean
   createdAt?: boolean
   updatedAt?: boolean
@@ -821,6 +1551,7 @@ export type HeadquarterSelectUpdateManyAndReturn<ExtArgs extends runtime.Types.E
   description?: boolean
   nif?: boolean
   logo?: boolean
+  isActive?: boolean
   planId?: boolean
   createdAt?: boolean
   updatedAt?: boolean
@@ -837,16 +1568,22 @@ export type HeadquarterSelectScalar = {
   description?: boolean
   nif?: boolean
   logo?: boolean
+  isActive?: boolean
   planId?: boolean
   createdAt?: boolean
   updatedAt?: boolean
   deletedAt?: boolean
 }
 
-export type HeadquarterOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "name" | "address" | "email" | "phone" | "description" | "nif" | "logo" | "planId" | "createdAt" | "updatedAt" | "deletedAt", ExtArgs["result"]["headquarter"]>
+export type HeadquarterOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "name" | "address" | "email" | "phone" | "description" | "nif" | "logo" | "isActive" | "planId" | "createdAt" | "updatedAt" | "deletedAt", ExtArgs["result"]["headquarter"]>
 export type HeadquarterInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   Branch?: boolean | Prisma.Headquarter$BranchArgs<ExtArgs>
   plan?: boolean | Prisma.PlanDefaultArgs<ExtArgs>
+  subscriptions?: boolean | Prisma.Headquarter$subscriptionsArgs<ExtArgs>
+  subscriptionRequests?: boolean | Prisma.Headquarter$subscriptionRequestsArgs<ExtArgs>
+  subscriptionAudits?: boolean | Prisma.Headquarter$subscriptionAuditsArgs<ExtArgs>
+  assistantConversations?: boolean | Prisma.Headquarter$assistantConversationsArgs<ExtArgs>
+  platformAdminAudits?: boolean | Prisma.Headquarter$platformAdminAuditsArgs<ExtArgs>
   _count?: boolean | Prisma.HeadquarterCountOutputTypeDefaultArgs<ExtArgs>
 }
 export type HeadquarterIncludeCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
@@ -861,6 +1598,11 @@ export type $HeadquarterPayload<ExtArgs extends runtime.Types.Extensions.Interna
   objects: {
     Branch: Prisma.$BranchPayload<ExtArgs>[]
     plan: Prisma.$PlanPayload<ExtArgs>
+    subscriptions: Prisma.$ClinicSubscriptionPayload<ExtArgs>[]
+    subscriptionRequests: Prisma.$SubscriptionRequestPayload<ExtArgs>[]
+    subscriptionAudits: Prisma.$SubscriptionAuditPayload<ExtArgs>[]
+    assistantConversations: Prisma.$AssistantConversationPayload<ExtArgs>[]
+    platformAdminAudits: Prisma.$PlatformAdminAuditPayload<ExtArgs>[]
   }
   scalars: runtime.Types.Extensions.GetPayloadResult<{
     id: string
@@ -871,6 +1613,7 @@ export type $HeadquarterPayload<ExtArgs extends runtime.Types.Extensions.Interna
     description: string | null
     nif: string
     logo: string | null
+    isActive: boolean
     planId: string
     createdAt: Date
     updatedAt: Date
@@ -1271,6 +2014,11 @@ export interface Prisma__HeadquarterClient<T, Null = never, ExtArgs extends runt
   readonly [Symbol.toStringTag]: "PrismaPromise"
   Branch<T extends Prisma.Headquarter$BranchArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Headquarter$BranchArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$BranchPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   plan<T extends Prisma.PlanDefaultArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.PlanDefaultArgs<ExtArgs>>): Prisma.Prisma__PlanClient<runtime.Types.Result.GetResult<Prisma.$PlanPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
+  subscriptions<T extends Prisma.Headquarter$subscriptionsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Headquarter$subscriptionsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$ClinicSubscriptionPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+  subscriptionRequests<T extends Prisma.Headquarter$subscriptionRequestsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Headquarter$subscriptionRequestsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$SubscriptionRequestPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+  subscriptionAudits<T extends Prisma.Headquarter$subscriptionAuditsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Headquarter$subscriptionAuditsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$SubscriptionAuditPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+  assistantConversations<T extends Prisma.Headquarter$assistantConversationsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Headquarter$assistantConversationsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$AssistantConversationPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+  platformAdminAudits<T extends Prisma.Headquarter$platformAdminAuditsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Headquarter$platformAdminAuditsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$PlatformAdminAuditPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   /**
    * Attaches callbacks for the resolution and/or rejection of the Promise.
    * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -1308,6 +2056,7 @@ export interface HeadquarterFieldRefs {
   readonly description: Prisma.FieldRef<"Headquarter", 'String'>
   readonly nif: Prisma.FieldRef<"Headquarter", 'String'>
   readonly logo: Prisma.FieldRef<"Headquarter", 'String'>
+  readonly isActive: Prisma.FieldRef<"Headquarter", 'Boolean'>
   readonly planId: Prisma.FieldRef<"Headquarter", 'String'>
   readonly createdAt: Prisma.FieldRef<"Headquarter", 'DateTime'>
   readonly updatedAt: Prisma.FieldRef<"Headquarter", 'DateTime'>
@@ -1729,6 +2478,126 @@ export type Headquarter$BranchArgs<ExtArgs extends runtime.Types.Extensions.Inte
   take?: number
   skip?: number
   distinct?: Prisma.BranchScalarFieldEnum | Prisma.BranchScalarFieldEnum[]
+}
+
+/**
+ * Headquarter.subscriptions
+ */
+export type Headquarter$subscriptionsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the ClinicSubscription
+   */
+  select?: Prisma.ClinicSubscriptionSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the ClinicSubscription
+   */
+  omit?: Prisma.ClinicSubscriptionOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.ClinicSubscriptionInclude<ExtArgs> | null
+  where?: Prisma.ClinicSubscriptionWhereInput
+  orderBy?: Prisma.ClinicSubscriptionOrderByWithRelationInput | Prisma.ClinicSubscriptionOrderByWithRelationInput[]
+  cursor?: Prisma.ClinicSubscriptionWhereUniqueInput
+  take?: number
+  skip?: number
+  distinct?: Prisma.ClinicSubscriptionScalarFieldEnum | Prisma.ClinicSubscriptionScalarFieldEnum[]
+}
+
+/**
+ * Headquarter.subscriptionRequests
+ */
+export type Headquarter$subscriptionRequestsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the SubscriptionRequest
+   */
+  select?: Prisma.SubscriptionRequestSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the SubscriptionRequest
+   */
+  omit?: Prisma.SubscriptionRequestOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.SubscriptionRequestInclude<ExtArgs> | null
+  where?: Prisma.SubscriptionRequestWhereInput
+  orderBy?: Prisma.SubscriptionRequestOrderByWithRelationInput | Prisma.SubscriptionRequestOrderByWithRelationInput[]
+  cursor?: Prisma.SubscriptionRequestWhereUniqueInput
+  take?: number
+  skip?: number
+  distinct?: Prisma.SubscriptionRequestScalarFieldEnum | Prisma.SubscriptionRequestScalarFieldEnum[]
+}
+
+/**
+ * Headquarter.subscriptionAudits
+ */
+export type Headquarter$subscriptionAuditsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the SubscriptionAudit
+   */
+  select?: Prisma.SubscriptionAuditSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the SubscriptionAudit
+   */
+  omit?: Prisma.SubscriptionAuditOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.SubscriptionAuditInclude<ExtArgs> | null
+  where?: Prisma.SubscriptionAuditWhereInput
+  orderBy?: Prisma.SubscriptionAuditOrderByWithRelationInput | Prisma.SubscriptionAuditOrderByWithRelationInput[]
+  cursor?: Prisma.SubscriptionAuditWhereUniqueInput
+  take?: number
+  skip?: number
+  distinct?: Prisma.SubscriptionAuditScalarFieldEnum | Prisma.SubscriptionAuditScalarFieldEnum[]
+}
+
+/**
+ * Headquarter.assistantConversations
+ */
+export type Headquarter$assistantConversationsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the AssistantConversation
+   */
+  select?: Prisma.AssistantConversationSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the AssistantConversation
+   */
+  omit?: Prisma.AssistantConversationOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.AssistantConversationInclude<ExtArgs> | null
+  where?: Prisma.AssistantConversationWhereInput
+  orderBy?: Prisma.AssistantConversationOrderByWithRelationInput | Prisma.AssistantConversationOrderByWithRelationInput[]
+  cursor?: Prisma.AssistantConversationWhereUniqueInput
+  take?: number
+  skip?: number
+  distinct?: Prisma.AssistantConversationScalarFieldEnum | Prisma.AssistantConversationScalarFieldEnum[]
+}
+
+/**
+ * Headquarter.platformAdminAudits
+ */
+export type Headquarter$platformAdminAuditsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the PlatformAdminAudit
+   */
+  select?: Prisma.PlatformAdminAuditSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the PlatformAdminAudit
+   */
+  omit?: Prisma.PlatformAdminAuditOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.PlatformAdminAuditInclude<ExtArgs> | null
+  where?: Prisma.PlatformAdminAuditWhereInput
+  orderBy?: Prisma.PlatformAdminAuditOrderByWithRelationInput | Prisma.PlatformAdminAuditOrderByWithRelationInput[]
+  cursor?: Prisma.PlatformAdminAuditWhereUniqueInput
+  take?: number
+  skip?: number
+  distinct?: Prisma.PlatformAdminAuditScalarFieldEnum | Prisma.PlatformAdminAuditScalarFieldEnum[]
 }
 
 /**

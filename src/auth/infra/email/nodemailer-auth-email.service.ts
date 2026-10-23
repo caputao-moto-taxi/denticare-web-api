@@ -16,10 +16,6 @@ export class NodemailerAuthEmailService implements AuthEmailService {
   private readonly password = (
     process.env.SMTP_PASSWORD ?? process.env.GMAIL_APP_PASSWORD
   )?.trim();
-  private readonly smtpTlsCa = process.env.SMTP_TLS_CA_CERT?.replace(
-    /\\n/g,
-    '\n',
-  );
 
   private readonly frontendUrl = (
     process.env.FRONTEND_URL || 'http://localhost:5173'
@@ -31,7 +27,6 @@ export class NodemailerAuthEmailService implements AuthEmailService {
           port: 465,
           secure: true,
           auth: { user: this.user, pass: this.password },
-          ...(this.smtpTlsCa ? { tls: { ca: this.smtpTlsCa } } : {}),
         })
       : null;
 
@@ -125,7 +120,7 @@ export class NodemailerAuthEmailService implements AuthEmailService {
         code === 'ETIMEDOUT'
           ? '; verify SMTP host and outbound network access on port 465'
           : code === 'SELF_SIGNED_CERT_IN_CHAIN'
-            ? '; configure SMTP_TLS_CA_CERT with the trusted CA certificate'
+            ? '; verify the SMTP host presents a certificate chain trusted by Node.js'
             : '';
       this.logger.error(
         `Email delivery failed (code=${code}${transport}, smtp=${smtp}, command=${command}${networkDetails ? `, ${networkDetails}` : ''})${guidance}`,

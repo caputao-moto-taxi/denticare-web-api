@@ -20,6 +20,9 @@ import { CommunicationsModule } from './communications/communications.module';
 import { ValidateNifModule } from './validate-nif/validate-nif.module';
 import { DocumentsModule } from './documents/documents.module';
 import { FinancesModule } from './finances/finances.module';
+import { ScheduleModule } from '@nestjs/schedule';
+import { SubscriptionsModule } from './subscriptions/subscriptions.module';
+import { PlatformAdminModule } from './platform-admin/platform-admin.module';
 
 @Module({
   imports: [
@@ -45,6 +48,9 @@ import { FinancesModule } from './finances/finances.module';
     ValidateNifModule,
     DocumentsModule,
     FinancesModule,
+    ScheduleModule.forRoot(),
+    SubscriptionsModule,
+    PlatformAdminModule,
   ],
 })
 export class AppModule implements NestModule {

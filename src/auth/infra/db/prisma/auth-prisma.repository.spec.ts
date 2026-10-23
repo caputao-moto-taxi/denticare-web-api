@@ -8,7 +8,7 @@ describe('AuthPrismaRepository email actions', () => {
     findFirst: jest.fn(),
     updateMany: jest.fn(),
   };
-  const user = { update: jest.fn() };
+  const user = { update: jest.fn(), findUnique: jest.fn() };
   const refreshToken = { updateMany: jest.fn() };
   const transaction = { authActionToken, user, refreshToken };
   const prisma = {
@@ -33,6 +33,7 @@ describe('AuthPrismaRepository email actions', () => {
     jest.clearAllMocks();
     authActionToken.updateMany.mockResolvedValue({ count: 1 });
     user.update.mockResolvedValue({});
+    user.findUnique.mockResolvedValue({ branchId: null });
     refreshToken.updateMany.mockResolvedValue({ count: 1 });
   });
 
@@ -56,6 +57,10 @@ describe('AuthPrismaRepository email actions', () => {
     expect(user.update).toHaveBeenCalledWith({
       where: { id: 'user-1' },
       data: { isEmailVerified: true, isActive: true },
+    });
+    expect(user.findUnique).toHaveBeenCalledWith({
+      where: { id: 'user-1' },
+      select: { branchId: true },
     });
   });
 

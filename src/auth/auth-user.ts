@@ -18,4 +18,5 @@ export interface AuthenticatedRequest {
     [key: string]: unknown;
   };
   ip?: string;
+  path?: string;
 }

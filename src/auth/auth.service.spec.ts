@@ -10,6 +10,10 @@ describe('AuthPrismaRepository', () => {
     email: 'admin@example.test',
     password: 'bcrypt-hash',
     branchId: 'branch-id',
+    branch: {
+      deletedAt: null,
+      headquarter: { deletedAt: null, isActive: true },
+    },
     Role: { slug: 'admin', RolePermission: [] },
     Person: [
       {

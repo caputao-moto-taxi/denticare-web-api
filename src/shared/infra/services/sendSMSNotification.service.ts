@@ -9,6 +9,10 @@ export interface ITwilioProps {
 
 export class SendSMSNotification {
   private formatBrazilianPhoneNumber(phoneNumber: string): string {
+    if (!this.isValidBrazilianPhoneNumber(phoneNumber)) {
+      return phoneNumber;
+    }
+
     const cleanNumber = phoneNumber.replace(/\s+/g, '').replace(/[^\d]/g, '');
 
     if (cleanNumber.startsWith('55')) {
@@ -28,6 +32,9 @@ export class SendSMSNotification {
 
   private isValidBrazilianPhoneNumber(phoneNumber: string): boolean {
     const cleanNumber = phoneNumber.replace(/\s+/g, '').replace(/[^\d]/g, '');
+    if (phoneNumber.trim().startsWith('+') && !cleanNumber.startsWith('55')) {
+      return false;
+    }
 
     let numberWithoutCountry = cleanNumber;
     if (cleanNumber.startsWith('55')) {
@@ -127,15 +134,11 @@ export class SendSMSNotification {
 
   async execute({ to, body }: ITwilioProps) {
     try {
-      const accountSid =
-        (await GetEnviromentVariable('TWILIO_ACCOUNT_SID')!) ??
-        'AC7c431b8ae20e647295dbac9adb52db0f';
-      const authToken =
-        (await GetEnviromentVariable('TWILIO_AUTH_TOKEN')!) ??
-        '8fb1fd581b4e7f77e62c727ed6a5c6d8';
-      const from =
-        (await GetEnviromentVariable('TWILIO_FROM_NUMBER')!) ??
-        '+5511952130888';
+      const [accountSid, authToken, from] = await Promise.all([
+        GetEnviromentVariable('TWILIO_ACCOUNT_SID'),
+        GetEnviromentVariable('TWILIO_AUTH_TOKEN'),
+        GetEnviromentVariable('TWILIO_FROM_NUMBER'),
+      ]);
 
       const client = twilio(accountSid!, authToken!);
 
@@ -158,13 +161,14 @@ export class SendSMSNotification {
         ),
       );
 
-      console.log('Res =====', responses);
       return successResponse({
         message: `SMS enviado para ${recipients.length} destinatário(s) com sucesso.`,
         results: responses,
       });
-    } catch (error: any) {
-      return errorResponse(error);
+    } catch (error: unknown) {
+      return errorResponse(
+        error instanceof Error ? error : new Error(String(error)),
+      );
     }
   }
 }

@@ -1,6 +1,7 @@
 import {
   CanActivate,
   ExecutionContext,
+  ForbiddenException,
   Injectable,
   UnauthorizedException,
 } from '@nestjs/common';
@@ -85,17 +86,32 @@ export class JwtAuthGuard implements CanActivate {
           where: { deletedAt: null },
           include: { permission: { select: { slug: true } } },
         },
+        branch: {
+          select: {
+            deletedAt: true,
+            headquarter: { select: { deletedAt: true, isActive: true } },
+          },
+        },
       },
     });
     if (!user) {
       throw new UnauthorizedException('User account is unavailable');
+    }
+    if (
+      user.Role?.slug !== 'platform_owner' &&
+      (!user.branch ||
+        user.branch.deletedAt ||
+        user.branch.headquarter.deletedAt ||
+        !user.branch.headquarter.isActive)
+    ) {
+      throw new UnauthorizedException('Clinic account is unavailable');
     }
 
     request.user = {
       id: user.id,
       email: user.email,
       role: user.Role?.slug ?? 'staff',
-      branchId: user.branchId,
+      branchId: user.branchId ?? '',
       permissions: resolvePermissions(
         user.Role?.slug ?? 'staff',
         user.Role?.RolePermission.map(
@@ -113,6 +129,59 @@ export class JwtAuthGuard implements CanActivate {
       sessionId: payload.sid,
     };
 
+    await this.assertSubscriptionAccess(request);
+
     return true;
+  }
+
+  private async assertSubscriptionAccess(request: AuthenticatedRequest) {
+    if (
+      request.user.role === 'platform_owner' ||
+      this.isAccessExempt(request.path)
+    ) {
+      return;
+    }
+    const branch = await this.prisma.branch.findFirst({
+      where: { id: request.user.branchId, deletedAt: null },
+      select: { headquarterId: true },
+    });
+    if (!branch) return;
+
+    const activeSubscription = await this.prisma.clinicSubscription.findFirst({
+      where: {
+        headquarterId: branch.headquarterId,
+        status: { in: ['TRIAL_ACTIVE', 'ACTIVE', 'EXPIRING_SOON'] },
+      },
+      orderBy: { createdAt: 'desc' },
+      select: { expiresAt: true },
+    });
+    const pastDueSubscription = activeSubscription
+      ? null
+      : await this.prisma.clinicSubscription.findFirst({
+          where: {
+            headquarterId: branch.headquarterId,
+            status: { in: ['TRIAL_EXPIRED', 'EXPIRED'] },
+          },
+          orderBy: { createdAt: 'desc' },
+          select: { expiresAt: true },
+        });
+    const subscription = activeSubscription ?? pastDueSubscription;
+    if (subscription && subscription.expiresAt <= new Date()) {
+      throw new ForbiddenException({
+        message:
+          'The trial or subscription has expired. Choose a plan to restore access.',
+        subscriptionRequired: true,
+      });
+    }
+  }
+
+  private isAccessExempt(path: string | undefined) {
+    const normalizedPath = (path ?? '').toLowerCase();
+    return (
+      normalizedPath.startsWith('/auth/') ||
+      normalizedPath.startsWith('/subscriptions/') ||
+      normalizedPath.startsWith('/admin/subscriptions/') ||
+      normalizedPath.startsWith('/assistant/')
+    );
   }
 }

@@ -16,7 +16,6 @@ describe('NodemailerAuthEmailService', () => {
     user: process.env.GMAIL_USER,
     appPassword: process.env.GMAIL_APP_PASSWORD,
     frontendUrl: process.env.FRONTEND_URL,
-    smtpTlsCa: process.env.SMTP_TLS_CA_CERT,
   };
   let sendMailMock: jest.Mock;
 
@@ -25,7 +24,6 @@ describe('NodemailerAuthEmailService', () => {
     process.env.SMTP_USER = 'mailer@example.test';
     process.env.SMTP_PASSWORD = 'mailbox-password';
     process.env.FRONTEND_URL = 'https://dentcare.example';
-    delete process.env.SMTP_TLS_CA_CERT;
     sendMailMock = jest.fn().mockResolvedValue({});
     createTransportMock.mockReturnValue({ sendMail: sendMailMock });
   });
@@ -55,11 +53,6 @@ describe('NodemailerAuthEmailService', () => {
       delete process.env.FRONTEND_URL;
     } else {
       process.env.FRONTEND_URL = originalEnvironment.frontendUrl;
-    }
-    if (originalEnvironment.smtpTlsCa === undefined) {
-      delete process.env.SMTP_TLS_CA_CERT;
-    } else {
-      process.env.SMTP_TLS_CA_CERT = originalEnvironment.smtpTlsCa;
     }
   });
 
@@ -94,22 +87,6 @@ describe('NodemailerAuthEmailService', () => {
 
     expect(() => service.assertConfigured()).not.toThrow();
     expect(sendMailMock).not.toHaveBeenCalled();
-  });
-
-  it('adds an explicitly configured trusted CA without disabling TLS checks', async () => {
-    process.env.SMTP_TLS_CA_CERT =
-      '-----BEGIN CERTIFICATE-----\\ntrusted-ca\\n-----END CERTIFICATE-----';
-    const service = new NodemailerAuthEmailService();
-
-    service.assertConfigured();
-
-    expect(createTransportMock).toHaveBeenCalledWith(
-      expect.objectContaining({
-        tls: {
-          ca: '-----BEGIN CERTIFICATE-----\ntrusted-ca\n-----END CERTIFICATE-----',
-        },
-      }),
-    );
   });
 
   it('converts SMTP authentication failures to a safe service error', async () => {
@@ -207,7 +184,9 @@ describe('NodemailerAuthEmailService', () => {
       }),
     ).rejects.toThrow(ServiceUnavailableException);
     expect(loggerError).toHaveBeenCalledWith(
-      expect.stringContaining('configure SMTP_TLS_CA_CERT'),
+      expect.stringContaining(
+        'verify the SMTP host presents a certificate chain trusted by Node.js',
+      ),
     );
     loggerError.mockRestore();
   });

@@ -138,7 +138,7 @@ export class StockPrismaRepository implements IStockRepository {
 
   async list(user: AuthUser, query: ListQuery = {}) {
     this.requireStaff(user);
-    validateListFilters(query);
+    validateListFilters(query, { category: true });
     const where: Prisma.StockItemWhereInput = {
       branchId: user.branchId,
       deletedAt: null,

@@ -13,6 +13,7 @@ import { IHashService } from '../../../../shared/application/interfaces/IHash';
 import { PrismaService } from '../../../../shared/infra/db/prisma/prisma.service';
 import { AuthUser } from '../../../auth-user';
 import { resolvePermissions } from '../../../permissions';
+import { addCalendarMonthsUtc } from '../../../../plans/domain/subscription-pricing';
 import {
   IAuthRepository,
   AuthActionEmail,
@@ -55,6 +56,12 @@ const USER_PROFILE = {
     },
     take: 1,
   },
+  branch: {
+    select: {
+      deletedAt: true,
+      headquarter: { select: { deletedAt: true, isActive: true } },
+    },
+  },
 } satisfies Prisma.UserSelect;
 
 @Injectable()
@@ -63,7 +70,7 @@ export class AuthPrismaRepository implements IAuthRepository {
     private readonly prisma: PrismaService,
     private readonly jwtService: JwtService,
     private readonly hashService: IHashService,
-  ) { }
+  ) {}
 
   async register(input: RegisterCommand): Promise<AuthActionEmail> {
     const email = input.adminEmail.trim().toLowerCase();
@@ -221,6 +228,38 @@ export class AuthPrismaRepository implements IAuthRepository {
         where: { id: action.userId },
         data: { isEmailVerified: true, isActive: true },
       });
+      const account = await transaction.user.findUnique({
+        where: { id: action.userId },
+        select: { branchId: true },
+      });
+      if (account?.branchId) {
+        const branch = await transaction.branch.findUnique({
+          where: { id: account.branchId },
+          select: { headquarterId: true },
+        });
+        if (branch) {
+          const existingSubscription =
+            await transaction.clinicSubscription.findFirst({
+              where: {
+                headquarterId: branch.headquarterId,
+                status: {
+                  in: ['TRIAL_ACTIVE', 'ACTIVE', 'EXPIRING_SOON'],
+                },
+              },
+              select: { id: true },
+            });
+          if (!existingSubscription) {
+            await transaction.clinicSubscription.create({
+              data: {
+                headquarterId: branch.headquarterId,
+                status: 'TRIAL_ACTIVE',
+                startsAt: now,
+                expiresAt: addCalendarMonthsUtc(now, 1),
+              },
+            });
+          }
+        }
+      }
       await transaction.authActionToken.updateMany({
         where: {
           userId: action.userId,
@@ -330,6 +369,15 @@ export class AuthPrismaRepository implements IAuthRepository {
       !(await this.hashService.compare(input.password, user.password))
     ) {
       throw new UnauthorizedException('Invalid email or password');
+    }
+    if (
+      user.Role?.slug !== 'platform_owner' &&
+      (!user.branch ||
+        user.branch.deletedAt ||
+        user.branch.headquarter.deletedAt ||
+        !user.branch.headquarter.isActive)
+    ) {
+      throw new UnauthorizedException('Clinic account is unavailable');
     }
 
     return this.createSession(user);
@@ -590,7 +638,7 @@ export class AuthPrismaRepository implements IAuthRepository {
       sub: user.id,
       email: user.email,
       role,
-      branchId: user.branchId,
+      branchId: user.branchId ?? '',
       jti: randomUUID(),
       sid: sessionId,
     });
@@ -628,11 +676,13 @@ export class AuthPrismaRepository implements IAuthRepository {
       email: user.email,
       phone: person?.phoneNumber ?? '',
       role:
-        role === 'administrator' || role === 'admin'
-          ? 'admin'
-          : role === 'doctor' || role === 'nurse'
-            ? role
-            : 'secretary',
+        role === 'platform_owner'
+          ? 'platform_owner'
+          : role === 'administrator' || role === 'admin'
+            ? 'admin'
+            : role === 'doctor' || role === 'nurse'
+              ? role
+              : 'secretary',
       avatar: person?.avatar?.startsWith(`users/${user.id}/avatar/`)
         ? '/auth/me/avatar'
         : '',

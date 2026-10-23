@@ -29,6 +29,8 @@ export type AggregatePlan = {
 export type PlanAvgAggregateOutputType = {
   total_branch: number | null
   price: number | null
+  subscriptionPrice: runtime.Decimal | null
+  subscriptionMonths: number | null
   duration: number | null
   promotionalPrice: number | null
   promotionPercentage: number | null
@@ -37,6 +39,8 @@ export type PlanAvgAggregateOutputType = {
 export type PlanSumAggregateOutputType = {
   total_branch: number | null
   price: number | null
+  subscriptionPrice: runtime.Decimal | null
+  subscriptionMonths: number | null
   duration: number | null
   promotionalPrice: number | null
   promotionPercentage: number | null
@@ -47,6 +51,9 @@ export type PlanMinAggregateOutputType = {
   name: string | null
   total_branch: number | null
   price: number | null
+  subscriptionPrice: runtime.Decimal | null
+  subscriptionMonths: number | null
+  isSubscriptionOption: boolean | null
   currencyId: string | null
   duration: number | null
   createdAt: Date | null
@@ -65,6 +72,9 @@ export type PlanMaxAggregateOutputType = {
   name: string | null
   total_branch: number | null
   price: number | null
+  subscriptionPrice: runtime.Decimal | null
+  subscriptionMonths: number | null
+  isSubscriptionOption: boolean | null
   currencyId: string | null
   duration: number | null
   createdAt: Date | null
@@ -83,6 +93,9 @@ export type PlanCountAggregateOutputType = {
   name: number
   total_branch: number
   price: number
+  subscriptionPrice: number
+  subscriptionMonths: number
+  isSubscriptionOption: number
   currencyId: number
   duration: number
   createdAt: number
@@ -101,6 +114,8 @@ export type PlanCountAggregateOutputType = {
 export type PlanAvgAggregateInputType = {
   total_branch?: true
   price?: true
+  subscriptionPrice?: true
+  subscriptionMonths?: true
   duration?: true
   promotionalPrice?: true
   promotionPercentage?: true
@@ -109,6 +124,8 @@ export type PlanAvgAggregateInputType = {
 export type PlanSumAggregateInputType = {
   total_branch?: true
   price?: true
+  subscriptionPrice?: true
+  subscriptionMonths?: true
   duration?: true
   promotionalPrice?: true
   promotionPercentage?: true
@@ -119,6 +136,9 @@ export type PlanMinAggregateInputType = {
   name?: true
   total_branch?: true
   price?: true
+  subscriptionPrice?: true
+  subscriptionMonths?: true
+  isSubscriptionOption?: true
   currencyId?: true
   duration?: true
   createdAt?: true
@@ -137,6 +157,9 @@ export type PlanMaxAggregateInputType = {
   name?: true
   total_branch?: true
   price?: true
+  subscriptionPrice?: true
+  subscriptionMonths?: true
+  isSubscriptionOption?: true
   currencyId?: true
   duration?: true
   createdAt?: true
@@ -155,6 +178,9 @@ export type PlanCountAggregateInputType = {
   name?: true
   total_branch?: true
   price?: true
+  subscriptionPrice?: true
+  subscriptionMonths?: true
+  isSubscriptionOption?: true
   currencyId?: true
   duration?: true
   createdAt?: true
@@ -260,6 +286,9 @@ export type PlanGroupByOutputType = {
   name: string
   total_branch: number | null
   price: number
+  subscriptionPrice: runtime.Decimal | null
+  subscriptionMonths: number | null
+  isSubscriptionOption: boolean
   currencyId: string
   duration: number
   createdAt: Date
@@ -301,6 +330,9 @@ export type PlanWhereInput = {
   name?: Prisma.StringFilter<"Plan"> | string
   total_branch?: Prisma.IntNullableFilter<"Plan"> | number | null
   price?: Prisma.FloatFilter<"Plan"> | number
+  subscriptionPrice?: Prisma.DecimalNullableFilter<"Plan"> | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  subscriptionMonths?: Prisma.IntNullableFilter<"Plan"> | number | null
+  isSubscriptionOption?: Prisma.BoolFilter<"Plan"> | boolean
   currencyId?: Prisma.StringFilter<"Plan"> | string
   duration?: Prisma.IntFilter<"Plan"> | number
   createdAt?: Prisma.DateTimeFilter<"Plan"> | Date | string
@@ -314,6 +346,8 @@ export type PlanWhereInput = {
   deletedAt?: Prisma.DateTimeNullableFilter<"Plan"> | Date | string | null
   Headquarter?: Prisma.HeadquarterListRelationFilter
   PlanBenefit?: Prisma.PlanBenefitListRelationFilter
+  subscriptions?: Prisma.ClinicSubscriptionListRelationFilter
+  subscriptionRequests?: Prisma.SubscriptionRequestListRelationFilter
   currency?: Prisma.XOR<Prisma.CurrencyScalarRelationFilter, Prisma.CurrencyWhereInput>
 }
 
@@ -322,6 +356,9 @@ export type PlanOrderByWithRelationInput = {
   name?: Prisma.SortOrder
   total_branch?: Prisma.SortOrderInput | Prisma.SortOrder
   price?: Prisma.SortOrder
+  subscriptionPrice?: Prisma.SortOrderInput | Prisma.SortOrder
+  subscriptionMonths?: Prisma.SortOrderInput | Prisma.SortOrder
+  isSubscriptionOption?: Prisma.SortOrder
   currencyId?: Prisma.SortOrder
   duration?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
@@ -335,11 +372,14 @@ export type PlanOrderByWithRelationInput = {
   deletedAt?: Prisma.SortOrderInput | Prisma.SortOrder
   Headquarter?: Prisma.HeadquarterOrderByRelationAggregateInput
   PlanBenefit?: Prisma.PlanBenefitOrderByRelationAggregateInput
+  subscriptions?: Prisma.ClinicSubscriptionOrderByRelationAggregateInput
+  subscriptionRequests?: Prisma.SubscriptionRequestOrderByRelationAggregateInput
   currency?: Prisma.CurrencyOrderByWithRelationInput
 }
 
 export type PlanWhereUniqueInput = Prisma.AtLeast<{
   id?: string
+  subscriptionMonths?: number
   slug?: string
   AND?: Prisma.PlanWhereInput | Prisma.PlanWhereInput[]
   OR?: Prisma.PlanWhereInput[]
@@ -347,6 +387,8 @@ export type PlanWhereUniqueInput = Prisma.AtLeast<{
   name?: Prisma.StringFilter<"Plan"> | string
   total_branch?: Prisma.IntNullableFilter<"Plan"> | number | null
   price?: Prisma.FloatFilter<"Plan"> | number
+  subscriptionPrice?: Prisma.DecimalNullableFilter<"Plan"> | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  isSubscriptionOption?: Prisma.BoolFilter<"Plan"> | boolean
   currencyId?: Prisma.StringFilter<"Plan"> | string
   duration?: Prisma.IntFilter<"Plan"> | number
   createdAt?: Prisma.DateTimeFilter<"Plan"> | Date | string
@@ -359,14 +401,19 @@ export type PlanWhereUniqueInput = Prisma.AtLeast<{
   deletedAt?: Prisma.DateTimeNullableFilter<"Plan"> | Date | string | null
   Headquarter?: Prisma.HeadquarterListRelationFilter
   PlanBenefit?: Prisma.PlanBenefitListRelationFilter
+  subscriptions?: Prisma.ClinicSubscriptionListRelationFilter
+  subscriptionRequests?: Prisma.SubscriptionRequestListRelationFilter
   currency?: Prisma.XOR<Prisma.CurrencyScalarRelationFilter, Prisma.CurrencyWhereInput>
-}, "id" | "slug">
+}, "id" | "subscriptionMonths" | "slug">
 
 export type PlanOrderByWithAggregationInput = {
   id?: Prisma.SortOrder
   name?: Prisma.SortOrder
   total_branch?: Prisma.SortOrderInput | Prisma.SortOrder
   price?: Prisma.SortOrder
+  subscriptionPrice?: Prisma.SortOrderInput | Prisma.SortOrder
+  subscriptionMonths?: Prisma.SortOrderInput | Prisma.SortOrder
+  isSubscriptionOption?: Prisma.SortOrder
   currencyId?: Prisma.SortOrder
   duration?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
@@ -393,6 +440,9 @@ export type PlanScalarWhereWithAggregatesInput = {
   name?: Prisma.StringWithAggregatesFilter<"Plan"> | string
   total_branch?: Prisma.IntNullableWithAggregatesFilter<"Plan"> | number | null
   price?: Prisma.FloatWithAggregatesFilter<"Plan"> | number
+  subscriptionPrice?: Prisma.DecimalNullableWithAggregatesFilter<"Plan"> | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  subscriptionMonths?: Prisma.IntNullableWithAggregatesFilter<"Plan"> | number | null
+  isSubscriptionOption?: Prisma.BoolWithAggregatesFilter<"Plan"> | boolean
   currencyId?: Prisma.StringWithAggregatesFilter<"Plan"> | string
   duration?: Prisma.IntWithAggregatesFilter<"Plan"> | number
   createdAt?: Prisma.DateTimeWithAggregatesFilter<"Plan"> | Date | string
@@ -411,6 +461,9 @@ export type PlanCreateInput = {
   name: string
   total_branch?: number | null
   price?: number
+  subscriptionPrice?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  subscriptionMonths?: number | null
+  isSubscriptionOption?: boolean
   duration?: number
   createdAt?: Date | string
   updatedAt?: Date | string
@@ -423,6 +476,8 @@ export type PlanCreateInput = {
   deletedAt?: Date | string | null
   Headquarter?: Prisma.HeadquarterCreateNestedManyWithoutPlanInput
   PlanBenefit?: Prisma.PlanBenefitCreateNestedManyWithoutPlanInput
+  subscriptions?: Prisma.ClinicSubscriptionCreateNestedManyWithoutPlanInput
+  subscriptionRequests?: Prisma.SubscriptionRequestCreateNestedManyWithoutPlanInput
   currency: Prisma.CurrencyCreateNestedOneWithoutPlanInput
 }
 
@@ -431,6 +486,9 @@ export type PlanUncheckedCreateInput = {
   name: string
   total_branch?: number | null
   price?: number
+  subscriptionPrice?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  subscriptionMonths?: number | null
+  isSubscriptionOption?: boolean
   currencyId: string
   duration?: number
   createdAt?: Date | string
@@ -444,6 +502,8 @@ export type PlanUncheckedCreateInput = {
   deletedAt?: Date | string | null
   Headquarter?: Prisma.HeadquarterUncheckedCreateNestedManyWithoutPlanInput
   PlanBenefit?: Prisma.PlanBenefitUncheckedCreateNestedManyWithoutPlanInput
+  subscriptions?: Prisma.ClinicSubscriptionUncheckedCreateNestedManyWithoutPlanInput
+  subscriptionRequests?: Prisma.SubscriptionRequestUncheckedCreateNestedManyWithoutPlanInput
 }
 
 export type PlanUpdateInput = {
@@ -451,6 +511,9 @@ export type PlanUpdateInput = {
   name?: Prisma.StringFieldUpdateOperationsInput | string
   total_branch?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   price?: Prisma.FloatFieldUpdateOperationsInput | number
+  subscriptionPrice?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  subscriptionMonths?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  isSubscriptionOption?: Prisma.BoolFieldUpdateOperationsInput | boolean
   duration?: Prisma.IntFieldUpdateOperationsInput | number
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -463,6 +526,8 @@ export type PlanUpdateInput = {
   deletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   Headquarter?: Prisma.HeadquarterUpdateManyWithoutPlanNestedInput
   PlanBenefit?: Prisma.PlanBenefitUpdateManyWithoutPlanNestedInput
+  subscriptions?: Prisma.ClinicSubscriptionUpdateManyWithoutPlanNestedInput
+  subscriptionRequests?: Prisma.SubscriptionRequestUpdateManyWithoutPlanNestedInput
   currency?: Prisma.CurrencyUpdateOneRequiredWithoutPlanNestedInput
 }
 
@@ -471,6 +536,9 @@ export type PlanUncheckedUpdateInput = {
   name?: Prisma.StringFieldUpdateOperationsInput | string
   total_branch?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   price?: Prisma.FloatFieldUpdateOperationsInput | number
+  subscriptionPrice?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  subscriptionMonths?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  isSubscriptionOption?: Prisma.BoolFieldUpdateOperationsInput | boolean
   currencyId?: Prisma.StringFieldUpdateOperationsInput | string
   duration?: Prisma.IntFieldUpdateOperationsInput | number
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -484,6 +552,8 @@ export type PlanUncheckedUpdateInput = {
   deletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   Headquarter?: Prisma.HeadquarterUncheckedUpdateManyWithoutPlanNestedInput
   PlanBenefit?: Prisma.PlanBenefitUncheckedUpdateManyWithoutPlanNestedInput
+  subscriptions?: Prisma.ClinicSubscriptionUncheckedUpdateManyWithoutPlanNestedInput
+  subscriptionRequests?: Prisma.SubscriptionRequestUncheckedUpdateManyWithoutPlanNestedInput
 }
 
 export type PlanCreateManyInput = {
@@ -491,6 +561,9 @@ export type PlanCreateManyInput = {
   name: string
   total_branch?: number | null
   price?: number
+  subscriptionPrice?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  subscriptionMonths?: number | null
+  isSubscriptionOption?: boolean
   currencyId: string
   duration?: number
   createdAt?: Date | string
@@ -509,6 +582,9 @@ export type PlanUpdateManyMutationInput = {
   name?: Prisma.StringFieldUpdateOperationsInput | string
   total_branch?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   price?: Prisma.FloatFieldUpdateOperationsInput | number
+  subscriptionPrice?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  subscriptionMonths?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  isSubscriptionOption?: Prisma.BoolFieldUpdateOperationsInput | boolean
   duration?: Prisma.IntFieldUpdateOperationsInput | number
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -526,6 +602,9 @@ export type PlanUncheckedUpdateManyInput = {
   name?: Prisma.StringFieldUpdateOperationsInput | string
   total_branch?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   price?: Prisma.FloatFieldUpdateOperationsInput | number
+  subscriptionPrice?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  subscriptionMonths?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  isSubscriptionOption?: Prisma.BoolFieldUpdateOperationsInput | boolean
   currencyId?: Prisma.StringFieldUpdateOperationsInput | string
   duration?: Prisma.IntFieldUpdateOperationsInput | number
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -554,6 +633,9 @@ export type PlanCountOrderByAggregateInput = {
   name?: Prisma.SortOrder
   total_branch?: Prisma.SortOrder
   price?: Prisma.SortOrder
+  subscriptionPrice?: Prisma.SortOrder
+  subscriptionMonths?: Prisma.SortOrder
+  isSubscriptionOption?: Prisma.SortOrder
   currencyId?: Prisma.SortOrder
   duration?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
@@ -570,6 +652,8 @@ export type PlanCountOrderByAggregateInput = {
 export type PlanAvgOrderByAggregateInput = {
   total_branch?: Prisma.SortOrder
   price?: Prisma.SortOrder
+  subscriptionPrice?: Prisma.SortOrder
+  subscriptionMonths?: Prisma.SortOrder
   duration?: Prisma.SortOrder
   promotionalPrice?: Prisma.SortOrder
   promotionPercentage?: Prisma.SortOrder
@@ -580,6 +664,9 @@ export type PlanMaxOrderByAggregateInput = {
   name?: Prisma.SortOrder
   total_branch?: Prisma.SortOrder
   price?: Prisma.SortOrder
+  subscriptionPrice?: Prisma.SortOrder
+  subscriptionMonths?: Prisma.SortOrder
+  isSubscriptionOption?: Prisma.SortOrder
   currencyId?: Prisma.SortOrder
   duration?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
@@ -598,6 +685,9 @@ export type PlanMinOrderByAggregateInput = {
   name?: Prisma.SortOrder
   total_branch?: Prisma.SortOrder
   price?: Prisma.SortOrder
+  subscriptionPrice?: Prisma.SortOrder
+  subscriptionMonths?: Prisma.SortOrder
+  isSubscriptionOption?: Prisma.SortOrder
   currencyId?: Prisma.SortOrder
   duration?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
@@ -614,6 +704,8 @@ export type PlanMinOrderByAggregateInput = {
 export type PlanSumOrderByAggregateInput = {
   total_branch?: Prisma.SortOrder
   price?: Prisma.SortOrder
+  subscriptionPrice?: Prisma.SortOrder
+  subscriptionMonths?: Prisma.SortOrder
   duration?: Prisma.SortOrder
   promotionalPrice?: Prisma.SortOrder
   promotionPercentage?: Prisma.SortOrder
@@ -622,6 +714,11 @@ export type PlanSumOrderByAggregateInput = {
 export type PlanScalarRelationFilter = {
   is?: Prisma.PlanWhereInput
   isNot?: Prisma.PlanWhereInput
+}
+
+export type PlanNullableScalarRelationFilter = {
+  is?: Prisma.PlanWhereInput | null
+  isNot?: Prisma.PlanWhereInput | null
 }
 
 export type PlanCreateNestedManyWithoutCurrencyInput = {
@@ -682,16 +779,24 @@ export type FloatFieldUpdateOperationsInput = {
   divide?: number
 }
 
+export type NullableDecimalFieldUpdateOperationsInput = {
+  set?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  increment?: runtime.Decimal | runtime.DecimalJsLike | number | string
+  decrement?: runtime.Decimal | runtime.DecimalJsLike | number | string
+  multiply?: runtime.Decimal | runtime.DecimalJsLike | number | string
+  divide?: runtime.Decimal | runtime.DecimalJsLike | number | string
+}
+
+export type BoolFieldUpdateOperationsInput = {
+  set?: boolean
+}
+
 export type IntFieldUpdateOperationsInput = {
   set?: number
   increment?: number
   decrement?: number
   multiply?: number
   divide?: number
-}
-
-export type BoolFieldUpdateOperationsInput = {
-  set?: boolean
 }
 
 export type NullableFloatFieldUpdateOperationsInput = {
@@ -730,11 +835,44 @@ export type PlanUpdateOneRequiredWithoutHeadquarterNestedInput = {
   update?: Prisma.XOR<Prisma.XOR<Prisma.PlanUpdateToOneWithWhereWithoutHeadquarterInput, Prisma.PlanUpdateWithoutHeadquarterInput>, Prisma.PlanUncheckedUpdateWithoutHeadquarterInput>
 }
 
+export type PlanCreateNestedOneWithoutSubscriptionsInput = {
+  create?: Prisma.XOR<Prisma.PlanCreateWithoutSubscriptionsInput, Prisma.PlanUncheckedCreateWithoutSubscriptionsInput>
+  connectOrCreate?: Prisma.PlanCreateOrConnectWithoutSubscriptionsInput
+  connect?: Prisma.PlanWhereUniqueInput
+}
+
+export type PlanUpdateOneWithoutSubscriptionsNestedInput = {
+  create?: Prisma.XOR<Prisma.PlanCreateWithoutSubscriptionsInput, Prisma.PlanUncheckedCreateWithoutSubscriptionsInput>
+  connectOrCreate?: Prisma.PlanCreateOrConnectWithoutSubscriptionsInput
+  upsert?: Prisma.PlanUpsertWithoutSubscriptionsInput
+  disconnect?: Prisma.PlanWhereInput | boolean
+  delete?: Prisma.PlanWhereInput | boolean
+  connect?: Prisma.PlanWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.PlanUpdateToOneWithWhereWithoutSubscriptionsInput, Prisma.PlanUpdateWithoutSubscriptionsInput>, Prisma.PlanUncheckedUpdateWithoutSubscriptionsInput>
+}
+
+export type PlanCreateNestedOneWithoutSubscriptionRequestsInput = {
+  create?: Prisma.XOR<Prisma.PlanCreateWithoutSubscriptionRequestsInput, Prisma.PlanUncheckedCreateWithoutSubscriptionRequestsInput>
+  connectOrCreate?: Prisma.PlanCreateOrConnectWithoutSubscriptionRequestsInput
+  connect?: Prisma.PlanWhereUniqueInput
+}
+
+export type PlanUpdateOneRequiredWithoutSubscriptionRequestsNestedInput = {
+  create?: Prisma.XOR<Prisma.PlanCreateWithoutSubscriptionRequestsInput, Prisma.PlanUncheckedCreateWithoutSubscriptionRequestsInput>
+  connectOrCreate?: Prisma.PlanCreateOrConnectWithoutSubscriptionRequestsInput
+  upsert?: Prisma.PlanUpsertWithoutSubscriptionRequestsInput
+  connect?: Prisma.PlanWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.PlanUpdateToOneWithWhereWithoutSubscriptionRequestsInput, Prisma.PlanUpdateWithoutSubscriptionRequestsInput>, Prisma.PlanUncheckedUpdateWithoutSubscriptionRequestsInput>
+}
+
 export type PlanCreateWithoutCurrencyInput = {
   id?: string
   name: string
   total_branch?: number | null
   price?: number
+  subscriptionPrice?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  subscriptionMonths?: number | null
+  isSubscriptionOption?: boolean
   duration?: number
   createdAt?: Date | string
   updatedAt?: Date | string
@@ -747,6 +885,8 @@ export type PlanCreateWithoutCurrencyInput = {
   deletedAt?: Date | string | null
   Headquarter?: Prisma.HeadquarterCreateNestedManyWithoutPlanInput
   PlanBenefit?: Prisma.PlanBenefitCreateNestedManyWithoutPlanInput
+  subscriptions?: Prisma.ClinicSubscriptionCreateNestedManyWithoutPlanInput
+  subscriptionRequests?: Prisma.SubscriptionRequestCreateNestedManyWithoutPlanInput
 }
 
 export type PlanUncheckedCreateWithoutCurrencyInput = {
@@ -754,6 +894,9 @@ export type PlanUncheckedCreateWithoutCurrencyInput = {
   name: string
   total_branch?: number | null
   price?: number
+  subscriptionPrice?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  subscriptionMonths?: number | null
+  isSubscriptionOption?: boolean
   duration?: number
   createdAt?: Date | string
   updatedAt?: Date | string
@@ -766,6 +909,8 @@ export type PlanUncheckedCreateWithoutCurrencyInput = {
   deletedAt?: Date | string | null
   Headquarter?: Prisma.HeadquarterUncheckedCreateNestedManyWithoutPlanInput
   PlanBenefit?: Prisma.PlanBenefitUncheckedCreateNestedManyWithoutPlanInput
+  subscriptions?: Prisma.ClinicSubscriptionUncheckedCreateNestedManyWithoutPlanInput
+  subscriptionRequests?: Prisma.SubscriptionRequestUncheckedCreateNestedManyWithoutPlanInput
 }
 
 export type PlanCreateOrConnectWithoutCurrencyInput = {
@@ -802,6 +947,9 @@ export type PlanScalarWhereInput = {
   name?: Prisma.StringFilter<"Plan"> | string
   total_branch?: Prisma.IntNullableFilter<"Plan"> | number | null
   price?: Prisma.FloatFilter<"Plan"> | number
+  subscriptionPrice?: Prisma.DecimalNullableFilter<"Plan"> | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  subscriptionMonths?: Prisma.IntNullableFilter<"Plan"> | number | null
+  isSubscriptionOption?: Prisma.BoolFilter<"Plan"> | boolean
   currencyId?: Prisma.StringFilter<"Plan"> | string
   duration?: Prisma.IntFilter<"Plan"> | number
   createdAt?: Prisma.DateTimeFilter<"Plan"> | Date | string
@@ -820,6 +968,9 @@ export type PlanCreateWithoutPlanBenefitInput = {
   name: string
   total_branch?: number | null
   price?: number
+  subscriptionPrice?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  subscriptionMonths?: number | null
+  isSubscriptionOption?: boolean
   duration?: number
   createdAt?: Date | string
   updatedAt?: Date | string
@@ -831,6 +982,8 @@ export type PlanCreateWithoutPlanBenefitInput = {
   slug: string
   deletedAt?: Date | string | null
   Headquarter?: Prisma.HeadquarterCreateNestedManyWithoutPlanInput
+  subscriptions?: Prisma.ClinicSubscriptionCreateNestedManyWithoutPlanInput
+  subscriptionRequests?: Prisma.SubscriptionRequestCreateNestedManyWithoutPlanInput
   currency: Prisma.CurrencyCreateNestedOneWithoutPlanInput
 }
 
@@ -839,6 +992,9 @@ export type PlanUncheckedCreateWithoutPlanBenefitInput = {
   name: string
   total_branch?: number | null
   price?: number
+  subscriptionPrice?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  subscriptionMonths?: number | null
+  isSubscriptionOption?: boolean
   currencyId: string
   duration?: number
   createdAt?: Date | string
@@ -851,6 +1007,8 @@ export type PlanUncheckedCreateWithoutPlanBenefitInput = {
   slug: string
   deletedAt?: Date | string | null
   Headquarter?: Prisma.HeadquarterUncheckedCreateNestedManyWithoutPlanInput
+  subscriptions?: Prisma.ClinicSubscriptionUncheckedCreateNestedManyWithoutPlanInput
+  subscriptionRequests?: Prisma.SubscriptionRequestUncheckedCreateNestedManyWithoutPlanInput
 }
 
 export type PlanCreateOrConnectWithoutPlanBenefitInput = {
@@ -874,6 +1032,9 @@ export type PlanUpdateWithoutPlanBenefitInput = {
   name?: Prisma.StringFieldUpdateOperationsInput | string
   total_branch?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   price?: Prisma.FloatFieldUpdateOperationsInput | number
+  subscriptionPrice?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  subscriptionMonths?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  isSubscriptionOption?: Prisma.BoolFieldUpdateOperationsInput | boolean
   duration?: Prisma.IntFieldUpdateOperationsInput | number
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -885,6 +1046,8 @@ export type PlanUpdateWithoutPlanBenefitInput = {
   slug?: Prisma.StringFieldUpdateOperationsInput | string
   deletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   Headquarter?: Prisma.HeadquarterUpdateManyWithoutPlanNestedInput
+  subscriptions?: Prisma.ClinicSubscriptionUpdateManyWithoutPlanNestedInput
+  subscriptionRequests?: Prisma.SubscriptionRequestUpdateManyWithoutPlanNestedInput
   currency?: Prisma.CurrencyUpdateOneRequiredWithoutPlanNestedInput
 }
 
@@ -893,6 +1056,9 @@ export type PlanUncheckedUpdateWithoutPlanBenefitInput = {
   name?: Prisma.StringFieldUpdateOperationsInput | string
   total_branch?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   price?: Prisma.FloatFieldUpdateOperationsInput | number
+  subscriptionPrice?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  subscriptionMonths?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  isSubscriptionOption?: Prisma.BoolFieldUpdateOperationsInput | boolean
   currencyId?: Prisma.StringFieldUpdateOperationsInput | string
   duration?: Prisma.IntFieldUpdateOperationsInput | number
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -905,6 +1071,8 @@ export type PlanUncheckedUpdateWithoutPlanBenefitInput = {
   slug?: Prisma.StringFieldUpdateOperationsInput | string
   deletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   Headquarter?: Prisma.HeadquarterUncheckedUpdateManyWithoutPlanNestedInput
+  subscriptions?: Prisma.ClinicSubscriptionUncheckedUpdateManyWithoutPlanNestedInput
+  subscriptionRequests?: Prisma.SubscriptionRequestUncheckedUpdateManyWithoutPlanNestedInput
 }
 
 export type PlanCreateWithoutHeadquarterInput = {
@@ -912,6 +1080,9 @@ export type PlanCreateWithoutHeadquarterInput = {
   name: string
   total_branch?: number | null
   price?: number
+  subscriptionPrice?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  subscriptionMonths?: number | null
+  isSubscriptionOption?: boolean
   duration?: number
   createdAt?: Date | string
   updatedAt?: Date | string
@@ -923,6 +1094,8 @@ export type PlanCreateWithoutHeadquarterInput = {
   slug: string
   deletedAt?: Date | string | null
   PlanBenefit?: Prisma.PlanBenefitCreateNestedManyWithoutPlanInput
+  subscriptions?: Prisma.ClinicSubscriptionCreateNestedManyWithoutPlanInput
+  subscriptionRequests?: Prisma.SubscriptionRequestCreateNestedManyWithoutPlanInput
   currency: Prisma.CurrencyCreateNestedOneWithoutPlanInput
 }
 
@@ -931,6 +1104,9 @@ export type PlanUncheckedCreateWithoutHeadquarterInput = {
   name: string
   total_branch?: number | null
   price?: number
+  subscriptionPrice?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  subscriptionMonths?: number | null
+  isSubscriptionOption?: boolean
   currencyId: string
   duration?: number
   createdAt?: Date | string
@@ -943,6 +1119,8 @@ export type PlanUncheckedCreateWithoutHeadquarterInput = {
   slug: string
   deletedAt?: Date | string | null
   PlanBenefit?: Prisma.PlanBenefitUncheckedCreateNestedManyWithoutPlanInput
+  subscriptions?: Prisma.ClinicSubscriptionUncheckedCreateNestedManyWithoutPlanInput
+  subscriptionRequests?: Prisma.SubscriptionRequestUncheckedCreateNestedManyWithoutPlanInput
 }
 
 export type PlanCreateOrConnectWithoutHeadquarterInput = {
@@ -966,6 +1144,9 @@ export type PlanUpdateWithoutHeadquarterInput = {
   name?: Prisma.StringFieldUpdateOperationsInput | string
   total_branch?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   price?: Prisma.FloatFieldUpdateOperationsInput | number
+  subscriptionPrice?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  subscriptionMonths?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  isSubscriptionOption?: Prisma.BoolFieldUpdateOperationsInput | boolean
   duration?: Prisma.IntFieldUpdateOperationsInput | number
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -977,6 +1158,8 @@ export type PlanUpdateWithoutHeadquarterInput = {
   slug?: Prisma.StringFieldUpdateOperationsInput | string
   deletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   PlanBenefit?: Prisma.PlanBenefitUpdateManyWithoutPlanNestedInput
+  subscriptions?: Prisma.ClinicSubscriptionUpdateManyWithoutPlanNestedInput
+  subscriptionRequests?: Prisma.SubscriptionRequestUpdateManyWithoutPlanNestedInput
   currency?: Prisma.CurrencyUpdateOneRequiredWithoutPlanNestedInput
 }
 
@@ -985,6 +1168,9 @@ export type PlanUncheckedUpdateWithoutHeadquarterInput = {
   name?: Prisma.StringFieldUpdateOperationsInput | string
   total_branch?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   price?: Prisma.FloatFieldUpdateOperationsInput | number
+  subscriptionPrice?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  subscriptionMonths?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  isSubscriptionOption?: Prisma.BoolFieldUpdateOperationsInput | boolean
   currencyId?: Prisma.StringFieldUpdateOperationsInput | string
   duration?: Prisma.IntFieldUpdateOperationsInput | number
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -997,6 +1183,232 @@ export type PlanUncheckedUpdateWithoutHeadquarterInput = {
   slug?: Prisma.StringFieldUpdateOperationsInput | string
   deletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   PlanBenefit?: Prisma.PlanBenefitUncheckedUpdateManyWithoutPlanNestedInput
+  subscriptions?: Prisma.ClinicSubscriptionUncheckedUpdateManyWithoutPlanNestedInput
+  subscriptionRequests?: Prisma.SubscriptionRequestUncheckedUpdateManyWithoutPlanNestedInput
+}
+
+export type PlanCreateWithoutSubscriptionsInput = {
+  id?: string
+  name: string
+  total_branch?: number | null
+  price?: number
+  subscriptionPrice?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  subscriptionMonths?: number | null
+  isSubscriptionOption?: boolean
+  duration?: number
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  isOnPromotion?: boolean
+  promotionalPrice?: number | null
+  promotionEndDate?: Date | string | null
+  promotionStartDate?: Date | string | null
+  promotionPercentage?: number | null
+  slug: string
+  deletedAt?: Date | string | null
+  Headquarter?: Prisma.HeadquarterCreateNestedManyWithoutPlanInput
+  PlanBenefit?: Prisma.PlanBenefitCreateNestedManyWithoutPlanInput
+  subscriptionRequests?: Prisma.SubscriptionRequestCreateNestedManyWithoutPlanInput
+  currency: Prisma.CurrencyCreateNestedOneWithoutPlanInput
+}
+
+export type PlanUncheckedCreateWithoutSubscriptionsInput = {
+  id?: string
+  name: string
+  total_branch?: number | null
+  price?: number
+  subscriptionPrice?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  subscriptionMonths?: number | null
+  isSubscriptionOption?: boolean
+  currencyId: string
+  duration?: number
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  isOnPromotion?: boolean
+  promotionalPrice?: number | null
+  promotionEndDate?: Date | string | null
+  promotionStartDate?: Date | string | null
+  promotionPercentage?: number | null
+  slug: string
+  deletedAt?: Date | string | null
+  Headquarter?: Prisma.HeadquarterUncheckedCreateNestedManyWithoutPlanInput
+  PlanBenefit?: Prisma.PlanBenefitUncheckedCreateNestedManyWithoutPlanInput
+  subscriptionRequests?: Prisma.SubscriptionRequestUncheckedCreateNestedManyWithoutPlanInput
+}
+
+export type PlanCreateOrConnectWithoutSubscriptionsInput = {
+  where: Prisma.PlanWhereUniqueInput
+  create: Prisma.XOR<Prisma.PlanCreateWithoutSubscriptionsInput, Prisma.PlanUncheckedCreateWithoutSubscriptionsInput>
+}
+
+export type PlanUpsertWithoutSubscriptionsInput = {
+  update: Prisma.XOR<Prisma.PlanUpdateWithoutSubscriptionsInput, Prisma.PlanUncheckedUpdateWithoutSubscriptionsInput>
+  create: Prisma.XOR<Prisma.PlanCreateWithoutSubscriptionsInput, Prisma.PlanUncheckedCreateWithoutSubscriptionsInput>
+  where?: Prisma.PlanWhereInput
+}
+
+export type PlanUpdateToOneWithWhereWithoutSubscriptionsInput = {
+  where?: Prisma.PlanWhereInput
+  data: Prisma.XOR<Prisma.PlanUpdateWithoutSubscriptionsInput, Prisma.PlanUncheckedUpdateWithoutSubscriptionsInput>
+}
+
+export type PlanUpdateWithoutSubscriptionsInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  total_branch?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  price?: Prisma.FloatFieldUpdateOperationsInput | number
+  subscriptionPrice?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  subscriptionMonths?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  isSubscriptionOption?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  duration?: Prisma.IntFieldUpdateOperationsInput | number
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  isOnPromotion?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  promotionalPrice?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
+  promotionEndDate?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  promotionStartDate?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  promotionPercentage?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
+  slug?: Prisma.StringFieldUpdateOperationsInput | string
+  deletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  Headquarter?: Prisma.HeadquarterUpdateManyWithoutPlanNestedInput
+  PlanBenefit?: Prisma.PlanBenefitUpdateManyWithoutPlanNestedInput
+  subscriptionRequests?: Prisma.SubscriptionRequestUpdateManyWithoutPlanNestedInput
+  currency?: Prisma.CurrencyUpdateOneRequiredWithoutPlanNestedInput
+}
+
+export type PlanUncheckedUpdateWithoutSubscriptionsInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  total_branch?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  price?: Prisma.FloatFieldUpdateOperationsInput | number
+  subscriptionPrice?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  subscriptionMonths?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  isSubscriptionOption?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  currencyId?: Prisma.StringFieldUpdateOperationsInput | string
+  duration?: Prisma.IntFieldUpdateOperationsInput | number
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  isOnPromotion?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  promotionalPrice?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
+  promotionEndDate?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  promotionStartDate?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  promotionPercentage?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
+  slug?: Prisma.StringFieldUpdateOperationsInput | string
+  deletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  Headquarter?: Prisma.HeadquarterUncheckedUpdateManyWithoutPlanNestedInput
+  PlanBenefit?: Prisma.PlanBenefitUncheckedUpdateManyWithoutPlanNestedInput
+  subscriptionRequests?: Prisma.SubscriptionRequestUncheckedUpdateManyWithoutPlanNestedInput
+}
+
+export type PlanCreateWithoutSubscriptionRequestsInput = {
+  id?: string
+  name: string
+  total_branch?: number | null
+  price?: number
+  subscriptionPrice?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  subscriptionMonths?: number | null
+  isSubscriptionOption?: boolean
+  duration?: number
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  isOnPromotion?: boolean
+  promotionalPrice?: number | null
+  promotionEndDate?: Date | string | null
+  promotionStartDate?: Date | string | null
+  promotionPercentage?: number | null
+  slug: string
+  deletedAt?: Date | string | null
+  Headquarter?: Prisma.HeadquarterCreateNestedManyWithoutPlanInput
+  PlanBenefit?: Prisma.PlanBenefitCreateNestedManyWithoutPlanInput
+  subscriptions?: Prisma.ClinicSubscriptionCreateNestedManyWithoutPlanInput
+  currency: Prisma.CurrencyCreateNestedOneWithoutPlanInput
+}
+
+export type PlanUncheckedCreateWithoutSubscriptionRequestsInput = {
+  id?: string
+  name: string
+  total_branch?: number | null
+  price?: number
+  subscriptionPrice?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  subscriptionMonths?: number | null
+  isSubscriptionOption?: boolean
+  currencyId: string
+  duration?: number
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  isOnPromotion?: boolean
+  promotionalPrice?: number | null
+  promotionEndDate?: Date | string | null
+  promotionStartDate?: Date | string | null
+  promotionPercentage?: number | null
+  slug: string
+  deletedAt?: Date | string | null
+  Headquarter?: Prisma.HeadquarterUncheckedCreateNestedManyWithoutPlanInput
+  PlanBenefit?: Prisma.PlanBenefitUncheckedCreateNestedManyWithoutPlanInput
+  subscriptions?: Prisma.ClinicSubscriptionUncheckedCreateNestedManyWithoutPlanInput
+}
+
+export type PlanCreateOrConnectWithoutSubscriptionRequestsInput = {
+  where: Prisma.PlanWhereUniqueInput
+  create: Prisma.XOR<Prisma.PlanCreateWithoutSubscriptionRequestsInput, Prisma.PlanUncheckedCreateWithoutSubscriptionRequestsInput>
+}
+
+export type PlanUpsertWithoutSubscriptionRequestsInput = {
+  update: Prisma.XOR<Prisma.PlanUpdateWithoutSubscriptionRequestsInput, Prisma.PlanUncheckedUpdateWithoutSubscriptionRequestsInput>
+  create: Prisma.XOR<Prisma.PlanCreateWithoutSubscriptionRequestsInput, Prisma.PlanUncheckedCreateWithoutSubscriptionRequestsInput>
+  where?: Prisma.PlanWhereInput
+}
+
+export type PlanUpdateToOneWithWhereWithoutSubscriptionRequestsInput = {
+  where?: Prisma.PlanWhereInput
+  data: Prisma.XOR<Prisma.PlanUpdateWithoutSubscriptionRequestsInput, Prisma.PlanUncheckedUpdateWithoutSubscriptionRequestsInput>
+}
+
+export type PlanUpdateWithoutSubscriptionRequestsInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  total_branch?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  price?: Prisma.FloatFieldUpdateOperationsInput | number
+  subscriptionPrice?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  subscriptionMonths?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  isSubscriptionOption?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  duration?: Prisma.IntFieldUpdateOperationsInput | number
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  isOnPromotion?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  promotionalPrice?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
+  promotionEndDate?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  promotionStartDate?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  promotionPercentage?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
+  slug?: Prisma.StringFieldUpdateOperationsInput | string
+  deletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  Headquarter?: Prisma.HeadquarterUpdateManyWithoutPlanNestedInput
+  PlanBenefit?: Prisma.PlanBenefitUpdateManyWithoutPlanNestedInput
+  subscriptions?: Prisma.ClinicSubscriptionUpdateManyWithoutPlanNestedInput
+  currency?: Prisma.CurrencyUpdateOneRequiredWithoutPlanNestedInput
+}
+
+export type PlanUncheckedUpdateWithoutSubscriptionRequestsInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  total_branch?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  price?: Prisma.FloatFieldUpdateOperationsInput | number
+  subscriptionPrice?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  subscriptionMonths?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  isSubscriptionOption?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  currencyId?: Prisma.StringFieldUpdateOperationsInput | string
+  duration?: Prisma.IntFieldUpdateOperationsInput | number
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  isOnPromotion?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  promotionalPrice?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
+  promotionEndDate?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  promotionStartDate?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  promotionPercentage?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
+  slug?: Prisma.StringFieldUpdateOperationsInput | string
+  deletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  Headquarter?: Prisma.HeadquarterUncheckedUpdateManyWithoutPlanNestedInput
+  PlanBenefit?: Prisma.PlanBenefitUncheckedUpdateManyWithoutPlanNestedInput
+  subscriptions?: Prisma.ClinicSubscriptionUncheckedUpdateManyWithoutPlanNestedInput
 }
 
 export type PlanCreateManyCurrencyInput = {
@@ -1004,6 +1416,9 @@ export type PlanCreateManyCurrencyInput = {
   name: string
   total_branch?: number | null
   price?: number
+  subscriptionPrice?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  subscriptionMonths?: number | null
+  isSubscriptionOption?: boolean
   duration?: number
   createdAt?: Date | string
   updatedAt?: Date | string
@@ -1021,6 +1436,9 @@ export type PlanUpdateWithoutCurrencyInput = {
   name?: Prisma.StringFieldUpdateOperationsInput | string
   total_branch?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   price?: Prisma.FloatFieldUpdateOperationsInput | number
+  subscriptionPrice?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  subscriptionMonths?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  isSubscriptionOption?: Prisma.BoolFieldUpdateOperationsInput | boolean
   duration?: Prisma.IntFieldUpdateOperationsInput | number
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -1033,6 +1451,8 @@ export type PlanUpdateWithoutCurrencyInput = {
   deletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   Headquarter?: Prisma.HeadquarterUpdateManyWithoutPlanNestedInput
   PlanBenefit?: Prisma.PlanBenefitUpdateManyWithoutPlanNestedInput
+  subscriptions?: Prisma.ClinicSubscriptionUpdateManyWithoutPlanNestedInput
+  subscriptionRequests?: Prisma.SubscriptionRequestUpdateManyWithoutPlanNestedInput
 }
 
 export type PlanUncheckedUpdateWithoutCurrencyInput = {
@@ -1040,6 +1460,9 @@ export type PlanUncheckedUpdateWithoutCurrencyInput = {
   name?: Prisma.StringFieldUpdateOperationsInput | string
   total_branch?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   price?: Prisma.FloatFieldUpdateOperationsInput | number
+  subscriptionPrice?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  subscriptionMonths?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  isSubscriptionOption?: Prisma.BoolFieldUpdateOperationsInput | boolean
   duration?: Prisma.IntFieldUpdateOperationsInput | number
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -1052,6 +1475,8 @@ export type PlanUncheckedUpdateWithoutCurrencyInput = {
   deletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   Headquarter?: Prisma.HeadquarterUncheckedUpdateManyWithoutPlanNestedInput
   PlanBenefit?: Prisma.PlanBenefitUncheckedUpdateManyWithoutPlanNestedInput
+  subscriptions?: Prisma.ClinicSubscriptionUncheckedUpdateManyWithoutPlanNestedInput
+  subscriptionRequests?: Prisma.SubscriptionRequestUncheckedUpdateManyWithoutPlanNestedInput
 }
 
 export type PlanUncheckedUpdateManyWithoutCurrencyInput = {
@@ -1059,6 +1484,9 @@ export type PlanUncheckedUpdateManyWithoutCurrencyInput = {
   name?: Prisma.StringFieldUpdateOperationsInput | string
   total_branch?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   price?: Prisma.FloatFieldUpdateOperationsInput | number
+  subscriptionPrice?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  subscriptionMonths?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  isSubscriptionOption?: Prisma.BoolFieldUpdateOperationsInput | boolean
   duration?: Prisma.IntFieldUpdateOperationsInput | number
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -1079,11 +1507,15 @@ export type PlanUncheckedUpdateManyWithoutCurrencyInput = {
 export type PlanCountOutputType = {
   Headquarter: number
   PlanBenefit: number
+  subscriptions: number
+  subscriptionRequests: number
 }
 
 export type PlanCountOutputTypeSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   Headquarter?: boolean | PlanCountOutputTypeCountHeadquarterArgs
   PlanBenefit?: boolean | PlanCountOutputTypeCountPlanBenefitArgs
+  subscriptions?: boolean | PlanCountOutputTypeCountSubscriptionsArgs
+  subscriptionRequests?: boolean | PlanCountOutputTypeCountSubscriptionRequestsArgs
 }
 
 /**
@@ -1110,12 +1542,29 @@ export type PlanCountOutputTypeCountPlanBenefitArgs<ExtArgs extends runtime.Type
   where?: Prisma.PlanBenefitWhereInput
 }
 
+/**
+ * PlanCountOutputType without action
+ */
+export type PlanCountOutputTypeCountSubscriptionsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  where?: Prisma.ClinicSubscriptionWhereInput
+}
+
+/**
+ * PlanCountOutputType without action
+ */
+export type PlanCountOutputTypeCountSubscriptionRequestsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  where?: Prisma.SubscriptionRequestWhereInput
+}
+
 
 export type PlanSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
   id?: boolean
   name?: boolean
   total_branch?: boolean
   price?: boolean
+  subscriptionPrice?: boolean
+  subscriptionMonths?: boolean
+  isSubscriptionOption?: boolean
   currencyId?: boolean
   duration?: boolean
   createdAt?: boolean
@@ -1129,6 +1578,8 @@ export type PlanSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = r
   deletedAt?: boolean
   Headquarter?: boolean | Prisma.Plan$HeadquarterArgs<ExtArgs>
   PlanBenefit?: boolean | Prisma.Plan$PlanBenefitArgs<ExtArgs>
+  subscriptions?: boolean | Prisma.Plan$subscriptionsArgs<ExtArgs>
+  subscriptionRequests?: boolean | Prisma.Plan$subscriptionRequestsArgs<ExtArgs>
   currency?: boolean | Prisma.CurrencyDefaultArgs<ExtArgs>
   _count?: boolean | Prisma.PlanCountOutputTypeDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["plan"]>
@@ -1138,6 +1589,9 @@ export type PlanSelectCreateManyAndReturn<ExtArgs extends runtime.Types.Extensio
   name?: boolean
   total_branch?: boolean
   price?: boolean
+  subscriptionPrice?: boolean
+  subscriptionMonths?: boolean
+  isSubscriptionOption?: boolean
   currencyId?: boolean
   duration?: boolean
   createdAt?: boolean
@@ -1157,6 +1611,9 @@ export type PlanSelectUpdateManyAndReturn<ExtArgs extends runtime.Types.Extensio
   name?: boolean
   total_branch?: boolean
   price?: boolean
+  subscriptionPrice?: boolean
+  subscriptionMonths?: boolean
+  isSubscriptionOption?: boolean
   currencyId?: boolean
   duration?: boolean
   createdAt?: boolean
@@ -1176,6 +1633,9 @@ export type PlanSelectScalar = {
   name?: boolean
   total_branch?: boolean
   price?: boolean
+  subscriptionPrice?: boolean
+  subscriptionMonths?: boolean
+  isSubscriptionOption?: boolean
   currencyId?: boolean
   duration?: boolean
   createdAt?: boolean
@@ -1189,10 +1649,12 @@ export type PlanSelectScalar = {
   deletedAt?: boolean
 }
 
-export type PlanOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "name" | "total_branch" | "price" | "currencyId" | "duration" | "createdAt" | "updatedAt" | "isOnPromotion" | "promotionalPrice" | "promotionEndDate" | "promotionStartDate" | "promotionPercentage" | "slug" | "deletedAt", ExtArgs["result"]["plan"]>
+export type PlanOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "name" | "total_branch" | "price" | "subscriptionPrice" | "subscriptionMonths" | "isSubscriptionOption" | "currencyId" | "duration" | "createdAt" | "updatedAt" | "isOnPromotion" | "promotionalPrice" | "promotionEndDate" | "promotionStartDate" | "promotionPercentage" | "slug" | "deletedAt", ExtArgs["result"]["plan"]>
 export type PlanInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   Headquarter?: boolean | Prisma.Plan$HeadquarterArgs<ExtArgs>
   PlanBenefit?: boolean | Prisma.Plan$PlanBenefitArgs<ExtArgs>
+  subscriptions?: boolean | Prisma.Plan$subscriptionsArgs<ExtArgs>
+  subscriptionRequests?: boolean | Prisma.Plan$subscriptionRequestsArgs<ExtArgs>
   currency?: boolean | Prisma.CurrencyDefaultArgs<ExtArgs>
   _count?: boolean | Prisma.PlanCountOutputTypeDefaultArgs<ExtArgs>
 }
@@ -1208,6 +1670,8 @@ export type $PlanPayload<ExtArgs extends runtime.Types.Extensions.InternalArgs =
   objects: {
     Headquarter: Prisma.$HeadquarterPayload<ExtArgs>[]
     PlanBenefit: Prisma.$PlanBenefitPayload<ExtArgs>[]
+    subscriptions: Prisma.$ClinicSubscriptionPayload<ExtArgs>[]
+    subscriptionRequests: Prisma.$SubscriptionRequestPayload<ExtArgs>[]
     currency: Prisma.$CurrencyPayload<ExtArgs>
   }
   scalars: runtime.Types.Extensions.GetPayloadResult<{
@@ -1215,6 +1679,9 @@ export type $PlanPayload<ExtArgs extends runtime.Types.Extensions.InternalArgs =
     name: string
     total_branch: number | null
     price: number
+    subscriptionPrice: runtime.Decimal | null
+    subscriptionMonths: number | null
+    isSubscriptionOption: boolean
     currencyId: string
     duration: number
     createdAt: Date
@@ -1622,6 +2089,8 @@ export interface Prisma__PlanClient<T, Null = never, ExtArgs extends runtime.Typ
   readonly [Symbol.toStringTag]: "PrismaPromise"
   Headquarter<T extends Prisma.Plan$HeadquarterArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Plan$HeadquarterArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$HeadquarterPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   PlanBenefit<T extends Prisma.Plan$PlanBenefitArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Plan$PlanBenefitArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$PlanBenefitPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+  subscriptions<T extends Prisma.Plan$subscriptionsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Plan$subscriptionsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$ClinicSubscriptionPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+  subscriptionRequests<T extends Prisma.Plan$subscriptionRequestsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Plan$subscriptionRequestsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$SubscriptionRequestPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   currency<T extends Prisma.CurrencyDefaultArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.CurrencyDefaultArgs<ExtArgs>>): Prisma.Prisma__CurrencyClient<runtime.Types.Result.GetResult<Prisma.$CurrencyPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
   /**
    * Attaches callbacks for the resolution and/or rejection of the Promise.
@@ -1656,6 +2125,9 @@ export interface PlanFieldRefs {
   readonly name: Prisma.FieldRef<"Plan", 'String'>
   readonly total_branch: Prisma.FieldRef<"Plan", 'Int'>
   readonly price: Prisma.FieldRef<"Plan", 'Float'>
+  readonly subscriptionPrice: Prisma.FieldRef<"Plan", 'Decimal'>
+  readonly subscriptionMonths: Prisma.FieldRef<"Plan", 'Int'>
+  readonly isSubscriptionOption: Prisma.FieldRef<"Plan", 'Boolean'>
   readonly currencyId: Prisma.FieldRef<"Plan", 'String'>
   readonly duration: Prisma.FieldRef<"Plan", 'Int'>
   readonly createdAt: Prisma.FieldRef<"Plan", 'DateTime'>
@@ -2108,6 +2580,54 @@ export type Plan$PlanBenefitArgs<ExtArgs extends runtime.Types.Extensions.Intern
   take?: number
   skip?: number
   distinct?: Prisma.PlanBenefitScalarFieldEnum | Prisma.PlanBenefitScalarFieldEnum[]
+}
+
+/**
+ * Plan.subscriptions
+ */
+export type Plan$subscriptionsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the ClinicSubscription
+   */
+  select?: Prisma.ClinicSubscriptionSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the ClinicSubscription
+   */
+  omit?: Prisma.ClinicSubscriptionOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.ClinicSubscriptionInclude<ExtArgs> | null
+  where?: Prisma.ClinicSubscriptionWhereInput
+  orderBy?: Prisma.ClinicSubscriptionOrderByWithRelationInput | Prisma.ClinicSubscriptionOrderByWithRelationInput[]
+  cursor?: Prisma.ClinicSubscriptionWhereUniqueInput
+  take?: number
+  skip?: number
+  distinct?: Prisma.ClinicSubscriptionScalarFieldEnum | Prisma.ClinicSubscriptionScalarFieldEnum[]
+}
+
+/**
+ * Plan.subscriptionRequests
+ */
+export type Plan$subscriptionRequestsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the SubscriptionRequest
+   */
+  select?: Prisma.SubscriptionRequestSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the SubscriptionRequest
+   */
+  omit?: Prisma.SubscriptionRequestOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.SubscriptionRequestInclude<ExtArgs> | null
+  where?: Prisma.SubscriptionRequestWhereInput
+  orderBy?: Prisma.SubscriptionRequestOrderByWithRelationInput | Prisma.SubscriptionRequestOrderByWithRelationInput[]
+  cursor?: Prisma.SubscriptionRequestWhereUniqueInput
+  take?: number
+  skip?: number
+  distinct?: Prisma.SubscriptionRequestScalarFieldEnum | Prisma.SubscriptionRequestScalarFieldEnum[]
 }
 
 /**
