@@ -19,7 +19,6 @@ import {
   addCalendarMonthsUtc,
   quoteForPlan,
 } from '../../plans/domain/subscription-pricing';
-import { PaymentProofScanner } from '../infra/security/payment-proof-scanner';
 import {
   CreateSubscriptionRequestDto,
   RejectSubscriptionRequestDto,
@@ -63,7 +62,6 @@ export class SubscriptionsService {
   constructor(
     private readonly prisma: PrismaService,
     private readonly proofStorage: PatientExamStorage,
-    private readonly proofScanner: PaymentProofScanner,
   ) {}
 
   async listOptions() {
@@ -303,7 +301,6 @@ export class SubscriptionsService {
     const { plan, quote, paymentDate } =
       await this.getRequestPlanAndPayment(input);
     const proof = this.validateProof(file);
-    await this.proofScanner.scan(file.buffer);
     await this.assertNoOpenRequest(headquarterId);
 
     const storageKey = `subscription-proofs/${randomUUID()}`;

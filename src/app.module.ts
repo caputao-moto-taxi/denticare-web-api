@@ -23,6 +23,7 @@ import { FinancesModule } from './finances/finances.module';
 import { ScheduleModule } from '@nestjs/schedule';
 import { SubscriptionsModule } from './subscriptions/subscriptions.module';
 import { PlatformAdminModule } from './platform-admin/platform-admin.module';
+import { AssistantModule } from './assistant/assistant.module';
 
 @Module({
   imports: [
@@ -51,6 +52,7 @@ import { PlatformAdminModule } from './platform-admin/platform-admin.module';
     ScheduleModule.forRoot(),
     SubscriptionsModule,
     PlatformAdminModule,
+    AssistantModule,
   ],
 })
 export class AppModule implements NestModule {

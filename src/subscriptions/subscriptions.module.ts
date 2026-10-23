@@ -9,10 +9,6 @@ import {
   PlatformOwnerGuard,
 } from './infra/http/platform-owner.guard';
 import { SubscriptionsController } from './infra/http/subscriptions.controller';
-import {
-  ClamAvPaymentProofScanner,
-  PaymentProofScanner,
-} from './infra/security/payment-proof-scanner';
 
 @Module({
   imports: [AuthModule],
@@ -23,10 +19,6 @@ import {
     PlatformOwnerGuard,
     ClinicAdminGuard,
     PatientExamStorage,
-    {
-      provide: PaymentProofScanner,
-      useClass: ClamAvPaymentProofScanner,
-    },
   ],
   exports: [PlatformOwnerGuard],
 })

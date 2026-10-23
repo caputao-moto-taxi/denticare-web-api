@@ -41,6 +41,13 @@ O endpoint R2 deve apresentar uma cadeia HTTPS confiável pelo Node.js. Se a
 validação TLS falhar, corrija o endpoint ou a cadeia de certificados; a API
 não aceita certificados autoassinados.
 
+Para usar o assistente odontológico, configure `OPENAI_API_KEY` com uma chave
+de API da OpenAI. `OPENAI_MODEL` é opcional e usa `gpt-4o-mini` por padrão.
+Em desenvolvimento local, defina as variáveis em `.env.development`; no
+Docker Compose, defina-as no `.env` junto ao `docker-compose.yml` ou no ambiente
+do processo que executa o Compose. Não envie nem versione a chave. O endpoint
+`POST /assistant/chat` exige autenticação e recebe até 16 mensagens recentes.
+
 Para email, configure `SMTP_USER` e `SMTP_PASSWORD` com as credenciais da caixa
 postal. O servidor de saída é `mail.aquatecnica.ao`, na porta 465 com SSL/TLS.
 As variáveis antigas `GMAIL_USER` e `GMAIL_APP_PASSWORD` continuam aceites como
