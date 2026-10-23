@@ -1,16 +1,27 @@
 import { PrismaService } from '../shared/infra/db/prisma/prisma.service';
-import { CancelAppointmentUseCase } from './application/useCases/cancel-appointment/cancel-appointment-use-case';
-import { CompleteAppointmentUseCase } from './application/useCases/complete-appointment/complete-appointment-use-case';
-import { CreateAppointmentUseCase } from './application/useCases/create-appointment/create-appointment-use-case';
-import { GetAppointmentAvailabilityUseCase } from './application/useCases/get-appointment-availability/get-appointment-availability-use-case';
-import { GetAppointmentUseCase } from './application/useCases/get-appointment/get-appointment-use-case';
-import { ListAppointmentsUseCase } from './application/useCases/list-appointments/list-appointments-use-case';
-import { RescheduleAppointmentUseCase } from './application/useCases/reschedule-appointment/reschedule-appointment-use-case';
-import { UpdateAppointmentUseCase } from './application/useCases/update-appointment/update-appointment-use-case';
-import { IAppointmentRepository } from './domain/appointment.repository';
+import { AppointmentSchedulingService } from './application/common/appointment-scheduling.service';
+import {
+  CancelAppointmentUseCase,
+  CompleteAppointmentUseCase,
+  CreateAppointmentUseCase,
+  GetAppointmentAvailabilityUseCase,
+  GetAppointmentUseCase,
+  ListAppointmentsUseCase,
+  RescheduleAppointmentUseCase,
+  UpdateAppointmentUseCase,
+} from './application/useCases';
+import {
+  IAppointmentClinicRepository,
+  IAppointmentDoctorRepository,
+  IAppointmentPatientRepository,
+  IAppointmentRepository,
+} from './domain';
+import { AppointmentClinicPrismaRepository } from './infra/db/prisma/appointment-clinic-prisma.repository';
+import { AppointmentDoctorPrismaRepository } from './infra/db/prisma/appointment-doctor-prisma.repository';
+import { AppointmentPatientPrismaRepository } from './infra/db/prisma/appointment-patient-prisma.repository';
 import { AppointmentsPrismaRepository } from './infra/db/prisma/appointments-prisma.repository';
 
-const REPOSITORIES = {
+export const REPOSITORIES = {
   APPOINTMENT_REPOSITORY: {
     provide: 'AppointmentRepository',
     useExisting: AppointmentsPrismaRepository,
@@ -21,57 +32,165 @@ const REPOSITORIES = {
       new AppointmentsPrismaRepository(prismaService),
     inject: [PrismaService],
   },
+  APPOINTMENT_CLINIC_REPOSITORY: {
+    provide: 'AppointmentClinicRepository',
+    useExisting: AppointmentClinicPrismaRepository,
+  },
+  APPOINTMENT_CLINIC_PRISMA_REPOSITORY: {
+    provide: AppointmentClinicPrismaRepository,
+    useFactory: (prismaService: PrismaService) =>
+      new AppointmentClinicPrismaRepository(prismaService),
+    inject: [PrismaService],
+  },
+  APPOINTMENT_PATIENT_REPOSITORY: {
+    provide: 'AppointmentPatientRepository',
+    useExisting: AppointmentPatientPrismaRepository,
+  },
+  APPOINTMENT_PATIENT_PRISMA_REPOSITORY: {
+    provide: AppointmentPatientPrismaRepository,
+    useFactory: (prismaService: PrismaService) =>
+      new AppointmentPatientPrismaRepository(prismaService),
+    inject: [PrismaService],
+  },
+  APPOINTMENT_DOCTOR_REPOSITORY: {
+    provide: 'AppointmentDoctorRepository',
+    useExisting: AppointmentDoctorPrismaRepository,
+  },
+  APPOINTMENT_DOCTOR_PRISMA_REPOSITORY: {
+    provide: AppointmentDoctorPrismaRepository,
+    useFactory: (prismaService: PrismaService) =>
+      new AppointmentDoctorPrismaRepository(prismaService),
+    inject: [PrismaService],
+  },
 };
 
-const USE_CASES = {
-  LIST: {
+export const SERVICES = {
+  APPOINTMENT_SCHEDULING_SERVICE: {
+    provide: AppointmentSchedulingService,
+    useFactory: (
+      clinicRepository: IAppointmentClinicRepository,
+      appointmentRepository: IAppointmentRepository,
+    ) =>
+      new AppointmentSchedulingService(clinicRepository, appointmentRepository),
+    inject: [
+      REPOSITORIES.APPOINTMENT_CLINIC_REPOSITORY.provide,
+      REPOSITORIES.APPOINTMENT_REPOSITORY.provide,
+    ],
+  },
+};
+
+export const USE_CASES = {
+  LIST_APPOINTMENTS_USE_CASE: {
     provide: ListAppointmentsUseCase,
-    useFactory: (repository: IAppointmentRepository) =>
-      new ListAppointmentsUseCase(repository),
-    inject: [REPOSITORIES.APPOINTMENT_REPOSITORY.provide],
+    useFactory: (
+      appointmentRepository: IAppointmentRepository,
+      patientRepository: IAppointmentPatientRepository,
+    ) => new ListAppointmentsUseCase(appointmentRepository, patientRepository),
+    inject: [
+      REPOSITORIES.APPOINTMENT_REPOSITORY.provide,
+      REPOSITORIES.APPOINTMENT_PATIENT_REPOSITORY.provide,
+    ],
   },
-  GET: {
+  GET_APPOINTMENT_USE_CASE: {
     provide: GetAppointmentUseCase,
-    useFactory: (repository: IAppointmentRepository) =>
-      new GetAppointmentUseCase(repository),
+    useFactory: (appointmentRepository: IAppointmentRepository) =>
+      new GetAppointmentUseCase(appointmentRepository),
     inject: [REPOSITORIES.APPOINTMENT_REPOSITORY.provide],
   },
-  CREATE: {
+  CREATE_APPOINTMENT_USE_CASE: {
     provide: CreateAppointmentUseCase,
-    useFactory: (repository: IAppointmentRepository) =>
-      new CreateAppointmentUseCase(repository),
-    inject: [REPOSITORIES.APPOINTMENT_REPOSITORY.provide],
+    useFactory: (
+      appointmentRepository: IAppointmentRepository,
+      patientRepository: IAppointmentPatientRepository,
+      doctorRepository: IAppointmentDoctorRepository,
+      scheduling: AppointmentSchedulingService,
+    ) =>
+      new CreateAppointmentUseCase(
+        appointmentRepository,
+        patientRepository,
+        doctorRepository,
+        scheduling,
+      ),
+    inject: [
+      REPOSITORIES.APPOINTMENT_REPOSITORY.provide,
+      REPOSITORIES.APPOINTMENT_PATIENT_REPOSITORY.provide,
+      REPOSITORIES.APPOINTMENT_DOCTOR_REPOSITORY.provide,
+      SERVICES.APPOINTMENT_SCHEDULING_SERVICE.provide,
+    ],
   },
-  CANCEL: {
+  CANCEL_APPOINTMENT_USE_CASE: {
     provide: CancelAppointmentUseCase,
-    useFactory: (repository: IAppointmentRepository) =>
-      new CancelAppointmentUseCase(repository),
+    useFactory: (appointmentRepository: IAppointmentRepository) =>
+      new CancelAppointmentUseCase(appointmentRepository),
     inject: [REPOSITORIES.APPOINTMENT_REPOSITORY.provide],
   },
-  COMPLETE: {
+  COMPLETE_APPOINTMENT_USE_CASE: {
     provide: CompleteAppointmentUseCase,
-    useFactory: (repository: IAppointmentRepository) =>
-      new CompleteAppointmentUseCase(repository),
+    useFactory: (appointmentRepository: IAppointmentRepository) =>
+      new CompleteAppointmentUseCase(appointmentRepository),
     inject: [REPOSITORIES.APPOINTMENT_REPOSITORY.provide],
   },
-  RESCHEDULE: {
+  RESCHEDULE_APPOINTMENT_USE_CASE: {
     provide: RescheduleAppointmentUseCase,
-    useFactory: (repository: IAppointmentRepository) =>
-      new RescheduleAppointmentUseCase(repository),
-    inject: [REPOSITORIES.APPOINTMENT_REPOSITORY.provide],
+    useFactory: (
+      appointmentRepository: IAppointmentRepository,
+      doctorRepository: IAppointmentDoctorRepository,
+      scheduling: AppointmentSchedulingService,
+    ) =>
+      new RescheduleAppointmentUseCase(
+        appointmentRepository,
+        doctorRepository,
+        scheduling,
+      ),
+    inject: [
+      REPOSITORIES.APPOINTMENT_REPOSITORY.provide,
+      REPOSITORIES.APPOINTMENT_DOCTOR_REPOSITORY.provide,
+      SERVICES.APPOINTMENT_SCHEDULING_SERVICE.provide,
+    ],
   },
-  UPDATE: {
+  UPDATE_APPOINTMENT_USE_CASE: {
     provide: UpdateAppointmentUseCase,
-    useFactory: (repository: IAppointmentRepository) =>
-      new UpdateAppointmentUseCase(repository),
-    inject: [REPOSITORIES.APPOINTMENT_REPOSITORY.provide],
+    useFactory: (
+      appointmentRepository: IAppointmentRepository,
+      patientRepository: IAppointmentPatientRepository,
+      doctorRepository: IAppointmentDoctorRepository,
+      scheduling: AppointmentSchedulingService,
+    ) =>
+      new UpdateAppointmentUseCase(
+        appointmentRepository,
+        patientRepository,
+        doctorRepository,
+        scheduling,
+      ),
+    inject: [
+      REPOSITORIES.APPOINTMENT_REPOSITORY.provide,
+      REPOSITORIES.APPOINTMENT_PATIENT_REPOSITORY.provide,
+      REPOSITORIES.APPOINTMENT_DOCTOR_REPOSITORY.provide,
+      SERVICES.APPOINTMENT_SCHEDULING_SERVICE.provide,
+    ],
   },
-  AVAILABILITY: {
+  GET_APPOINTMENT_AVAILABILITY_USE_CASE: {
     provide: GetAppointmentAvailabilityUseCase,
-    useFactory: (repository: IAppointmentRepository) =>
-      new GetAppointmentAvailabilityUseCase(repository),
-    inject: [REPOSITORIES.APPOINTMENT_REPOSITORY.provide],
+    useFactory: (
+      appointmentRepository: IAppointmentRepository,
+      doctorRepository: IAppointmentDoctorRepository,
+      scheduling: AppointmentSchedulingService,
+    ) =>
+      new GetAppointmentAvailabilityUseCase(
+        appointmentRepository,
+        doctorRepository,
+        scheduling,
+      ),
+    inject: [
+      REPOSITORIES.APPOINTMENT_REPOSITORY.provide,
+      REPOSITORIES.APPOINTMENT_DOCTOR_REPOSITORY.provide,
+      SERVICES.APPOINTMENT_SCHEDULING_SERVICE.provide,
+    ],
   },
 };
 
-export const APPOINTMENT_PROVIDERS = { REPOSITORIES, USE_CASES };
+export const APPOINTMENT_PROVIDERS = {
+  REPOSITORIES,
+  SERVICES,
+  USE_CASES,
+};

@@ -5,7 +5,7 @@ import {
   NotFoundException,
 } from '@nestjs/common';
 import { Prisma } from '../../../../../generated/prisma/client';
-import { APPOINTMENT_SLOT_DURATION_MS } from '../../../../appointments/appointment-time';
+import { APPOINTMENT_SLOT_DURATION_MS } from '../../../../appointments/domain/appointment-time';
 import { AuthUser } from '../../../../auth/auth-user';
 import {
   DaySchedule,

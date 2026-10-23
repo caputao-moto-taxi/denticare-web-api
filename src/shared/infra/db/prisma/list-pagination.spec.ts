@@ -4,6 +4,8 @@ import { AuthUser } from '../../../../auth/auth-user';
 import { PatientsPrismaRepository } from '../../../../patients/infra/db/prisma/patients-prisma.repository';
 import { DoctorsPrismaRepository } from '../../../../doctors/infra/db/prisma/doctors-prisma.repository';
 import { AppointmentsPrismaRepository } from '../../../../appointments/infra/db/prisma/appointments-prisma.repository';
+import { AppointmentPatientPrismaRepository } from '../../../../appointments/infra/db/prisma/appointment-patient-prisma.repository';
+import { ListAppointmentsUseCase } from '../../../../appointments/application/useCases';
 import { UsersPrismaRepository } from '../../../../users/infra/db/prisma/users-prisma.repository';
 import { StockPrismaRepository } from '../../../../stock/infra/db/prisma/stock-prisma.repository';
 import { TreatmentPlansPrismaRepository } from '../../../../treatment-plans/infra/db/prisma/treatment-plans-prisma.repository';
@@ -54,7 +56,15 @@ describe('Database listing pagination', () => {
       providers: [
         { provide: PrismaService, useValue: prisma },
         PatientsPrismaRepository,
-        AppointmentsPrismaRepository,
+        {
+          provide: ListAppointmentsUseCase,
+          useFactory: (db: PrismaService) =>
+            new ListAppointmentsUseCase(
+              new AppointmentsPrismaRepository(db),
+              new AppointmentPatientPrismaRepository(db),
+            ),
+          inject: [PrismaService],
+        },
         StockPrismaRepository,
         TreatmentPlansPrismaRepository,
         ChatPrismaRepository,
@@ -76,8 +86,13 @@ describe('Database listing pagination', () => {
       patients: (query, caller = user) =>
         module.get(PatientsPrismaRepository).list(caller, query),
       doctors: (query) => module.get(DoctorsPrismaRepository).list(user, query),
-      appointments: (query, caller = user) =>
-        module.get(AppointmentsPrismaRepository).list(caller, query),
+      appointments: async (query, caller = user) => {
+        const result = await module
+          .get(ListAppointmentsUseCase)
+          .execute({ user: caller, query });
+        if (result.status === 400) throw new BadRequestException(result.data);
+        return result.data;
+      },
       users: (query) => module.get(UsersPrismaRepository).list(user, query),
       stock: (query) => module.get(StockPrismaRepository).list(user, query),
       treatments: (query) =>
@@ -148,9 +163,9 @@ describe('Database listing pagination', () => {
           entity === 'appointment'
             ? { doctor: { branchId: 'my-clinic' } }
             : {
-              branchId: 'my-clinic',
-              ...(entity !== 'chatConversation' && { deletedAt: null }),
-            },
+                branchId: 'my-clinic',
+                ...(entity !== 'chatConversation' && { deletedAt: null }),
+              },
         );
       }
       if (name === 'conversations') {
@@ -184,7 +199,7 @@ describe('Database listing pagination', () => {
   it('does not allow a doctor filter to override the authenticated doctor scope', async () => {
     await list.appointments(
       { doctorId: 'another-doctor' },
-      { ...user, role: 'doctor' },
+      { ...user, role: 'doctor', permissions: ['appointments.read.assigned'] },
     );
     expect(models.appointment.findMany).toHaveBeenCalledWith(
       expect.objectContaining({

@@ -8,6 +8,7 @@ import { APPOINTMENT_PROVIDERS } from './appointments.providers';
   controllers: [AppointmentsController],
   providers: [
     ...Object.values(APPOINTMENT_PROVIDERS.REPOSITORIES),
+    ...Object.values(APPOINTMENT_PROVIDERS.SERVICES),
     ...Object.values(APPOINTMENT_PROVIDERS.USE_CASES),
   ],
 })

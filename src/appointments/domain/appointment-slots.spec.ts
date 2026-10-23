@@ -6,7 +6,7 @@ import {
 import {
   DEFAULT_CLINIC_SCHEDULE,
   WeeklySchedule,
-} from '../shared/helpers/schedule';
+} from '../../shared/helpers/schedule';
 
 describe('buildFreeSlots', () => {
   const monday = new Date('2026-03-09T00:00:00.000Z');

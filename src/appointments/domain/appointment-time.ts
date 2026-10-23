@@ -3,7 +3,7 @@ import {
   timeToMinutes,
   WeeklySchedule,
   weekdayOf,
-} from '../shared/helpers/schedule';
+} from '../../shared/helpers/schedule';
 
 export const APPOINTMENT_SLOT_DURATION_MS = 30 * 60 * 1000;
 
@@ -99,12 +99,7 @@ export function buildFreeSlots(input: {
   now: Date;
 }): FreeSlot[] {
   const { date, clinic, doctors, booked, now } = input;
-  const dayStart = Date.UTC(
-    now.getUTCFullYear(),
-    now.getUTCMonth(),
-    now.getUTCDate(),
-  );
-  if (date.getTime() < dayStart) return [];
+  if (date.getTime() < startOfDayUtc(now)) return [];
 
   const hours = clinic.workingHours[weekdayOf(date)];
   const open = hours?.start ? timeToMinutes(hours.start) : null;
@@ -162,5 +157,20 @@ export function rankDoctorsByLoad(
   }
   return [...doctorIds].sort(
     (a, b) => (load.get(a) ?? 0) - (load.get(b) ?? 0) || a.localeCompare(b),
+  );
+}
+
+export function startOfDayUtc(now: Date): number {
+  return Date.UTC(now.getUTCFullYear(), now.getUTCMonth(), now.getUTCDate());
+}
+
+export function isClosedDay(
+  date: Date,
+  clinic: WeeklySchedule,
+  now: Date,
+): boolean {
+  return (
+    date.getTime() < startOfDayUtc(now) ||
+    !clinic.workingDays.includes(weekdayOf(date))
   );
 }

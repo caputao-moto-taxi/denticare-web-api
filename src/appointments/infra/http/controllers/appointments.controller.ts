@@ -6,29 +6,37 @@ import {
   Patch,
   Post,
   Query,
+  Res,
   UseGuards,
 } from '@nestjs/common';
 import { ApiBearerAuth, ApiTags } from '@nestjs/swagger';
+import { Response } from 'express';
 import { AuthUser } from '../../../../auth/auth-user';
 import { CurrentUser } from '../../../../auth/current-user.decorator';
 import { JwtAuthGuard } from '../../../../auth/jwt-auth.guard';
 import { PermissionsGuard } from '../../../../auth/permissions.guard';
 import { RequirePermissions } from '../../../../auth/permissions';
+import { HttpResponse } from '../../../../shared/contracts/httpContracts';
 import { ListQueryDto } from '../../../../shared/infra/http/list-query.dto';
-import { CancelAppointmentUseCase } from '../../../application/useCases/cancel-appointment/cancel-appointment-use-case';
-import { CompleteAppointmentUseCase } from '../../../application/useCases/complete-appointment/complete-appointment-use-case';
-import { CreateAppointmentUseCase } from '../../../application/useCases/create-appointment/create-appointment-use-case';
-import { GetAppointmentAvailabilityUseCase } from '../../../application/useCases/get-appointment-availability/get-appointment-availability-use-case';
-import { GetAppointmentUseCase } from '../../../application/useCases/get-appointment/get-appointment-use-case';
-import { ListAppointmentsUseCase } from '../../../application/useCases/list-appointments/list-appointments-use-case';
-import { RescheduleAppointmentUseCase } from '../../../application/useCases/reschedule-appointment/reschedule-appointment-use-case';
-import { UpdateAppointmentUseCase } from '../../../application/useCases/update-appointment/update-appointment-use-case';
+import {
+  CancelAppointmentUseCase,
+  CompleteAppointmentUseCase,
+  CreateAppointmentUseCase,
+  GetAppointmentAvailabilityUseCase,
+  GetAppointmentUseCase,
+  ListAppointmentsUseCase,
+  RescheduleAppointmentUseCase,
+  UpdateAppointmentUseCase,
+} from '../../../application/useCases';
 import {
   AppointmentAvailabilityQuery,
   CreateAppointmentDto,
   RescheduleAppointmentDto,
   UpdateAppointmentDto,
 } from './dtos/appointment.dto';
+
+const send = (res: Response, result: HttpResponse) =>
+  res.status(result.status).json(result.data);
 
 @ApiTags('Appointments')
 @ApiBearerAuth()
@@ -48,60 +56,86 @@ export class AppointmentsController {
 
   @Get()
   @RequirePermissions('appointments.read.all', 'appointments.read.assigned')
-  list(@CurrentUser() user: AuthUser, @Query() query: ListQueryDto) {
-    return this.listAppointments.execute({ user, query });
+  async list(
+    @CurrentUser() user: AuthUser,
+    @Query() query: ListQueryDto,
+    @Res() res: Response,
+  ) {
+    return send(res, await this.listAppointments.execute({ user, query }));
   }
 
   @Get('availability')
   @RequirePermissions('appointments.create')
-  availability(
+  async availability(
     @CurrentUser() user: AuthUser,
     @Query() query: AppointmentAvailabilityQuery,
+    @Res() res: Response,
   ) {
-    return this.getAvailability.execute({ user, query });
+    return send(res, await this.getAvailability.execute({ user, query }));
   }
 
   @Get(':id')
   @RequirePermissions('appointments.read.all', 'appointments.read.assigned')
-  findOne(@CurrentUser() user: AuthUser, @Param('id') id: string) {
-    return this.getAppointment.execute({ user, id });
+  async findOne(
+    @CurrentUser() user: AuthUser,
+    @Param('id') id: string,
+    @Res() res: Response,
+  ) {
+    return send(res, await this.getAppointment.execute({ user, id }));
   }
 
   @Post()
   @RequirePermissions('appointments.create')
-  create(@CurrentUser() user: AuthUser, @Body() input: CreateAppointmentDto) {
-    return this.createAppointment.execute({ user, input });
+  async create(
+    @CurrentUser() user: AuthUser,
+    @Body() input: CreateAppointmentDto,
+    @Res() res: Response,
+  ) {
+    return send(res, await this.createAppointment.execute({ user, input }));
   }
 
   @Patch(':id/cancel')
   @RequirePermissions('appointments.manage')
-  cancel(@CurrentUser() user: AuthUser, @Param('id') id: string) {
-    return this.cancelAppointment.execute({ user, id });
+  async cancel(
+    @CurrentUser() user: AuthUser,
+    @Param('id') id: string,
+    @Res() res: Response,
+  ) {
+    return send(res, await this.cancelAppointment.execute({ user, id }));
   }
 
   @Patch(':id/complete')
   @RequirePermissions('appointments.manage')
-  complete(@CurrentUser() user: AuthUser, @Param('id') id: string) {
-    return this.completeAppointment.execute({ user, id });
+  async complete(
+    @CurrentUser() user: AuthUser,
+    @Param('id') id: string,
+    @Res() res: Response,
+  ) {
+    return send(res, await this.completeAppointment.execute({ user, id }));
   }
 
   @Patch(':id/reschedule')
   @RequirePermissions('appointments.manage')
-  reschedule(
+  async reschedule(
     @CurrentUser() user: AuthUser,
     @Param('id') id: string,
     @Body() input: RescheduleAppointmentDto,
+    @Res() res: Response,
   ) {
-    return this.rescheduleAppointment.execute({ user, id, input });
+    return send(
+      res,
+      await this.rescheduleAppointment.execute({ user, id, input }),
+    );
   }
 
   @Patch(':id')
   @RequirePermissions('appointments.manage')
-  update(
+  async update(
     @CurrentUser() user: AuthUser,
     @Param('id') id: string,
     @Body() input: UpdateAppointmentDto,
+    @Res() res: Response,
   ) {
-    return this.updateAppointment.execute({ user, id, input });
+    return send(res, await this.updateAppointment.execute({ user, id, input }));
   }
 }
