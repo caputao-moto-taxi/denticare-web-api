@@ -44,27 +44,30 @@ export class JwtAuthGuard implements CanActivate {
       throw new UnauthorizedException('Invalid access token');
     }
 
-    const revoked = await this.prisma.revokedToken.findUnique({
-      where: { jti: payload.jti },
-      select: { jti: true },
-    });
+    const now = new Date();
+    const [revoked, session] = await Promise.all([
+      this.prisma.revokedToken.findUnique({
+        where: { jti: payload.jti },
+        select: { jti: true },
+      }),
+      payload.sid
+        ? this.prisma.refreshToken.findFirst({
+            where: {
+              jti: payload.sid,
+              userId: payload.sub,
+              revokedAt: null,
+              expiresAt: { gt: now },
+            },
+            select: { jti: true },
+          })
+        : Promise.resolve(null),
+    ]);
     if (revoked) {
       throw new UnauthorizedException('Access token has been revoked');
     }
 
-    if (payload.sid) {
-      const session = await this.prisma.refreshToken.findFirst({
-        where: {
-          jti: payload.sid,
-          userId: payload.sub,
-          revokedAt: null,
-          expiresAt: { gt: new Date() },
-        },
-        select: { jti: true },
-      });
-      if (!session) {
-        throw new UnauthorizedException('Authentication session has ended');
-      }
+    if (payload.sid && !session) {
+      throw new UnauthorizedException('Authentication session has ended');
     }
 
     const user = await this.prisma.user.findFirst({
@@ -88,6 +91,7 @@ export class JwtAuthGuard implements CanActivate {
         },
         branch: {
           select: {
+            headquarterId: true,
             deletedAt: true,
             headquarter: { select: { deletedAt: true, isActive: true } },
           },
@@ -129,27 +133,26 @@ export class JwtAuthGuard implements CanActivate {
       sessionId: payload.sid,
     };
 
-    await this.assertSubscriptionAccess(request);
+    await this.assertSubscriptionAccess(request, user.branch?.headquarterId);
 
     return true;
   }
 
-  private async assertSubscriptionAccess(request: AuthenticatedRequest) {
+  private async assertSubscriptionAccess(
+    request: AuthenticatedRequest,
+    headquarterId?: string,
+  ) {
     if (
       request.user.role === 'platform_owner' ||
       this.isAccessExempt(request.path)
     ) {
       return;
     }
-    const branch = await this.prisma.branch.findFirst({
-      where: { id: request.user.branchId, deletedAt: null },
-      select: { headquarterId: true },
-    });
-    if (!branch) return;
+    if (!headquarterId) return;
 
     const activeSubscription = await this.prisma.clinicSubscription.findFirst({
       where: {
-        headquarterId: branch.headquarterId,
+        headquarterId,
         status: { in: ['TRIAL_ACTIVE', 'ACTIVE', 'EXPIRING_SOON'] },
       },
       orderBy: { createdAt: 'desc' },
@@ -159,7 +162,7 @@ export class JwtAuthGuard implements CanActivate {
       ? null
       : await this.prisma.clinicSubscription.findFirst({
           where: {
-            headquarterId: branch.headquarterId,
+            headquarterId,
             status: { in: ['TRIAL_EXPIRED', 'EXPIRED'] },
           },
           orderBy: { createdAt: 'desc' },

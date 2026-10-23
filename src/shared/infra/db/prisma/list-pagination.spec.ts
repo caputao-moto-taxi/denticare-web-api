@@ -143,7 +143,11 @@ describe('Database listing pagination', () => {
         orderBy: expect.any(Array),
       });
       expect(target.count).toHaveBeenCalledWith({ where: find.where });
-      expect(prisma.$transaction).toHaveBeenCalledTimes(1);
+      if (name === 'appointments') {
+        expect(prisma.$transaction).not.toHaveBeenCalled();
+      } else {
+        expect(prisma.$transaction).toHaveBeenCalledTimes(1);
+      }
       const where = find.where;
       if (!['plans', 'messages'].includes(name)) {
         expect(where).toMatchObject(

@@ -100,13 +100,34 @@ export class SubscriptionsService {
   async current(user: AuthUser) {
     const headquarterId = await this.getHeadquarterId(user.branchId);
     const now = new Date();
-    let current = await this.prisma.clinicSubscription.findFirst({
-      where: {
-        headquarterId,
-        status: { in: [...ACTIVE_SUBSCRIPTION_STATUSES] },
-      },
-      orderBy: { createdAt: 'desc' },
-    });
+    const [activeSubscription, openRequest] = await Promise.all([
+      this.prisma.clinicSubscription.findFirst({
+        where: {
+          headquarterId,
+          status: { in: [...ACTIVE_SUBSCRIPTION_STATUSES] },
+        },
+        orderBy: { createdAt: 'desc' },
+      }),
+      this.prisma.subscriptionRequest.findFirst({
+        where: {
+          headquarterId,
+          status: { in: OPEN_REQUEST_STATUSES },
+        },
+        orderBy: { submittedAt: 'desc' },
+        select: {
+          id: true,
+          status: true,
+          submittedAt: true,
+          reviewedAt: true,
+          informationRequest: true,
+          rejectionReason: true,
+          planNameSnapshot: true,
+          requestedAmount: true,
+          currencyCode: true,
+        },
+      }),
+    ]);
+    let current = activeSubscription;
 
     if (current && current.expiresAt <= now) {
       const expiredStatus =
@@ -116,34 +137,21 @@ export class SubscriptionsService {
         data: { status: expiredStatus, endedAt: now },
       });
     }
+    let legacyAccess = false;
     if (!current) {
-      current = await this.prisma.clinicSubscription.findFirst({
-        where: {
-          headquarterId,
-          status: { in: ['TRIAL_EXPIRED', 'EXPIRED'] },
-        },
-        orderBy: { createdAt: 'desc' },
-      });
+      const [pastDueSubscription, hasHistory] = await Promise.all([
+        this.prisma.clinicSubscription.findFirst({
+          where: {
+            headquarterId,
+            status: { in: ['TRIAL_EXPIRED', 'EXPIRED'] },
+          },
+          orderBy: { createdAt: 'desc' },
+        }),
+        this.hasSubscriptionHistory(headquarterId),
+      ]);
+      current = pastDueSubscription;
+      legacyAccess = !current && !hasHistory;
     }
-
-    const openRequest = await this.prisma.subscriptionRequest.findFirst({
-      where: {
-        headquarterId,
-        status: { in: OPEN_REQUEST_STATUSES },
-      },
-      orderBy: { submittedAt: 'desc' },
-      select: {
-        id: true,
-        status: true,
-        submittedAt: true,
-        reviewedAt: true,
-        informationRequest: true,
-        rejectionReason: true,
-        planNameSnapshot: true,
-        requestedAmount: true,
-        currencyCode: true,
-      },
-    });
 
     return {
       subscription: current
@@ -164,8 +172,7 @@ export class SubscriptionsService {
             currencyCode: current.currencyCode,
           }
         : null,
-      legacyAccess:
-        !current && !(await this.hasSubscriptionHistory(headquarterId)),
+      legacyAccess,
       openRequest: openRequest
         ? {
             ...openRequest,

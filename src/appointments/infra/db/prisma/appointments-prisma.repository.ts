@@ -50,6 +50,52 @@ const STAFF_ROLES = new Set([
   'receptionist',
 ]);
 const BUSY_STATUSES = ['PENDING', 'CONFIRMED'] as const;
+const APPOINTMENT_RESPONSE_INCLUDE = {
+  patient: {
+    select: {
+      id: true,
+      userId: true,
+      firstName: true,
+      lastName: true,
+    },
+  },
+  doctor: {
+    select: {
+      id: true,
+      email: true,
+      Person: {
+        where: { deletedAt: null },
+        take: 1,
+        select: { firstName: true, lastName: true },
+      },
+      doctorProfile: { select: { specialties: true } },
+    },
+  },
+} satisfies Prisma.AppointmentInclude;
+const APPOINTMENT_SCOPE_INCLUDE = {
+  patient: {
+    select: {
+      id: true,
+      userId: true,
+      firstName: true,
+      lastName: true,
+    },
+  },
+  doctor: {
+    select: {
+      id: true,
+      email: true,
+      Person: {
+        where: { deletedAt: null },
+        take: 1,
+        select: { firstName: true, lastName: true },
+      },
+      doctorProfile: {
+        select: { specialties: true, workingDays: true, workingHours: true },
+      },
+    },
+  },
+} satisfies Prisma.AppointmentInclude;
 
 @Injectable()
 export class AppointmentsPrismaRepository implements IAppointmentRepository {
@@ -104,18 +150,10 @@ export class AppointmentsPrismaRepository implements IAppointmentRepository {
         ],
       }),
     };
-    const [appointments, total] = await this.prisma.$transaction([
+    const [appointments, total] = await Promise.all([
       this.prisma.appointment.findMany({
         where,
-        include: {
-          patient: true,
-          doctor: {
-            include: {
-              Person: { where: { deletedAt: null }, take: 1 },
-              doctorProfile: true,
-            },
-          },
-        },
+        include: APPOINTMENT_RESPONSE_INCLUDE,
         orderBy: [{ date: 'asc' }, { time: 'asc' }, { id: 'asc' }],
         ...pageWindow(query),
       }),
@@ -145,7 +183,7 @@ export class AppointmentsPrismaRepository implements IAppointmentRepository {
     this.assertNotPast(time, clinic.timezone);
     this.assertClinicOpen(date, input.time, clinic.schedule);
 
-    const patient = await this.prisma.person.findFirst({
+    const patientQuery = this.prisma.person.findFirst({
       where: {
         ...(user.role === 'patient'
           ? { userId: user.id }
@@ -156,6 +194,19 @@ export class AppointmentsPrismaRepository implements IAppointmentRepository {
       },
       select: { id: true },
     });
+    const doctorQuery = input.doctorId
+      ? this.prisma.user.findFirst({
+          where: {
+            id: input.doctorId,
+            branchId: user.branchId,
+            deletedAt: null,
+            isActive: true,
+            Role: { slug: 'doctor' },
+          },
+          include: { doctorProfile: true },
+        })
+      : Promise.resolve(null);
+    const [patient, doctor] = await Promise.all([patientQuery, doctorQuery]);
     if (!patient)
       throw new NotFoundException('Patient not found in this clinic');
 
@@ -174,16 +225,6 @@ export class AppointmentsPrismaRepository implements IAppointmentRepository {
       );
     }
 
-    const doctor = await this.prisma.user.findFirst({
-      where: {
-        id: input.doctorId,
-        branchId: user.branchId,
-        deletedAt: null,
-        isActive: true,
-        Role: { slug: 'doctor' },
-      },
-      include: { doctorProfile: true },
-    });
     if (!doctor) throw new NotFoundException('Doctor not found in this clinic');
     this.assertDoctorHasAvailability(
       doctor.doctorProfile,
@@ -210,15 +251,7 @@ export class AppointmentsPrismaRepository implements IAppointmentRepository {
     const updated = await this.prisma.appointment.update({
       where: { id },
       data: { status: 'CANCELLED' },
-      include: {
-        patient: true,
-        doctor: {
-          include: {
-            Person: { where: { deletedAt: null }, take: 1 },
-            doctorProfile: true,
-          },
-        },
-      },
+      include: APPOINTMENT_RESPONSE_INCLUDE,
     });
     return this.toAppointment(updated);
   }
@@ -239,15 +272,7 @@ export class AppointmentsPrismaRepository implements IAppointmentRepository {
     const updated = await this.prisma.appointment.update({
       where: { id },
       data: { status: 'COMPLETED' },
-      include: {
-        patient: true,
-        doctor: {
-          include: {
-            Person: { where: { deletedAt: null }, take: 1 },
-            doctorProfile: true,
-          },
-        },
-      },
+      include: APPOINTMENT_RESPONSE_INCLUDE,
     });
     return this.toAppointment(updated);
   }
@@ -288,15 +313,7 @@ export class AppointmentsPrismaRepository implements IAppointmentRepository {
         return transaction.appointment.update({
           where: { id },
           data: { date, time, status: 'CONFIRMED' },
-          include: {
-            patient: true,
-            doctor: {
-              include: {
-                Person: { where: { deletedAt: null }, take: 1 },
-                doctorProfile: true,
-              },
-            },
-          },
+          include: APPOINTMENT_RESPONSE_INCLUDE,
         });
       },
     );
@@ -320,37 +337,38 @@ export class AppointmentsPrismaRepository implements IAppointmentRepository {
       throw new ForbiddenException('Doctors cannot reassign appointments');
     }
 
-    const patient = await this.prisma.person.findFirst({
-      where: {
-        id: user.role === 'patient' ? current.patientId : input.patientId,
-        branchId: user.branchId,
-        deletedAt: null,
-        Role: { slug: 'patient' },
-      },
-      select: { id: true },
-    });
+    const { date, time } = this.toDateTime(input.date, input.time);
+    const [patient, doctor, clinic] = await Promise.all([
+      this.prisma.person.findFirst({
+        where: {
+          id: user.role === 'patient' ? current.patientId : input.patientId,
+          branchId: user.branchId,
+          deletedAt: null,
+          Role: { slug: 'patient' },
+        },
+        select: { id: true },
+      }),
+      this.prisma.user.findFirst({
+        where: {
+          id: input.doctorId,
+          branchId: user.branchId,
+          deletedAt: null,
+          isActive: true,
+          Role: { slug: 'doctor' },
+        },
+        include: { doctorProfile: true },
+      }),
+      this.loadClinic(user.branchId),
+    ]);
     if (!patient) {
       throw new NotFoundException('Patient not found in this clinic');
     }
-
-    const doctor = await this.prisma.user.findFirst({
-      where: {
-        id: input.doctorId,
-        branchId: user.branchId,
-        deletedAt: null,
-        isActive: true,
-        Role: { slug: 'doctor' },
-      },
-      include: { doctorProfile: true },
-    });
     if (!doctor) throw new NotFoundException('Doctor not found in this clinic');
 
-    const { date, time } = this.toDateTime(input.date, input.time);
     const sameSlot =
       doctor.id === current.doctorId &&
       date.getTime() === current.date.getTime() &&
       time.getTime() === current.time.getTime();
-    const clinic = await this.loadClinic(user.branchId);
     if (!sameSlot) {
       this.assertNotPast(time, clinic.timezone);
       this.assertClinicOpen(date, input.time, clinic.schedule);
@@ -384,15 +402,7 @@ export class AppointmentsPrismaRepository implements IAppointmentRepository {
             reason: input.reason.trim(),
             description: input.description?.trim() || null,
           },
-          include: {
-            patient: true,
-            doctor: {
-              include: {
-                Person: { where: { deletedAt: null }, take: 1 },
-                doctorProfile: true,
-              },
-            },
-          },
+          include: APPOINTMENT_RESPONSE_INCLUDE,
         });
       },
     );
@@ -405,8 +415,10 @@ export class AppointmentsPrismaRepository implements IAppointmentRepository {
         'Clinic staff or patient access is required',
       );
     }
-    const clinic = await this.loadClinic(user.branchId);
-    const doctors = await this.findActiveDoctors(user.branchId, query.doctorId);
+    const [clinic, doctors] = await Promise.all([
+      this.loadClinic(user.branchId),
+      this.findActiveDoctors(user.branchId, query.doctorId),
+    ]);
     if (query.doctorId && doctors.length === 0) {
       throw new NotFoundException('Doctor not found in this clinic');
     }
@@ -572,15 +584,7 @@ export class AppointmentsPrismaRepository implements IAppointmentRepository {
             doctorId: input.doctorId,
             userId: input.user.id,
           },
-          include: {
-            patient: true,
-            doctor: {
-              include: {
-                Person: { where: { deletedAt: null }, take: 1 },
-                doctorProfile: true,
-              },
-            },
-          },
+          include: APPOINTMENT_RESPONSE_INCLUDE,
         });
       });
     } catch (error) {
@@ -687,15 +691,7 @@ export class AppointmentsPrismaRepository implements IAppointmentRepository {
               },
             }),
       },
-      include: {
-        patient: true,
-        doctor: {
-          include: {
-            Person: { where: { deletedAt: null }, take: 1 },
-            doctorProfile: true,
-          },
-        },
-      },
+      include: APPOINTMENT_SCOPE_INCLUDE,
     });
     if (!appointment) throw new NotFoundException('Appointment not found');
     return appointment;
@@ -759,7 +755,7 @@ export class AppointmentsPrismaRepository implements IAppointmentRepository {
       id: string;
       email: string;
       Person: { firstName: string; lastName: string }[];
-      doctorProfile: { avatar: string | null; specialties: string[] } | null;
+      doctorProfile: { specialties: string[] } | null;
     };
   }) {
     const doctorName = appointment.doctor.Person[0]
