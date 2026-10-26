@@ -13,8 +13,16 @@ export class CommunicationDeliveryService {
 
   constructor(private readonly emailService: AuthEmailService) {}
 
-  async sendEmail(recipients: string[], subject: string, body: string) {
-    await this.emailService.sendCampaignEmail(recipients, subject, body);
+  async sendEmail(
+    recipients: string[],
+    subject: string,
+    body: string,
+  ) {
+    await this.emailService.sendCampaignEmail(
+      recipients,
+      subject,
+      body,
+    );
   }
 
   async sendSmsBatch(recipients: string[], body: string) {
@@ -43,9 +51,14 @@ export class CommunicationDeliveryService {
     });
   }
 
-  static isValidContact(channel: CampaignChannel, value: string | null) {
+  static isValidContact(
+    channel: CampaignChannel,
+    value: string | null,
+  ) {
     const contact = value?.trim();
+
     if (!contact) return false;
+
     if (channel === 'EMAIL') {
       return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(contact);
     }
