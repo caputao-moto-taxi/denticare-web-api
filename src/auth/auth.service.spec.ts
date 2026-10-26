@@ -9,6 +9,7 @@ describe('AuthPrismaRepository', () => {
     id: 'user-id',
     email: 'admin@example.test',
     password: 'bcrypt-hash',
+    isActive: true,
     branchId: 'branch-id',
     branch: {
       deletedAt: null,
@@ -115,6 +116,17 @@ describe('AuthPrismaRepository', () => {
         password: 'valid-password',
       }),
     ).rejects.toBeInstanceOf(UnauthorizedException);
+    expect(hash.compare).not.toHaveBeenCalled();
+  });
+
+  it('rejects inactive accounts before comparing the password', async () => {
+    jest
+      .spyOn(prisma.user, 'findFirst')
+      .mockResolvedValue({ ...account, isActive: false } as never);
+
+    await expect(
+      service.login({ email: account.email, password: 'valid-password' }),
+    ).rejects.toThrow('User account is not active');
     expect(hash.compare).not.toHaveBeenCalled();
   });
 

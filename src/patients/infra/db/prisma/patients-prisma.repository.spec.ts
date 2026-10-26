@@ -1,6 +1,5 @@
 import { PatientsPrismaRepository } from './patients-prisma.repository';
 import { PrismaService } from '../../../../shared/infra/db/prisma/prisma.service';
-import { PatientExamStorage } from '../../storage/patient-exam-storage';
 
 describe('PatientsPrismaRepository data processing consent', () => {
   const existingPatient = {
@@ -25,7 +24,6 @@ describe('PatientsPrismaRepository data processing consent', () => {
   };
   const repository = new PatientsPrismaRepository(
     prisma as unknown as PrismaService,
-    {} as PatientExamStorage,
   );
 
   beforeEach(() => {

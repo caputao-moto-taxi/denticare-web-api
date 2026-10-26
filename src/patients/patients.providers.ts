@@ -34,11 +34,9 @@ const REPOSITORIES = {
   },
   PATIENT_PRISMA_REPOSITORY: {
     provide: PatientsPrismaRepository,
-    useFactory: (
-      prismaService: PrismaService,
-      examStorage: PatientExamStorage,
-    ) => new PatientsPrismaRepository(prismaService, examStorage),
-    inject: [PrismaService, PatientExamStorage],
+    useFactory: (prismaService: PrismaService) =>
+      new PatientsPrismaRepository(prismaService),
+    inject: [PrismaService],
   },
 };
 
@@ -88,20 +86,44 @@ const USE_CASES = {
   UPDATE_PATIENT_DIAGNOSIS_USE_CASE: repositoryUseCase(
     UpdatePatientDiagnosisUseCase,
   ),
-  ADD_PATIENT_DIAGNOSIS_ATTACHMENTS_USE_CASE: repositoryUseCase(
-    AddPatientDiagnosisAttachmentsUseCase,
-  ),
-  GET_PATIENT_DIAGNOSIS_ATTACHMENT_USE_CASE: repositoryUseCase(
-    GetPatientDiagnosisAttachmentUseCase,
-  ),
+  ADD_PATIENT_DIAGNOSIS_ATTACHMENTS_USE_CASE: {
+    provide: AddPatientDiagnosisAttachmentsUseCase,
+    useFactory: (
+      repository: IPatientRepository,
+      storage: PatientExamStorage,
+    ) => new AddPatientDiagnosisAttachmentsUseCase(repository, storage),
+    inject: [REPOSITORIES.PATIENT_REPOSITORY.provide, PatientExamStorage],
+  },
+  GET_PATIENT_DIAGNOSIS_ATTACHMENT_USE_CASE: {
+    provide: GetPatientDiagnosisAttachmentUseCase,
+    useFactory: (
+      repository: IPatientRepository,
+      storage: PatientExamStorage,
+    ) => new GetPatientDiagnosisAttachmentUseCase(repository, storage),
+    inject: [REPOSITORIES.PATIENT_REPOSITORY.provide, PatientExamStorage],
+  },
   ADD_PATIENT_PRESCRIPTION_USE_CASE: repositoryUseCase(
     AddPatientPrescriptionUseCase,
   ),
   ADD_PATIENT_FINANCIAL_ENTRY_USE_CASE: repositoryUseCase(
     AddPatientFinancialEntryUseCase,
   ),
-  ADD_PATIENT_EXAM_USE_CASE: repositoryUseCase(AddPatientExamUseCase),
-  GET_PATIENT_EXAM_FILE_USE_CASE: repositoryUseCase(GetPatientExamFileUseCase),
+  ADD_PATIENT_EXAM_USE_CASE: {
+    provide: AddPatientExamUseCase,
+    useFactory: (
+      repository: IPatientRepository,
+      storage: PatientExamStorage,
+    ) => new AddPatientExamUseCase(repository, storage),
+    inject: [REPOSITORIES.PATIENT_REPOSITORY.provide, PatientExamStorage],
+  },
+  GET_PATIENT_EXAM_FILE_USE_CASE: {
+    provide: GetPatientExamFileUseCase,
+    useFactory: (
+      repository: IPatientRepository,
+      storage: PatientExamStorage,
+    ) => new GetPatientExamFileUseCase(repository, storage),
+    inject: [REPOSITORIES.PATIENT_REPOSITORY.provide, PatientExamStorage],
+  },
   CREATE_PATIENT_USE_CASE: repositoryUseCase(CreatePatientUseCase),
   UPDATE_PATIENT_USE_CASE: repositoryUseCase(UpdatePatientUseCase),
   SET_PATIENT_STATUS_USE_CASE: repositoryUseCase(SetPatientStatusUseCase),

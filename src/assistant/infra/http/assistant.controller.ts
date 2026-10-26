@@ -2,7 +2,7 @@ import { Body, Controller, Post, UseGuards } from '@nestjs/common';
 import { ThrottlerGuard } from '@nestjs/throttler';
 import { ApiBearerAuth, ApiTags } from '@nestjs/swagger';
 import { JwtAuthGuard } from '../../../auth/jwt-auth.guard';
-import { AssistantService } from '../../application/assistant.service';
+import { ChatAssistantUseCase } from '../../application/useCases/chat-assistant/chat-assistant-use-case';
 import { AssistantChatDto } from './assistant-chat.dto';
 
 @ApiTags('Assistant')
@@ -10,10 +10,10 @@ import { AssistantChatDto } from './assistant-chat.dto';
 @UseGuards(ThrottlerGuard, JwtAuthGuard)
 @Controller('assistant')
 export class AssistantController {
-  constructor(private readonly assistant: AssistantService) {}
+  constructor(private readonly chatAssistant: ChatAssistantUseCase) {}
 
   @Post('chat')
   chat(@Body() input: AssistantChatDto) {
-    return this.assistant.chat(input.messages);
+    return this.chatAssistant.execute(input.messages);
   }
 }

@@ -1,10 +1,7 @@
 import {
-  ConflictException,
-  ForbiddenException,
   Injectable,
   NotFoundException,
 } from '@nestjs/common';
-import { randomUUID } from 'node:crypto';
 import { Prisma } from '../../../../../generated/prisma/client';
 import { PrismaService } from '../../../../shared/infra/db/prisma/prisma.service';
 import { AuthUser } from '../../../../auth/auth-user';
@@ -17,25 +14,23 @@ import {
 import {
   dateRange,
   personSearch,
-  validateListFilters,
 } from '../../../../shared/helpers/list-filters';
 import { joinName } from '../../../../shared/helpers/staff';
 import {
   IPatientRepository,
-  PatientCreateCommand,
+  PatientCreatePersistenceCommand,
   PatientChartPdfData,
-  PatientDiagnosisCommand,
-  PatientDiagnosisAttachmentCommand,
-  PatientExamCommand,
+  PatientDiagnosisPersistenceCommand,
+  PatientDiagnosisAttachmentPersistenceCommand,
+  PatientExamPersistenceCommand,
   PatientFinancialEntryCommand,
   PatientFinancialPdfData,
   PatientPrescriptionCommand,
   PatientPrescriptionPdfData,
   PatientStatusCommand,
-  PatientToothCommand,
-  PatientUpdateCommand,
+  PatientToothPersistenceCommand,
+  PatientUpdatePersistenceCommand,
 } from '../../../domain/patient.repository';
-import { PatientExamStorage } from '../../storage/patient-exam-storage';
 
 const STAFF_ROLES = new Set([
   'admin',
@@ -49,11 +44,9 @@ const STAFF_ROLES = new Set([
 export class PatientsPrismaRepository implements IPatientRepository {
   constructor(
     private readonly prisma: PrismaService,
-    private readonly examStorage: PatientExamStorage,
   ) { }
 
   async list(user: AuthUser, query: ListQuery = {}) {
-    validateListFilters(query, { status: ['active', 'inactive'] });
     const where: Prisma.PersonWhereInput = {
       branchId: user.branchId,
       deletedAt: null,
@@ -560,8 +553,11 @@ export class PatientsPrismaRepository implements IPatientRepository {
     };
   }
 
-  async updateTooth(user: AuthUser, id: string, input: PatientToothCommand) {
-    this.requireClinicalStaff(user);
+  async updateTooth(
+    user: AuthUser,
+    id: string,
+    input: PatientToothPersistenceCommand,
+  ) {
     await this.findScopedRecord(user, id);
     return this.prisma.patientTooth.upsert({
       where: {
@@ -571,13 +567,13 @@ export class PatientsPrismaRepository implements IPatientRepository {
         patientId: id,
         number: input.number,
         state: input.state,
-        procedureDone: input.procedureDone?.trim() || null,
-        notes: input.notes?.trim() || null,
+        procedureDone: input.procedureDone,
+        notes: input.notes,
       },
       update: {
         state: input.state,
-        procedureDone: input.procedureDone?.trim() || null,
-        notes: input.notes?.trim() || null,
+        procedureDone: input.procedureDone,
+        notes: input.notes,
       },
     });
   }
@@ -585,20 +581,19 @@ export class PatientsPrismaRepository implements IPatientRepository {
   async addDiagnosis(
     user: AuthUser,
     id: string,
-    input: PatientDiagnosisCommand,
+    input: PatientDiagnosisPersistenceCommand,
   ) {
-    this.requireClinicalStaff(user);
     await this.findScopedRecord(user, id);
     const diagnosis = await this.prisma.diagnostic.create({
       data: {
         patientId: id,
         doctorId: user.id,
-        code: input.code?.trim() || null,
-        designation: input.title.trim(),
-        description: input.description.trim(),
+        code: input.code || null,
+        designation: input.designation,
+        description: input.description,
         severity: input.severity,
         status: input.status,
-        affectedTeeth: input.affectedTeeth?.map(String) ?? [],
+        affectedTeeth: input.affectedTeeth,
       },
       include: {
         doctor: {
@@ -613,32 +608,15 @@ export class PatientsPrismaRepository implements IPatientRepository {
         attachments: true,
       },
     });
-    return {
-      id: diagnosis.id,
-      code: diagnosis.code ?? '',
-      title: diagnosis.designation,
-      affectedTeeth: diagnosis.affectedTeeth,
-      diagnosedAt: diagnosis.createdAt.toISOString(),
-      doctorName: joinName(diagnosis.doctor.Person[0], 'Profissional'),
-      severity: diagnosis.severity,
-      status: diagnosis.status,
-      description: diagnosis.description ?? '',
-      attachments: diagnosis.attachments.map((attachment) => ({
-        id: attachment.id,
-        fileName: attachment.fileName,
-        mimeType: attachment.mimeType,
-        fileSize: attachment.fileSize,
-      })),
-    };
+    return diagnosis;
   }
 
   async updateDiagnosis(
     user: AuthUser,
     id: string,
     diagnosisId: string,
-    input: PatientDiagnosisCommand,
+    input: PatientDiagnosisPersistenceCommand,
   ) {
-    this.requireClinicalStaff(user);
     await this.findScopedRecord(user, id);
     const existing = await this.prisma.diagnostic.findFirst({
       where: { id: diagnosisId, patientId: id, deletedAt: null },
@@ -648,12 +626,12 @@ export class PatientsPrismaRepository implements IPatientRepository {
     const diagnosis = await this.prisma.diagnostic.update({
       where: { id: diagnosisId },
       data: {
-        code: input.code?.trim() || null,
-        designation: input.title.trim(),
-        description: input.description.trim(),
+        code: input.code || null,
+        designation: input.designation,
+        description: input.description,
         severity: input.severity,
         status: input.status,
-        affectedTeeth: input.affectedTeeth?.map(String) ?? [],
+        affectedTeeth: input.affectedTeeth,
       },
       include: {
         doctor: {
@@ -671,32 +649,15 @@ export class PatientsPrismaRepository implements IPatientRepository {
         },
       },
     });
-    return {
-      id: diagnosis.id,
-      code: diagnosis.code ?? '',
-      title: diagnosis.designation,
-      affectedTeeth: diagnosis.affectedTeeth,
-      diagnosedAt: diagnosis.createdAt.toISOString(),
-      doctorName: joinName(diagnosis.doctor.Person[0], 'Profissional'),
-      severity: diagnosis.severity,
-      status: diagnosis.status,
-      description: diagnosis.description ?? '',
-      attachments: diagnosis.attachments.map((attachment) => ({
-        id: attachment.id,
-        fileName: attachment.fileName,
-        mimeType: attachment.mimeType,
-        fileSize: attachment.fileSize,
-      })),
-    };
+    return diagnosis;
   }
 
   async addDiagnosisAttachments(
     user: AuthUser,
     id: string,
     diagnosisId: string,
-    files: PatientDiagnosisAttachmentCommand[],
+    files: PatientDiagnosisAttachmentPersistenceCommand[],
   ) {
-    this.requireClinicalStaff(user);
     await this.findScopedRecord(user, id);
     const diagnosis = await this.prisma.diagnostic.findFirst({
       where: { id: diagnosisId, patientId: id, deletedAt: null },
@@ -704,55 +665,19 @@ export class PatientsPrismaRepository implements IPatientRepository {
     });
     if (!diagnosis) throw new NotFoundException('Patient diagnosis not found');
 
-    const storageKeys: string[] = [];
-    try {
-      for (const file of files) {
-        const storageKey = randomUUID();
-        await this.examStorage.store({
-          id: storageKey,
-          data: file.buffer,
-          mimeType: file.mimetype,
-        });
-        storageKeys.push(storageKey);
-      }
-
-      const attachments = await this.prisma.$transaction(
-        files.map((file, index) =>
-          this.prisma.diagnosticAttachment.create({
-            data: {
-              diagnosisId,
-              fileName: file.originalname,
-              mimeType: file.mimetype,
-              fileSize: file.size,
-              storageKey: storageKeys[index],
-            },
-          }),
-        ),
-      );
-      return attachments.map((attachment) => ({
-        id: attachment.id,
-        fileName: attachment.fileName,
-        mimeType: attachment.mimeType,
-        fileSize: attachment.fileSize,
-      }));
-    } catch (error) {
-      const cleanupResults = await Promise.allSettled(
-        storageKeys.map((storageKey) => this.examStorage.delete(storageKey)),
-      );
-      const cleanupErrors = cleanupResults
-        .filter(
-          (result): result is PromiseRejectedResult =>
-            result.status === 'rejected',
-        )
-        .map((result) => result.reason);
-      if (cleanupErrors.length) {
-        throw new AggregateError(
-          [error, ...cleanupErrors],
-          'Could not persist diagnosis attachments and clean up stored files',
-        );
-      }
-      throw error;
-    }
+    return this.prisma.$transaction(
+      files.map((file) =>
+        this.prisma.diagnosticAttachment.create({
+          data: {
+            diagnosisId,
+            fileName: file.originalname,
+            mimeType: file.mimetype,
+            fileSize: file.size,
+            storageKey: file.storageKey,
+          },
+        }),
+      ),
+    );
   }
 
   async getDiagnosisAttachment(
@@ -761,7 +686,6 @@ export class PatientsPrismaRepository implements IPatientRepository {
     diagnosisId: string,
     attachmentId: string,
   ) {
-    this.requireClinicalStaff(user, 'read');
     await this.findScopedRecord(user, id);
     const attachment = await this.prisma.diagnosticAttachment.findFirst({
       where: {
@@ -775,151 +699,89 @@ export class PatientsPrismaRepository implements IPatientRepository {
     if (!attachment) {
       throw new NotFoundException('Patient diagnosis attachment not found');
     }
-    const file = await this.examStorage.get(attachment.storageKey);
-    return {
-      data: file.data,
-      mimeType:
-        attachment.mimeType || file.mime_type || 'application/octet-stream',
-      fileName: attachment.fileName,
-    };
+    return attachment;
   }
 
   async addPrescription(
     user: AuthUser,
     id: string,
     input: PatientPrescriptionCommand,
+    groupId: string,
   ) {
-    this.requireClinicalStaff(user);
     await this.findScopedRecord(user, id);
-    const groupId = randomUUID();
-    const prescriptions = await this.prisma.$transaction(
+    return this.prisma.$transaction(
       input.items.map((item) =>
         this.prisma.patientPrescription.create({
           data: {
             patientId: id,
             doctorId: user.id,
             groupId,
-            medication: item.medication.trim(),
-            dosage: item.dosage.trim(),
-            instructions: item.instructions.trim(),
-            duration: item.duration.trim(),
+            medication: item.medication,
+            dosage: item.dosage,
+            instructions: item.instructions,
+            duration: item.duration,
           },
           include: { doctor: true },
         }),
       ),
     );
-    const first = prescriptions[0];
-    return {
-      id: groupId,
-      items: prescriptions.map((prescription) => ({
-        medication: prescription.medication,
-        dosage: prescription.dosage,
-        instructions: prescription.instructions,
-        duration: prescription.duration,
-      })),
-      prescribedBy: first.doctor.username,
-      date: first.createdAt.toISOString(),
-      status: 'active',
-    };
   }
 
   async addFinancialEntry(
     user: AuthUser,
     id: string,
     input: PatientFinancialEntryCommand,
+    entryId: string,
+    reference: string,
   ) {
-    this.requireStaff(user);
     await this.findScopedRecord(user, id);
-    const entryId = randomUUID();
-    const entry = await this.prisma.patientFinancialEntry.create({
+    return this.prisma.patientFinancialEntry.create({
       data: {
         id: entryId,
         patientId: id,
         branchId: user.branchId,
-        reference: `REG-${entryId.slice(0, 8).toUpperCase()}`,
-        description: input.description.trim(),
+        reference,
+        description: input.description,
         amount: input.amount,
         method: input.method,
       },
     });
-    return {
-      id: entry.id,
-      reference: entry.reference,
-      description: entry.description,
-      amount: this.formatMoney(entry.amount),
-      method: entry.method,
-      date: entry.createdAt.toISOString(),
-      status: entry.status,
-    };
   }
 
-  async addExam(user: AuthUser, id: string, input: PatientExamCommand) {
-    this.requireClinicalStaff(user);
+  async addExam(
+    user: AuthUser,
+    id: string,
+    input: PatientExamPersistenceCommand,
+  ) {
     await this.findScopedRecord(user, id);
-    const storageKey = randomUUID();
-    await this.examStorage.store({
-      id: storageKey,
-      data: input.file.buffer,
-      mimeType: input.file.mimetype,
+    return this.prisma.patientExam.create({
+      data: { patientId: id, ...input },
     });
-    try {
-      const exam = await this.prisma.patientExam.create({
-        data: {
-          patientId: id,
-          title: input.title.trim(),
-          type: input.type,
-          doctorName: input.doctorName.trim(),
-          fileName: input.file.originalname,
-          mimeType: input.file.mimetype,
-          fileSize: input.file.size,
-          storageKey,
-        },
-      });
-      return {
-        id: exam.id,
-        title: exam.title,
-        type: exam.type,
-        date: exam.createdAt.toISOString(),
-        doctorName: exam.doctorName,
-        fileName: exam.fileName,
-        mimeType: exam.mimeType,
-        fileSize: `${(exam.fileSize / (1024 * 1024)).toFixed(1)} MB`,
-      };
-    } catch (error) {
-      await this.examStorage.delete(storageKey);
-      throw error;
-    }
   }
 
   async getExamFile(user: AuthUser, id: string, examId: string) {
-    this.requireClinicalStaff(user, 'read');
     await this.findScopedRecord(user, id);
     const exam = await this.prisma.patientExam.findFirst({
       where: { id: examId, patientId: id, deletedAt: null },
       select: { storageKey: true, mimeType: true, fileName: true },
     });
     if (!exam) throw new NotFoundException('Patient exam not found');
-    const file = await this.examStorage.get(exam.storageKey);
-    return {
-      data: file.data,
-      mimeType: exam.mimeType || file.mime_type || 'application/octet-stream',
-      fileName: exam.fileName,
-    };
+    return exam;
   }
 
-  async create(user: AuthUser, input: PatientCreateCommand) {
-    this.requireStaff(user);
-    const email = input.email?.trim().toLowerCase() || null;
-    if (email) {
-      const duplicate = await this.prisma.person.findFirst({
-        where: { email, deletedAt: null },
-        select: { id: true },
-      });
-      if (duplicate)
-        throw new ConflictException('A patient with this email already exists');
-    }
+  async emailExists(email: string, excludingId?: string) {
+    const existing = await this.prisma.person.findFirst({
+      where: {
+        email,
+        deletedAt: null,
+        ...(excludingId && { id: { not: excludingId } }),
+      },
+      select: { id: true },
+    });
+    return Boolean(existing);
+  }
 
-    const nameParts = this.splitName(input.name);
+  async create(user: AuthUser, input: PatientCreatePersistenceCommand) {
     const patient = await this.prisma.$transaction(async (transaction) => {
       const role = await transaction.role.upsert({
         where: { slug: 'patient' },
@@ -928,44 +790,38 @@ export class PatientsPrismaRepository implements IPatientRepository {
       });
       const address = await transaction.address.create({
         data: {
-          street: input.address.trim(),
+          street: input.address,
           city: 'Not specified',
           country: 'Angola',
         },
       });
       return transaction.person.create({
         data: {
-          ...nameParts,
-          email,
-          phoneNumber: input.phone?.trim(),
+          firstName: input.firstName,
+          lastName: input.lastName,
+          email: input.email,
+          phoneNumber: input.phone,
           birthDate: input.birthDate ? new Date(input.birthDate) : undefined,
           gender: input.gender,
-          medicalNotes: input.medicalNotes?.trim(),
+          medicalNotes: input.medicalNotes,
           dataProcessingConsent: input.dataProcessingConsent ?? false,
           dataProcessingConsentUpdatedAt: input.dataProcessingConsent
             ? new Date()
             : undefined,
-          idNumber: input.idNumber?.trim(),
-          nif: input.nif?.trim(),
-          profession: input.profession?.trim(),
+          idNumber: input.idNumber,
+          nif: input.nif,
+          profession: input.profession,
           bloodType: input.bloodType,
-          insuranceProvider: input.insuranceProvider?.trim(),
-          insurancePlan: input.insurancePlan?.trim(),
-          insurancePolicyNumber: input.insurancePolicyNumber?.trim(),
+          insuranceProvider: input.insuranceProvider,
+          insurancePlan: input.insurancePlan,
+          insurancePolicyNumber: input.insurancePolicyNumber,
           insuranceCoveragePercent: input.insuranceCoveragePercent,
-          emergencyContactName: input.emergencyContactName?.trim(),
-          emergencyContactRelationship:
-            input.emergencyContactRelationship?.trim(),
-          emergencyContactPhone: input.emergencyContactPhone?.trim(),
-          allergies: input.allergies
-            ?.map((value) => value.trim())
-            .filter(Boolean),
-          medicalConditions: input.medicalConditions
-            ?.map((value) => value.trim())
-            .filter(Boolean),
-          medications: input.medications
-            ?.map((value) => value.trim())
-            .filter(Boolean),
+          emergencyContactName: input.emergencyContactName,
+          emergencyContactRelationship: input.emergencyContactRelationship,
+          emergencyContactPhone: input.emergencyContactPhone,
+          allergies: input.allergies,
+          medicalConditions: input.medicalConditions,
+          medications: input.medications,
           branchId: user.branchId,
           addressId: address.id,
           roleId: role.id,
@@ -981,42 +837,34 @@ export class PatientsPrismaRepository implements IPatientRepository {
     );
   }
 
-  async update(user: AuthUser, id: string, input: PatientUpdateCommand) {
+  async update(
+    user: AuthUser,
+    id: string,
+    input: PatientUpdatePersistenceCommand,
+  ) {
     const existing = await this.findScopedRecord(user, id);
-    if (!STAFF_ROLES.has(user.role) && existing.userId !== user.id) {
-      throw new ForbiddenException('You cannot update this patient record');
-    }
-
-    const email = input.email?.trim().toLowerCase() || null;
-    if (email && email !== existing.email) {
-      const duplicate = await this.prisma.person.findFirst({
-        where: { email, deletedAt: null, id: { not: id } },
-        select: { id: true },
-      });
-      if (duplicate)
-        throw new ConflictException('A patient with this email already exists');
-    }
-
-    const nameParts = input.name ? this.splitName(input.name) : undefined;
     const updated = await this.prisma.$transaction(async (transaction) => {
       if (input.address !== undefined) {
         await transaction.address.update({
           where: { id: existing.addressId },
-          data: { street: input.address.trim() },
+          data: { street: input.address },
         });
       }
       return transaction.person.update({
         where: { id },
         data: {
-          ...nameParts,
-          ...(input.email !== undefined && { email }),
-          ...(input.phone !== undefined && { phoneNumber: input.phone.trim() }),
+          ...(input.firstName !== undefined && {
+            firstName: input.firstName,
+          }),
+          ...(input.lastName !== undefined && { lastName: input.lastName }),
+          ...(input.email !== undefined && { email: input.email }),
+          ...(input.phone !== undefined && { phoneNumber: input.phone }),
           ...(input.birthDate !== undefined && {
             birthDate: input.birthDate ? new Date(input.birthDate) : null,
           }),
           ...(input.gender !== undefined && { gender: input.gender }),
           ...(input.medicalNotes !== undefined && {
-            medicalNotes: input.medicalNotes.trim(),
+            medicalNotes: input.medicalNotes,
           }),
           ...(input.dataProcessingConsent !== undefined && {
             dataProcessingConsent: input.dataProcessingConsent,
@@ -1040,51 +888,44 @@ export class PatientsPrismaRepository implements IPatientRepository {
                 : existing.marketingSmsConsentUpdatedAt,
           }),
           ...(input.idNumber !== undefined && {
-            idNumber: input.idNumber.trim(),
+            idNumber: input.idNumber,
           }),
-          ...(input.nif !== undefined && { nif: input.nif.trim() }),
+          ...(input.nif !== undefined && { nif: input.nif }),
           ...(input.profession !== undefined && {
-            profession: input.profession.trim(),
+            profession: input.profession,
           }),
           ...(input.bloodType !== undefined && {
             bloodType: input.bloodType,
           }),
           ...(input.insuranceProvider !== undefined && {
-            insuranceProvider: input.insuranceProvider.trim(),
+            insuranceProvider: input.insuranceProvider,
           }),
           ...(input.insurancePlan !== undefined && {
-            insurancePlan: input.insurancePlan.trim(),
+            insurancePlan: input.insurancePlan,
           }),
           ...(input.insurancePolicyNumber !== undefined && {
-            insurancePolicyNumber: input.insurancePolicyNumber.trim(),
+            insurancePolicyNumber: input.insurancePolicyNumber,
           }),
           ...(input.insuranceCoveragePercent !== undefined && {
             insuranceCoveragePercent: input.insuranceCoveragePercent,
           }),
           ...(input.emergencyContactName !== undefined && {
-            emergencyContactName: input.emergencyContactName.trim(),
+            emergencyContactName: input.emergencyContactName,
           }),
           ...(input.emergencyContactRelationship !== undefined && {
-            emergencyContactRelationship:
-              input.emergencyContactRelationship.trim(),
+            emergencyContactRelationship: input.emergencyContactRelationship,
           }),
           ...(input.emergencyContactPhone !== undefined && {
-            emergencyContactPhone: input.emergencyContactPhone.trim(),
+            emergencyContactPhone: input.emergencyContactPhone,
           }),
           ...(input.allergies !== undefined && {
-            allergies: input.allergies
-              .map((value) => value.trim())
-              .filter(Boolean),
+            allergies: input.allergies,
           }),
           ...(input.medicalConditions !== undefined && {
-            medicalConditions: input.medicalConditions
-              .map((value) => value.trim())
-              .filter(Boolean),
+            medicalConditions: input.medicalConditions,
           }),
           ...(input.medications !== undefined && {
-            medications: input.medications
-              .map((value) => value.trim())
-              .filter(Boolean),
+            medications: input.medications,
           }),
         },
         include: { address: true },
@@ -1112,7 +953,6 @@ export class PatientsPrismaRepository implements IPatientRepository {
   }
 
   async setStatus(user: AuthUser, id: string, input: PatientStatusCommand) {
-    this.requireStaff(user);
     await this.findScopedRecord(user, id);
     const patient = await this.prisma.person.update({
       where: { id },
@@ -1127,7 +967,6 @@ export class PatientsPrismaRepository implements IPatientRepository {
   }
 
   async remove(user: AuthUser, id: string) {
-    this.requireStaff(user);
     await this.findScopedRecord(user, id);
     await this.prisma.person.update({
       where: { id },
@@ -1148,23 +987,6 @@ export class PatientsPrismaRepository implements IPatientRepository {
     });
     if (!patient) throw new NotFoundException('Patient not found');
     return patient;
-  }
-
-  private requireStaff(user: AuthUser) {
-    if (!STAFF_ROLES.has(user.role)) {
-      throw new ForbiddenException('Clinic staff access is required');
-    }
-  }
-
-  private requireClinicalStaff(
-    user: AuthUser,
-    access: 'read' | 'write' = 'write',
-  ) {
-    const permission =
-      access === 'read' ? 'patients.clinical.read' : 'patients.clinical.write';
-    if (!hasPermission(user, permission)) {
-      throw new ForbiddenException('Clinical permissions are required');
-    }
   }
 
   private canReadMedicalNotes(user: AuthUser) {
@@ -1205,14 +1027,6 @@ export class PatientsPrismaRepository implements IPatientRepository {
       age--;
     }
     return age;
-  }
-
-  private splitName(name: string) {
-    const [firstName, ...lastParts] = name
-      .trim()
-      .replace(/\s+/g, ' ')
-      .split(' ');
-    return { firstName, lastName: lastParts.join(' ') || firstName };
   }
 
   private toPatient(

@@ -99,7 +99,8 @@ export class SubscriptionJobsService {
         Prisma.sql`
           SELECT "id"
           FROM "notification_outbox"
-          WHERE "sentAt" IS NULL
+          WHERE "eventType" LIKE 'SUBSCRIPTION_%'
+            AND "sentAt" IS NULL
             AND "nextAttemptAt" <= NOW()
             AND ("lockedAt" IS NULL OR "lockedAt" < ${staleLock})
           ORDER BY "createdAt"

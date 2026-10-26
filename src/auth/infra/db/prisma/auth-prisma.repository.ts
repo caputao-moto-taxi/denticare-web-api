@@ -360,14 +360,18 @@ export class AuthPrismaRepository implements IAuthRepository {
   async login(input: LoginCommand) {
     const email = input.email.trim().toLowerCase();
     const user = await this.prisma.user.findFirst({
-      where: { email, deletedAt: null, isActive: true },
-      select: { ...USER_PROFILE, password: true },
+      where: { email, deletedAt: null },
+      select: { ...USER_PROFILE, password: true, isActive: true },
     });
 
-    if (
-      !user ||
-      !(await this.hashService.compare(input.password, user.password))
-    ) {
+    if (!user) {
+      throw new UnauthorizedException('Invalid email or password');
+    }
+    if (!user.isActive) {
+      throw new UnauthorizedException('User account is not active');
+    }
+
+    if (!(await this.hashService.compare(input.password, user.password))) {
       throw new UnauthorizedException('Invalid email or password');
     }
     if (

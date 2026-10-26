@@ -10,7 +10,9 @@ import {
   MinLength,
 } from 'class-validator';
 
-export type CampaignChannel = 'EMAIL' | 'SMS';
+import { CampaignChannel } from './domain/communications.types';
+
+export type { CampaignChannel } from './domain/communications.types';
 
 export class CampaignAudienceQueryDto {
   @IsIn(['EMAIL', 'SMS'])

@@ -44,7 +44,6 @@ export class ClinicSchedulePrismaRepository implements IClinicScheduleRepository
     }
     if (problems.length > 0) throw new BadRequestException(problems);
 
-    // Only the listed days are kept, so closed days cannot leave stale hours behind.
     const workingHours = Object.fromEntries(
       input.workingDays.map((day) => {
         const { start, end, lunchStart, lunchEnd } = input.workingHours[day];

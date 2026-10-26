@@ -1,4 +1,5 @@
 import { Type } from 'class-transformer';
+import { AssistantChatMessage } from '../../application/assistant-chat-gateway';
 import {
   ArrayMaxSize,
   ArrayMinSize,
@@ -9,7 +10,7 @@ import {
   ValidateNested,
 } from 'class-validator';
 
-export class AssistantChatMessageDto {
+export class AssistantChatMessageDto implements AssistantChatMessage {
   @IsIn(['user', 'assistant'])
   role: 'user' | 'assistant';
 

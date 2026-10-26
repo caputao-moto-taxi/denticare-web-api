@@ -31,6 +31,16 @@ export type PatientUpdateCommand = Partial<PatientCreateCommand> & {
   marketingSmsConsent?: boolean;
 };
 
+export type PatientCreatePersistenceCommand = Omit<
+  PatientCreateCommand,
+  'name'
+> & { firstName: string; lastName: string };
+
+export type PatientUpdatePersistenceCommand = Omit<
+  PatientUpdateCommand,
+  'name'
+> & { firstName?: string; lastName?: string };
+
 export type PatientStatusCommand = { active: boolean };
 
 export type PatientToothCommand = {
@@ -39,6 +49,11 @@ export type PatientToothCommand = {
   procedureDone?: string;
   notes?: string;
 };
+
+export type PatientToothPersistenceCommand = Omit<
+  PatientToothCommand,
+  'procedureDone' | 'notes'
+> & { procedureDone: string | null; notes: string | null };
 
 export type PatientDiagnosisCommand = {
   code?: string;
@@ -49,11 +64,55 @@ export type PatientDiagnosisCommand = {
   affectedTeeth?: number[];
 };
 
+export type PatientDiagnosisPersistenceCommand = Omit<
+  PatientDiagnosisCommand,
+  'title' | 'affectedTeeth'
+> & {
+  designation: string;
+  affectedTeeth: string[];
+};
+
+export type PatientDiagnosisRecord = {
+  id: string;
+  code: string | null;
+  designation: string;
+  affectedTeeth: string[];
+  createdAt: Date;
+  doctor: { Person: { firstName: string; lastName: string }[] };
+  severity: string;
+  status: string;
+  description: string | null;
+  attachments: {
+    id: string;
+    fileName: string;
+    mimeType: string;
+    fileSize: number;
+  }[];
+};
+
 export type PatientDiagnosisAttachmentCommand = {
   originalname: string;
   mimetype: string;
   size: number;
   buffer: Buffer;
+};
+
+export type PatientDiagnosisAttachmentPersistenceCommand = Omit<
+  PatientDiagnosisAttachmentCommand,
+  'buffer'
+> & { storageKey: string };
+
+export type PatientDiagnosisAttachmentRecord = {
+  id: string;
+  fileName: string;
+  mimeType: string;
+  fileSize: number;
+};
+
+export type PatientDiagnosisAttachmentFileRecord = {
+  storageKey: string;
+  mimeType: string | null;
+  fileName: string;
 };
 
 export type PatientChartPdfData = {
@@ -208,10 +267,30 @@ export type PatientPrescriptionCommand = {
   }[];
 };
 
+export type PatientPrescriptionRecord = {
+  id: string;
+  medication: string;
+  dosage: string;
+  instructions: string;
+  duration: string;
+  createdAt: Date;
+  doctor: { username: string };
+};
+
 export type PatientFinancialEntryCommand = {
   description: string;
   amount: number;
   method: 'Multicaixa' | 'Transferência' | 'Dinheiro' | 'Convênio';
+};
+
+export type PatientFinancialEntryRecord = {
+  id: string;
+  reference: string;
+  description: string;
+  amount: number;
+  method: string;
+  createdAt: Date;
+  status: string;
 };
 
 export type PatientExamCommand = {
@@ -224,6 +303,27 @@ export type PatientExamCommand = {
     size: number;
     buffer: Buffer;
   };
+};
+
+export type PatientExamPersistenceCommand = {
+  title: string;
+  type: string;
+  doctorName: string;
+  fileName: string;
+  mimeType: string;
+  fileSize: number;
+  storageKey: string;
+};
+
+export type PatientExamRecord = PatientExamPersistenceCommand & {
+  id: string;
+  createdAt: Date;
+};
+
+export type PatientExamFileRecord = {
+  storageKey: string;
+  mimeType: string | null;
+  fileName: string;
 };
 
 export abstract class IPatientRepository {
@@ -247,59 +347,63 @@ export abstract class IPatientRepository {
   abstract updateTooth(
     user: AuthUser,
     id: string,
-    input: PatientToothCommand,
+    input: PatientToothPersistenceCommand,
   ): Promise<unknown>;
   abstract addDiagnosis(
     user: AuthUser,
     id: string,
-    input: PatientDiagnosisCommand,
-  ): Promise<unknown>;
+    input: PatientDiagnosisPersistenceCommand,
+  ): Promise<PatientDiagnosisRecord>;
   abstract updateDiagnosis(
     user: AuthUser,
     id: string,
     diagnosisId: string,
-    input: PatientDiagnosisCommand,
-  ): Promise<unknown>;
+    input: PatientDiagnosisPersistenceCommand,
+  ): Promise<PatientDiagnosisRecord>;
   abstract addDiagnosisAttachments(
     user: AuthUser,
     id: string,
     diagnosisId: string,
-    files: PatientDiagnosisAttachmentCommand[],
-  ): Promise<unknown>;
+    files: PatientDiagnosisAttachmentPersistenceCommand[],
+  ): Promise<PatientDiagnosisAttachmentRecord[]>;
   abstract getDiagnosisAttachment(
     user: AuthUser,
     id: string,
     diagnosisId: string,
     attachmentId: string,
-  ): Promise<{ data: Buffer; mimeType: string; fileName: string }>;
+  ): Promise<PatientDiagnosisAttachmentFileRecord>;
   abstract addPrescription(
     user: AuthUser,
     id: string,
     input: PatientPrescriptionCommand,
-  ): Promise<unknown>;
+    groupId: string,
+  ): Promise<PatientPrescriptionRecord[]>;
   abstract addFinancialEntry(
     user: AuthUser,
     id: string,
     input: PatientFinancialEntryCommand,
-  ): Promise<unknown>;
+    entryId: string,
+    reference: string,
+  ): Promise<PatientFinancialEntryRecord>;
   abstract addExam(
     user: AuthUser,
     id: string,
-    input: PatientExamCommand,
-  ): Promise<unknown>;
+    input: PatientExamPersistenceCommand,
+  ): Promise<PatientExamRecord>;
   abstract getExamFile(
     user: AuthUser,
     id: string,
     examId: string,
-  ): Promise<{ data: Buffer; mimeType: string; fileName: string }>;
+  ): Promise<PatientExamFileRecord>;
+  abstract emailExists(email: string, excludingId?: string): Promise<boolean>;
   abstract create(
     user: AuthUser,
-    input: PatientCreateCommand,
+    input: PatientCreatePersistenceCommand,
   ): Promise<unknown>;
   abstract update(
     user: AuthUser,
     id: string,
-    input: PatientUpdateCommand,
+    input: PatientUpdatePersistenceCommand,
   ): Promise<unknown>;
   abstract getAvatarStorageKey(
     user: AuthUser,

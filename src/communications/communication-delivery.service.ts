@@ -1,31 +1,34 @@
-import { Injectable, Logger, ServiceUnavailableException } from '@nestjs/common';
-import twilio = require('twilio');
+import {
+  Injectable,
+  Logger,
+  ServiceUnavailableException,
+} from '@nestjs/common';
+import twilio from 'twilio';
 import { AuthEmailService } from '../auth/domain/auth-email.service';
 import { GetEnviromentVariable } from '../shared/infra/azure';
-
-type CampaignChannel = 'EMAIL' | 'SMS';
+import { CommunicationDeliveryGateway } from './application/communication-delivery.gateway';
+import {
+  isValidCommunicationContact,
+  normalizeCommunicationContact,
+  toE164,
+} from './domain/communication-contact';
 
 @Injectable()
-export class CommunicationDeliveryService {
+export class CommunicationDeliveryService extends CommunicationDeliveryGateway {
   private readonly logger = new Logger(CommunicationDeliveryService.name);
   private smsClient: ReturnType<typeof twilio> | null = null;
   private smsSender: string | null = null;
 
-  constructor(private readonly emailService: AuthEmailService) {}
-
-  async sendEmail(
-    recipients: string[],
-    subject: string,
-    body: string,
-  ) {
-    await this.emailService.sendCampaignEmail(
-      recipients,
-      subject,
-      body,
-    );
+  constructor(private readonly emailService: AuthEmailService) {
+    super();
   }
 
-  async sendSmsBatch(recipients: string[], body: string) {
+  override;
+  async sendEmail(recipients: string[], subject: string, body: string) {
+    await this.emailService.sendCampaignEmail(recipients, subject, body);
+  }
+
+  override async sendSmsBatch(recipients: string[], body: string) {
     await this.ensureSmsClient();
 
     const results = await Promise.allSettled(
@@ -51,37 +54,16 @@ export class CommunicationDeliveryService {
     });
   }
 
-  static isValidContact(
-    channel: CampaignChannel,
-    value: string | null,
-  ) {
-    const contact = value?.trim();
-
-    if (!contact) return false;
-
-    if (channel === 'EMAIL') {
-      return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(contact);
-    }
-    return CommunicationDeliveryService.toE164(contact) !== null;
+  static isValidContact(channel: 'EMAIL' | 'SMS', value: string | null) {
+    return isValidCommunicationContact(channel, value);
   }
 
-  static normalizeContact(channel: CampaignChannel, value: string) {
-    if (channel === 'EMAIL') return value.trim();
-    return CommunicationDeliveryService.toE164(value) ?? value.trim();
+  static normalizeContact(channel: 'EMAIL' | 'SMS', value: string) {
+    return normalizeCommunicationContact(channel, value);
   }
 
   static toE164(value: string) {
-    const compact = value.trim().replace(/[\s().-]/g, '');
-    if (/^\+[1-9]\d{7,14}$/.test(compact)) return compact;
-
-    const digits = compact.replace(/\D/g, '');
-    if (digits.startsWith('244') && digits.length >= 12 && digits.length <= 13) {
-      return `+${digits}`;
-    }
-    if (/^9\d{8}$/.test(digits)) {
-      return `+244${digits}`;
-    }
-    return null;
+    return toE164(value);
   }
 
   private async ensureSmsClient() {

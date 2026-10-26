@@ -9,9 +9,10 @@ import { NodeHttpHandler } from '@smithy/node-http-handler';
 import { Agent as HttpsAgent } from 'node:https';
 import { IStorage } from '../../../shared/application/storage.interface';
 import { AwsS3Storage } from '../../../shared/infra/storage/aws-s3.storage';
+import { IPatientFileStorage } from '../../application/interfaces/patient-file-storage.interface';
 
 @Injectable()
-export class PatientExamStorage {
+export class PatientExamStorage implements IPatientFileStorage {
   private readonly logger = new Logger(PatientExamStorage.name);
   private storage?: IStorage;
 

@@ -3,6 +3,11 @@ import {
   IPatientRepository,
   PatientDiagnosisCommand,
 } from '../../../domain/patient.repository';
+import { requirePatientClinicalAccess } from '../../patient-access.policy';
+import {
+  normalizePatientDiagnosis,
+  toPatientDiagnosisView,
+} from '../../patient-diagnosis.mapper';
 
 export type AddPatientDiagnosisInput = {
   user: AuthUser;
@@ -13,7 +18,13 @@ export type AddPatientDiagnosisInput = {
 export class AddPatientDiagnosisUseCase {
   constructor(private readonly repository: IPatientRepository) {}
 
-  execute({ user, id, diagnosis }: AddPatientDiagnosisInput) {
-    return this.repository.addDiagnosis(user, id, diagnosis);
+  async execute({ user, id, diagnosis }: AddPatientDiagnosisInput) {
+    requirePatientClinicalAccess(user);
+    const record = await this.repository.addDiagnosis(
+      user,
+      id,
+      normalizePatientDiagnosis(diagnosis),
+    );
+    return toPatientDiagnosisView(record);
   }
 }
