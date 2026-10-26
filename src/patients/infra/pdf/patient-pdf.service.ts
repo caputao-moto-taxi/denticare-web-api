@@ -1,13 +1,13 @@
 import { Injectable } from '@nestjs/common';
 import { existsSync } from 'node:fs';
 import { join } from 'node:path';
-import * as PDFDocument from 'pdfkit';
 import {
   PatientChartPdfData,
   PatientFinancialPdfData,
   PatientPrescriptionPdfData,
 } from '../../domain/patient.repository';
 import { IPatientPdfGenerator } from '../../application/interfaces/patient-pdf-generator.interface';
+import { PDFDocument } from '../../../shared/pdfkit';
 
 const PAGE_MARGIN = 48;
 const PAGE_BOTTOM_MARGIN = 54;

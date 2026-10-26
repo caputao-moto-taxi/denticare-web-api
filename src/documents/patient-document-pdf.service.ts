@@ -1,5 +1,5 @@
 import { Injectable, ServiceUnavailableException } from '@nestjs/common';
-import * as PDFDocument from 'pdfkit';
+import { PDFDocument } from '../shared/pdfkit';
 import { CreatePatientDocumentDto, PatientDocumentType } from './documents.dto';
 
 export interface PatientDocumentPdfData {

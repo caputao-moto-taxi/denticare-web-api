@@ -71,7 +71,6 @@ export function isDoctorWorkingSlot(
 export type SlotDoctor = { id: string; schedule: WeeklySchedule };
 export type FreeSlot = { time: string; doctorIds: string[] };
 
-// Doctors that never configured their hours follow the clinic's opening hours.
 export function doctorScheduleOrClinic(
   profile: { workingDays: string[]; workingHours: unknown } | null,
   clinic: WeeklySchedule,
@@ -89,8 +88,6 @@ export function atTime(date: Date, time: string): Date {
   return new Date(`${date.toISOString().slice(0, 10)}T${time}:00.000Z`);
 }
 
-// Free slots of one day: open at the clinic, inside the doctor's own schedule,
-// not overlapping another appointment and not in the past.
 export function buildFreeSlots(input: {
   date: Date;
   clinic: WeeklySchedule;
@@ -151,7 +148,6 @@ export function buildFreeSlots(input: {
   return slots;
 }
 
-// Least busy doctor first, so automatic allocation spreads the workload.
 export function rankDoctorsByLoad(
   doctorIds: string[],
   booked: { doctorId: string }[],

@@ -1,11 +1,13 @@
-import { Injectable, ServiceUnavailableException } from '@nestjs/common';
-import * as twilio from 'twilio';
+import { Injectable, Logger, ServiceUnavailableException } from '@nestjs/common';
+import twilio = require('twilio');
 import { AuthEmailService } from '../auth/domain/auth-email.service';
+import { GetEnviromentVariable } from '../shared/infra/azure';
 
 type CampaignChannel = 'EMAIL' | 'SMS';
 
 @Injectable()
 export class CommunicationDeliveryService {
+  private readonly logger = new Logger(CommunicationDeliveryService.name);
   private smsClient: ReturnType<typeof twilio> | null = null;
   private smsSender: string | null = null;
 
@@ -16,18 +18,7 @@ export class CommunicationDeliveryService {
   }
 
   async sendSmsBatch(recipients: string[], body: string) {
-    if (!this.smsClient || !this.smsSender) {
-      const { TWILIO_ACCOUNT_SID, TWILIO_AUTH_TOKEN, TWILIO_FROM_NUMBER } =
-        process.env;
-      if (!TWILIO_ACCOUNT_SID || !TWILIO_AUTH_TOKEN || !TWILIO_FROM_NUMBER) {
-        throw new ServiceUnavailableException('SMS delivery is not configured');
-      }
-      const accountSid = TWILIO_ACCOUNT_SID;
-      const authToken = TWILIO_AUTH_TOKEN;
-      const sender = TWILIO_FROM_NUMBER;
-      this.smsClient = twilio(accountSid, authToken);
-      this.smsSender = sender;
-    }
+    await this.ensureSmsClient();
 
     const results = await Promise.allSettled(
       recipients.map((to) =>
@@ -38,7 +29,18 @@ export class CommunicationDeliveryService {
         }),
       ),
     );
-    return results.map((result) => result.status === 'fulfilled');
+
+    return results.map((result, index) => {
+      if (result.status === 'fulfilled') return true;
+      const reason =
+        result.reason instanceof Error
+          ? result.reason.message
+          : String(result.reason);
+      this.logger.warn(
+        `Campaign SMS failed for recipient ${index + 1}/${recipients.length}: ${reason}`,
+      );
+      return false;
+    });
   }
 
   static isValidContact(channel: CampaignChannel, value: string | null) {
@@ -47,12 +49,61 @@ export class CommunicationDeliveryService {
     if (channel === 'EMAIL') {
       return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(contact);
     }
-    return /^\+[1-9]\d{7,14}$/.test(contact.replace(/[\s().-]/g, ''));
+    return CommunicationDeliveryService.toE164(contact) !== null;
   }
 
   static normalizeContact(channel: CampaignChannel, value: string) {
-    return channel === 'EMAIL'
-      ? value.trim()
-      : value.trim().replace(/[\s().-]/g, '');
+    if (channel === 'EMAIL') return value.trim();
+    return CommunicationDeliveryService.toE164(value) ?? value.trim();
+  }
+
+  static toE164(value: string) {
+    const compact = value.trim().replace(/[\s().-]/g, '');
+    if (/^\+[1-9]\d{7,14}$/.test(compact)) return compact;
+
+    const digits = compact.replace(/\D/g, '');
+    if (digits.startsWith('244') && digits.length >= 12 && digits.length <= 13) {
+      return `+${digits}`;
+    }
+    if (/^9\d{8}$/.test(digits)) {
+      return `+244${digits}`;
+    }
+    return null;
+  }
+
+  private async ensureSmsClient() {
+    if (this.smsClient && this.smsSender) return;
+
+    const [accountSid, authToken, sender] = await Promise.all([
+      this.readSecret('TWILIO_ACCOUNT_SID'),
+      this.readSecret('TWILIO_AUTH_TOKEN'),
+      this.readSecret('TWILIO_PHONE_NUMBER', 'TWILIO_FROM_NUMBER'),
+    ]);
+
+    if (!accountSid || !authToken || !sender) {
+      throw new ServiceUnavailableException('SMS delivery is not configured');
+    }
+
+    this.smsClient = twilio(accountSid, authToken);
+    this.smsSender = sender;
+  }
+
+  private async readSecret(name: string, alias?: string) {
+    const local =
+      process.env[name]?.trim() || (alias && process.env[alias]?.trim());
+    if (local) return local;
+    try {
+      const value = await GetEnviromentVariable(name);
+      if (value?.trim()) return value.trim();
+    } catch {
+      if (!alias) return '';
+    }
+    if (!alias) return '';
+    try {
+      const value = await GetEnviromentVariable(alias);
+      return value?.trim() || '';
+    } catch {
+      return '';
+    }
   }
 }

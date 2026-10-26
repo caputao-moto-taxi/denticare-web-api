@@ -141,6 +141,33 @@ describe('CommunicationsService', () => {
     );
   });
 
+  it('normalizes Angola phone numbers before sending SMS campaigns', async () => {
+    person.findMany.mockResolvedValue([
+      { id: 'patient-1', email: null, phoneNumber: '923000001' },
+      { id: 'patient-2', email: null, phoneNumber: '244923000002' },
+    ]);
+    communicationCampaign.create.mockResolvedValue({ id: 'campaign-1' });
+    delivery.sendSmsBatch.mockResolvedValue([true, true]);
+    communicationCampaign.update.mockResolvedValue({
+      id: 'campaign-1',
+      status: 'SENT',
+      sentCount: 2,
+      failedCount: 0,
+    });
+
+    await service.sendCampaign(admin, {
+      name: 'Recall SMS',
+      channel: 'SMS',
+      body: 'A clínica tem uma vaga amanhã.',
+      recipientIds: ['patient-1', 'patient-2'],
+    });
+
+    expect(delivery.sendSmsBatch).toHaveBeenCalledWith(
+      ['+244923000001', '+244923000002'],
+      'A clínica tem uma vaga amanhã.',
+    );
+  });
+
   it('records per-recipient SMS delivery counts for the caller branch', async () => {
     person.findMany.mockResolvedValue([
       { id: 'patient-1', email: null, phoneNumber: '+244923000001' },

@@ -134,11 +134,18 @@ export class SendSMSNotification {
 
   async execute({ to, body }: ITwilioProps) {
     try {
-      const [accountSid, authToken, from] = await Promise.all([
-        GetEnviromentVariable('TWILIO_ACCOUNT_SID'),
-        GetEnviromentVariable('TWILIO_AUTH_TOKEN'),
-        GetEnviromentVariable('TWILIO_FROM_NUMBER'),
-      ]);
+      const accountSid =
+        process.env.TWILIO_ACCOUNT_SID ||
+        (await GetEnviromentVariable('TWILIO_ACCOUNT_SID'));
+      const authToken =
+        process.env.TWILIO_AUTH_TOKEN ||
+        (await GetEnviromentVariable('TWILIO_AUTH_TOKEN'));
+      const from =
+        process.env.TWILIO_PHONE_NUMBER ||
+        process.env.TWILIO_FROM_NUMBER ||
+        (await GetEnviromentVariable('TWILIO_PHONE_NUMBER').catch(() =>
+          GetEnviromentVariable('TWILIO_FROM_NUMBER'),
+        ));
 
       const client = twilio(accountSid!, authToken!);
 
