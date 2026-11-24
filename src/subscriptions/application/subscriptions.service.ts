@@ -11,7 +11,8 @@ import {
   SubscriptionRequestStatus,
 } from '../../../generated/prisma/client';
 import { randomUUID } from 'node:crypto';
-import { extname } from 'node:path';
+import { PaymentProofUpload } from './payment-proof-upload';
+import { SubscriptionRequestPolicy } from './subscription-request.policy';
 import { AuthUser } from '../../auth/auth-user';
 import { PatientExamStorage } from '../../patients/infra/storage/patient-exam-storage';
 import { PrismaService } from '../../shared/infra/db/prisma/prisma.service';
@@ -39,21 +40,7 @@ const OPEN_REQUEST_STATUSES: SubscriptionRequestStatus[] = [
   'UNDER_REVIEW',
   'INFORMATION_REQUESTED',
 ];
-const MAX_PROOF_SIZE = 5 * 1024 * 1024;
-const ACCEPTED_PROOFS: Record<string, { mimeType: string; extension: string }> =
-  {
-    '.pdf': { mimeType: 'application/pdf', extension: '.pdf' },
-    '.png': { mimeType: 'image/png', extension: '.png' },
-    '.jpg': { mimeType: 'image/jpeg', extension: '.jpg' },
-    '.jpeg': { mimeType: 'image/jpeg', extension: '.jpg' },
-  };
-
-export interface PaymentProofUpload {
-  originalname: string;
-  mimetype: string;
-  size: number;
-  buffer: Buffer;
-}
+export type { PaymentProofUpload } from './payment-proof-upload';
 
 @Injectable()
 export class SubscriptionsService {
@@ -198,14 +185,6 @@ export class SubscriptionsService {
     return settings;
   }
 
-  private assertIdempotencyKey(key: string | undefined): asserts key is string {
-    if (!key || !/^[A-Za-z0-9_-]{16,100}$/.test(key)) {
-      throw new BadRequestException(
-        'A valid Idempotency-Key header is required',
-      );
-    }
-  }
-
   private async findIdempotentRequest(
     headquarterId: string,
     idempotencyKey: string,
@@ -217,23 +196,8 @@ export class SubscriptionsService {
       },
     });
     if (!existing) return null;
-    this.assertSameIdempotentRequest(existing, input);
+    SubscriptionRequestPolicy.assertSameIdempotentRequest(existing, input);
     return this.requestOutput(existing);
-  }
-
-  private assertValidProofUpload(
-    file: PaymentProofUpload | undefined,
-  ): asserts file is PaymentProofUpload {
-    if (!file?.buffer?.length || !file.size) {
-      throw new BadRequestException('A payment proof file is required');
-    }
-    if (
-      file.size !== file.buffer.length ||
-      file.size > MAX_PROOF_SIZE ||
-      file.buffer.length > MAX_PROOF_SIZE
-    ) {
-      throw new BadRequestException('Payment proof must not exceed 5 MB');
-    }
   }
 
   private async getRequestPlanAndPayment(input: CreateSubscriptionRequestDto) {
@@ -289,7 +253,7 @@ export class SubscriptionsService {
     input: CreateSubscriptionRequestDto,
     file: PaymentProofUpload | undefined,
   ) {
-    this.assertIdempotencyKey(idempotencyKey);
+    SubscriptionRequestPolicy.assertIdempotencyKey(idempotencyKey);
     const headquarterId = await this.getHeadquarterId(user.branchId);
     const existing = await this.findIdempotentRequest(
       headquarterId,
@@ -297,10 +261,10 @@ export class SubscriptionsService {
       input,
     );
     if (existing) return existing;
-    this.assertValidProofUpload(file);
+    SubscriptionRequestPolicy.assertValidProofUpload(file);
     const { plan, quote, paymentDate } =
       await this.getRequestPlanAndPayment(input);
-    const proof = this.validateProof(file);
+    const proof = SubscriptionRequestPolicy.validateProof(file);
     await this.assertNoOpenRequest(headquarterId);
 
     const storageKey = `subscription-proofs/${randomUUID()}`;
@@ -980,50 +944,6 @@ export class SubscriptionsService {
         select: { id: true },
       }),
     );
-  }
-
-  private validateProof(file: PaymentProofUpload) {
-    const extension = extname(file.originalname).toLowerCase();
-    const type = ACCEPTED_PROOFS[extension];
-    if (!type?.mimeType || file.mimetype !== type.mimeType) {
-      throw new BadRequestException(
-        'Payment proof must be a PDF, PNG, JPG, or JPEG file',
-      );
-    }
-    const signatureValid =
-      (type.mimeType === 'application/pdf' &&
-        file.buffer.subarray(0, 5).toString('ascii') === '%PDF-') ||
-      (type.mimeType === 'image/png' &&
-        file.buffer
-          .subarray(0, 8)
-          .equals(
-            Buffer.from([0x89, 0x50, 0x4e, 0x47, 0x0d, 0x0a, 0x1a, 0x0a]),
-          )) ||
-      (type.mimeType === 'image/jpeg' &&
-        file.buffer[0] === 0xff &&
-        file.buffer[1] === 0xd8 &&
-        file.buffer[2] === 0xff);
-    if (!signatureValid) {
-      throw new BadRequestException(
-        'The uploaded payment proof does not match its declared file type',
-      );
-    }
-    const safeFileName = `${randomUUID()}${type.extension}`;
-    return { mimeType: type.mimeType, safeFileName };
-  }
-
-  private assertSameIdempotentRequest(
-    existing: { planId: string; amountPaid: Prisma.Decimal },
-    input: CreateSubscriptionRequestDto,
-  ) {
-    if (
-      existing.planId !== input.planId ||
-      !existing.amountPaid.equals(input.amountPaid)
-    ) {
-      throw new ConflictException(
-        'Idempotency-Key was already used for a different subscription request',
-      );
-    }
   }
 
   private requestOutput(request: object): Record<string, unknown> {

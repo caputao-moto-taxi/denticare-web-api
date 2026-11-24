@@ -1,6 +1,9 @@
+import { ConfigService } from '@nestjs/config';
 import { JwtService } from '@nestjs/jwt';
 import { IHashService } from '../shared/application/interfaces/IHash';
 import { PrismaService } from '../shared/infra/db/prisma/prisma.service';
+import { AuthenticateRequestUseCase } from './application/useCases/authenticate-request/authenticate-request-use-case';
+import { CheckPermissionsUseCase } from './application/useCases/check-permissions/check-permissions-use-case';
 import { GetProfileUseCase } from './application/useCases/get-profile/get-profile-use-case';
 import { LoginUseCase } from './application/useCases/login/login-use-case';
 import { LogoutUseCase } from './application/useCases/logout/logout-use-case';
@@ -11,17 +14,16 @@ import { ManageProfileAvatarUseCase } from './application/useCases/manage-profil
 import { IAuthRepository } from './domain/auth.repository';
 import { AuthPrismaRepository } from './infra/db/prisma/auth-prisma.repository';
 import { PatientExamStorage } from '../patients/infra/storage/patient-exam-storage';
-import { AuthEmailService } from './domain/auth-email.service';
-import { NodemailerAuthEmailService } from './infra/email/nodemailer-auth-email.service';
 import { ActivateAccountUseCase } from './application/useCases/activate-account/activate-account-use-case';
 import { RequestPasswordResetUseCase } from './application/useCases/request-password-reset/request-password-reset-use-case';
 import { ResetPasswordUseCase } from './application/useCases/reset-password/reset-password-use-case';
 import { ResendActivationUseCase } from './application/useCases/resend-activation/resend-activation-use-case';
+import { SendMailServiceUseCase } from '../shared/infra/services/sendEmailNotification.service';
 
 const SERVICES = {
-  AUTH_EMAIL: {
-    provide: AuthEmailService,
-    useClass: NodemailerAuthEmailService,
+  SEND_MAIL: {
+    provide: SendMailServiceUseCase,
+    useClass: SendMailServiceUseCase,
   },
 };
 
@@ -32,50 +34,80 @@ const REPOSITORIES = {
   },
   AUTH_PRISMA_REPOSITORY: {
     provide: AuthPrismaRepository,
-    useFactory: (
-      prismaService: PrismaService,
-      jwtService: JwtService,
-      hashService: IHashService,
-    ) => new AuthPrismaRepository(prismaService, jwtService, hashService),
-    inject: [PrismaService, JwtService, 'IHashService'],
+    useFactory: (prismaService: PrismaService) =>
+      new AuthPrismaRepository(prismaService),
+    inject: [PrismaService],
   },
 };
 
 const USE_CASES = {
+  CHECK_PERMISSIONS: {
+    provide: CheckPermissionsUseCase,
+    useClass: CheckPermissionsUseCase,
+  },
+  AUTHENTICATE_REQUEST: {
+    provide: AuthenticateRequestUseCase,
+    useFactory: (repository: IAuthRepository, jwtService: JwtService) =>
+      new AuthenticateRequestUseCase(repository, jwtService),
+    inject: [REPOSITORIES.AUTH_REPOSITORY.provide, JwtService],
+  },
   REGISTER: {
     provide: RegisterUseCase,
-    useFactory: (repository: IAuthRepository, emailService: AuthEmailService) =>
-      new RegisterUseCase(repository, emailService),
-    inject: [REPOSITORIES.AUTH_REPOSITORY.provide, AuthEmailService],
+    useFactory: (
+      repository: IAuthRepository,
+      sendMailService: SendMailServiceUseCase,
+      hashService: IHashService,
+    ) => new RegisterUseCase(repository, sendMailService, hashService),
+    inject: [
+      REPOSITORIES.AUTH_REPOSITORY.provide,
+      SendMailServiceUseCase,
+      'IHashService',
+    ],
   },
   ACTIVATE_ACCOUNT: {
     provide: ActivateAccountUseCase,
-    useFactory: (repository: IAuthRepository) =>
-      new ActivateAccountUseCase(repository),
-    inject: [REPOSITORIES.AUTH_REPOSITORY.provide],
+    useFactory: (
+      repository: IAuthRepository,
+      sendMailService: SendMailServiceUseCase,
+    ) => new ActivateAccountUseCase(repository, sendMailService),
+    inject: [REPOSITORIES.AUTH_REPOSITORY.provide, SendMailServiceUseCase],
   },
   REQUEST_PASSWORD_RESET: {
     provide: RequestPasswordResetUseCase,
-    useFactory: (repository: IAuthRepository, emailService: AuthEmailService) =>
-      new RequestPasswordResetUseCase(repository, emailService),
-    inject: [REPOSITORIES.AUTH_REPOSITORY.provide, AuthEmailService],
+    useFactory: (
+      repository: IAuthRepository,
+      sendMailService: SendMailServiceUseCase,
+    ) => new RequestPasswordResetUseCase(repository, sendMailService),
+    inject: [REPOSITORIES.AUTH_REPOSITORY.provide, SendMailServiceUseCase],
   },
   RESET_PASSWORD: {
     provide: ResetPasswordUseCase,
-    useFactory: (repository: IAuthRepository) =>
-      new ResetPasswordUseCase(repository),
-    inject: [REPOSITORIES.AUTH_REPOSITORY.provide],
+    useFactory: (repository: IAuthRepository, hashService: IHashService) =>
+      new ResetPasswordUseCase(repository, hashService),
+    inject: [REPOSITORIES.AUTH_REPOSITORY.provide, 'IHashService'],
   },
   RESEND_ACTIVATION: {
     provide: ResendActivationUseCase,
-    useFactory: (repository: IAuthRepository, emailService: AuthEmailService) =>
-      new ResendActivationUseCase(repository, emailService),
-    inject: [REPOSITORIES.AUTH_REPOSITORY.provide, AuthEmailService],
+    useFactory: (
+      repository: IAuthRepository,
+      sendMailService: SendMailServiceUseCase,
+    ) => new ResendActivationUseCase(repository, sendMailService),
+    inject: [REPOSITORIES.AUTH_REPOSITORY.provide, SendMailServiceUseCase],
   },
   LOGIN: {
     provide: LoginUseCase,
-    useFactory: (repository: IAuthRepository) => new LoginUseCase(repository),
-    inject: [REPOSITORIES.AUTH_REPOSITORY.provide],
+    useFactory: (
+      repository: IAuthRepository,
+      hashService: IHashService,
+      jwtService: JwtService,
+      configService: ConfigService,
+    ) => new LoginUseCase(repository, hashService, jwtService, configService),
+    inject: [
+      REPOSITORIES.AUTH_REPOSITORY.provide,
+      'IHashService',
+      JwtService,
+      ConfigService,
+    ],
   },
   GET_PROFILE: {
     provide: GetProfileUseCase,
@@ -85,9 +117,9 @@ const USE_CASES = {
   },
   UPDATE_PROFILE: {
     provide: UpdateProfileUseCase,
-    useFactory: (repository: IAuthRepository) =>
-      new UpdateProfileUseCase(repository),
-    inject: [REPOSITORIES.AUTH_REPOSITORY.provide],
+    useFactory: (repository: IAuthRepository, hashService: IHashService) =>
+      new UpdateProfileUseCase(repository, hashService),
+    inject: [REPOSITORIES.AUTH_REPOSITORY.provide, 'IHashService'],
   },
   LOGOUT: {
     provide: LogoutUseCase,
@@ -96,8 +128,12 @@ const USE_CASES = {
   },
   REFRESH: {
     provide: RefreshUseCase,
-    useFactory: (repository: IAuthRepository) => new RefreshUseCase(repository),
-    inject: [REPOSITORIES.AUTH_REPOSITORY.provide],
+    useFactory: (
+      repository: IAuthRepository,
+      jwtService: JwtService,
+      configService: ConfigService,
+    ) => new RefreshUseCase(repository, jwtService, configService),
+    inject: [REPOSITORIES.AUTH_REPOSITORY.provide, JwtService, ConfigService],
   },
   MANAGE_PROFILE_AVATAR: {
     provide: ManageProfileAvatarUseCase,

@@ -7,6 +7,6 @@ export class GetDoctorUseCase {
   constructor(private readonly repository: IDoctorRepository) {}
 
   execute({ user, id }: GetDoctorInput) {
-    return this.repository.findOne(user, id);
+    return this.repository.findOne(user.branchId, id);
   }
 }

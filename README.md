@@ -31,7 +31,16 @@ HTTP não devem ser usados como contratos internos de domínio.
 
 ## Desenvolvimento local
 
-Configure `DATABASE_URL` com a ligação PostgreSQL, `JWT_SECRET` e
+Os ambientes usam `NODE_ENV` para escolher `.env.development` ou
+`.env.production`; não há fallback entre os ficheiros. Crie localmente o ficheiro
+correspondente ao ambiente; ficheiros `.env*` são ignorados pelo Git e não devem
+ser versionados. `pnpm start:dev` e o Docker Compose usam
+`NODE_ENV=development`; o Compose aponta a API para o PostgreSQL local e aplica
+as migrações pendentes ao iniciar. Em produção, defina `NODE_ENV=production` e
+configure as variáveis no ambiente de execução, incluindo a URL Neon. Nunca use
+a URL local em produção.
+
+Configure também `JWT_SECRET` e
 `JWT_REFRESH_SECRET` com segredos fortes e distintos no ambiente local. Não
 inclua esses valores no controlo de versões. Para uploads, configure
 `R2_ENDPOINT`, `R2_BUCKET`, `R2_ACCESS_KEY_ID` e `R2_SECRET_ACCESS_KEY`. Os
@@ -43,9 +52,8 @@ não aceita certificados autoassinados.
 
 Para usar o assistente odontológico, configure `OPENAI_API_KEY` com uma chave
 de API da OpenAI. `OPENAI_MODEL` é opcional e usa `gpt-4o-mini` por padrão.
-Em desenvolvimento local, defina as variáveis em `.env.development`; no
-Docker Compose, defina-as no `.env` junto ao `docker-compose.yml` ou no ambiente
-do processo que executa o Compose. Não envie nem versione a chave. O endpoint
+Defina as variáveis localmente em `.env.development` ou `.env.production`, ou
+no ambiente de execução. Não envie nem versione a chave. O endpoint
 `POST /assistant/chat` exige autenticação e recebe até 16 mensagens recentes.
 
 Para email, configure `SMTP_USER` e `SMTP_PASSWORD` com as credenciais da caixa
@@ -71,6 +79,9 @@ pnpm exec prisma migrate deploy
 pnpm db:seed
 pnpm start:dev
 ```
+
+Para executar migrações em produção, use
+`NODE_ENV=production pnpm exec prisma migrate deploy`.
 
 Para testar a ligação real ao R2, execute
 `RUN_R2_INTEGRATION_TESTS=true pnpm exec jest src/shared/infra/storage/__tests__/aws-s3.storage.int.spec.ts --runInBand`.

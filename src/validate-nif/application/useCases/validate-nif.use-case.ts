@@ -1,4 +1,3 @@
-import axios from 'axios';
 import { HttpStatus } from '@nestjs/common';
 import {
   HttpResponseType,
@@ -7,19 +6,18 @@ import {
 } from '../../../shared/contracts/httpContracts';
 import type { UseCase } from '../../../shared/contracts/useCasesOrServicesContract';
 import type { ValidateNifInterface } from '../interface/validateNif.interface';
-
-const NIF_PROVIDER_URL = 'https://dominios.ao/ao/actions/nif.ajcall.php';
+import { INifVerificationProvider } from '../interface/nif-verification.provider';
 
 export class ValidateNifUseCase implements UseCase {
+  constructor(private readonly provider: INifVerificationProvider) {}
+
   async execute({ nif }: ValidateNifInterface) {
     if (!/^\d{10}$/.test(nif ?? '')) {
       return badRequestResponse({ message: 'NIF must be 10 digits' });
     }
 
     try {
-      const { data: result } = await axios.get(NIF_PROVIDER_URL, {
-        params: { nif },
-      });
+      const result = await this.provider.verify(nif);
       if (result.success !== true && result.sucess !== true) {
         return badRequestResponse({ message: 'NIF is not valid' });
       }

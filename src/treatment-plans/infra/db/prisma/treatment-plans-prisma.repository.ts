@@ -1,9 +1,4 @@
-import {
-  BadRequestException,
-  ForbiddenException,
-  Injectable,
-  NotFoundException,
-} from '@nestjs/common';
+import { Injectable, NotFoundException } from '@nestjs/common';
 import { AuthUser } from '../../../../auth/auth-user';
 import { Prisma } from '../../../../../generated/prisma/client';
 import {
@@ -14,9 +9,8 @@ import {
 import {
   dateRange,
   personSearch,
-  validateListFilters,
 } from '../../../../shared/helpers/list-filters';
-import { joinName, STAFF_ROLES } from '../../../../shared/helpers/staff';
+import { joinName } from '../../../../shared/helpers/staff';
 import { PrismaService } from '../../../../shared/infra/db/prisma/prisma.service';
 import {
   ITreatmentPlanRepository,
@@ -59,21 +53,11 @@ type PlanRow = {
   };
 };
 
-// Clinical records are written by physicians; nurses only record progress.
-const MANAGE_ROLES = new Set(['admin', 'doctor']);
-const PROGRESS_ROLES = new Set(['admin', 'doctor', 'nurse']);
-
 @Injectable()
 export class TreatmentPlansPrismaRepository implements ITreatmentPlanRepository {
   constructor(private readonly prisma: PrismaService) {}
 
   async list(user: AuthUser, query: ListQuery = {}) {
-    this.requireRole(user, STAFF_ROLES);
-    validateListFilters(query, {
-      status: ['planned', 'in-progress', 'completed'],
-      doctorId: true,
-      patientId: true,
-    });
     const where: Prisma.TreatmentPlanWhereInput = {
       branchId: user.branchId,
       deletedAt: null,
@@ -121,33 +105,57 @@ export class TreatmentPlansPrismaRepository implements ITreatmentPlanRepository 
   }
 
   async findOne(user: AuthUser, id: string) {
-    this.requireRole(user, STAFF_ROLES);
     return this.toPlan(await this.findScoped(user, id));
   }
 
-  async create(user: AuthUser, input: TreatmentPlanCreateCommand) {
-    this.requireRole(user, MANAGE_ROLES);
-    await this.assertPatient(user, input.patientId);
-    await this.assertDoctor(user, input.doctorId);
+  async patientExists(user: AuthUser, patientId: string) {
+    return Boolean(
+      await this.prisma.person.findFirst({
+        where: {
+          id: patientId,
+          branchId: user.branchId,
+          deletedAt: null,
+          isActive: true,
+          Role: { slug: 'patient' },
+        },
+        select: { id: true },
+      }),
+    );
+  }
 
+  async doctorExists(user: AuthUser, doctorId: string) {
+    return Boolean(
+      await this.prisma.user.findFirst({
+        where: {
+          id: doctorId,
+          branchId: user.branchId,
+          deletedAt: null,
+          isActive: true,
+          Role: { slug: 'doctor' },
+        },
+        select: { id: true },
+      }),
+    );
+  }
+
+  async create(user: AuthUser, input: TreatmentPlanCreateCommand) {
     const startDate = input.startDate ? new Date(input.startDate) : new Date();
     const estimatedCompletion = input.estimatedCompletion
       ? new Date(input.estimatedCompletion)
       : null;
-    this.validatePlanDates(startDate, estimatedCompletion);
 
     const plan = await this.prisma.treatmentPlan.create({
       data: {
         branchId: user.branchId,
         patientId: input.patientId,
         doctorId: input.doctorId,
-        diagnosis: input.diagnosis.trim(),
-        notes: input.notes?.trim() || null,
+        diagnosis: input.diagnosis,
+        notes: input.notes || null,
         totalCost: input.totalCost,
         totalSteps: input.totalSteps,
         startDate,
         estimatedCompletion,
-        activePhase: input.activePhase?.trim() || null,
+        activePhase: input.activePhase || null,
       },
       include: PLAN_INCLUDE,
     });
@@ -155,16 +163,9 @@ export class TreatmentPlansPrismaRepository implements ITreatmentPlanRepository 
   }
 
   async update(user: AuthUser, id: string, input: TreatmentPlanUpdateCommand) {
-    this.requireRole(user, MANAGE_ROLES);
     const current = await this.findScoped(user, id);
-    if (input.doctorId) await this.assertDoctor(user, input.doctorId);
-
     const totalSteps = input.totalSteps ?? current.totalSteps;
-    if (totalSteps < current.completedSteps) {
-      throw new BadRequestException(
-        'Total steps cannot be lower than the completed steps',
-      );
-    }
+    if (totalSteps < current.completedSteps) return null;
     const startDate = input.startDate
       ? new Date(input.startDate)
       : current.startDate;
@@ -174,16 +175,14 @@ export class TreatmentPlansPrismaRepository implements ITreatmentPlanRepository 
         : input.estimatedCompletion
           ? new Date(input.estimatedCompletion)
           : null;
-    this.validatePlanDates(startDate, estimatedCompletion);
-
     const plan = await this.prisma.treatmentPlan.update({
       where: { id: current.id },
       data: {
         ...(input.doctorId !== undefined && { doctorId: input.doctorId }),
         ...(input.diagnosis !== undefined && {
-          diagnosis: input.diagnosis.trim(),
+          diagnosis: input.diagnosis,
         }),
-        ...(input.notes !== undefined && { notes: input.notes.trim() || null }),
+        ...(input.notes !== undefined && { notes: input.notes || null }),
         ...(input.totalCost !== undefined && { totalCost: input.totalCost }),
         totalSteps,
         ...(input.startDate !== undefined && {
@@ -193,7 +192,7 @@ export class TreatmentPlansPrismaRepository implements ITreatmentPlanRepository 
           estimatedCompletion,
         }),
         ...(input.activePhase !== undefined && {
-          activePhase: input.activePhase.trim() || null,
+          activePhase: input.activePhase || null,
         }),
       },
       include: PLAN_INCLUDE,
@@ -206,19 +205,13 @@ export class TreatmentPlansPrismaRepository implements ITreatmentPlanRepository 
     id: string,
     input: TreatmentPlanProgressCommand,
   ) {
-    this.requireRole(user, PROGRESS_ROLES);
-
     // The bounds check and the write run together so concurrent updates stay consistent.
     return this.prisma.$transaction(async (transaction) => {
       const current = await transaction.treatmentPlan.findFirst({
         where: { id, branchId: user.branchId, deletedAt: null },
       });
       if (!current) throw new NotFoundException('Treatment plan not found');
-      if (input.completedSteps > current.totalSteps) {
-        throw new BadRequestException(
-          'Completed steps cannot exceed the total steps',
-        );
-      }
+      if (input.completedSteps > current.totalSteps) return null;
 
       const plan = await transaction.treatmentPlan.update({
         where: { id: current.id },
@@ -230,7 +223,6 @@ export class TreatmentPlansPrismaRepository implements ITreatmentPlanRepository 
   }
 
   async remove(user: AuthUser, id: string) {
-    this.requireRole(user, new Set(['admin']));
     const current = await this.findScoped(user, id);
     await this.prisma.treatmentPlan.update({
       where: { id: current.id },
@@ -246,50 +238,6 @@ export class TreatmentPlansPrismaRepository implements ITreatmentPlanRepository 
     });
     if (!plan) throw new NotFoundException('Treatment plan not found');
     return plan;
-  }
-
-  private async assertPatient(user: AuthUser, patientId: string) {
-    const patient = await this.prisma.person.findFirst({
-      where: {
-        id: patientId,
-        branchId: user.branchId,
-        deletedAt: null,
-        isActive: true,
-        Role: { slug: 'patient' },
-      },
-      select: { id: true },
-    });
-    if (!patient) throw new NotFoundException('Patient not found');
-  }
-
-  private async assertDoctor(user: AuthUser, doctorId: string) {
-    const doctor = await this.prisma.user.findFirst({
-      where: {
-        id: doctorId,
-        branchId: user.branchId,
-        deletedAt: null,
-        isActive: true,
-        Role: { slug: 'doctor' },
-      },
-      select: { id: true },
-    });
-    if (!doctor) throw new NotFoundException('Doctor not found');
-  }
-
-  private requireRole(user: AuthUser, allowed: Set<string>) {
-    if (!allowed.has(user.role)) {
-      throw new ForbiddenException(
-        'You do not have permission for this treatment plan action',
-      );
-    }
-  }
-
-  private validatePlanDates(startDate: Date, estimatedCompletion: Date | null) {
-    if (estimatedCompletion && estimatedCompletion < startDate) {
-      throw new BadRequestException(
-        'Estimated completion cannot be before the plan start date',
-      );
-    }
   }
 
   private toPlan(plan: PlanRow) {

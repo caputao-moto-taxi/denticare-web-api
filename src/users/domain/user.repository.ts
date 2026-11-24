@@ -14,8 +14,27 @@ export type UserPermissionView = {
   granted: boolean;
 };
 
+export type UserPermissionData = {
+  roleSlug: string | null;
+  rolePermissionSlugs: string[];
+  overrides: { slug: string; granted: boolean }[];
+  permissions: {
+    id: string;
+    slug: string;
+    name: string;
+    description: string;
+  }[];
+};
+
+export type UserPermissionOverride = {
+  userId: string;
+  permissionId: string;
+  granted: boolean;
+};
+
 export type UserCreateCommand = {
-  name: string;
+  firstName: string;
+  lastName: string;
   email: string;
   phone?: string;
   role: StaffRole;
@@ -23,7 +42,8 @@ export type UserCreateCommand = {
 };
 
 export type UserUpdateCommand = {
-  name?: string;
+  firstName?: string;
+  lastName?: string;
   phone?: string;
   role?: StaffRole;
 };
@@ -39,15 +59,15 @@ export abstract class IUserRepository {
     query?: ListQuery,
   ): Promise<PaginatedResult<User>>;
   abstract findOne(user: AuthUser, id: string): Promise<User>;
-  abstract getPermissions(
+  abstract getPermissionData(
     user: AuthUser,
     id: string,
-  ): Promise<UserPermissionView[]>;
-  abstract setPermissions(
-    user: AuthUser,
+  ): Promise<UserPermissionData>;
+  abstract savePermissionOverrides(
     id: string,
-    input: UserPermissionCommand,
-  ): Promise<UserPermissionView[]>;
+    overrides: UserPermissionOverride[],
+  ): Promise<void>;
+  abstract emailExists(email: string): Promise<boolean>;
   abstract create(user: AuthUser, input: UserCreateCommand): Promise<User>;
   abstract update(
     user: AuthUser,

@@ -19,7 +19,12 @@ export type UpdatePatientDiagnosisInput = {
 export class UpdatePatientDiagnosisUseCase {
   constructor(private readonly repository: IPatientRepository) {}
 
-  async execute({ user, id, diagnosisId, diagnosis }: UpdatePatientDiagnosisInput) {
+  async execute({
+    user,
+    id,
+    diagnosisId,
+    diagnosis,
+  }: UpdatePatientDiagnosisInput) {
     requirePatientClinicalAccess(user);
     const record = await this.repository.updateDiagnosis(
       user,

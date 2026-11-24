@@ -15,7 +15,7 @@ export class UpdateClinicScheduleDto {
   @IsIn([...WEEKDAY_CODES], { each: true })
   workingDays: string[];
 
-  // Each day is { start, end, lunchStart?, lunchEnd? }, checked by the repository.
+  // Each day is { start, end, lunchStart?, lunchEnd? }, validated by the use case.
   @IsObject()
   workingHours: Record<
     string,

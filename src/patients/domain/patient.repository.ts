@@ -34,12 +34,31 @@ export type PatientUpdateCommand = Partial<PatientCreateCommand> & {
 export type PatientCreatePersistenceCommand = Omit<
   PatientCreateCommand,
   'name'
-> & { firstName: string; lastName: string };
+> & {
+  firstName: string;
+  lastName: string;
+  dataProcessingConsentUpdatedAt?: Date;
+};
 
 export type PatientUpdatePersistenceCommand = Omit<
   PatientUpdateCommand,
   'name'
-> & { firstName?: string; lastName?: string };
+> & {
+  firstName?: string;
+  lastName?: string;
+  dataProcessingConsentUpdatedAt?: Date | null;
+  marketingEmailConsentUpdatedAt?: Date | null;
+  marketingSmsConsentUpdatedAt?: Date | null;
+};
+
+export type PatientConsentState = {
+  dataProcessingConsent: boolean;
+  dataProcessingConsentUpdatedAt: Date | null;
+  marketingEmailConsent: boolean;
+  marketingEmailConsentUpdatedAt: Date | null;
+  marketingSmsConsent: boolean;
+  marketingSmsConsentUpdatedAt: Date | null;
+};
 
 export type PatientStatusCommand = { active: boolean };
 
@@ -334,16 +353,6 @@ export abstract class IPatientRepository {
     user: AuthUser,
     id: string,
   ): Promise<PatientChartPdfData>;
-  abstract getPrescriptionPdfData(
-    user: AuthUser,
-    id: string,
-    prescriptionId: string,
-  ): Promise<PatientPrescriptionPdfData>;
-  abstract getFinancialPdfData(
-    user: AuthUser,
-    id: string,
-    financialId: string,
-  ): Promise<PatientFinancialPdfData>;
   abstract updateTooth(
     user: AuthUser,
     id: string,
@@ -396,6 +405,10 @@ export abstract class IPatientRepository {
     examId: string,
   ): Promise<PatientExamFileRecord>;
   abstract emailExists(email: string, excludingId?: string): Promise<boolean>;
+  abstract getConsentState(
+    user: AuthUser,
+    id: string,
+  ): Promise<PatientConsentState>;
   abstract create(
     user: AuthUser,
     input: PatientCreatePersistenceCommand,

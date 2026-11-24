@@ -88,18 +88,14 @@ const USE_CASES = {
   ),
   ADD_PATIENT_DIAGNOSIS_ATTACHMENTS_USE_CASE: {
     provide: AddPatientDiagnosisAttachmentsUseCase,
-    useFactory: (
-      repository: IPatientRepository,
-      storage: PatientExamStorage,
-    ) => new AddPatientDiagnosisAttachmentsUseCase(repository, storage),
+    useFactory: (repository: IPatientRepository, storage: PatientExamStorage) =>
+      new AddPatientDiagnosisAttachmentsUseCase(repository, storage),
     inject: [REPOSITORIES.PATIENT_REPOSITORY.provide, PatientExamStorage],
   },
   GET_PATIENT_DIAGNOSIS_ATTACHMENT_USE_CASE: {
     provide: GetPatientDiagnosisAttachmentUseCase,
-    useFactory: (
-      repository: IPatientRepository,
-      storage: PatientExamStorage,
-    ) => new GetPatientDiagnosisAttachmentUseCase(repository, storage),
+    useFactory: (repository: IPatientRepository, storage: PatientExamStorage) =>
+      new GetPatientDiagnosisAttachmentUseCase(repository, storage),
     inject: [REPOSITORIES.PATIENT_REPOSITORY.provide, PatientExamStorage],
   },
   ADD_PATIENT_PRESCRIPTION_USE_CASE: repositoryUseCase(
@@ -110,18 +106,14 @@ const USE_CASES = {
   ),
   ADD_PATIENT_EXAM_USE_CASE: {
     provide: AddPatientExamUseCase,
-    useFactory: (
-      repository: IPatientRepository,
-      storage: PatientExamStorage,
-    ) => new AddPatientExamUseCase(repository, storage),
+    useFactory: (repository: IPatientRepository, storage: PatientExamStorage) =>
+      new AddPatientExamUseCase(repository, storage),
     inject: [REPOSITORIES.PATIENT_REPOSITORY.provide, PatientExamStorage],
   },
   GET_PATIENT_EXAM_FILE_USE_CASE: {
     provide: GetPatientExamFileUseCase,
-    useFactory: (
-      repository: IPatientRepository,
-      storage: PatientExamStorage,
-    ) => new GetPatientExamFileUseCase(repository, storage),
+    useFactory: (repository: IPatientRepository, storage: PatientExamStorage) =>
+      new GetPatientExamFileUseCase(repository, storage),
     inject: [REPOSITORIES.PATIENT_REPOSITORY.provide, PatientExamStorage],
   },
   CREATE_PATIENT_USE_CASE: repositoryUseCase(CreatePatientUseCase),

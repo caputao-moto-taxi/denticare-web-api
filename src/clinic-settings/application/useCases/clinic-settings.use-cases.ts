@@ -1,5 +1,9 @@
 import { randomUUID } from 'crypto';
-import { Injectable, NotFoundException } from '@nestjs/common';
+import {
+  ForbiddenException,
+  Injectable,
+  NotFoundException,
+} from '@nestjs/common';
 import { AuthUser } from '../../../auth/auth-user';
 import { PatientExamStorage } from '../../../patients/infra/storage/patient-exam-storage';
 import {
@@ -9,12 +13,21 @@ import {
   IClinicSettingsRepository,
 } from '../../domain/clinic-settings.repository';
 
+function ensureClinicAdmin(user: AuthUser) {
+  if (user.role !== 'admin' && user.role !== 'administrator') {
+    throw new ForbiddenException(
+      'Only clinic administrators can manage settings',
+    );
+  }
+}
+
 @Injectable()
 export class GetClinicSettingsUseCase {
   constructor(private readonly repository: IClinicSettingsRepository) {}
 
   execute(user: AuthUser) {
-    return this.repository.getSettings(user);
+    ensureClinicAdmin(user);
+    return this.repository.getSettings(user.branchId);
   }
 }
 
@@ -23,7 +36,13 @@ export class UpdateClinicSettingsUseCase {
   constructor(private readonly repository: IClinicSettingsRepository) {}
 
   execute(user: AuthUser, input: ClinicSettingsUpdateCommand) {
-    return this.repository.updateSettings(user, input);
+    ensureClinicAdmin(user);
+    return this.repository.updateSettings(
+      user.branchId,
+      Object.fromEntries(
+        Object.entries(input).map(([key, value]) => [key, value?.trim()]),
+      ) as ClinicSettingsUpdateCommand,
+    );
   }
 }
 
@@ -32,19 +51,33 @@ export class ManageClinicServicesUseCase {
   constructor(private readonly repository: IClinicSettingsRepository) {}
 
   list(user: AuthUser) {
-    return this.repository.listServices(user);
+    ensureClinicAdmin(user);
+    return this.repository.listServices(user.branchId);
   }
 
   create(user: AuthUser, input: ClinicServiceCommand) {
-    return this.repository.createService(user, input);
+    ensureClinicAdmin(user);
+    return this.repository.createService(user.branchId, {
+      ...input,
+      name: input.name.trim(),
+      description: input.description?.trim() || undefined,
+    });
   }
 
   update(user: AuthUser, id: string, input: ClinicServiceUpdateCommand) {
-    return this.repository.updateService(user, id, input);
+    ensureClinicAdmin(user);
+    return this.repository.updateService(user.branchId, id, {
+      ...input,
+      ...(input.name !== undefined && { name: input.name.trim() }),
+      ...(input.description !== undefined && {
+        description: input.description.trim(),
+      }),
+    });
   }
 
   delete(user: AuthUser, id: string) {
-    return this.repository.deleteService(user, id);
+    ensureClinicAdmin(user);
+    return this.repository.deleteService(user.branchId, id);
   }
 }
 
@@ -65,7 +98,10 @@ export class ManageClinicLogoUseCase {
   ) {}
 
   async upload(user: AuthUser, file: { mimetype: string; buffer: Buffer }) {
-    const previousKey = await this.repository.getLogoKey(user);
+    ensureClinicAdmin(user);
+    const previousKey = this.normalizeLogoKey(
+      await this.repository.getLogoKey(user.branchId),
+    );
     const storageKey = `headquarters/${user.branchId}/logo/${randomUUID()}`;
     await this.storage.store({
       id: storageKey,
@@ -73,7 +109,7 @@ export class ManageClinicLogoUseCase {
       mimeType: file.mimetype,
     });
     try {
-      await this.repository.updateLogoKey(user, storageKey);
+      await this.repository.updateLogoKey(user.branchId, storageKey);
     } catch (error) {
       await this.storage.delete(storageKey).catch(() => undefined);
       throw error;
@@ -84,13 +120,23 @@ export class ManageClinicLogoUseCase {
   }
 
   async getForUser(user: AuthUser) {
-    const storageKey = await this.repository.getLogoKey(user);
+    ensureClinicAdmin(user);
+    const storageKey = this.normalizeLogoKey(
+      await this.repository.getLogoKey(user.branchId),
+    );
     if (!storageKey) throw new NotFoundException('Clinic logo not found');
     return this.storage.get(storageKey);
   }
 
   async getPublic(branchId: string) {
-    const storageKey = await this.repository.getPublicLogoKey(branchId);
+    const storageKey = this.normalizeLogoKey(
+      await this.repository.getPublicLogoKey(branchId),
+    );
+    if (!storageKey) throw new NotFoundException('Clinic logo not found');
     return this.storage.get(storageKey);
+  }
+
+  private normalizeLogoKey(value: string | null) {
+    return value?.startsWith('headquarters/') ? value : null;
   }
 }

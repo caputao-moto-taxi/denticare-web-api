@@ -1,8 +1,4 @@
-import {
-  BadRequestException,
-  ForbiddenException,
-  NotFoundException,
-} from '@nestjs/common';
+import { NotFoundException } from '@nestjs/common';
 import { AuthUser } from '../../../../auth/auth-user';
 import { PrismaService } from '../../../../shared/infra/db/prisma/prisma.service';
 import { TreatmentPlansPrismaRepository } from './treatment-plans-prisma.repository';
@@ -81,33 +77,12 @@ describe('TreatmentPlansPrismaRepository', () => {
     });
   });
 
-  it('does not let nurses create plans', async () => {
-    await expect(
-      repository.create(
-        { ...doctor, role: 'nurse' },
-        {
-          patientId: 'patient-1',
-          doctorId: 'doctor-1',
-          diagnosis: 'Cavities',
-          totalCost: 100,
-          totalSteps: 3,
-        },
-      ),
-    ).rejects.toBeInstanceOf(ForbiddenException);
-  });
-
-  it('requires the patient to belong to the caller branch', async () => {
+  it('checks patient existence within the caller branch', async () => {
     person.findFirst.mockResolvedValue(null);
 
     await expect(
-      repository.create(doctor, {
-        patientId: 'foreign-patient',
-        doctorId: 'doctor-1',
-        diagnosis: 'Cavities',
-        totalCost: 100,
-        totalSteps: 3,
-      }),
-    ).rejects.toBeInstanceOf(NotFoundException);
+      repository.patientExists(doctor, 'foreign-patient'),
+    ).resolves.toBe(false);
     expect(person.findFirst).toHaveBeenCalledWith(
       expect.objectContaining({
         where: expect.objectContaining({
@@ -116,15 +91,23 @@ describe('TreatmentPlansPrismaRepository', () => {
         }),
       }),
     );
-    expect(treatmentPlan.create).not.toHaveBeenCalled();
   });
 
-  it('rejects progress above the total number of steps', async () => {
+  it('keeps the progress bound check inside its transaction', async () => {
     treatmentPlan.findFirst.mockResolvedValue(plan);
 
     await expect(
       repository.setProgress(doctor, plan.id, { completedSteps: 6 }),
-    ).rejects.toBeInstanceOf(BadRequestException);
+    ).resolves.toBeNull();
+    expect(treatmentPlan.update).not.toHaveBeenCalled();
+  });
+
+  it('does not persist total steps below current progress', async () => {
+    treatmentPlan.findFirst.mockResolvedValue(plan);
+
+    await expect(
+      repository.update(doctor, plan.id, { totalSteps: 1 }),
+    ).resolves.toBeNull();
     expect(treatmentPlan.update).not.toHaveBeenCalled();
   });
 
@@ -137,11 +120,10 @@ describe('TreatmentPlansPrismaRepository', () => {
     ).resolves.toMatchObject({ status: 'completed', completedSteps: 5 });
   });
 
-  it('does not allow lowering the total below the completed steps', async () => {
-    treatmentPlan.findFirst.mockResolvedValue(plan);
-
+  it('returns not found for a plan outside the caller branch', async () => {
+    treatmentPlan.findFirst.mockResolvedValue(null);
     await expect(
-      repository.update(doctor, plan.id, { totalSteps: 1 }),
-    ).rejects.toBeInstanceOf(BadRequestException);
+      repository.findOne(doctor, 'foreign-plan'),
+    ).rejects.toBeInstanceOf(NotFoundException);
   });
 });

@@ -11,9 +11,38 @@ const STAFF_ROLES = new Set([
 ]);
 
 export function requirePatientStaff(user: AuthUser) {
-  if (!STAFF_ROLES.has(user.role)) {
+  if (!canAccessClinicPatientRecords(user)) {
     throw new ForbiddenException('Clinic staff access is required');
   }
+}
+
+export function canAccessClinicPatientRecords(user: AuthUser) {
+  return STAFF_ROLES.has(user.role);
+}
+
+export function canReadPatientClinicalData(user: AuthUser) {
+  return hasPermission(user, 'patients.clinical.read');
+}
+
+export function canReadPatientContacts(user: AuthUser) {
+  return hasPermission(user, 'patients.contacts.read');
+}
+
+export function canReadPatientFinancials(user: AuthUser) {
+  return hasPermission(user, 'patients.financial.read');
+}
+
+export function patientAppointmentVisibility(user: AuthUser) {
+  if (
+    hasPermission(user, 'appointments.read.all') ||
+    hasPermission(user, 'appointments.manage')
+  ) {
+    return {};
+  }
+  if (hasPermission(user, 'appointments.read.assigned')) {
+    return { doctorId: user.id };
+  }
+  return { id: { in: [] as string[] } };
 }
 
 export function requirePatientClinicalAccess(

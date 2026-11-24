@@ -1,6 +1,5 @@
 import { IUseCase } from '../../../../shared/application/use-case.interface';
 import {
-  badRequestResponse,
   errorResponse,
   successResponse,
   HttpResponse,
@@ -16,22 +15,16 @@ export type GetPlanInput = {
 export class GetPlanUseCase implements IUseCase<GetPlanInput, GetPlanOutput> {
   constructor(private notificationRepository: IPlanRepository) {}
 
-  async execute(
-    input: GetPlanInput,
-  ): Promise<HttpResponse<GetPlanOutput | any>> {
+  async execute(input: GetPlanInput): Promise<HttpResponse> {
     try {
       const planId = new PlanId(input.id);
       const plan = await this.notificationRepository.findById(planId);
 
-      if (!plan) {
-        return badRequestResponse({
-          message: `${new NotFoundError(input.id, Plan)}`,
-        });
-      }
+      if (!plan) throw new NotFoundError(input.id, Plan);
 
       return successResponse(PlanOutputMapper.toOutput(plan));
-    } catch (error: any) {
-      return errorResponse(error);
+    } catch (error: unknown) {
+      return errorResponse(error as Error);
     }
   }
 }

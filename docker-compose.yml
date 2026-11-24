@@ -1,35 +1,43 @@
 services:
   app:
     build: .
-    command: ./.docker/start.sh
+    command: sh -c "pnpm exec prisma migrate deploy && pnpm run start:dev"
     container_name: dentcare-app
+    env_file:
+      - .env.development
     ports:
       - 3002:3000
     volumes:
       - .:/home/node/app
+      - /home/node/app/node_modules
     depends_on:
-      - dentcare-app-postgresql
+      dentcare-app-postgresql:
+        condition: service_healthy
     environment:
-      - POSTGRES_HOST=localhost
-      - POSTGRES_DATABASE=root
-      - POSTGRES_USER=root
-      - POSTGRES_PASSWORD=root
-      - OPENAI_API_KEY=${OPENAI_API_KEY:-}
-      - OPENAI_MODEL=${OPENAI_MODEL:-gpt-4o-mini}
+      NODE_ENV: development
+      DATABASE_URL: postgresql://root:root@dentcare-app-postgresql:5432/root
+      POSTGRES_HOST: dentcare-app-postgresql
+      POSTGRES_DATABASE: root
+      POSTGRES_USER: root
+      POSTGRES_PASSWORD: root
 
   dentcare-app-postgresql:
     container_name: dentcare-app-db
-    image: postgres:9.4
+    image: postgres:16-alpine
     environment:
-      - POSTGRES_HOST=localhost
-      - POSTGRES_DATABASE=root
-      - POSTGRES_USER=root
-      - POSTGRES_PASSWORD=root
+      POSTGRES_DB: root
+      POSTGRES_USER: root
+      POSTGRES_PASSWORD: root
     ports:
       - "5432:5432"
     volumes:
-      - postgres_data:/var/lib/dentcare-app-postgresql/dentcare-app
+      - postgres_data:/var/lib/postgresql/data
       - ./scripts:/docker-entrypoint-initdb.d
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U root -d root"]
+      interval: 5s
+      timeout: 5s
+      retries: 10
     command: ["postgres", "-c", "log_statement=all"]
 
 volumes:

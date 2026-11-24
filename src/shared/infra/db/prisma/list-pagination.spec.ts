@@ -11,6 +11,15 @@ import { TreatmentPlansPrismaRepository } from '../../../../treatment-plans/infr
 import { ChatPrismaRepository } from '../../../../chat/infra/db/prisma/chat-prisma.repository';
 import { PlanPrismaRepository } from '../../../../plans/infra/db/prisma/plan-prisma.repository';
 import { ListPlansUseCase } from '../../../../plans/application/useCases/list-plans/list-plans-use-case';
+import { ListPatientsUseCase } from '../../../../patients/application/useCases/list-patients/list-patients-use-case';
+import { ListDoctorsUseCase } from '../../../../doctors/application/useCases/list-doctors/list-doctors-use-case';
+import { ListAppointmentsUseCase } from '../../../../appointments/application/useCases/list-appointments/list-appointments-use-case';
+import { ListUsersUseCase } from '../../../../users/application/useCases/list-users/list-users-use-case';
+import { ListStockUseCase } from '../../../../stock/application/useCases/list-stock/list-stock-use-case';
+import { ListTreatmentPlansUseCase } from '../../../../treatment-plans/application/useCases/list-treatment-plans/list-treatment-plans-use-case';
+import { ListConversationsUseCase } from '../../../../chat/application/useCases/list-conversations/list-conversations-use-case';
+import { ListChatContactsUseCase } from '../../../../chat/application/useCases/list-chat-contacts/list-chat-contacts-use-case';
+import { GetConversationMessagesUseCase } from '../../../../chat/application/useCases/get-conversation-messages/get-conversation-messages-use-case';
 import { ListQuery } from '../../../domain/list-query';
 import { PrismaService } from './prisma.service';
 
@@ -20,11 +29,18 @@ describe('Database listing pagination', () => {
     email: 'me@example.test',
     role: 'admin',
     branchId: 'my-clinic',
+    permissions: ['appointments.read.all'],
   };
   const model = () => ({
     findMany: jest.fn().mockResolvedValue([]),
     count: jest.fn().mockResolvedValue(51),
     findFirst: jest.fn().mockResolvedValue({ id: 'thread', starterId: 'me' }),
+    findUnique: jest.fn().mockResolvedValue({
+      id: 'thread',
+      branchId: 'my-clinic',
+      starterId: 'me',
+      recipientId: 'other',
+    }),
     fields: { totalSteps: { modelName: 'TreatmentPlan', name: 'totalSteps' } },
   });
   const models = {
@@ -56,10 +72,19 @@ describe('Database listing pagination', () => {
         { provide: PrismaService, useValue: prisma },
         { provide: PatientExamStorage, useValue: {} },
         PatientsPrismaRepository,
-        AppointmentsPrismaRepository,
+        {
+          provide: AppointmentsPrismaRepository,
+          useFactory: (db: PrismaService) =>
+            new AppointmentsPrismaRepository(db),
+          inject: [PrismaService],
+        },
         StockPrismaRepository,
         TreatmentPlansPrismaRepository,
-        ChatPrismaRepository,
+        {
+          provide: ChatPrismaRepository,
+          useFactory: (db: PrismaService) => new ChatPrismaRepository(db),
+          inject: [PrismaService],
+        },
         {
           provide: DoctorsPrismaRepository,
           useFactory: (db: PrismaService) =>
@@ -76,24 +101,51 @@ describe('Database listing pagination', () => {
     }).compile();
     list = {
       patients: (query, caller = user) =>
-        module.get(PatientsPrismaRepository).list(caller, query),
-      doctors: (query) => module.get(DoctorsPrismaRepository).list(user, query),
-      appointments: (query, caller = user) =>
-        module.get(AppointmentsPrismaRepository).list(caller, query),
-      users: (query) => module.get(UsersPrismaRepository).list(user, query),
-      stock: (query) => module.get(StockPrismaRepository).list(user, query),
-      treatments: (query) =>
-        module.get(TreatmentPlansPrismaRepository).list(user, query),
-      conversations: (query) =>
-        module.get(ChatPrismaRepository).list(user, query),
-      contacts: (query) =>
-        module.get(ChatPrismaRepository).contacts(user, query),
-      messages: (query) =>
-        module.get(ChatPrismaRepository).messages(user, 'thread', query),
-      plans: (query) =>
-        new PlanPrismaRepository(module.get(PrismaService)).listPaginated(
+        new ListPatientsUseCase(module.get(PatientsPrismaRepository)).execute({
+          user: caller,
           query,
-        ),
+        }),
+      doctors: (query, caller = user) =>
+        new ListDoctorsUseCase(module.get(DoctorsPrismaRepository)).execute({
+          user: caller,
+          query,
+        }),
+      appointments: (query, caller = user) =>
+        new ListAppointmentsUseCase(
+          module.get(AppointmentsPrismaRepository),
+        ).execute({ user: caller, query }),
+      users: (query, caller = user) =>
+        new ListUsersUseCase(module.get(UsersPrismaRepository)).execute({
+          user: caller,
+          query,
+        }),
+      stock: (query, caller = user) =>
+        new ListStockUseCase(module.get(StockPrismaRepository)).execute({
+          user: caller,
+          query,
+        }),
+      treatments: (query) =>
+        new ListTreatmentPlansUseCase(
+          module.get(TreatmentPlansPrismaRepository),
+        ).execute({ user, query }),
+      conversations: (query) =>
+        new ListConversationsUseCase(module.get(ChatPrismaRepository)).execute({
+          user,
+          query,
+        }),
+      contacts: (query) =>
+        new ListChatContactsUseCase(module.get(ChatPrismaRepository)).execute({
+          user,
+          query,
+        }),
+      messages: (query) =>
+        new GetConversationMessagesUseCase(
+          module.get(ChatPrismaRepository),
+        ).execute({ user, conversationId: 'thread', query }),
+      plans: (query) =>
+        new ListPlansUseCase(
+          new PlanPrismaRepository(module.get(PrismaService)),
+        ).execute(query),
     };
   });
   beforeEach(() => jest.clearAllMocks());
@@ -131,10 +183,19 @@ describe('Database listing pagination', () => {
         dateFrom: '2026-01-01',
         dateTo: '2026-01-31',
       };
-      await expect(list[name](query)).resolves.toMatchObject({
-        data: [],
-        meta: { page: 3, pageSize: 25, total: 51, totalPages: 3 },
-      });
+      await expect(list[name](query)).resolves.toMatchObject(
+        name === 'plans'
+          ? {
+              data: {
+                data: [],
+                meta: { page: 3, pageSize: 25, total: 51, totalPages: 3 },
+              },
+            }
+          : {
+              data: [],
+              meta: { page: 3, pageSize: 25, total: 51, totalPages: 3 },
+            },
+      );
       const target = models[entity];
       const [find] = target.findMany.mock.calls[0];
       expect(find).toMatchObject({
@@ -181,7 +242,9 @@ describe('Database listing pagination', () => {
     '%s rejects reversed dates before executing a list query',
     async (name, entity) => {
       await expect(
-        list[name]({ dateFrom: '2026-02-01', dateTo: '2026-01-01' }),
+        Promise.resolve().then(() =>
+          list[name]({ dateFrom: '2026-02-01', dateTo: '2026-01-01' }),
+        ),
       ).rejects.toBeInstanceOf(BadRequestException);
       expect(models[entity].findMany).not.toHaveBeenCalled();
     },
@@ -199,8 +262,8 @@ describe('Database listing pagination', () => {
     expect(models.appointment.findMany).toHaveBeenCalledWith(
       expect.objectContaining({
         where: expect.objectContaining({
-          doctorId: 'me',
-          AND: [{ doctorId: 'another-doctor' }],
+          doctor: { branchId: 'my-clinic' },
+          AND: [{ doctorId: 'another-doctor' }, { doctorId: 'me' }],
         }),
       }),
     );
@@ -215,8 +278,8 @@ describe('Database listing pagination', () => {
     expect(models.appointment.findMany).toHaveBeenCalledWith(
       expect.objectContaining({
         where: expect.objectContaining({
-          patientId: 'my-patient',
-          AND: [{ patientId: 'other-patient' }],
+          doctor: { branchId: 'my-clinic' },
+          AND: [{ patientId: 'other-patient' }, { patientId: 'my-patient' }],
         }),
       }),
     );
@@ -232,7 +295,7 @@ describe('Database listing pagination', () => {
   });
 
   it('keeps conversation membership validation when paging message history', async () => {
-    models.chatConversation.findFirst.mockResolvedValueOnce(null);
+    models.chatConversation.findUnique.mockResolvedValueOnce(null);
     await expect(list.messages({ page: 2 })).rejects.toThrow(
       'Conversation not found',
     );

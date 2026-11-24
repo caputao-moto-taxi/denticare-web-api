@@ -1,18 +1,38 @@
-import { AuthUser } from '../../../../auth/auth-user';
 import { randomUUID } from 'crypto';
+import { AuthUser } from '../../../../auth/auth-user';
+import { PatientExamStorage } from '../../../../patients/infra/storage/patient-exam-storage';
 import {
-  IChatRepository,
+  ChatAttachmentRecord,
   ChatMessageUpload,
+  IChatRepository,
   SendMessageCommand,
 } from '../../../domain/chat.repository';
 import { ChatRealtimeService } from '../../../infra/realtime/chat-realtime.service';
-import { PatientExamStorage } from '../../../../patients/infra/storage/patient-exam-storage';
+import {
+  requireConversationParticipant,
+  toChatMessage,
+} from '../shared/chat-rules';
 
 export type SendChatMessageInput = {
   user: AuthUser;
   conversationId: string;
   input: SendMessageCommand & { files?: ChatMessageUpload[] };
 };
+
+async function removeStoredAttachments(
+  storage: PatientExamStorage,
+  attachments: ChatAttachmentRecord[],
+) {
+  const results = await Promise.allSettled(
+    attachments.map((attachment) => storage.delete(attachment.storageKey)),
+  );
+  const failures = results.flatMap((result) =>
+    result.status === 'rejected' ? [result.reason] : [],
+  );
+  if (failures.length > 0) {
+    throw new AggregateError(failures, 'Failed to remove chat attachments');
+  }
+}
 
 export class SendChatMessageUseCase {
   constructor(
@@ -22,59 +42,74 @@ export class SendChatMessageUseCase {
   ) {}
 
   async execute({ user, conversationId, input }: SendChatMessageInput) {
-    const { starterId, recipientId } = await this.repository.participants(
+    const conversation = await requireConversationParticipant(
+      this.repository,
       user,
       conversationId,
     );
-    const attachments: {
-      id: string;
-      storageKey: string;
-      name: string;
-      mimeType: string;
-      size: number;
-    }[] = [];
+    const attachments: ChatAttachmentRecord[] = [];
+
     try {
       for (const file of input.files ?? []) {
         const id = randomUUID();
         const storageKey = `chat/${id}`;
+        const mimeType = file.mimetype || 'application/octet-stream';
         attachments.push({
           id,
           storageKey,
           name: file.originalname,
-          mimeType: file.mimetype || 'application/octet-stream',
+          mimeType,
           size: file.size,
         });
         await this.storage.store({
           id: storageKey,
           data: file.buffer,
-          mimeType: file.mimetype || 'application/octet-stream',
+          mimeType,
         });
       }
     } catch (error) {
-      await Promise.allSettled(
-        attachments.map((attachment) =>
-          this.storage.delete(attachment.storageKey),
-        ),
-      );
+      try {
+        await removeStoredAttachments(this.storage, attachments);
+      } catch (cleanupError) {
+        throw new AggregateError(
+          [error, cleanupError],
+          'Failed to store a chat message and clean up its attachments',
+        );
+      }
       throw error;
     }
 
     let message;
     try {
-      message = await this.repository.send(user, conversationId, {
-        content: input.content,
-        attachments,
+      message = await this.repository.transaction(async (transaction) => {
+        const created = await transaction.createMessage({
+          conversationId,
+          authorId: user.id,
+          content: input.content.trim(),
+          ...(attachments.length > 0 && { attachments }),
+        });
+        await transaction.updateConversation(conversationId, {
+          updatedAt: new Date(),
+          ...(conversation.starterId === user.id
+            ? { starterLastReadAt: created.createdAt }
+            : { recipientLastReadAt: created.createdAt }),
+        });
+        return created;
       });
     } catch (error) {
-      await Promise.allSettled(
-        attachments.map((attachment) =>
-          this.storage.delete(attachment.storageKey),
-        ),
-      );
+      try {
+        await removeStoredAttachments(this.storage, attachments);
+      } catch (cleanupError) {
+        throw new AggregateError(
+          [error, cleanupError],
+          'Failed to persist a chat message and clean up its attachments',
+        );
+      }
       throw error;
     }
 
-    const participantIds = [starterId, recipientId];
+    const participantIds = [conversation.starterId, conversation.recipientId];
+    const messageView = toChatMessage(message, user.id);
     this.realtime.typingChanged({
       conversationId,
       userId: user.id,
@@ -83,10 +118,10 @@ export class SendChatMessageUseCase {
     });
     this.realtime.messageCreated({
       conversationId,
-      message,
+      message: messageView,
       authorId: user.id,
       participantIds,
     });
-    return message;
+    return messageView;
   }
 }

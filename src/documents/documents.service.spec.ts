@@ -2,13 +2,13 @@ import 'reflect-metadata';
 import { plainToInstance } from 'class-transformer';
 import { validateSync } from 'class-validator';
 import { AuthUser } from '../auth/auth-user';
-import { PatientExamStorage } from '../patients/infra/storage/patient-exam-storage';
-import { PrismaService } from '../shared/infra/db/prisma/prisma.service';
 import { CreatePatientDocumentDto } from './documents.dto';
-import { DocumentsService } from './documents.service';
+import { IDocumentsRepository } from './domain/documents.repository';
+import { DocumentsUseCases } from './application/documents.use-cases';
 import { PatientDocumentPdfService } from './patient-document-pdf.service';
+import { PatientExamStorage } from '../patients/infra/storage/patient-exam-storage';
 
-describe('DocumentsService', () => {
+describe('DocumentsUseCases', () => {
   const user: AuthUser = {
     id: 'user-a',
     email: 'staff@example.test',
@@ -24,7 +24,7 @@ describe('DocumentsService', () => {
   };
   const pdfBytes = Buffer.from('pdf-content');
 
-  it('requires and trims the fields that belong to the selected document type', () => {
+  it('requires and trims fields belonging to the selected document type', () => {
     const invalid = plainToInstance(CreatePatientDocumentDto, {
       patientId: 'patient-a',
       type: 'JUSTIFICATIVO_FALTA',
@@ -32,7 +32,6 @@ describe('DocumentsService', () => {
       absenceReason: '   ',
     });
     const errors = validateSync(invalid);
-
     expect(errors.map((error) => error.property)).toContain('patientId');
     expect(errors.map((error) => error.property)).toContain('absenceReason');
     expect(errors.map((error) => error.property)).toContain('recipient');
@@ -49,44 +48,34 @@ describe('DocumentsService', () => {
     expect(validateSync(validTerm)).toHaveLength(0);
   });
 
-  function createService(logoKey: string | null = null) {
-    const prisma = {
-      person: {
-        findMany: jest
-          .fn()
-          .mockResolvedValue([
-            { id: 'patient-a', firstName: 'Ana', lastName: 'Silva' },
-          ]),
-        count: jest.fn().mockResolvedValue(1),
-        findFirst: jest.fn().mockResolvedValue({
-          id: 'patient-a',
-          firstName: 'Ana',
-          lastName: 'Silva',
-        }),
-      },
-      user: {
-        findFirst: jest.fn().mockResolvedValue({ username: 'Dra. Maria' }),
-      },
-      branch: {
-        findFirst: jest.fn().mockResolvedValue({
-          name: 'Clínica DentCare',
-          headquarter: { logo: logoKey },
-        }),
-      },
-      patientDocument: {
-        create: jest.fn().mockResolvedValue({
-          id: 'document-a',
-          patientId: 'patient-a',
-          type: input.type,
-          formData: input,
-          fileName: 'justificativo_falta-2026-10-22.pdf',
-          createdAt: new Date('2026-10-22T10:00:00.000Z'),
-        }),
-      },
-    } as unknown as PrismaService;
-    const pdf = {
-      generate: jest.fn().mockResolvedValue(pdfBytes),
-    } as unknown as PatientDocumentPdfService;
+  function createUseCases(logo: string | null = null) {
+    const repository = {
+      listPatients: jest.fn().mockResolvedValue({
+        data: [{ id: 'patient-a', firstName: 'Ana', lastName: 'Silva' }],
+        total: 1,
+      }),
+      list: jest.fn().mockResolvedValue({ data: [], total: 0 }),
+      findPatient: jest.fn().mockResolvedValue({
+        id: 'patient-a',
+        firstName: 'Ana',
+        lastName: 'Silva',
+      }),
+      findAuthor: jest.fn().mockResolvedValue({ username: 'Dra. Maria' }),
+      findBranch: jest.fn().mockResolvedValue({
+        name: 'Clínica DentCare',
+        headquarter: { logo },
+      }),
+      create: jest.fn().mockResolvedValue({
+        id: 'document-a',
+        patientId: 'patient-a',
+        type: input.type,
+        formData: input,
+        fileName: 'justificativo_falta-2026-10-22.pdf',
+        createdAt: new Date('2026-10-22T10:00:00.000Z'),
+      }),
+      getPdf: jest.fn(),
+    } as unknown as IDocumentsRepository;
+    const pdf = { generate: jest.fn().mockResolvedValue(pdfBytes) };
     const storage = {
       get: jest.fn().mockResolvedValue({
         data: Buffer.from('clinic-logo'),
@@ -94,75 +83,36 @@ describe('DocumentsService', () => {
       }),
     };
     return {
-      service: new DocumentsService(
-        prisma,
-        pdf,
+      useCases: new DocumentsUseCases(
+        repository,
+        pdf as unknown as PatientDocumentPdfService,
         storage as unknown as PatientExamStorage,
       ),
-      prisma,
+      repository,
       pdf,
       storage,
     };
   }
 
-  it('searches patients by every name term within the active branch', async () => {
-    const { service, prisma } = createService();
-
-    const result = await service.listPatients(user, {
+  it('lists patients by the active branch and maps names for the API', async () => {
+    const { useCases, repository } = createUseCases();
+    const result = await useCases.listPatients(user, {
       search: 'Ana Silva',
       page: 1,
       pageSize: 100,
     });
-
     expect(result.data).toEqual([{ id: 'patient-a', name: 'Ana Silva' }]);
-    expect(prisma.person.findMany).toHaveBeenCalledWith(
-      expect.objectContaining({
-        where: expect.objectContaining({
-          branchId: user.branchId,
-          AND: [
-            {
-              OR: [
-                {
-                  firstName: {
-                    contains: 'Ana',
-                    mode: 'insensitive',
-                  },
-                },
-                {
-                  lastName: {
-                    contains: 'Ana',
-                    mode: 'insensitive',
-                  },
-                },
-              ],
-            },
-            {
-              OR: [
-                {
-                  firstName: {
-                    contains: 'Silva',
-                    mode: 'insensitive',
-                  },
-                },
-                {
-                  lastName: {
-                    contains: 'Silva',
-                    mode: 'insensitive',
-                  },
-                },
-              ],
-            },
-          ],
-        }),
-      }),
+    expect(repository.listPatients).toHaveBeenCalledWith(
+      user.branchId,
+      expect.objectContaining({ search: 'Ana Silva' }),
     );
   });
 
-  it('previews a validated document without persisting it', async () => {
-    const { service, prisma, pdf } = createService();
-
-    const result = await service.preview(user, input);
-
+  it('previews generated PDFs without persisting and loads only eligible clinic logos', async () => {
+    const { useCases, repository, pdf, storage } = createUseCases(
+      'headquarters/branch-a/logo/logo.png',
+    );
+    const result = await useCases.preview(user, input);
     expect(result.pdfBytes).toEqual(pdfBytes);
     expect(result.fileName).toMatch(
       /^justificativo_falta-\d{4}-\d{2}-\d{2}\.pdf$/,
@@ -172,49 +122,32 @@ describe('DocumentsService', () => {
         patientName: 'Ana Silva',
         authorName: 'Dra. Maria',
         branchName: 'Clínica DentCare',
+        clinicLogo: {
+          data: Buffer.from('clinic-logo'),
+          mime_type: 'image/png',
+        },
       }),
     );
-    expect(prisma.patientDocument.create).not.toHaveBeenCalled();
+    expect(storage.get).toHaveBeenCalledWith(
+      'headquarters/branch-a/logo/logo.png',
+    );
+    expect(repository.create).not.toHaveBeenCalled();
   });
 
   it('persists generated documents under the authenticated branch', async () => {
-    const { service, prisma } = createService();
-
-    const result = await service.generate(user, input);
-
+    const { useCases, repository } = createUseCases();
+    const result = await useCases.generate(user, input);
     expect(result).toMatchObject({
       id: 'document-a',
       patientName: 'Ana Silva',
       authorName: 'Dra. Maria',
     });
-    expect(prisma.patientDocument.create).toHaveBeenCalledWith(
+    expect(repository.create).toHaveBeenCalledWith(
       expect.objectContaining({
-        data: expect.objectContaining({
-          patientId: 'patient-a',
-          authorId: user.id,
-          branchId: user.branchId,
-          pdfBytes,
-        }),
-      }),
-    );
-  });
-
-  it('loads the clinic logo for a medical justification PDF', async () => {
-    const { service, pdf, storage } = createService(
-      'headquarters/branch-a/logo/logo.png',
-    );
-
-    await service.preview(user, input);
-
-    expect(storage.get).toHaveBeenCalledWith(
-      'headquarters/branch-a/logo/logo.png',
-    );
-    expect(pdf.generate).toHaveBeenCalledWith(
-      expect.objectContaining({
-        clinicLogo: {
-          data: Buffer.from('clinic-logo'),
-          mime_type: 'image/png',
-        },
+        patientId: 'patient-a',
+        authorId: user.id,
+        branchId: user.branchId,
+        pdfBytes,
       }),
     );
   });

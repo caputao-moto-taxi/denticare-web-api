@@ -1,8 +1,11 @@
 import { Injectable, Logger } from '@nestjs/common';
 import { Cron, CronExpression } from '@nestjs/schedule';
+import { existsSync } from 'node:fs';
+import { join } from 'node:path';
 import { Prisma } from '../../../generated/prisma/client';
-import { AuthEmailService } from '../../auth/domain/auth-email.service';
+import { ReadHTMLFile } from '../../shared/helpers/utils';
 import { PrismaService } from '../../shared/infra/db/prisma/prisma.service';
+import { SendMailServiceUseCase } from '../../shared/infra/services/sendEmailNotification.service';
 
 @Injectable()
 export class SubscriptionJobsService {
@@ -10,7 +13,7 @@ export class SubscriptionJobsService {
 
   constructor(
     private readonly prisma: PrismaService,
-    private readonly emailService: AuthEmailService,
+    private readonly sendMailService: SendMailServiceUseCase,
   ) {}
 
   @Cron(CronExpression.EVERY_DAY_AT_2AM)
@@ -167,11 +170,31 @@ export class SubscriptionJobsService {
   ) {
     try {
       const payload = this.jsonObject(notification.payload);
-      await this.emailService.sendCampaignEmail(
-        [notification.recipient],
-        this.subject(notification.eventType),
-        this.body(notification.eventType, payload),
-      );
+      const subject = this.subject(notification.eventType);
+      const body = this.body(notification.eventType, payload);
+      const templatePath = [
+        join(__dirname, '../../../public/email-template.html'),
+        join(__dirname, '../../public/email-template.html'),
+      ].find(existsSync);
+      if (!templatePath) {
+        throw new Error('Email template not found');
+      }
+
+      const html = await ReadHTMLFile(templatePath, {
+        subject,
+        body,
+        year: new Date().getFullYear(),
+      });
+      const result = await this.sendMailService.execute({
+        to: notification.recipient,
+        subject,
+        text: body,
+        html,
+      });
+      if (result !== true) {
+        throw new Error('Email delivery failed');
+      }
+
       await this.prisma.notificationOutbox.update({
         where: { id: notification.id },
         data: { sentAt: new Date(), lockedAt: null },

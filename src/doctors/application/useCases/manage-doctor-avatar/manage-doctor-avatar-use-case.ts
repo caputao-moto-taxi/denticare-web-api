@@ -13,9 +13,9 @@ export class ManageDoctorAvatarUseCase {
   ) {}
 
   async upload(user: AuthUser, doctorId: string, file: AvatarUpload) {
-    const previousKey = await this.repository.getAvatarStorageKey(
-      user,
+    const previousKey = this.normalizeAvatarKey(
       doctorId,
+      await this.repository.getAvatarStorageKey(user.branchId, doctorId),
     );
     const storageKey = `doctors/${doctorId}/avatar/${randomUUID()}`;
     await this.storage.store({
@@ -24,7 +24,11 @@ export class ManageDoctorAvatarUseCase {
       mimeType: file.mimetype,
     });
     try {
-      await this.repository.updateAvatarStorageKey(user, doctorId, storageKey);
+      await this.repository.updateAvatarStorageKey(
+        user.branchId,
+        doctorId,
+        storageKey,
+      );
     } catch (error) {
       await this.storage.delete(storageKey).catch(() => undefined);
       throw error;
@@ -35,9 +39,9 @@ export class ManageDoctorAvatarUseCase {
   }
 
   async get(user: AuthUser, doctorId: string) {
-    const storageKey = await this.repository.getAvatarStorageKey(
-      user,
+    const storageKey = this.normalizeAvatarKey(
       doctorId,
+      await this.repository.getAvatarStorageKey(user.branchId, doctorId),
     );
     if (!storageKey) throw new NotFoundException('Doctor avatar not found');
     const file = await this.storage.get(storageKey);
@@ -45,5 +49,9 @@ export class ManageDoctorAvatarUseCase {
       data: file.data,
       mimeType: file.mime_type ?? 'application/octet-stream',
     };
+  }
+
+  private normalizeAvatarKey(doctorId: string, key: string | null) {
+    return key?.startsWith(`doctors/${doctorId}/avatar/`) ? key : null;
   }
 }

@@ -3,8 +3,11 @@ import {
   Logger,
   ServiceUnavailableException,
 } from '@nestjs/common';
+import { existsSync } from 'node:fs';
+import { join } from 'node:path';
 import twilio from 'twilio';
-import { AuthEmailService } from '../auth/domain/auth-email.service';
+import { ReadHTMLFile } from '../shared/helpers/utils';
+import { SendMailServiceUseCase } from '../shared/infra/services/sendEmailNotification.service';
 import { GetEnviromentVariable } from '../shared/infra/azure';
 import { CommunicationDeliveryGateway } from './application/communication-delivery.gateway';
 import {
@@ -19,13 +22,34 @@ export class CommunicationDeliveryService extends CommunicationDeliveryGateway {
   private smsClient: ReturnType<typeof twilio> | null = null;
   private smsSender: string | null = null;
 
-  constructor(private readonly emailService: AuthEmailService) {
+  constructor(private readonly sendMailService: SendMailServiceUseCase) {
     super();
   }
 
   override;
   async sendEmail(recipients: string[], subject: string, body: string) {
-    await this.emailService.sendCampaignEmail(recipients, subject, body);
+    const templatePath = [
+      join(__dirname, '../../public/email-template.html'),
+      join(__dirname, '../public/email-template.html'),
+    ].find(existsSync);
+    if (!templatePath) {
+      throw new ServiceUnavailableException('Email template not found');
+    }
+
+    const html = await ReadHTMLFile(templatePath, {
+      subject,
+      body,
+      year: new Date().getFullYear(),
+    });
+    const result = await this.sendMailService.execute({
+      bcc: recipients,
+      subject,
+      text: body,
+      html,
+    });
+    if (result !== true) {
+      throw new ServiceUnavailableException('Email delivery failed');
+    }
   }
 
   override async sendSmsBatch(recipients: string[], body: string) {

@@ -1,7 +1,7 @@
 import { PatientsPrismaRepository } from './patients-prisma.repository';
 import { PrismaService } from '../../../../shared/infra/db/prisma/prisma.service';
 
-describe('PatientsPrismaRepository data processing consent', () => {
+describe('PatientsPrismaRepository consent persistence', () => {
   const existingPatient = {
     id: 'patient-1',
     addressId: 'address-1',
@@ -48,6 +48,7 @@ describe('PatientsPrismaRepository data processing consent', () => {
   });
 
   it('persists all consent changes and returns their timestamps', async () => {
+    const updatedAt = new Date('2026-02-01T10:00:00.000Z');
     const patient = await repository.update(
       {
         id: 'admin-1',
@@ -61,16 +62,19 @@ describe('PatientsPrismaRepository data processing consent', () => {
         dataProcessingConsent: true,
         marketingEmailConsent: true,
         marketingSmsConsent: true,
+        dataProcessingConsentUpdatedAt: updatedAt,
+        marketingEmailConsentUpdatedAt: updatedAt,
+        marketingSmsConsentUpdatedAt: updatedAt,
       },
     );
 
     const updateData = transaction.person.update.mock.calls[0][0].data;
     expect(updateData.dataProcessingConsent).toBe(true);
-    expect(updateData.dataProcessingConsentUpdatedAt).toEqual(expect.any(Date));
+    expect(updateData.dataProcessingConsentUpdatedAt).toEqual(updatedAt);
     expect(updateData.marketingEmailConsent).toBe(true);
-    expect(updateData.marketingEmailConsentUpdatedAt).toEqual(expect.any(Date));
+    expect(updateData.marketingEmailConsentUpdatedAt).toEqual(updatedAt);
     expect(updateData.marketingSmsConsent).toBe(true);
-    expect(updateData.marketingSmsConsentUpdatedAt).toEqual(expect.any(Date));
+    expect(updateData.marketingSmsConsentUpdatedAt).toEqual(updatedAt);
     expect(patient).toMatchObject({
       dataProcessingConsent: true,
       dataProcessingConsentUpdatedAt:

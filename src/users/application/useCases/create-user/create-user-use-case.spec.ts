@@ -12,7 +12,7 @@ describe('CreateUserUseCase', () => {
     role: 'admin',
     branchId: 'branch-1',
   };
-  const repository = { create: jest.fn() };
+  const repository = { create: jest.fn(), emailExists: jest.fn() };
   const hashService = { hashPassword: jest.fn() };
   const useCase = new CreateUserUseCase(
     repository as unknown as IUserRepository,
@@ -21,6 +21,7 @@ describe('CreateUserUseCase', () => {
 
   beforeEach(() => {
     jest.clearAllMocks();
+    repository.emailExists.mockResolvedValue(false);
     hashService.hashPassword.mockResolvedValue('hashed-password');
     repository.create.mockResolvedValue(
       new User({
@@ -39,14 +40,15 @@ describe('CreateUserUseCase', () => {
     const output = await useCase.execute({
       user: administrator,
       name: 'Ana Costa',
-      email: 'ana@example.test',
+      email: ' ANA@Example.test ',
       role: 'nurse',
       password: 'Password1',
     });
 
     expect(hashService.hashPassword).toHaveBeenCalledWith('Password1');
     expect(repository.create).toHaveBeenCalledWith(administrator, {
-      name: 'Ana Costa',
+      firstName: 'Ana',
+      lastName: 'Costa',
       email: 'ana@example.test',
       role: 'nurse',
       passwordHash: 'hashed-password',
@@ -73,6 +75,24 @@ describe('CreateUserUseCase', () => {
       }),
     ).rejects.toBeInstanceOf(ForbiddenException);
 
+    expect(hashService.hashPassword).not.toHaveBeenCalled();
+    expect(repository.create).not.toHaveBeenCalled();
+  });
+
+  it('rejects duplicate email addresses before hashing or persistence', async () => {
+    repository.emailExists.mockResolvedValue(true);
+
+    await expect(
+      useCase.execute({
+        user: administrator,
+        name: 'Ana Costa',
+        email: ' ANA@Example.test ',
+        role: 'nurse',
+        password: 'Password1',
+      }),
+    ).rejects.toThrow('An account with this email already exists');
+
+    expect(repository.emailExists).toHaveBeenCalledWith('ana@example.test');
     expect(hashService.hashPassword).not.toHaveBeenCalled();
     expect(repository.create).not.toHaveBeenCalled();
   });

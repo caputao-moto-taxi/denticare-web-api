@@ -13,17 +13,19 @@ const staff: AuthUser = {
 describe('AddPatientFinancialEntryUseCase', () => {
   it('creates the reference and formats the persisted result', async () => {
     const repository = {
-      addFinancialEntry: jest.fn().mockImplementation(
-        async (_user, _patientId, input, entryId, reference) => ({
-          id: entryId,
-          reference,
-          description: input.description,
-          amount: input.amount,
-          method: input.method,
-          createdAt: new Date('2026-10-26T09:00:00.000Z'),
-          status: 'pending',
-        }),
-      ),
+      addFinancialEntry: jest
+        .fn()
+        .mockImplementation(
+          async (_user, _patientId, input, entryId, reference) => ({
+            id: entryId,
+            reference,
+            description: input.description,
+            amount: input.amount,
+            method: input.method,
+            createdAt: new Date('2026-10-26T09:00:00.000Z'),
+            status: 'pending',
+          }),
+        ),
     };
     const useCase = new AddPatientFinancialEntryUseCase(
       repository as unknown as IPatientRepository,

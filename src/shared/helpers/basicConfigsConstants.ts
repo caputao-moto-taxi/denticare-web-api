@@ -1,7 +1,7 @@
 import type { LogLevel } from '@nestjs/common';
 
-export const appSystemTag = 'Dentcare Notiifications Service';
-export const appTitle = 'Dentcare Notiifications Service';
+export const appSystemTag = 'Dentcare API';
+export const appTitle = 'Dentcare API';
 export const appVersion = '0.0.1';
 export const appPort = () => process.env.PORT || 3000;
 export const appFavicon = '';

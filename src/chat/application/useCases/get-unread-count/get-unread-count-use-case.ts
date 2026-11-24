@@ -7,6 +7,9 @@ export class GetUnreadCountUseCase {
   constructor(private readonly repository: IChatRepository) {}
 
   execute({ user }: GetUnreadCountInput) {
-    return this.repository.unreadCount(user);
+    return this.repository.unreadCount({
+      userId: user.id,
+      branchId: user.branchId,
+    });
   }
 }

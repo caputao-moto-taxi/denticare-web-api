@@ -78,22 +78,16 @@ describe('UsersPrismaRepository', () => {
     });
   });
 
-  it('refuses duplicated emails before creating anything', async () => {
+  it('checks email existence with a database lookup', async () => {
     userModel.findFirst.mockResolvedValue({ id: 'existing' });
 
-    await expect(
-      repository.create(admin, {
-        name: 'New User',
-        email: ' Nurse@Example.test ',
-        role: 'nurse',
-        passwordHash: 'hashed',
-      }),
-    ).rejects.toBeInstanceOf(ConflictException);
+    await expect(repository.emailExists('nurse@example.test')).resolves.toBe(
+      true,
+    );
     expect(userModel.findFirst).toHaveBeenCalledWith({
       where: { email: 'nurse@example.test' },
       select: { id: true },
     });
-    expect(userModel.create).not.toHaveBeenCalled();
   });
 
   it('stores a hashed password and a doctor profile for doctors', async () => {
@@ -108,7 +102,8 @@ describe('UsersPrismaRepository', () => {
     });
 
     await repository.create(admin, {
-      name: 'Dr Who',
+      firstName: 'Dr',
+      lastName: 'Who',
       email: 'doctor@example.test',
       role: 'doctor',
       passwordHash: 'hashed',

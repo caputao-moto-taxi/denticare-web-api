@@ -7,6 +7,7 @@ import { IUserRepository } from '../../../domain/user.repository';
 import { User } from '../../../domain/user.entity';
 import { UserOutput, UserOutputMapper } from '../../common/user.output';
 import { UserManagementPolicy } from '../../user-management.policy';
+import { validateListFilters } from '../../../../shared/helpers/list-filters';
 
 export type ListUsersInput = {
   user: AuthUser;
@@ -21,6 +22,17 @@ export class ListUsersUseCase {
     query,
   }: ListUsersInput): Promise<PaginatedResult<UserOutput>> {
     UserManagementPolicy.ensureAdministrator(user);
+    validateListFilters(query ?? {}, {
+      status: ['active', 'inactive'],
+      role: [
+        'admin',
+        'doctor',
+        'nurse',
+        'secretary',
+        'receptionist',
+        'patient',
+      ],
+    });
     const result = await this.repository.list(user, query);
     return {
       ...result,

@@ -10,11 +10,16 @@ export class LogoutUseCase {
   constructor(private readonly repository: IAuthRepository) {}
 
   execute({ userId, authToken }: LogoutInput) {
-    return this.repository.logout(
-      userId,
-      authToken.jti,
-      authToken.expiresAt,
-      authToken.sessionId,
-    );
+    const now = new Date();
+    return this.repository.transaction(async (transaction) => {
+      await transaction.createRevokedToken(authToken.jti, authToken.expiresAt);
+      if (authToken.sessionId) {
+        await transaction.revokeRefreshSession(
+          authToken.sessionId,
+          userId,
+          now,
+        );
+      }
+    });
   }
 }

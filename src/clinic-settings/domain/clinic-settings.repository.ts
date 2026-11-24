@@ -1,5 +1,3 @@
-import { AuthUser } from '../../auth/auth-user';
-
 export type ClinicSettingsUpdateCommand = {
   name?: string;
   description?: string;
@@ -22,27 +20,24 @@ export type ClinicServiceCommand = {
 export type ClinicServiceUpdateCommand = Partial<ClinicServiceCommand>;
 
 export abstract class IClinicSettingsRepository {
-  abstract getSettings(user: AuthUser): Promise<unknown>;
+  abstract getSettings(branchId: string): Promise<unknown>;
   abstract updateSettings(
-    user: AuthUser,
+    branchId: string,
     input: ClinicSettingsUpdateCommand,
   ): Promise<unknown>;
   abstract getPublicClinic(branchId: string): Promise<unknown>;
-  abstract listServices(user: AuthUser): Promise<unknown>;
+  abstract listServices(branchId: string): Promise<unknown>;
   abstract createService(
-    user: AuthUser,
+    branchId: string,
     input: ClinicServiceCommand,
   ): Promise<unknown>;
   abstract updateService(
-    user: AuthUser,
+    branchId: string,
     id: string,
     input: ClinicServiceUpdateCommand,
   ): Promise<unknown>;
-  abstract deleteService(user: AuthUser, id: string): Promise<unknown>;
-  abstract getLogoKey(user: AuthUser): Promise<string | null>;
+  abstract deleteService(branchId: string, id: string): Promise<unknown>;
+  abstract getLogoKey(branchId: string): Promise<string | null>;
   abstract getPublicLogoKey(branchId: string): Promise<string | null>;
-  abstract updateLogoKey(
-    user: AuthUser,
-    storageKey: string,
-  ): Promise<string | null>;
+  abstract updateLogoKey(branchId: string, storageKey: string): Promise<void>;
 }

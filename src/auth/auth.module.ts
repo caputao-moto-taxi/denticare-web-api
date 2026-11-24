@@ -2,8 +2,10 @@ import { Module } from '@nestjs/common';
 import { JwtModule } from '@nestjs/jwt';
 import { HashModule } from '../shared/application/hash.module';
 import { AuthController } from './infra/http/controllers/auth.controller';
-import { AuthEmailService } from './domain/auth-email.service';
+import { SendMailServiceUseCase } from '../shared/infra/services/sendEmailNotification.service';
 import { JwtAuthGuard } from './jwt-auth.guard';
+import { AuthenticateRequestUseCase } from './application/useCases/authenticate-request/authenticate-request-use-case';
+import { CheckPermissionsUseCase } from './application/useCases/check-permissions/check-permissions-use-case';
 import { PermissionsGuard } from './permissions.guard';
 import { AUTH_PROVIDERS } from './auth.providers';
 import { PatientExamStorage } from '../patients/infra/storage/patient-exam-storage';
@@ -36,6 +38,13 @@ import { PatientExamStorage } from '../patients/infra/storage/patient-exam-stora
     JwtAuthGuard,
     PermissionsGuard,
   ],
-  exports: [JwtAuthGuard, PermissionsGuard, JwtModule, AuthEmailService],
+  exports: [
+    JwtAuthGuard,
+    PermissionsGuard,
+    JwtModule,
+    SendMailServiceUseCase,
+    AuthenticateRequestUseCase,
+    CheckPermissionsUseCase,
+  ],
 })
 export class AuthModule {}
