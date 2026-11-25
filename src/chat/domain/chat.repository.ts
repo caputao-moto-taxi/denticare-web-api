@@ -1,5 +1,3 @@
-import { AuthUser } from '../../auth/auth-user';
-import { ListQuery } from '../../shared/domain/list-query';
 export type CreateConversationCommand = {
   recipientId: string;
   subject: string;
@@ -50,33 +48,159 @@ export type ConversationParticipants = {
   recipientId: string;
 };
 
+export type ChatConversationScopeRecord = ConversationParticipants & {
+  id: string;
+  branchId: string;
+};
+
+export type ChatParticipantRecord = {
+  id: string;
+  email: string;
+  Person: { firstName: string; lastName: string }[];
+};
+
+export type ChatUserRecord = ChatParticipantRecord & {
+  branchId: string | null;
+  isActive: boolean;
+  deletedAt: Date | null;
+  Role: { slug: string } | null;
+};
+
+export type ChatMessageRecord = {
+  id: string;
+  conversationId: string;
+  authorId: string;
+  content: string;
+  createdAt: Date;
+  attachments: unknown;
+  author: ChatParticipantRecord;
+};
+
+export type ChatConversationRecord = {
+  id: string;
+  branchId: string;
+  starterId: string;
+  recipientId: string;
+  category: string;
+  channel: string;
+  subject: string;
+  updatedAt: Date;
+  starterLastReadAt: Date | null;
+  recipientLastReadAt: Date | null;
+  starter: ChatParticipantRecord;
+  recipient: ChatParticipantRecord;
+  messages: ChatMessageRecord[];
+};
+
+export type ChatConversationView = {
+  id: string;
+  contact: {
+    id: string;
+    name: string;
+    email: string;
+    avatar: string;
+  };
+  category: string;
+  channel: string;
+  subject: string;
+  updatedAt: string;
+  unreadCount: number;
+  messages: ChatMessageView[];
+};
+
+export type ChatContactView = {
+  id: string;
+  name: string;
+  email: string;
+  role: string;
+  avatar: string;
+};
+
+export type ChatConversationListCriteria = {
+  branchId: string;
+  participantId: string;
+  category?: string;
+  updatedAtFrom?: Date;
+  updatedAtToExclusive?: Date;
+  search?: string;
+  skip: number;
+  take: number;
+  messageLimit: number;
+};
+
+export type ChatContactListCriteria = {
+  branchId: string;
+  excludedUserId: string;
+  role?: string;
+  createdAtFrom?: Date;
+  createdAtToExclusive?: Date;
+  search?: string;
+  skip: number;
+  take: number;
+};
+
+export type ChatMessageListCriteria = {
+  conversationId: string;
+  createdAtFrom?: Date;
+  createdAtToExclusive?: Date;
+  search?: string;
+  skip: number;
+  take: number;
+};
+
+export type CreateConversationData = {
+  branchId: string;
+  starterId: string;
+  recipientId: string;
+  subject: string;
+  category: string;
+};
+
+export type CreateMessageData = {
+  conversationId: string;
+  authorId: string;
+  content: string;
+  attachments?: ChatAttachmentRecord[];
+};
+
+export type ChatConversationUpdate = {
+  starterLastReadAt?: Date;
+  recipientLastReadAt?: Date;
+  updatedAt?: Date;
+};
+
 export abstract class IChatRepository {
-  abstract list(user: AuthUser, query?: ListQuery): Promise<unknown>;
-  abstract unreadCount(user: AuthUser): Promise<{ count: number }>;
-  abstract contacts(user: AuthUser, query?: ListQuery): Promise<unknown>;
-  abstract markRead(user: AuthUser, conversationId: string): Promise<unknown>;
-  abstract create(
-    user: AuthUser,
-    input: CreateConversationCommand,
-  ): Promise<{ id: string }>;
-  abstract messages(
-    user: AuthUser,
+  abstract transaction<T>(
+    operation: (repository: IChatRepository) => Promise<T>,
+  ): Promise<T>;
+
+  abstract unreadCount(input: {
+    userId: string;
+    branchId: string;
+  }): Promise<{ count: number }>;
+  abstract listConversations(
+    criteria: ChatConversationListCriteria,
+  ): Promise<{ conversations: ChatConversationRecord[]; total: number }>;
+  abstract listContacts(
+    criteria: ChatContactListCriteria,
+  ): Promise<{ contacts: ChatUserRecord[]; total: number }>;
+  abstract findConversation(
     conversationId: string,
-    query?: ListQuery,
-  ): Promise<unknown>;
-  abstract send(
-    user: AuthUser,
+  ): Promise<ChatConversationScopeRecord | null>;
+  abstract findUser(userId: string): Promise<ChatUserRecord | null>;
+  abstract createConversation(
+    data: CreateConversationData,
+  ): Promise<ChatConversationRecord>;
+  abstract listMessages(
+    criteria: ChatMessageListCriteria,
+  ): Promise<{ messages: ChatMessageRecord[]; total: number }>;
+  abstract createMessage(data: CreateMessageData): Promise<ChatMessageRecord>;
+  abstract updateConversation(
     conversationId: string,
-    input: SendMessageCommand,
-  ): Promise<ChatMessageView>;
-  abstract getAttachment(
-    user: AuthUser,
+    data: ChatConversationUpdate,
+  ): Promise<void>;
+  abstract findMessageAttachments(
     conversationId: string,
     messageId: string,
-    attachmentId: string,
-  ): Promise<ChatAttachmentFile>;
-  abstract participants(
-    user: AuthUser,
-    conversationId: string,
-  ): Promise<ConversationParticipants>;
+  ): Promise<{ attachments: unknown } | null>;
 }

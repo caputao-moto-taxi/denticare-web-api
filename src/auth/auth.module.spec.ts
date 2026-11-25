@@ -48,24 +48,21 @@ describe('AuthModule dependency visibility', () => {
     AppointmentsModule,
     ChatModule,
     CommunicationsModule,
-  ])(
-    'resolves the JWT guard in %p',
-    async (featureModule) => {
-      const module = await Test.createTestingModule({
-        imports: [TestDatabaseModule, featureModule],
-      }).compile();
+  ])('resolves the JWT guard in %p', async (featureModule) => {
+    const module = await Test.createTestingModule({
+      imports: [TestDatabaseModule, featureModule],
+    }).compile();
 
-      try {
-        expect(module.get(JwtAuthGuard)).toBeInstanceOf(JwtAuthGuard);
-        const jwt = module.get(JwtService);
-        const token = await jwt.signAsync({ sub: 'test-user' });
-        await expect(jwt.verifyAsync(token)).resolves.toMatchObject({
-          sub: 'test-user',
-          exp: expect.any(Number),
-        });
-      } finally {
-        await module.close();
-      }
-    },
-  );
+    try {
+      expect(module.get(JwtAuthGuard)).toBeInstanceOf(JwtAuthGuard);
+      const jwt = module.get(JwtService);
+      const token = await jwt.signAsync({ sub: 'test-user' });
+      await expect(jwt.verifyAsync(token)).resolves.toMatchObject({
+        sub: 'test-user',
+        exp: expect.any(Number),
+      });
+    } finally {
+      await module.close();
+    }
+  });
 });

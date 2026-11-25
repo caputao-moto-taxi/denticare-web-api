@@ -19,9 +19,24 @@ export type TreatmentPlanUpdateCommand = Partial<
 
 export type TreatmentPlanProgressCommand = { completedSteps: number };
 
+export type TreatmentPlanView = {
+  id: string;
+  patientId: string;
+  doctorId: string;
+  diagnosis: string;
+  notes: string;
+  totalCost: number;
+  totalSteps: number;
+  completedSteps: number;
+  date: string;
+  estimatedCompletion: string;
+};
+
 export abstract class ITreatmentPlanRepository {
   abstract list(user: AuthUser, query?: ListQuery): Promise<unknown>;
-  abstract findOne(user: AuthUser, id: string): Promise<unknown>;
+  abstract findOne(user: AuthUser, id: string): Promise<TreatmentPlanView>;
+  abstract patientExists(user: AuthUser, patientId: string): Promise<boolean>;
+  abstract doctorExists(user: AuthUser, doctorId: string): Promise<boolean>;
   abstract create(
     user: AuthUser,
     input: TreatmentPlanCreateCommand,

@@ -1,11 +1,27 @@
-import {
-  Injectable,
-  NotFoundException,
-} from '@nestjs/common';
+import { Injectable, NotFoundException } from '@nestjs/common';
 import { Prisma } from '../../../../../generated/prisma/client';
 import { PrismaService } from '../../../../shared/infra/db/prisma/prisma.service';
 import { AuthUser } from '../../../../auth/auth-user';
-import { hasPermission } from '../../../../auth/permissions';
+import {
+  canAccessClinicPatientRecords,
+  canReadPatientClinicalData,
+  canReadPatientContacts,
+  canReadPatientFinancials,
+  patientAppointmentVisibility,
+} from '../../../application/patient-access.policy';
+import {
+  calculatePatientAge,
+  currentPatientTreatment,
+  formatPatientMoney,
+  groupPatientPrescriptions,
+  nextPatientAppointment,
+  patientAppointmentDateTime,
+  patientAppointmentStatus,
+  patientFinancials,
+  patientFinancialTotals,
+  patientPaymentCompletionPercent,
+  patientTreatmentProgress,
+} from '../../../application/patient-details.rules';
 import {
   ListQuery,
   pageWindow,
@@ -24,33 +40,21 @@ import {
   PatientDiagnosisAttachmentPersistenceCommand,
   PatientExamPersistenceCommand,
   PatientFinancialEntryCommand,
-  PatientFinancialPdfData,
   PatientPrescriptionCommand,
-  PatientPrescriptionPdfData,
   PatientStatusCommand,
   PatientToothPersistenceCommand,
   PatientUpdatePersistenceCommand,
 } from '../../../domain/patient.repository';
 
-const STAFF_ROLES = new Set([
-  'admin',
-  'doctor',
-  'nurse',
-  'secretary',
-  'receptionist',
-]);
-
 @Injectable()
 export class PatientsPrismaRepository implements IPatientRepository {
-  constructor(
-    private readonly prisma: PrismaService,
-  ) { }
+  constructor(private readonly prisma: PrismaService) {}
 
   async list(user: AuthUser, query: ListQuery = {}) {
     const where: Prisma.PersonWhereInput = {
       branchId: user.branchId,
       deletedAt: null,
-      ...(STAFF_ROLES.has(user.role)
+      ...(canAccessClinicPatientRecords(user)
         ? { Role: { slug: 'patient' } }
         : { userId: user.id }),
       ...(query.status && { isActive: query.status === 'active' }),
@@ -79,8 +83,8 @@ export class PatientsPrismaRepository implements IPatientRepository {
       patients.map((patient) =>
         this.toPatient(
           patient,
-          this.canReadMedicalNotes(user),
-          this.canReadContacts(user),
+          canReadPatientClinicalData(user),
+          canReadPatientContacts(user),
         ),
       ),
       total,
@@ -94,39 +98,34 @@ export class PatientsPrismaRepository implements IPatientRepository {
         id,
         branchId: user.branchId,
         deletedAt: null,
-        ...(STAFF_ROLES.has(user.role) ? {} : { userId: user.id }),
+        ...(canAccessClinicPatientRecords(user) ? {} : { userId: user.id }),
       },
       include: { address: true },
     });
     if (!patient) throw new NotFoundException('Patient not found');
     return this.toPatient(
       patient,
-      this.canReadMedicalNotes(user),
-      this.canReadContacts(user),
+      canReadPatientClinicalData(user),
+      canReadPatientContacts(user),
     );
   }
 
   async details(user: AuthUser, id: string) {
-    const canReadClinical = this.canReadMedicalNotes(user);
-    const canReadContacts = this.canReadContacts(user);
+    const canReadClinical = canReadPatientClinicalData(user);
+    const canReadContacts = canReadPatientContacts(user);
     const patient = await this.prisma.person.findFirst({
       where: {
         id,
         branchId: user.branchId,
         deletedAt: null,
-        ...(STAFF_ROLES.has(user.role) ? {} : { userId: user.id }),
+        ...(canAccessClinicPatientRecords(user) ? {} : { userId: user.id }),
       },
       include: {
         address: true,
         Appointment: {
           where: {
             deletedAt: null,
-            ...(hasPermission(user, 'appointments.read.all') ||
-              hasPermission(user, 'appointments.manage')
-              ? {}
-              : hasPermission(user, 'appointments.read.assigned')
-                ? { doctorId: user.id }
-                : { id: { in: [] } }),
+            ...patientAppointmentVisibility(user),
           },
           include: {
             doctor: {
@@ -234,81 +233,34 @@ export class PatientsPrismaRepository implements IPatientRepository {
       doctorName: joinName(appointment.doctor.Person[0], 'Profissional'),
       specialty: appointment.doctor.doctorProfile?.specialties[0] ?? '',
       procedure: appointment.reason,
-      status: this.appointmentStatus(appointment.status),
+      status: patientAppointmentStatus(appointment.status),
       canComplete: appointment.status === 'CONFIRMED',
       notes: canReadClinical ? (appointment.description ?? '') : '',
       cost: '—',
     }));
-    const financials = [
-      ...patient.financialEntries.map((entry) => ({
-        id: entry.id,
-        reference: entry.reference,
-        description: entry.description,
-        amount: this.formatMoney(entry.amount),
-        amountValue: entry.amount,
-        paidValue: entry.status === 'paid' ? entry.amount : 0,
-        method: entry.method,
-        date: entry.createdAt.toISOString(),
-        status: entry.status,
-      })),
-      ...patient.consults.map((consult) => ({
-        id: consult.id,
-        reference: `CONS-${consult.id.slice(0, 8).toUpperCase()}`,
-        description: consult.description ?? 'Consulta',
-        amount: this.formatMoney(consult.paidAmount ?? consult.amount),
-        amountValue: consult.amount,
-        paidValue: consult.isPaid ? (consult.paidAmount ?? consult.amount) : 0,
-        method: '—',
-        date: consult.createdAt.toISOString(),
-        status: consult.isPaid ? 'paid' : 'pending',
-      })),
-    ].sort((left, right) => right.date.localeCompare(left.date));
-    const totalBilled = financials.reduce(
-      (sum, entry) => sum + entry.amountValue,
-      0,
+    const financials = patientFinancials(
+      patient.financialEntries,
+      patient.consults,
     );
-    const totalPaid = financials.reduce(
-      (sum, entry) => sum + entry.paidValue,
-      0,
-    );
-    const pendingBalance = financials.reduce(
-      (sum, entry) => sum + Math.max(0, entry.amountValue - entry.paidValue),
-      0,
-    );
-    const currentTreatment = patient.treatmentPlans.find(
-      (plan) => plan.totalSteps === 0 || plan.completedSteps < plan.totalSteps,
-    );
+    const {
+      billed: totalBilled,
+      paid: totalPaid,
+      pending: pendingBalance,
+    } = patientFinancialTotals(financials);
+    const currentTreatment = currentPatientTreatment(patient.treatmentPlans);
     const latestCompletedAppointment = appointments.find(
       (appointment) => appointment.status === 'completed',
     );
-    const appointmentDateTime = (appointment: { date: string; time: string }) =>
-      new Date(`${appointment.date.slice(0, 10)}T${appointment.time}:00.000Z`);
-    const nextAppointment = appointments
-      .filter(
-        (appointment) =>
-          appointment.status === 'scheduled' &&
-          appointmentDateTime(appointment).getTime() >= Date.now(),
-      )
-      .sort(
-        (left, right) =>
-          appointmentDateTime(left).getTime() -
-          appointmentDateTime(right).getTime(),
-      )[0];
-    const age = patient.birthDate ? this.calculateAge(patient.birthDate) : null;
-    const patientPrescriptionGroups = new Map<
-      string,
-      (typeof patient.patientPrescriptions)[number][]
-    >();
-    for (const prescription of patient.patientPrescriptions) {
-      const groupId = prescription.groupId ?? prescription.id;
-      const group = patientPrescriptionGroups.get(groupId) ?? [];
-      group.push(prescription);
-      patientPrescriptionGroups.set(groupId, group);
-    }
+    const nextAppointment = nextPatientAppointment(appointments);
+    const age = patient.birthDate
+      ? calculatePatientAge(patient.birthDate)
+      : null;
+    const patientPrescriptionGroups = groupPatientPrescriptions(
+      patient.patientPrescriptions,
+    );
     const prescriptions = canReadClinical
       ? [
-        ...[...patientPrescriptionGroups.entries()].map(
-          ([groupId, items]) => ({
+          ...patientPrescriptionGroups.map(([groupId, items]) => ({
             id: groupId,
             items: items.map((item) => ({
               medication: item.medication,
@@ -321,36 +273,35 @@ export class PatientsPrismaRepository implements IPatientRepository {
             status: items.some((item) => item.status === 'active')
               ? 'active'
               : 'completed',
-          }),
-        ),
-        ...patient.consults.flatMap((consult) =>
-          consult.prescriptions.map((prescription) => ({
-            id: prescription.id,
-            items: prescription.prescriptionItems.map((item) => ({
-              medication: item.product.name,
-              dosage: item.details ?? '',
-              instructions: prescription.recommendations ?? '',
-              duration: `${prescription.duration} ${prescription.period.toLowerCase()}`,
-            })),
-            prescribedBy: joinName(consult.doctor.Person[0], 'Profissional'),
-            date: prescription.createdAt.toISOString(),
-            status: 'active',
           })),
-        ),
-      ].sort((left, right) => right.date.localeCompare(left.date))
+          ...patient.consults.flatMap((consult) =>
+            consult.prescriptions.map((prescription) => ({
+              id: prescription.id,
+              items: prescription.prescriptionItems.map((item) => ({
+                medication: item.product.name,
+                dosage: item.details ?? '',
+                instructions: prescription.recommendations ?? '',
+                duration: `${prescription.duration} ${prescription.period.toLowerCase()}`,
+              })),
+              prescribedBy: joinName(consult.doctor.Person[0], 'Profissional'),
+              date: prescription.createdAt.toISOString(),
+              status: 'active',
+            })),
+          ),
+        ].sort((left, right) => right.date.localeCompare(left.date))
       : [];
 
     return {
       ...this.toPatient(patient, canReadClinical, canReadContacts),
       address: canReadContacts
         ? [
-          patient.address?.street,
-          patient.address?.city,
-          patient.address?.province,
-          patient.address?.country,
-        ]
-          .filter(Boolean)
-          .join(', ') || ''
+            patient.address?.street,
+            patient.address?.city,
+            patient.address?.province,
+            patient.address?.country,
+          ]
+            .filter(Boolean)
+            .join(', ') || ''
         : '',
       addressStreet: canReadContacts ? (patient.address?.street ?? '') : '',
       recordNumber: `#PAC-${patient.createdAt.getFullYear()}-${patient.id
@@ -379,115 +330,108 @@ export class PatientsPrismaRepository implements IPatientRepository {
       medications: canReadClinical ? patient.medications : [],
       currentTreatment: canReadClinical
         ? {
-          title: currentTreatment?.diagnosis ?? '',
-          startedAt: currentTreatment
-            ? currentTreatment.startDate.toISOString()
-            : '',
-          estimatedCompletion:
-            currentTreatment?.estimatedCompletion?.toISOString() ?? '',
-          progress: currentTreatment?.totalSteps
-            ? Math.min(
-              100,
-              Math.round(
-                (currentTreatment.completedSteps /
-                  currentTreatment.totalSteps) *
-                100,
-              ),
-            )
-            : 0,
-          doctorName: currentTreatment
-            ? joinName(currentTreatment.doctor.Person[0], 'Profissional')
-            : '',
-          specialty:
-            currentTreatment?.doctor.doctorProfile?.specialties[0] ?? '',
-          activePhase:
-            currentTreatment?.activePhase ?? currentTreatment?.notes ?? '',
-        }
+            title: currentTreatment?.diagnosis ?? '',
+            startedAt: currentTreatment
+              ? currentTreatment.startDate.toISOString()
+              : '',
+            estimatedCompletion:
+              currentTreatment?.estimatedCompletion?.toISOString() ?? '',
+            progress: patientTreatmentProgress(
+              currentTreatment?.completedSteps ?? 0,
+              currentTreatment?.totalSteps ?? 0,
+            ),
+            doctorName: currentTreatment
+              ? joinName(currentTreatment.doctor.Person[0], 'Profissional')
+              : '',
+            specialty:
+              currentTreatment?.doctor.doctorProfile?.specialties[0] ?? '',
+            activePhase:
+              currentTreatment?.activePhase ?? currentTreatment?.notes ?? '',
+          }
         : {
-          title: '',
-          startedAt: '',
-          estimatedCompletion: '',
-          progress: 0,
-          doctorName: '',
-          specialty: '',
-          activePhase: '',
-        },
+            title: '',
+            startedAt: '',
+            estimatedCompletion: '',
+            progress: 0,
+            doctorName: '',
+            specialty: '',
+            activePhase: '',
+          },
       metrics: {
         totalAppointments: appointments.length,
         completedProcedures: appointments.filter(
           (appointment) => appointment.status === 'completed',
         ).length,
-        totalBilled: hasPermission(user, 'patients.financial.read')
-          ? this.formatMoney(totalBilled)
+        totalBilled: canReadPatientFinancials(user)
+          ? formatPatientMoney(totalBilled)
           : '',
-        totalPaid: hasPermission(user, 'patients.financial.read')
-          ? this.formatMoney(totalPaid)
+        totalPaid: canReadPatientFinancials(user)
+          ? formatPatientMoney(totalPaid)
           : '',
-        pendingBalance: hasPermission(user, 'patients.financial.read')
-          ? this.formatMoney(pendingBalance)
+        pendingBalance: canReadPatientFinancials(user)
+          ? formatPatientMoney(pendingBalance)
           : '',
-        paymentCompletionPercent:
-          hasPermission(user, 'patients.financial.read') && totalBilled
-            ? Math.min(100, Math.round((totalPaid / totalBilled) * 100))
-            : 0,
+        paymentCompletionPercent: canReadPatientFinancials(user)
+          ? patientPaymentCompletionPercent(totalPaid, totalBilled)
+          : 0,
       },
       lastVisit: latestCompletedAppointment?.date ?? '',
       nextAppointment: nextAppointment
-        ? appointmentDateTime(nextAppointment).toISOString()
+        ? patientAppointmentDateTime(nextAppointment).toISOString()
         : '',
       appointments,
       prescriptions,
       diagnoses: canReadClinical
         ? patient.diagnostics.map((diagnosis) => ({
-          id: diagnosis.id,
-          code: diagnosis.code ?? '',
-          title: diagnosis.designation,
-          affectedTeeth: diagnosis.affectedTeeth,
-          diagnosedAt: diagnosis.createdAt.toISOString(),
-          doctorName: joinName(diagnosis.doctor.Person[0], 'Profissional'),
-          severity: diagnosis.severity,
-          status: diagnosis.status,
-          description: diagnosis.description ?? '',
-          attachments: diagnosis.attachments.map((attachment) => ({
-            id: attachment.id,
-            fileName: attachment.fileName,
-            mimeType: attachment.mimeType,
-            fileSize: attachment.fileSize,
-          })),
-        }))
+            id: diagnosis.id,
+            code: diagnosis.code ?? '',
+            title: diagnosis.designation,
+            affectedTeeth: diagnosis.affectedTeeth,
+            diagnosedAt: diagnosis.createdAt.toISOString(),
+            doctorName: joinName(diagnosis.doctor.Person[0], 'Profissional'),
+            severity: diagnosis.severity,
+            status: diagnosis.status,
+            description: diagnosis.description ?? '',
+            attachments: diagnosis.attachments.map((attachment) => ({
+              id: attachment.id,
+              fileName: attachment.fileName,
+              mimeType: attachment.mimeType,
+              fileSize: attachment.fileSize,
+            })),
+          }))
         : [],
       odontogram: canReadClinical
         ? patient.odontogram.map((tooth) => ({
-          number: tooth.number,
-          state: tooth.state,
-          procedureDone: tooth.procedureDone ?? '',
-          notes: tooth.notes ?? '',
-        }))
+            number: tooth.number,
+            state: tooth.state,
+            procedureDone: tooth.procedureDone ?? '',
+            notes: tooth.notes ?? '',
+          }))
         : [],
-      financials: hasPermission(user, 'patients.financial.read')
+      financials: canReadPatientFinancials(user)
         ? financials.map(
-          ({ id, reference, description, amount, method, date, status }) => ({
-            id,
-            reference,
-            description,
-            amount,
-            method,
-            date,
-            status,
-          }),
-        )
+            ({ id, reference, description, amount, method, date, status }) => ({
+              id,
+              reference,
+              description,
+              amount,
+              method,
+              date,
+              status,
+            }),
+          )
         : [],
       exams: canReadClinical
         ? patient.exams.map((exam) => ({
-          id: exam.id,
-          title: exam.title,
-          type: exam.type,
-          date: exam.createdAt.toISOString(),
-          doctorName: exam.doctorName,
-          fileName: exam.fileName,
-          mimeType: exam.mimeType,
-          fileSize: `${(exam.fileSize / (1024 * 1024)).toFixed(1)} MB`,
-        }))
+            id: exam.id,
+            title: exam.title,
+            type: exam.type,
+            date: exam.createdAt.toISOString(),
+            doctorName: exam.doctorName,
+            fileName: exam.fileName,
+            mimeType: exam.mimeType,
+            fileSize: `${(exam.fileSize / (1024 * 1024)).toFixed(1)} MB`,
+          }))
         : [],
     };
   }
@@ -497,60 +441,6 @@ export class PatientsPrismaRepository implements IPatientRepository {
     id: string,
   ): Promise<PatientChartPdfData> {
     return this.details(user, id);
-  }
-
-  async getPrescriptionPdfData(
-    user: AuthUser,
-    id: string,
-    prescriptionId: string,
-  ): Promise<PatientPrescriptionPdfData> {
-    const chart = await this.getPatientChartPdfData(user, id);
-    const prescription = chart.prescriptions.find(
-      (item) => item.id === prescriptionId,
-    );
-    if (!prescription) {
-      throw new NotFoundException('Patient prescription not found');
-    }
-    return {
-      patient: {
-        name: chart.name,
-        recordNumber: chart.recordNumber,
-        phone: chart.phone,
-        email: chart.email,
-        address: chart.address,
-        birthDate: chart.birthDate,
-        age: chart.age,
-        idNumber: chart.idNumber,
-        nif: chart.nif,
-      },
-      prescription,
-    };
-  }
-
-  async getFinancialPdfData(
-    user: AuthUser,
-    id: string,
-    financialId: string,
-  ): Promise<PatientFinancialPdfData> {
-    const chart = await this.details(user, id);
-    const financial = chart.financials.find(
-      (entry) => entry.id === financialId,
-    );
-    if (!financial) {
-      throw new NotFoundException('Patient financial entry not found');
-    }
-    return {
-      patient: {
-        name: chart.name,
-        recordNumber: chart.recordNumber,
-        phone: chart.phone,
-        email: chart.email,
-        address: chart.address,
-        idNumber: chart.idNumber,
-        nif: chart.nif,
-      },
-      financial,
-    };
   }
 
   async updateTooth(
@@ -781,6 +671,27 @@ export class PatientsPrismaRepository implements IPatientRepository {
     return Boolean(existing);
   }
 
+  async getConsentState(user: AuthUser, id: string) {
+    const patient = await this.prisma.person.findFirst({
+      where: {
+        id,
+        branchId: user.branchId,
+        deletedAt: null,
+        ...(canAccessClinicPatientRecords(user) ? {} : { userId: user.id }),
+      },
+      select: {
+        dataProcessingConsent: true,
+        dataProcessingConsentUpdatedAt: true,
+        marketingEmailConsent: true,
+        marketingEmailConsentUpdatedAt: true,
+        marketingSmsConsent: true,
+        marketingSmsConsentUpdatedAt: true,
+      },
+    });
+    if (!patient) throw new NotFoundException('Patient not found');
+    return patient;
+  }
+
   async create(user: AuthUser, input: PatientCreatePersistenceCommand) {
     const patient = await this.prisma.$transaction(async (transaction) => {
       const role = await transaction.role.upsert({
@@ -805,9 +716,7 @@ export class PatientsPrismaRepository implements IPatientRepository {
           gender: input.gender,
           medicalNotes: input.medicalNotes,
           dataProcessingConsent: input.dataProcessingConsent ?? false,
-          dataProcessingConsentUpdatedAt: input.dataProcessingConsent
-            ? new Date()
-            : undefined,
+          dataProcessingConsentUpdatedAt: input.dataProcessingConsentUpdatedAt,
           idNumber: input.idNumber,
           nif: input.nif,
           profession: input.profession,
@@ -832,8 +741,8 @@ export class PatientsPrismaRepository implements IPatientRepository {
 
     return this.toPatient(
       patient,
-      this.canReadMedicalNotes(user),
-      this.canReadContacts(user),
+      canReadPatientClinicalData(user),
+      canReadPatientContacts(user),
     );
   }
 
@@ -869,23 +778,16 @@ export class PatientsPrismaRepository implements IPatientRepository {
           ...(input.dataProcessingConsent !== undefined && {
             dataProcessingConsent: input.dataProcessingConsent,
             dataProcessingConsentUpdatedAt:
-              input.dataProcessingConsent !== existing.dataProcessingConsent
-                ? new Date()
-                : existing.dataProcessingConsentUpdatedAt,
+              input.dataProcessingConsentUpdatedAt,
           }),
           ...(input.marketingEmailConsent !== undefined && {
             marketingEmailConsent: input.marketingEmailConsent,
             marketingEmailConsentUpdatedAt:
-              input.marketingEmailConsent !== existing.marketingEmailConsent
-                ? new Date()
-                : existing.marketingEmailConsentUpdatedAt,
+              input.marketingEmailConsentUpdatedAt,
           }),
           ...(input.marketingSmsConsent !== undefined && {
             marketingSmsConsent: input.marketingSmsConsent,
-            marketingSmsConsentUpdatedAt:
-              input.marketingSmsConsent !== existing.marketingSmsConsent
-                ? new Date()
-                : existing.marketingSmsConsentUpdatedAt,
+            marketingSmsConsentUpdatedAt: input.marketingSmsConsentUpdatedAt,
           }),
           ...(input.idNumber !== undefined && {
             idNumber: input.idNumber,
@@ -934,8 +836,8 @@ export class PatientsPrismaRepository implements IPatientRepository {
 
     return this.toPatient(
       updated,
-      this.canReadMedicalNotes(user),
-      this.canReadContacts(user),
+      canReadPatientClinicalData(user),
+      canReadPatientContacts(user),
     );
   }
 
@@ -961,8 +863,8 @@ export class PatientsPrismaRepository implements IPatientRepository {
     });
     return this.toPatient(
       patient,
-      this.canReadMedicalNotes(user),
-      this.canReadContacts(user),
+      canReadPatientClinicalData(user),
+      canReadPatientContacts(user),
     );
   }
 
@@ -981,52 +883,12 @@ export class PatientsPrismaRepository implements IPatientRepository {
         id,
         branchId: user.branchId,
         deletedAt: null,
-        ...(STAFF_ROLES.has(user.role) ? {} : { userId: user.id }),
+        ...(canAccessClinicPatientRecords(user) ? {} : { userId: user.id }),
       },
       include: { address: true },
     });
     if (!patient) throw new NotFoundException('Patient not found');
     return patient;
-  }
-
-  private canReadMedicalNotes(user: AuthUser) {
-    return hasPermission(user, 'patients.clinical.read');
-  }
-
-  private canReadContacts(user: AuthUser) {
-    return hasPermission(user, 'patients.contacts.read');
-  }
-
-  private appointmentStatus(status: string) {
-    switch (status) {
-      case 'COMPLETED':
-        return 'completed';
-      case 'PENDING':
-      case 'CONFIRMED':
-      case 'RESCHEDULED':
-        return 'scheduled';
-      default:
-        return 'cancelled';
-    }
-  }
-
-  private formatMoney(amount: number) {
-    return `${amount.toLocaleString('pt-PT', {
-      maximumFractionDigits: 2,
-    })} Kz`;
-  }
-
-  private calculateAge(birthDate: Date) {
-    const today = new Date();
-    let age = today.getFullYear() - birthDate.getFullYear();
-    if (
-      today.getMonth() < birthDate.getMonth() ||
-      (today.getMonth() === birthDate.getMonth() &&
-        today.getDate() < birthDate.getDate())
-    ) {
-      age--;
-    }
-    return age;
   }
 
   private toPatient(

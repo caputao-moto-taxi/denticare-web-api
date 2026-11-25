@@ -1,104 +1,92 @@
-import { BadRequestException } from '@nestjs/common';
-import { JwtService } from '@nestjs/jwt';
 import { PrismaService } from '../../../../shared/infra/db/prisma/prisma.service';
+import { IAuthRepository } from '../../../domain/auth.repository';
 import { AuthPrismaRepository } from './auth-prisma.repository';
 
-describe('AuthPrismaRepository email actions', () => {
+describe('AuthPrismaRepository', () => {
   const authActionToken = {
     findFirst: jest.fn(),
     updateMany: jest.fn(),
+    create: jest.fn(),
   };
-  const user = { update: jest.fn(), findUnique: jest.fn() };
-  const refreshToken = { updateMany: jest.fn() };
-  const transaction = { authActionToken, user, refreshToken };
-  const prisma = {
+  const user = { findFirst: jest.fn() };
+  const transactionClient = { authActionToken };
+  const prismaMock = {
     authActionToken,
     user,
-    refreshToken,
-    $transaction: jest.fn((operation: (tx: typeof transaction) => unknown) =>
-      operation(transaction),
-    ),
-  } as unknown as PrismaService;
-  const hashService = {
-    hashPassword: jest.fn().mockResolvedValue('new-password-hash'),
-    compare: jest.fn(),
+    $transaction: jest.fn(),
   };
   const repository = new AuthPrismaRepository(
-    prisma,
-    {} as JwtService,
-    hashService,
+    prismaMock as unknown as PrismaService,
   );
 
   beforeEach(() => {
     jest.clearAllMocks();
+  });
+
+  it('queries an account by email without applying account-state rules', async () => {
+    const account = {
+      id: 'user-id',
+      email: 'user@example.test',
+      deletedAt: new Date(),
+      isActive: false,
+      isEmailVerified: false,
+      Person: [],
+    };
+    user.findFirst.mockResolvedValue(account);
+
+    await expect(repository.findUserByEmail('user@example.test')).resolves.toBe(
+      account,
+    );
+    expect(user.findFirst).toHaveBeenCalledWith(
+      expect.objectContaining({
+        where: { email: 'user@example.test' },
+        select: expect.objectContaining({
+          deletedAt: true,
+          isActive: true,
+          isEmailVerified: true,
+        }),
+      }),
+    );
+  });
+
+  it('claims an unused, unexpired action token with one database update', async () => {
     authActionToken.updateMany.mockResolvedValue({ count: 1 });
-    user.update.mockResolvedValue({});
-    user.findUnique.mockResolvedValue({ branchId: null });
-    refreshToken.updateMany.mockResolvedValue({ count: 1 });
+    const now = new Date();
+
+    await expect(
+      repository.claimAuthActionToken('token-id', now),
+    ).resolves.toBe(1);
+    expect(authActionToken.updateMany).toHaveBeenCalledWith({
+      where: { id: 'token-id', usedAt: null, expiresAt: { gt: now } },
+      data: { usedAt: now },
+    });
   });
 
-  it('activates an account once and enables login', async () => {
-    authActionToken.findFirst.mockResolvedValue({
-      id: 'activation-token-1',
-      userId: 'user-1',
-    });
+  it('runs use-case persistence operations inside a transaction', async () => {
+    prismaMock.$transaction.mockImplementation(
+      (operation: (client: typeof transactionClient) => Promise<unknown>) =>
+        operation(transactionClient),
+    );
+    authActionToken.create.mockResolvedValue({ id: 'token-id' });
 
-    await repository.activateAccount('raw-activation-token');
-
-    expect(authActionToken.findFirst).toHaveBeenCalledWith({
-      where: {
-        tokenHash: expect.stringMatching(/^[a-f0-9]{64}$/),
+    await repository.transaction((transaction: IAuthRepository) =>
+      transaction.createAuthActionToken({
+        userId: 'user-id',
         type: 'ACTIVATION',
-        usedAt: null,
-        expiresAt: { gt: expect.any(Date) },
-      },
-      select: { id: true, userId: true },
-    });
-    expect(user.update).toHaveBeenCalledWith({
-      where: { id: 'user-1' },
-      data: { isEmailVerified: true, isActive: true },
-    });
-    expect(user.findUnique).toHaveBeenCalledWith({
-      where: { id: 'user-1' },
-      select: { branchId: true },
-    });
-  });
+        tokenHash: 'hashed-token',
+        expiresAt: new Date(),
+      }),
+    );
 
-  it('rejects an expired or reused activation token', async () => {
-    authActionToken.findFirst.mockResolvedValue(null);
-
-    await expect(
-      repository.activateAccount('expired-token'),
-    ).rejects.toBeInstanceOf(BadRequestException);
-    expect(user.update).not.toHaveBeenCalled();
-  });
-
-  it('changes the password once and revokes refresh sessions', async () => {
-    authActionToken.findFirst.mockResolvedValue({
-      id: 'reset-token-1',
-      userId: 'user-1',
-    });
-
-    await repository.resetPassword('raw-reset-token', 'NewPassword123');
-
-    expect(hashService.hashPassword).toHaveBeenCalledWith('NewPassword123');
-    expect(user.update).toHaveBeenCalledWith({
-      where: { id: 'user-1' },
-      data: { password: 'new-password-hash' },
-    });
-    expect(refreshToken.updateMany).toHaveBeenCalledWith({
-      where: { userId: 'user-1', revokedAt: null },
-      data: { revokedAt: expect.any(Date) },
-    });
-  });
-
-  it('rejects an expired or reused password reset token', async () => {
-    authActionToken.findFirst.mockResolvedValue(null);
-
-    await expect(
-      repository.resetPassword('expired-token', 'NewPassword123'),
-    ).rejects.toBeInstanceOf(BadRequestException);
-    expect(hashService.hashPassword).not.toHaveBeenCalled();
-    expect(user.update).not.toHaveBeenCalled();
+    expect(prismaMock.$transaction).toHaveBeenCalledTimes(1);
+    expect(authActionToken.create).toHaveBeenCalledWith(
+      expect.objectContaining({
+        data: expect.objectContaining({
+          userId: 'user-id',
+          type: 'ACTIVATION',
+          tokenHash: 'hashed-token',
+        }),
+      }),
+    );
   });
 });

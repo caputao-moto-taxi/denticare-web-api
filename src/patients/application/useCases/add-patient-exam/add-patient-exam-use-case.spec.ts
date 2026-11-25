@@ -26,11 +26,13 @@ const exam = {
 describe('AddPatientExamUseCase', () => {
   it('stores the file and persists normalized metadata', async () => {
     const repository = {
-      addExam: jest.fn().mockImplementation(async (_user, _patientId, input) => ({
-        id: 'exam-1',
-        ...input,
-        createdAt: new Date('2026-10-26T09:00:00.000Z'),
-      })),
+      addExam: jest
+        .fn()
+        .mockImplementation(async (_user, _patientId, input) => ({
+          id: 'exam-1',
+          ...input,
+          createdAt: new Date('2026-10-26T09:00:00.000Z'),
+        })),
     };
     const fileStorage = { store: jest.fn(), delete: jest.fn() };
     const useCase = new AddPatientExamUseCase(
@@ -38,7 +40,11 @@ describe('AddPatientExamUseCase', () => {
       fileStorage as unknown as IPatientFileStorage,
     );
 
-    const result = await useCase.execute({ user: doctor, id: 'patient-1', exam });
+    const result = await useCase.execute({
+      user: doctor,
+      id: 'patient-1',
+      exam,
+    });
 
     expect(fileStorage.store).toHaveBeenCalledWith({
       id: expect.stringMatching(/^[0-9a-f-]{36}$/),
@@ -66,7 +72,9 @@ describe('AddPatientExamUseCase', () => {
   });
 
   it('deletes the uploaded file if the database write fails', async () => {
-    const repository = { addExam: jest.fn().mockRejectedValue(new Error('db')) };
+    const repository = {
+      addExam: jest.fn().mockRejectedValue(new Error('db')),
+    };
     const fileStorage = { store: jest.fn(), delete: jest.fn() };
     const useCase = new AddPatientExamUseCase(
       repository as unknown as IPatientRepository,

@@ -3,6 +3,12 @@ import {
   IStockRepository,
   StockCreateCommand,
 } from '../../../domain/stock.repository';
+import {
+  assertStockCapacity,
+  normalizeStockText,
+  requireStockStaff,
+  stockCatalogError,
+} from '../../stock-policies';
 
 export type CreateStockItemInput = {
   user: AuthUser;
@@ -12,7 +18,26 @@ export type CreateStockItemInput = {
 export class CreateStockItemUseCase {
   constructor(private readonly repository: IStockRepository) {}
 
-  execute({ user, input }: CreateStockItemInput) {
-    return this.repository.create(user, input);
+  async execute({ user, input }: CreateStockItemInput) {
+    requireStockStaff(user);
+    const capacity = input.capacity ?? input.quantity;
+    assertStockCapacity(input.quantity, capacity);
+    for (const [kind, name] of [
+      ['category', input.category],
+      ['supplier', input.supplier],
+    ] as const) {
+      if (!(await this.repository.hasCatalogEntry(user, kind, name.trim()))) {
+        stockCatalogError(kind);
+      }
+    }
+
+    return this.repository.create(
+      user,
+      normalizeStockText({
+        ...input,
+        capacity,
+        salePrice: input.salePrice ?? input.unitCost,
+      }),
+    );
   }
 }

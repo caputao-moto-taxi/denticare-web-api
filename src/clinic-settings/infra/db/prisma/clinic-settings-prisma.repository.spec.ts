@@ -1,4 +1,4 @@
-import { ForbiddenException, NotFoundException } from '@nestjs/common';
+import { NotFoundException } from '@nestjs/common';
 import { AuthUser } from '../../../../auth/auth-user';
 import { PrismaService } from '../../../../shared/infra/db/prisma/prisma.service';
 import { ClinicSettingsPrismaRepository } from './clinic-settings-prisma.repository';
@@ -24,13 +24,6 @@ describe('ClinicSettingsPrismaRepository', () => {
 
   beforeEach(() => jest.resetAllMocks());
 
-  it('restricts settings access to clinic administrators', async () => {
-    await expect(
-      repository.listServices({ ...admin, role: 'doctor' }),
-    ).rejects.toBeInstanceOf(ForbiddenException);
-    expect(clinicService.findMany).not.toHaveBeenCalled();
-  });
-
   it('includes the province in clinic settings', async () => {
     branch.findFirst.mockResolvedValue({
       id: 'branch-1',
@@ -52,17 +45,19 @@ describe('ClinicSettingsPrismaRepository', () => {
       },
     });
 
-    await expect(repository.getSettings(admin)).resolves.toMatchObject({
-      province: 'Luanda',
-      city: 'Luanda',
-      country: 'Angola',
-    });
+    await expect(repository.getSettings(admin.branchId)).resolves.toMatchObject(
+      {
+        province: 'Luanda',
+        city: 'Luanda',
+        country: 'Angola',
+      },
+    );
   });
 
   it('lists services only for the caller branch', async () => {
     clinicService.findMany.mockResolvedValue([]);
 
-    await repository.listServices(admin);
+    await repository.listServices(admin.branchId);
 
     expect(clinicService.findMany).toHaveBeenCalledWith({
       where: { branchId: 'branch-1', deletedAt: null },
@@ -79,8 +74,8 @@ describe('ClinicSettingsPrismaRepository', () => {
       durationMinutes: 30,
     });
 
-    await repository.createService(admin, {
-      name: '  Cleaning  ',
+    await repository.createService(admin.branchId, {
+      name: 'Cleaning',
       price: 5000,
       durationMinutes: 30,
     });
@@ -100,7 +95,9 @@ describe('ClinicSettingsPrismaRepository', () => {
     clinicService.findFirst.mockResolvedValue(null);
 
     await expect(
-      repository.updateService(admin, 'foreign-service', { price: 100 }),
+      repository.updateService(admin.branchId, 'foreign-service', {
+        price: 100,
+      }),
     ).rejects.toBeInstanceOf(NotFoundException);
     expect(clinicService.findFirst).toHaveBeenCalledWith({
       where: {

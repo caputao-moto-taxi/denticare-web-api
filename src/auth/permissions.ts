@@ -128,25 +128,6 @@ export type PermissionSlug = (typeof PERMISSION_CATALOG)[number]['slug'];
 export const RequirePermissions = (...permissions: PermissionSlug[]) =>
   SetMetadata(PERMISSION_METADATA_KEY, permissions);
 
-export function resolvePermissions(
-  role: string,
-  rolePermissions: string[],
-  userOverrides: { slug: string; granted: boolean }[],
-) {
-  if (role === 'admin' || role === 'administrator') {
-    return PERMISSION_CATALOG.map(({ slug }) => slug);
-  }
-
-  const effective = new Set(rolePermissions);
-  for (const override of userOverrides) {
-    if (override.granted) effective.add(override.slug);
-    else effective.delete(override.slug);
-  }
-  return PERMISSION_CATALOG.filter(({ slug }) => effective.has(slug)).map(
-    ({ slug }) => slug,
-  );
-}
-
 export function hasPermission(user: AuthUser, permission: PermissionSlug) {
   return (
     user.role === 'admin' ||

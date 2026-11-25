@@ -1,4 +1,3 @@
-import { AuthUser } from '../../auth/auth-user';
 import { DaySchedule } from '../../shared/helpers/schedule';
 
 export type UpdateClinicScheduleCommand = {
@@ -7,10 +6,23 @@ export type UpdateClinicScheduleCommand = {
   timezone?: string;
 };
 
+export type ClinicScheduleRecord = {
+  deletedAt: Date | null;
+  workingDays: string[];
+  workingHours: unknown;
+  timezone: string;
+};
+
+export type ClinicScheduleUpdateData = {
+  workingDays: string[];
+  workingHours: Record<string, DaySchedule>;
+  timezone?: string;
+};
+
 export abstract class IClinicScheduleRepository {
-  abstract get(user: AuthUser): Promise<unknown>;
+  abstract findById(branchId: string): Promise<ClinicScheduleRecord | null>;
   abstract update(
-    user: AuthUser,
-    input: UpdateClinicScheduleCommand,
-  ): Promise<unknown>;
+    branchId: string,
+    data: ClinicScheduleUpdateData,
+  ): Promise<ClinicScheduleRecord>;
 }

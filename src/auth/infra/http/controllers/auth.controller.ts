@@ -1,6 +1,5 @@
 import {
   Body,
-  BadRequestException,
   Controller,
   HttpCode,
   HttpStatus,
@@ -57,7 +56,7 @@ export class AuthController {
     private readonly requestPasswordResetUseCase: RequestPasswordResetUseCase,
     private readonly resetPasswordUseCase: ResetPasswordUseCase,
     private readonly resendActivationUseCase: ResendActivationUseCase,
-  ) { }
+  ) {}
 
   @Post('register')
   @HttpCode(HttpStatus.CREATED)
@@ -133,14 +132,6 @@ export class AuthController {
     @CurrentUser() user: AuthUser,
     @UploadedFile() file?: AvatarUpload,
   ) {
-    if (
-      !file?.size ||
-      !['image/jpeg', 'image/png', 'image/webp'].includes(file.mimetype)
-    ) {
-      throw new BadRequestException(
-        'A non-empty JPEG, PNG, or WebP avatar is required',
-      );
-    }
     return this.manageProfileAvatar.upload(user, file);
   }
 

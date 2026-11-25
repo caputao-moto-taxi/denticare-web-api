@@ -1,7 +1,5 @@
 import {
-  BadRequestException,
   ConflictException,
-  ForbiddenException,
   Injectable,
   NotFoundException,
 } from '@nestjs/common';
@@ -15,14 +13,14 @@ import {
 import {
   dateRange,
   personSearch,
-  validateListFilters,
 } from '../../../../shared/helpers/list-filters';
-import { splitName } from '../../../../shared/helpers/staff';
 import { PrismaService } from '../../../../shared/infra/db/prisma/prisma.service';
 import {
   IUserRepository,
   StaffRole,
   UserCreateCommand,
+  UserPermissionData,
+  UserPermissionOverride,
   UserRemovalResult,
   UserStatusCommand,
   UserUpdateCommand,
@@ -41,17 +39,6 @@ export class UsersPrismaRepository implements IUserRepository {
   constructor(private readonly prisma: PrismaService) {}
 
   async list(user: AuthUser, query: ListQuery = {}) {
-    validateListFilters(query, {
-      status: ['active', 'inactive'],
-      role: [
-        'admin',
-        'doctor',
-        'nurse',
-        'secretary',
-        'receptionist',
-        'patient',
-      ],
-    });
     const where: Prisma.UserWhereInput = {
       branchId: user.branchId,
       deletedAt: null,
@@ -85,7 +72,10 @@ export class UsersPrismaRepository implements IUserRepository {
     return UserModelMapper.toEntity(await this.findScoped(user, id));
   }
 
-  async getPermissions(user: AuthUser, id: string) {
+  async getPermissionData(
+    user: AuthUser,
+    id: string,
+  ): Promise<UserPermissionData> {
     const [target, permissions] = await Promise.all([
       this.findPermissionTarget(user, id),
       this.prisma.permission.findMany({
@@ -99,100 +89,47 @@ export class UsersPrismaRepository implements IUserRepository {
         },
       }),
     ]);
-    const rolePermissions = new Set(
-      target.Role?.RolePermission.map(
-        (assignment) => assignment.permission.slug,
-      ) ?? [],
-    );
-    const userOverrides = new Map(
-      target.UserPermission.map((override) => [
-        override.permission.slug,
-        override.granted,
-      ]),
-    );
-    const isAdmin =
-      target.Role?.slug === 'admin' || target.Role?.slug === 'administrator';
-
-    return permissions.map((permission) => {
-      const roleDefault = isAdmin || rolePermissions.has(permission.slug);
-      const overridden = userOverrides.has(permission.slug);
-      return {
+    return {
+      roleSlug: target.Role?.slug ?? null,
+      rolePermissionSlugs:
+        target.Role?.RolePermission.map(
+          (assignment) => assignment.permission.slug,
+        ) ?? [],
+      overrides: target.UserPermission.map((override) => ({
+        slug: override.permission.slug,
+        granted: override.granted,
+      })),
+      permissions: permissions.map((permission) => ({
+        id: permission.id,
         slug: permission.slug,
         name: permission.name,
         description: permission.description ?? '',
-        roleDefault,
-        overridden,
-        granted: isAdmin
-          ? true
-          : (userOverrides.get(permission.slug) ?? roleDefault),
-      };
-    });
+      })),
+    };
   }
 
-  async setPermissions(
-    user: AuthUser,
+  async savePermissionOverrides(
     id: string,
-    input: { permissions: string[] },
+    overrides: UserPermissionOverride[],
   ) {
-    const [target, permissions] = await Promise.all([
-      this.findPermissionTarget(user, id),
-      this.prisma.permission.findMany({
-        where: { deletedAt: null },
-        select: { id: true, slug: true },
-      }),
-    ]);
-    const targetIsAdmin =
-      target.Role?.slug === 'admin' || target.Role?.slug === 'administrator';
-    if (targetIsAdmin) {
-      throw new ForbiddenException(
-        'Administrator permissions cannot be modified',
-      );
-    }
-
-    const requested = new Set(input.permissions);
-    const knownPermissions = new Set(permissions.map(({ slug }) => slug));
-    const unknown = [...requested].filter(
-      (slug) => !knownPermissions.has(slug),
-    );
-    if (unknown.length > 0) {
-      throw new BadRequestException(
-        `Unknown permissions: ${unknown.join(', ')}`,
-      );
-    }
-
-    const rolePermissions = new Set(
-      target.Role?.RolePermission.map(
-        (assignment) => assignment.permission.slug,
-      ) ?? [],
-    );
-    const overrides = permissions.flatMap((permission) => {
-      const granted = requested.has(permission.slug);
-      return granted === rolePermissions.has(permission.slug)
-        ? []
-        : [{ userId: id, permissionId: permission.id, granted }];
-    });
-
     await this.prisma.$transaction(async (transaction) => {
       await transaction.userPermission.deleteMany({ where: { userId: id } });
       if (overrides.length > 0) {
         await transaction.userPermission.createMany({ data: overrides });
       }
     });
-    return this.getPermissions(user, id);
+  }
+
+  async emailExists(email: string) {
+    return Boolean(
+      await this.prisma.user.findFirst({
+        where: { email },
+        select: { id: true },
+      }),
+    );
   }
 
   async create(user: AuthUser, input: UserCreateCommand) {
-    const email = input.email.trim().toLowerCase();
-    const duplicate = await this.prisma.user.findFirst({
-      where: { email },
-      select: { id: true },
-    });
-    if (duplicate) {
-      throw new ConflictException('An account with this email already exists');
-    }
-
-    const name = splitName(input.name);
-
     try {
       const created = await this.prisma.$transaction(async (transaction) => {
         const role = await this.upsertRole(transaction, input.role);
@@ -205,8 +142,8 @@ export class UsersPrismaRepository implements IUserRepository {
         });
         const createdUser = await transaction.user.create({
           data: {
-            email,
-            username: email,
+            email: input.email,
+            username: input.email,
             password: input.passwordHash,
             branchId: user.branchId,
             addressId: address.id,
@@ -217,9 +154,10 @@ export class UsersPrismaRepository implements IUserRepository {
         });
         await transaction.person.create({
           data: {
-            ...name,
-            email,
-            phoneNumber: input.phone?.trim(),
+            firstName: input.firstName,
+            lastName: input.lastName,
+            email: input.email,
+            phoneNumber: input.phone,
             branchId: user.branchId,
             addressId: address.id,
             roleId: role.id,
@@ -256,10 +194,6 @@ export class UsersPrismaRepository implements IUserRepository {
     const currentRole = current.Role?.slug;
     const changesRole = input.role !== undefined && input.role !== currentRole;
 
-    if (changesRole && id === user.id) {
-      throw new ForbiddenException('You cannot change your own role');
-    }
-
     const updated = await this.prisma.$transaction(async (transaction) => {
       if (changesRole && currentRole === 'admin') {
         await this.ensureAnotherAdmin(transaction, user.branchId, id);
@@ -291,9 +225,12 @@ export class UsersPrismaRepository implements IUserRepository {
         await transaction.person.update({
           where: { id: person.id },
           data: {
-            ...(input.name !== undefined && splitName(input.name)),
+            ...(input.firstName !== undefined && {
+              firstName: input.firstName,
+            }),
+            ...(input.lastName !== undefined && { lastName: input.lastName }),
             ...(input.phone !== undefined && {
-              phoneNumber: input.phone.trim(),
+              phoneNumber: input.phone,
             }),
             ...(role && { roleId: role.id }),
           },

@@ -1,10 +1,5 @@
-import {
-  ForbiddenException,
-  Injectable,
-  NotFoundException,
-} from '@nestjs/common';
+import { Injectable, NotFoundException } from '@nestjs/common';
 import { Prisma } from '../../../../../generated/prisma/client';
-import { AuthUser } from '../../../../auth/auth-user';
 import { PrismaService } from '../../../../shared/infra/db/prisma/prisma.service';
 import {
   ClinicServiceCommand,
@@ -19,10 +14,9 @@ export class ClinicSettingsPrismaRepository extends IClinicSettingsRepository {
     super();
   }
 
-  async getSettings(user: AuthUser) {
-    this.ensureAdmin(user);
+  async getSettings(branchId: string) {
     const branch = await this.prisma.branch.findFirst({
-      where: { id: user.branchId, deletedAt: null },
+      where: { id: branchId, deletedAt: null },
       include: {
         address: true,
         headquarter: true,
@@ -32,24 +26,23 @@ export class ClinicSettingsPrismaRepository extends IClinicSettingsRepository {
     return this.toClinicSettings(branch);
   }
 
-  async updateSettings(user: AuthUser, input: ClinicSettingsUpdateCommand) {
-    this.ensureAdmin(user);
+  async updateSettings(branchId: string, input: ClinicSettingsUpdateCommand) {
     const branch = await this.prisma.branch.findFirst({
-      where: { id: user.branchId, deletedAt: null },
+      where: { id: branchId, deletedAt: null },
       select: { id: true, addressId: true, headquarterId: true },
     });
     if (!branch) throw new NotFoundException('Clinic not found');
 
     await this.prisma.$transaction(async (transaction) => {
       const headquarterData: Prisma.HeadquarterUpdateInput = {
-        ...(input.name !== undefined && { name: input.name.trim() }),
+        ...(input.name !== undefined && { name: input.name }),
         ...(input.description !== undefined && {
-          description: input.description.trim() || null,
+          description: input.description || null,
         }),
-        ...(input.nif !== undefined && { nif: input.nif.trim() }),
-        ...(input.email !== undefined && { email: input.email.trim() || null }),
-        ...(input.phone !== undefined && { phone: input.phone.trim() || null }),
-        ...(input.address !== undefined && { address: input.address.trim() }),
+        ...(input.nif !== undefined && { nif: input.nif }),
+        ...(input.email !== undefined && { email: input.email || null }),
+        ...(input.phone !== undefined && { phone: input.phone || null }),
+        ...(input.address !== undefined && { address: input.address }),
       };
       if (Object.keys(headquarterData).length > 0) {
         await transaction.headquarter.update({
@@ -60,7 +53,7 @@ export class ClinicSettingsPrismaRepository extends IClinicSettingsRepository {
       if (input.name !== undefined) {
         await transaction.branch.update({
           where: { id: branch.id },
-          data: { name: input.name.trim() },
+          data: { name: input.name },
         });
       }
       if (
@@ -73,20 +66,18 @@ export class ClinicSettingsPrismaRepository extends IClinicSettingsRepository {
           where: { id: branch.addressId },
           data: {
             ...(input.address !== undefined && {
-              street: input.address.trim(),
+              street: input.address,
             }),
             ...(input.province !== undefined && {
-              province: input.province.trim(),
+              province: input.province,
             }),
-            ...(input.city !== undefined && { city: input.city.trim() }),
-            ...(input.country !== undefined && {
-              country: input.country.trim(),
-            }),
+            ...(input.city !== undefined && { city: input.city }),
+            ...(input.country !== undefined && { country: input.country }),
           },
         });
       }
     });
-    return this.getSettings(user);
+    return this.getSettings(branchId);
   }
 
   async getPublicClinic(branchId: string) {
@@ -120,22 +111,20 @@ export class ClinicSettingsPrismaRepository extends IClinicSettingsRepository {
     };
   }
 
-  async listServices(user: AuthUser) {
-    this.ensureAdmin(user);
+  async listServices(branchId: string) {
     const services = await this.prisma.clinicService.findMany({
-      where: { branchId: user.branchId, deletedAt: null },
+      where: { branchId, deletedAt: null },
       orderBy: [{ name: 'asc' }, { id: 'asc' }],
     });
     return services.map((service) => this.toClinicService(service));
   }
 
-  async createService(user: AuthUser, input: ClinicServiceCommand) {
-    this.ensureAdmin(user);
+  async createService(branchId: string, input: ClinicServiceCommand) {
     const service = await this.prisma.clinicService.create({
       data: {
-        branchId: user.branchId,
-        name: input.name.trim(),
-        description: input.description?.trim() || null,
+        branchId,
+        name: input.name,
+        description: input.description ?? null,
         price: input.price,
         durationMinutes: input.durationMinutes,
       },
@@ -144,22 +133,21 @@ export class ClinicSettingsPrismaRepository extends IClinicSettingsRepository {
   }
 
   async updateService(
-    user: AuthUser,
+    branchId: string,
     id: string,
     input: ClinicServiceUpdateCommand,
   ) {
-    this.ensureAdmin(user);
     const current = await this.prisma.clinicService.findFirst({
-      where: { id, branchId: user.branchId, deletedAt: null },
+      where: { id, branchId, deletedAt: null },
       select: { id: true },
     });
     if (!current) throw new NotFoundException('Clinic service not found');
     const service = await this.prisma.clinicService.update({
       where: { id: current.id },
       data: {
-        ...(input.name !== undefined && { name: input.name.trim() }),
+        ...(input.name !== undefined && { name: input.name }),
         ...(input.description !== undefined && {
-          description: input.description.trim() || null,
+          description: input.description || null,
         }),
         ...(input.price !== undefined && { price: input.price }),
         ...(input.durationMinutes !== undefined && {
@@ -170,10 +158,9 @@ export class ClinicSettingsPrismaRepository extends IClinicSettingsRepository {
     return this.toClinicService(service);
   }
 
-  async deleteService(user: AuthUser, id: string) {
-    this.ensureAdmin(user);
+  async deleteService(branchId: string, id: string) {
     const current = await this.prisma.clinicService.findFirst({
-      where: { id, branchId: user.branchId, deletedAt: null },
+      where: { id, branchId, deletedAt: null },
       select: { id: true },
     });
     if (!current) throw new NotFoundException('Clinic service not found');
@@ -184,14 +171,13 @@ export class ClinicSettingsPrismaRepository extends IClinicSettingsRepository {
     return { id, deleted: true };
   }
 
-  async getLogoKey(user: AuthUser) {
-    this.ensureAdmin(user);
+  async getLogoKey(branchId: string) {
     const branch = await this.prisma.branch.findFirst({
-      where: { id: user.branchId, deletedAt: null },
+      where: { id: branchId, deletedAt: null },
       select: { headquarter: { select: { logo: true } } },
     });
     if (!branch) throw new NotFoundException('Clinic not found');
-    return this.normalizeLogoKey(branch.headquarter.logo);
+    return branch.headquarter.logo;
   }
 
   async getPublicLogoKey(branchId: string) {
@@ -200,23 +186,19 @@ export class ClinicSettingsPrismaRepository extends IClinicSettingsRepository {
       select: { headquarter: { select: { logo: true } } },
     });
     if (!branch) throw new NotFoundException('Clinic not found');
-    const key = this.normalizeLogoKey(branch.headquarter.logo);
-    if (!key) throw new NotFoundException('Clinic logo not found');
-    return key;
+    return branch.headquarter.logo;
   }
 
-  async updateLogoKey(user: AuthUser, storageKey: string) {
-    this.ensureAdmin(user);
+  async updateLogoKey(branchId: string, storageKey: string) {
     const branch = await this.prisma.branch.findFirst({
-      where: { id: user.branchId, deletedAt: null },
-      select: { headquarterId: true, headquarter: { select: { logo: true } } },
+      where: { id: branchId, deletedAt: null },
+      select: { headquarterId: true },
     });
     if (!branch) throw new NotFoundException('Clinic not found');
     await this.prisma.headquarter.update({
       where: { id: branch.headquarterId },
       data: { logo: storageKey },
     });
-    return this.normalizeLogoKey(branch.headquarter.logo);
   }
 
   private toClinicSettings(branch: {
@@ -269,17 +251,5 @@ export class ClinicSettingsPrismaRepository extends IClinicSettingsRepository {
       price: service.price,
       durationMinutes: service.durationMinutes,
     };
-  }
-
-  private normalizeLogoKey(value: string | null) {
-    return value?.startsWith('headquarters/') ? value : null;
-  }
-
-  private ensureAdmin(user: AuthUser) {
-    if (user.role !== 'admin' && user.role !== 'administrator') {
-      throw new ForbiddenException(
-        'Only clinic administrators can manage settings',
-      );
-    }
   }
 }

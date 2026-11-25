@@ -1,6 +1,7 @@
 import { AuthUser } from '../../../../auth/auth-user';
 import { IChatRepository } from '../../../domain/chat.repository';
 import { ChatRealtimeService } from '../../../infra/realtime/chat-realtime.service';
+import { requireConversationParticipant } from '../shared/chat-rules';
 
 export type MarkConversationReadInput = {
   user: AuthUser;
@@ -14,8 +15,18 @@ export class MarkConversationReadUseCase {
   ) {}
 
   async execute({ user, conversationId }: MarkConversationReadInput) {
-    const result = await this.repository.markRead(user, conversationId);
+    const conversation = await requireConversationParticipant(
+      this.repository,
+      user,
+      conversationId,
+    );
+    const readAt = new Date();
+    await this.repository.updateConversation(conversationId, {
+      ...(conversation.starterId === user.id
+        ? { starterLastReadAt: readAt }
+        : { recipientLastReadAt: readAt }),
+    });
     this.realtime.conversationRead(user.id, conversationId);
-    return result;
+    return { id: conversationId, unreadCount: 0 };
   }
 }

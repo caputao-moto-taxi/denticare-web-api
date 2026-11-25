@@ -11,3 +11,10 @@ export const ReadHTMLFile = <D>(
     return htmlToSend;
   });
 };
+
+export const url = (path: string): string => {
+  if (path[0] === '/') {
+    return process.env.BASE_URL + path;
+  }
+  return `${process.env.BASE_URL}/${path}`;
+};

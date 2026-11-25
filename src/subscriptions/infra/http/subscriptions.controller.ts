@@ -20,10 +20,8 @@ import {
   RespondToInformationRequestDto,
 } from './subscription.dto';
 import { ClinicAdminGuard } from './platform-owner.guard';
-import {
-  PaymentProofUpload,
-  SubscriptionsService,
-} from '../../application/subscriptions.service';
+import { PaymentProofUpload } from '../../application/payment-proof-upload';
+import { SubscriptionsService } from '../../application/subscriptions.service';
 
 @ApiTags('Subscriptions')
 @ApiBearerAuth()
@@ -57,12 +55,7 @@ export class SubscriptionsController {
     @Body() input: CreateSubscriptionRequestDto,
     @UploadedFile() file?: PaymentProofUpload,
   ) {
-    return this.subscriptions.createRequest(
-      user,
-      idempotencyKey,
-      input,
-      file,
-    );
+    return this.subscriptions.createRequest(user, idempotencyKey, input, file);
   }
 
   @Get('requests')

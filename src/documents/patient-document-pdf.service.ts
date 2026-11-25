@@ -167,15 +167,10 @@ export class PatientDocumentPdfService {
             width: 214,
             align: 'center',
           })
-          .text(
-            'Assinatura do paciente / responsável',
-            325,
-            signatureY + 8,
-            {
-              width: 214,
-              align: 'center',
-            },
-          );
+          .text('Assinatura do paciente / responsável', 325, signatureY + 8, {
+            width: 214,
+            align: 'center',
+          });
       }
 
       pdf.end();
@@ -199,11 +194,7 @@ export class PatientDocumentPdfService {
     pdf.moveDown(0.4);
   }
 
-  private field(
-    pdf: PDFKit.PDFDocument,
-    label: string,
-    value?: string | null,
-  ) {
+  private field(pdf: PDFKit.PDFDocument, label: string, value?: string | null) {
     if (!value) return;
 
     pdf
@@ -221,8 +212,7 @@ export class PatientDocumentPdfService {
   private formatDate(value?: string | Date) {
     if (!value) return '';
 
-    const date =
-      value instanceof Date ? value : new Date(`${value}T12:00:00`);
+    const date = value instanceof Date ? value : new Date(`${value}T12:00:00`);
 
     return new Intl.DateTimeFormat('pt-PT').format(date);
   }

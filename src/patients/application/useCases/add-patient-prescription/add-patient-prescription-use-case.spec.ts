@@ -70,7 +70,11 @@ describe('AddPatientPrescriptionUseCase', () => {
 
   it('rejects an empty prescription before persistence', async () => {
     await expect(
-      useCase.execute({ user: doctor, id: 'patient-1', prescription: { items: [] } }),
+      useCase.execute({
+        user: doctor,
+        id: 'patient-1',
+        prescription: { items: [] },
+      }),
     ).rejects.toThrow(BadRequestException);
     expect(repository.addPrescription).not.toHaveBeenCalled();
   });

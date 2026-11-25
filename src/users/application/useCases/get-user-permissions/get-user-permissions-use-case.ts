@@ -4,6 +4,7 @@ import {
   UserPermissionView,
 } from '../../../domain/user.repository';
 import { UserManagementPolicy } from '../../user-management.policy';
+import { UserPermissionsPolicy } from '../../user-permissions.policy';
 
 export type GetUserPermissionsInput = {
   user: AuthUser;
@@ -13,11 +14,13 @@ export type GetUserPermissionsInput = {
 export class GetUserPermissionsUseCase {
   constructor(private readonly repository: IUserRepository) {}
 
-  execute({
+  async execute({
     user,
     id,
   }: GetUserPermissionsInput): Promise<UserPermissionView[]> {
     UserManagementPolicy.ensureAdministrator(user);
-    return this.repository.getPermissions(user, id);
+    return UserPermissionsPolicy.toViews(
+      await this.repository.getPermissionData(user, id),
+    );
   }
 }

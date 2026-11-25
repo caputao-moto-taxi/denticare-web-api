@@ -19,7 +19,9 @@ export class AddPatientPrescriptionUseCase {
   async execute({ user, id, prescription }: AddPatientPrescriptionInput) {
     requirePatientClinicalAccess(user);
     if (prescription.items.length === 0) {
-      throw new BadRequestException('At least one prescription item is required');
+      throw new BadRequestException(
+        'At least one prescription item is required',
+      );
     }
 
     const groupId = randomUUID();
@@ -41,12 +43,14 @@ export class AddPatientPrescriptionUseCase {
 
     return {
       id: groupId,
-      items: prescriptions.map(({ medication, dosage, instructions, duration }) => ({
-        medication,
-        dosage,
-        instructions,
-        duration,
-      })),
+      items: prescriptions.map(
+        ({ medication, dosage, instructions, duration }) => ({
+          medication,
+          dosage,
+          instructions,
+          duration,
+        }),
+      ),
       prescribedBy: firstPrescription.doctor.username,
       date: firstPrescription.createdAt.toISOString(),
       status: 'active',

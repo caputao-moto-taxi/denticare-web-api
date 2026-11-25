@@ -6,7 +6,7 @@ import { ValidateNifUseCase } from '../../application/useCases/validate-nif.use-
 @ApiTags('NIF validation')
 @Controller('validate-nif')
 export class ValidateNifController {
-  constructor(private readonly validateNifUseCase: ValidateNifUseCase) { }
+  constructor(private readonly validateNifUseCase: ValidateNifUseCase) {}
 
   @Get(':nif')
   @ApiParam({ name: 'nif', description: 'NIF com 10 dígitos' })

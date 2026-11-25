@@ -5,17 +5,12 @@ import {
 } from '@nestjs/common';
 import { Prisma } from '../../../../../generated/prisma/client';
 import { PrismaService } from '../../../../shared/infra/db/prisma/prisma.service';
-import { AuthUser } from '../../../../auth/auth-user';
 import {
   ListQuery,
   pageWindow,
   paginated,
 } from '../../../../shared/domain/list-query';
-import {
-  dateRange,
-  personSearch,
-  validateListFilters,
-} from '../../../../shared/helpers/list-filters';
+import { personSearch } from '../../../../shared/helpers/list-filters';
 import {
   DoctorCreateCommand,
   DoctorUpdateCommand,
@@ -26,18 +21,34 @@ import {
 export class DoctorsPrismaRepository implements IDoctorRepository {
   constructor(private readonly prisma: PrismaService) {}
 
-  async list(user: AuthUser, query: ListQuery = {}) {
-    validateListFilters(query, {
-      status: ['active', 'inactive'],
-      specialty: true,
-      type: ['FULL_TIME', 'PART_TIME'],
+  async emailExists(email: string, excludeUserId?: string) {
+    const account = await this.prisma.user.findFirst({
+      where: {
+        email,
+        deletedAt: null,
+        ...(excludeUserId && { id: { not: excludeUserId } }),
+      },
+      select: { id: true },
     });
+    return Boolean(account);
+  }
+
+  async list(branchId: string, query: ListQuery = {}) {
     const where: Prisma.UserWhereInput = {
-      branchId: user.branchId,
+      branchId,
       deletedAt: null,
       Role: { slug: 'doctor' },
       ...(query.status && { isActive: query.status === 'active' }),
-      createdAt: dateRange(query),
+      createdAt: {
+        ...(query.dateFrom && {
+          gte: new Date(`${query.dateFrom}T00:00:00.000Z`),
+        }),
+        ...(query.dateTo && {
+          lt: new Date(
+            new Date(`${query.dateTo}T00:00:00.000Z`).getTime() + 86400000,
+          ),
+        }),
+      },
       ...((query.specialty || query.type) && {
         doctorProfile: {
           ...(query.specialty && { specialties: { has: query.specialty } }),
@@ -73,11 +84,11 @@ export class DoctorsPrismaRepository implements IDoctorRepository {
     );
   }
 
-  async findOne(user: AuthUser, id: string) {
+  async findOne(branchId: string, id: string) {
     const doctor = await this.prisma.user.findFirst({
       where: {
         id,
-        branchId: user.branchId,
+        branchId,
         deletedAt: null,
         Role: { slug: 'doctor' },
       },
@@ -99,16 +110,7 @@ export class DoctorsPrismaRepository implements IDoctorRepository {
     return { ...this.toDoctor(doctor), completedAppointmentsCount };
   }
 
-  async create(user: AuthUser, input: DoctorCreateCommand) {
-    const email = input.email.trim().toLowerCase();
-    const duplicate = await this.prisma.user.findFirst({
-      where: { email, deletedAt: null },
-      select: { id: true },
-    });
-    if (duplicate)
-      throw new ConflictException('An account with this email already exists');
-
-    const name = this.splitName(input.name);
+  async create(branchId: string, input: DoctorCreateCommand) {
     try {
       const doctor = await this.prisma.$transaction(async (transaction) => {
         const role = await transaction.role.upsert({
@@ -118,17 +120,17 @@ export class DoctorsPrismaRepository implements IDoctorRepository {
         });
         const address = await transaction.address.create({
           data: {
-            street: input.address.trim(),
+            street: input.address,
             city: 'Not specified',
             country: 'Angola',
           },
         });
         const createdUser = await transaction.user.create({
           data: {
-            email,
-            username: email,
+            email: input.email,
+            username: input.email,
             password: input.passwordHash,
-            branchId: user.branchId,
+            branchId,
             addressId: address.id,
             roleId: role.id,
             isActive: true,
@@ -137,10 +139,11 @@ export class DoctorsPrismaRepository implements IDoctorRepository {
         });
         await transaction.person.create({
           data: {
-            ...name,
-            email,
-            phoneNumber: input.phone?.trim(),
-            branchId: user.branchId,
+            firstName: input.firstName,
+            lastName: input.lastName,
+            email: input.email,
+            phoneNumber: input.phone,
+            branchId,
             addressId: address.id,
             roleId: role.id,
             userId: createdUser.id,
@@ -183,11 +186,11 @@ export class DoctorsPrismaRepository implements IDoctorRepository {
     }
   }
 
-  async update(user: AuthUser, id: string, input: DoctorUpdateCommand) {
+  async update(branchId: string, id: string, input: DoctorUpdateCommand) {
     const current = await this.prisma.user.findFirst({
       where: {
         id,
-        branchId: user.branchId,
+        branchId,
         deletedAt: null,
         Role: { slug: 'doctor' },
       },
@@ -196,76 +199,83 @@ export class DoctorsPrismaRepository implements IDoctorRepository {
     if (!current?.doctorProfile)
       throw new NotFoundException('Doctor not found');
 
-    const email = input.email?.trim().toLowerCase();
-    if (email && email !== current.email) {
-      const duplicate = await this.prisma.user.findFirst({
-        where: { email, deletedAt: null, id: { not: id } },
-        select: { id: true },
-      });
-      if (duplicate)
-        throw new ConflictException(
-          'An account with this email already exists',
-        );
-    }
-    const name = input.name ? this.splitName(input.name) : undefined;
-
-    const updated = await this.prisma.$transaction(async (transaction) => {
-      await transaction.user.update({
-        where: { id },
-        data: email ? { email, username: email } : {},
-      });
-      const person = current.Person[0];
-      if (person) {
-        await transaction.person.update({
-          where: { id: person.id },
+    const email = input.email;
+    try {
+      const updated = await this.prisma.$transaction(async (transaction) => {
+        await transaction.user.update({
+          where: { id },
+          data: email ? { email, username: email } : {},
+        });
+        const person = current.Person[0];
+        if (person) {
+          await transaction.person.update({
+            where: { id: person.id },
+            data: {
+              ...(input.firstName !== undefined && {
+                firstName: input.firstName,
+              }),
+              ...(input.lastName !== undefined && {
+                lastName: input.lastName,
+              }),
+              ...(email && { email }),
+              ...(input.phone !== undefined && {
+                phoneNumber: input.phone,
+              }),
+            },
+          });
+        }
+        if (input.address !== undefined && current.addressId) {
+          await transaction.address.update({
+            where: { id: current.addressId },
+            data: { street: input.address },
+          });
+        }
+        return transaction.doctorProfile.update({
+          where: { userId: id },
           data: {
-            ...name,
-            ...(email && { email }),
-            ...(input.phone !== undefined && {
-              phoneNumber: input.phone.trim(),
+            ...(input.avatar !== undefined && { avatar: input.avatar }),
+            ...(input.type !== undefined && { type: input.type }),
+            ...(input.crmNumber !== undefined && {
+              crmNumber: input.crmNumber,
+            }),
+            ...(input.specialties !== undefined && {
+              specialties: input.specialties,
+            }),
+            ...(input.workingDays !== undefined && {
+              workingDays: input.workingDays,
+            }),
+            ...(input.workingHours !== undefined && {
+              workingHours: input.workingHours as Prisma.InputJsonValue,
+            }),
+            ...(input.daysOffNotes !== undefined && {
+              daysOffNotes: input.daysOffNotes,
             }),
           },
         });
-      }
-      if (input.address !== undefined && current.addressId) {
-        await transaction.address.update({
-          where: { id: current.addressId },
-          data: { street: input.address.trim() },
-        });
-      }
-      return transaction.doctorProfile.update({
-        where: { userId: id },
-        data: {
-          ...(input.avatar !== undefined && { avatar: input.avatar }),
-          ...(input.type !== undefined && { type: input.type }),
-          ...(input.crmNumber !== undefined && { crmNumber: input.crmNumber }),
-          ...(input.specialties !== undefined && {
-            specialties: input.specialties,
-          }),
-          ...(input.workingDays !== undefined && {
-            workingDays: input.workingDays,
-          }),
-          ...(input.workingHours !== undefined && {
-            workingHours: input.workingHours as Prisma.InputJsonValue,
-          }),
-          ...(input.daysOffNotes !== undefined && {
-            daysOffNotes: input.daysOffNotes,
-          }),
-        },
       });
-    });
 
-    return {
-      ...this.toDoctor({ ...current, doctorProfile: updated }),
-      email: email ?? current.email,
-    };
+      return {
+        ...this.toDoctor({ ...current, doctorProfile: updated }),
+        email: email ?? current.email,
+      };
+    } catch (error) {
+      if (
+        error instanceof Prisma.PrismaClientKnownRequestError &&
+        error.code === 'P2002'
+      ) {
+        throw new ConflictException(
+          'An account with this email already exists',
+        );
+      }
+      throw error;
+    }
   }
 
-  async remove(user: AuthUser, id: string) {
+  async remove(branchId: string, id: string) {
     const result = await this.prisma.user.updateMany({
       where: {
         id,
-        branchId: user.branchId,
+        branchId,
         deletedAt: null,
         Role: { slug: 'doctor' },
       },
@@ -275,27 +285,29 @@ export class DoctorsPrismaRepository implements IDoctorRepository {
     return { id, active: false };
   }
 
-  async getAvatarStorageKey(user: AuthUser, id: string) {
+  async getAvatarStorageKey(branchId: string, id: string) {
     const doctor = await this.prisma.user.findFirst({
       where: {
         id,
-        branchId: user.branchId,
+        branchId,
         deletedAt: null,
         Role: { slug: 'doctor' },
       },
       select: { doctorProfile: { select: { avatar: true } } },
     });
     if (!doctor?.doctorProfile) throw new NotFoundException('Doctor not found');
-    const key = doctor.doctorProfile.avatar;
-    return key?.startsWith(`doctors/${id}/avatar/`) ? key : null;
+    return doctor.doctorProfile.avatar;
   }
 
-  async updateAvatarStorageKey(user: AuthUser, id: string, storageKey: string) {
-    await this.getAvatarStorageKey(user, id);
+  async updateAvatarStorageKey(
+    branchId: string,
+    id: string,
+    storageKey: string,
+  ) {
     const doctor = await this.prisma.user.findFirst({
       where: {
         id,
-        branchId: user.branchId,
+        branchId,
         deletedAt: null,
         Role: { slug: 'doctor' },
       },
@@ -306,14 +318,6 @@ export class DoctorsPrismaRepository implements IDoctorRepository {
       where: { userId: id },
       data: { avatar: storageKey },
     });
-  }
-
-  private splitName(fullName: string) {
-    const [firstName, ...parts] = fullName
-      .trim()
-      .replace(/\s+/g, ' ')
-      .split(' ');
-    return { firstName, lastName: parts.join(' ') || firstName };
   }
 
   private toDoctor(doctor: {

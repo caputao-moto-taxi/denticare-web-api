@@ -22,6 +22,7 @@ describe('CreatePatientUseCase', () => {
   const repository = {
     emailExists: jest.fn(),
     create: jest.fn(),
+    update: jest.fn(),
   };
   const useCase = new CreatePatientUseCase(
     repository as unknown as IPatientRepository,
@@ -68,7 +69,7 @@ describe('CreatePatientUseCase', () => {
 
   it('allows an unchanged email during patient updates', async () => {
     repository.emailExists.mockResolvedValue(false);
-    repository.update = jest.fn().mockResolvedValue({ id: 'patient-1' });
+    repository.update.mockResolvedValue({ id: 'patient-1' });
     const useCase = new UpdatePatientUseCase(
       repository as unknown as IPatientRepository,
     );

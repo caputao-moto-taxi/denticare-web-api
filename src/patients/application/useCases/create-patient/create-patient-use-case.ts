@@ -25,6 +25,13 @@ export class CreatePatientUseCase {
     }
     const { name, ...changes } = normalizedPatient;
     const { firstName, lastName } = splitName(name);
-    return this.repository.create(user, { ...changes, firstName, lastName });
+    return this.repository.create(user, {
+      ...changes,
+      firstName,
+      lastName,
+      ...(changes.dataProcessingConsent && {
+        dataProcessingConsentUpdatedAt: new Date(),
+      }),
+    });
   }
 }

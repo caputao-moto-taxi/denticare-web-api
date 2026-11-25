@@ -14,17 +14,21 @@ import {
   pageWindow,
   paginated,
 } from '../../../../shared/domain/list-query';
-import {
-  dateRange,
-  validateListFilters,
-} from '../../../../shared/helpers/list-filters';
 
 export class PlanPrismaRepository implements IPlanRepository {
   async listPaginated(query: ListQuery) {
-    validateListFilters(query);
     const where: Prisma.PlanWhereInput = {
       deletedAt: null,
-      createdAt: dateRange(query),
+      createdAt: {
+        ...(query.dateFrom && {
+          gte: new Date(`${query.dateFrom}T00:00:00.000Z`),
+        }),
+        ...(query.dateTo && {
+          lt: new Date(
+            new Date(`${query.dateTo}T00:00:00.000Z`).getTime() + 86400000,
+          ),
+        }),
+      },
       ...(query.search && {
         OR: [
           { name: { contains: query.search, mode: 'insensitive' } },
@@ -67,15 +71,11 @@ export class PlanPrismaRepository implements IPlanRepository {
       data: modelProps,
     });
   }
-  async findById(entityId: PlanId): Promise<Plan> {
+  async findById(entityId: PlanId): Promise<Plan | null> {
     const plan = await this._prismaService.plan.findUnique({
       where: { id: entityId.value },
     });
-    if (!plan) {
-      throw new NotFoundError(entityId, Plan);
-    }
-
-    return PlanModelMapper.toEntity(plan);
+    return plan ? PlanModelMapper.toEntity(plan) : null;
   }
   async findByIds(ids: PlanId[]): Promise<Plan[]> {
     const plans = await this._prismaService.plan.findMany({
@@ -87,8 +87,8 @@ export class PlanPrismaRepository implements IPlanRepository {
       return PlanModelMapper.toEntity(plan);
     });
   }
-  async findAll(): Promise<any[]> {
-    return await this._prismaService.plan.findMany({
+  async findAll(): Promise<Plan[]> {
+    const plans = await this._prismaService.plan.findMany({
       include: {
         PlanBenefit: {
           include: {
@@ -102,6 +102,7 @@ export class PlanPrismaRepository implements IPlanRepository {
         currency: true,
       },
     });
+    return plans.map((plan) => PlanModelMapper.toEntity(plan));
   }
   async update(entity: Plan): Promise<void> {
     const modelProps = PlanModelMapper.toModel(entity);
@@ -118,7 +119,7 @@ export class PlanPrismaRepository implements IPlanRepository {
       where: { id: entityId.value },
     });
   }
-  getEntity(): new (...args: any[]) => Plan {
+  getEntity(): typeof Plan {
     return Plan;
   }
 

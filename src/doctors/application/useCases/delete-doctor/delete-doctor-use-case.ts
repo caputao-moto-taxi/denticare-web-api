@@ -9,6 +9,6 @@ export class DeleteDoctorUseCase {
 
   execute({ user, id }: DeleteDoctorInput) {
     DoctorManagementPolicy.ensureCanRemove(user);
-    return this.repository.remove(user, id);
+    return this.repository.remove(user.branchId, id);
   }
 }

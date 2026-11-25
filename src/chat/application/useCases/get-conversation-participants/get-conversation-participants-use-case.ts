@@ -1,5 +1,6 @@
 import { AuthUser } from '../../../../auth/auth-user';
 import { IChatRepository } from '../../../domain/chat.repository';
+import { requireConversationParticipant } from '../shared/chat-rules';
 
 export type GetConversationParticipantsInput = {
   user: AuthUser;
@@ -9,7 +10,12 @@ export type GetConversationParticipantsInput = {
 export class GetConversationParticipantsUseCase {
   constructor(private readonly repository: IChatRepository) {}
 
-  execute({ user, conversationId }: GetConversationParticipantsInput) {
-    return this.repository.participants(user, conversationId);
+  async execute({ user, conversationId }: GetConversationParticipantsInput) {
+    const { starterId, recipientId } = await requireConversationParticipant(
+      this.repository,
+      user,
+      conversationId,
+    );
+    return { starterId, recipientId };
   }
 }

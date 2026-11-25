@@ -1,6 +1,11 @@
 import { ForbiddenException } from '@nestjs/common';
 import { AuthUser } from '../../auth/auth-user';
 import {
+  canAccessClinicPatientRecords,
+  canReadPatientClinicalData,
+  canReadPatientContacts,
+  canReadPatientFinancials,
+  patientAppointmentVisibility,
   requirePatientClinicalAccess,
   requirePatientStaff,
 } from './patient-access.policy';
@@ -34,5 +39,23 @@ describe('patient access policy', () => {
     expect(() => requirePatientClinicalAccess(patientUser, 'read')).toThrow(
       ForbiddenException,
     );
+  });
+
+  it('centralizes read visibility for patient records and appointments', () => {
+    const assignedDoctor = {
+      ...patientUser,
+      role: 'doctor',
+      permissions: ['appointments.read.assigned', 'patients.clinical.read'],
+    } satisfies AuthUser;
+    expect(canAccessClinicPatientRecords(assignedDoctor)).toBe(true);
+    expect(canReadPatientClinicalData(assignedDoctor)).toBe(true);
+    expect(canReadPatientContacts(assignedDoctor)).toBe(false);
+    expect(canReadPatientFinancials(assignedDoctor)).toBe(false);
+    expect(patientAppointmentVisibility(assignedDoctor)).toEqual({
+      doctorId: assignedDoctor.id,
+    });
+    expect(patientAppointmentVisibility(patientUser)).toEqual({
+      id: { in: [] },
+    });
   });
 });
