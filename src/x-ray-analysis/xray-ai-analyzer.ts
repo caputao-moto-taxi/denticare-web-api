@@ -53,12 +53,22 @@ export class XRayAiAnalyzer implements IXRayAnalyzer {
         'XRAY_AI_BASE_URL must use HTTP or HTTPS',
       );
     }
+    if (
+      endpoint.username ||
+      endpoint.password ||
+      endpoint.search ||
+      endpoint.hash
+    ) {
+      throw new ServiceUnavailableException(
+        'XRAY_AI_BASE_URL must not contain credentials, query parameters, or fragments',
+      );
+    }
 
-    const endpointUrl = baseUrl
-      .replace(/\/+$/, '')
-      .endsWith('/chat/completions')
-      ? baseUrl.replace(/\/+$/, '')
-      : `${baseUrl.replace(/\/+$/, '')}/chat/completions`;
+    const basePath = endpoint.pathname.replace(/\/+$/, '');
+    const endpointPath = basePath.endsWith('/chat/completions')
+      ? basePath
+      : `${basePath}/chat/completions`;
+    const endpointUrl = new URL(endpointPath, endpoint.origin).toString();
     const prompt = [
       'Review this dental radiograph only as a clinical decision-support aid.',
       'Do not provide a diagnosis, treatment recommendation, or claim certainty.',
@@ -94,6 +104,7 @@ export class XRayAiAnalyzer implements IXRayAnalyzer {
             },
           ],
         }),
+        redirect: 'error',
         signal: AbortSignal.timeout(120_000),
       });
     } catch (error) {

@@ -26,7 +26,7 @@ export class LoginUseCase {
       throw new UnauthorizedException('Invalid email or password');
     }
     if (!user.isActive) {
-      throw new UnauthorizedException('User account is not active');
+      throw new UnauthorizedException('Invalid email or password');
     }
     if (!(await this.hashService.compare(input.password, user.password))) {
       throw new UnauthorizedException('Invalid email or password');
@@ -39,7 +39,7 @@ export class LoginUseCase {
         user.branch.headquarter.deletedAt ||
         !user.branch.headquarter.isActive)
     ) {
-      throw new UnauthorizedException('Clinic account is unavailable');
+      throw new UnauthorizedException('Invalid email or password');
     }
 
     const sessionId = randomUUID();

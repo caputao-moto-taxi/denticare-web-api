@@ -6,6 +6,7 @@ import {
   UnauthorizedException,
 } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
+import { Throttle } from '@nestjs/throttler';
 import {
   ConnectedSocket,
   MessageBody,
@@ -20,6 +21,7 @@ import { validate } from 'class-validator';
 import type { Namespace, Socket } from 'socket.io';
 import { AuthUser } from '../../../auth/auth-user';
 import { PrismaService } from '../../../shared/infra/db/prisma/prisma.service';
+import { getAllowedCorsOrigins } from '../../../shared/helpers/basicConfigsConstants';
 import { GetConversationParticipantsUseCase } from '../../application/useCases/get-conversation-participants/get-conversation-participants-use-case';
 import { MarkConversationReadUseCase } from '../../application/useCases/mark-conversation-read/mark-conversation-read-use-case';
 import { SendChatMessageUseCase } from '../../application/useCases/send-chat-message/send-chat-message-use-case';
@@ -50,11 +52,18 @@ type Ack<T> =
 const SESSION_KEY = 'session';
 
 @Injectable()
-@WebSocketGateway({ namespace: '/chat', cors: { origin: '*' } })
+@WebSocketGateway({
+  namespace: '/chat',
+  cors: { origin: getAllowedCorsOrigins() },
+})
 export class ChatGateway
   implements OnGatewayInit, OnGatewayConnection, OnGatewayDisconnect
 {
   private readonly logger = new Logger(ChatGateway.name);
+  private readonly connectionAttempts = new Map<
+    string,
+    { count: number; expiresAt: number }
+  >();
 
   constructor(
     private readonly jwtService: JwtService,
@@ -67,6 +76,12 @@ export class ChatGateway
 
   afterInit(server: Namespace) {
     this.realtime.attach(server);
+    server.use((client, next) => {
+      if (!this.allowConnection(client.handshake.address)) {
+        return next(new Error('Too many connection attempts'));
+      }
+      next();
+    });
   }
 
   async handleConnection(client: Socket) {
@@ -94,6 +109,7 @@ export class ChatGateway
   }
 
   @SubscribeMessage('chat:send')
+  @Throttle({ default: { limit: 30, ttl: 60_000 } })
   send(@ConnectedSocket() client: Socket, @MessageBody() body: unknown) {
     return this.handle(client, async (user) => {
       const dto = await this.parse(SocketSendMessageDto, body);
@@ -107,6 +123,7 @@ export class ChatGateway
   }
 
   @SubscribeMessage('chat:read')
+  @Throttle({ default: { limit: 60, ttl: 60_000 } })
   read(@ConnectedSocket() client: Socket, @MessageBody() body: unknown) {
     return this.handle(client, async (user) => {
       const dto = await this.parse(SocketReadDto, body);
@@ -119,6 +136,7 @@ export class ChatGateway
   }
 
   @SubscribeMessage('chat:typing')
+  @Throttle({ default: { limit: 120, ttl: 60_000 } })
   typing(@ConnectedSocket() client: Socket, @MessageBody() body: unknown) {
     return this.handle(client, async (user) => {
       const dto = await this.parse(SocketTypingDto, body);
@@ -135,6 +153,29 @@ export class ChatGateway
       });
       return {};
     });
+  }
+
+  private allowConnection(address: string): boolean {
+    const now = Date.now();
+    const attempt = this.connectionAttempts.get(address);
+    if (attempt && attempt.expiresAt > now) {
+      if (attempt.count >= 60) return false;
+      attempt.count += 1;
+      return true;
+    }
+
+    if (!attempt && this.connectionAttempts.size >= 10_000) {
+      const oldestAddress = this.connectionAttempts.keys().next().value;
+      if (oldestAddress !== undefined) {
+        this.connectionAttempts.delete(oldestAddress);
+      }
+    }
+
+    this.connectionAttempts.set(address, {
+      count: 1,
+      expiresAt: now + 60_000,
+    });
+    return true;
   }
 
   // Revocation is re-checked per event because logout does not close sockets by itself.
