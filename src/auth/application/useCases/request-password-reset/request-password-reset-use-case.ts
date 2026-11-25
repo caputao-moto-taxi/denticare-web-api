@@ -17,6 +17,9 @@ export class RequestPasswordResetUseCase {
   ) {}
 
   async execute(email: string) {
+    const response = {
+      message: 'If the account exists, a recovery link has been sent.',
+    };
     const account = await this.repository.findUserByEmail(
       email.trim().toLowerCase(),
     );
@@ -26,9 +29,7 @@ export class RequestPasswordResetUseCase {
       !account.isActive ||
       !account.isEmailVerified
     ) {
-      return {
-        message: 'Account not exists.',
-      };
+      return response;
     }
 
     const token = await replaceAuthActionToken(
@@ -69,15 +70,9 @@ export class RequestPasswordResetUseCase {
       if (result !== true) {
         this.logger.warn('Password reset email delivery failed');
       }
-      return {
-        message: 'If the account exists, a recovery link has been sent.',
-      };
-    } catch (error) {
-      this.logger.warn(
-        `Password reset email delivery failed: ${
-          error instanceof Error ? error.message : String(error)
-        }`,
-      );
+    } catch {
+      this.logger.warn('Password reset email delivery failed');
     }
+    return response;
   }
 }

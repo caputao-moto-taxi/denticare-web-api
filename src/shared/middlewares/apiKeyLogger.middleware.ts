@@ -7,14 +7,14 @@ export class ApiKeyLoggerMiddleware implements NestMiddleware {
   private readonly logger = new Logger('ApiKeyLogger');
 
   use(req: Request, res: Response, next: NextFunction) {
-    const apiKey = req.headers['x-api-key'] as string;
-    const ip = req.ip || req.connection.remoteAddress;
+    const apiKeyProvided = Boolean(req.headers['x-api-key']);
+    const ip = req.ip || req.socket.remoteAddress;
     const method = req.method;
-    const url = req.originalUrl;
+    const path = req.path.slice(0, 200);
 
-    if (apiKey) {
+    if (apiKeyProvided) {
       this.logger.log(
-        `[${new Date().toISOString()}] API Key: ${apiKey} | IP: ${ip} | ${method} ${url}`,
+        `[${new Date().toISOString()}] API key provided | IP: ${ip} | ${method} ${path}`,
       );
     }
 

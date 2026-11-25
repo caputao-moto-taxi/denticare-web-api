@@ -1,5 +1,4 @@
 import { Module } from '@nestjs/common';
-import { ThrottlerModule } from '@nestjs/throttler';
 import { AuthModule } from '../auth/auth.module';
 import { AssistantController } from './infra/http/assistant.controller';
 import { AssistantChatGateway } from './application/assistant-chat-gateway';
@@ -7,7 +6,7 @@ import { ChatAssistantUseCase } from './application/useCases/chat-assistant/chat
 import { LangChainAssistantChatGateway } from './infra/ai/langchain-assistant-chat.gateway';
 
 @Module({
-  imports: [AuthModule, ThrottlerModule.forRoot([{ ttl: 60_000, limit: 10 }])],
+  imports: [AuthModule],
   controllers: [AssistantController],
   providers: [
     ChatAssistantUseCase,

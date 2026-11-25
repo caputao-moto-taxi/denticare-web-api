@@ -40,7 +40,7 @@ export class HttpService {
 
   private logRequest(config: InternalAxiosRequestConfig): void {
     this.logger.log(
-      `HTTP Request: ${config.method?.toUpperCase()} ${config.baseURL}${config.url}`,
+      `HTTP Request: ${config.method?.toUpperCase()} ${this.safeTarget(config.url, config.baseURL)}`,
     );
   }
 
@@ -51,22 +51,30 @@ export class HttpService {
 
   private logResponse(response: AxiosResponse): void {
     this.logger.log(
-      `HTTP Response: ${response.status} ${response.config.method?.toUpperCase()} ${response.config.baseURL}${response.config.url}`,
+      `HTTP Response: ${response.status} ${response.config.method?.toUpperCase()} ${this.safeTarget(response.config.url, response.config.baseURL)}`,
     );
   }
 
   private handleErrorResponse(error: AxiosError): Promise<AxiosError> {
-    // Capturando detalhes específicos do erro para logar de forma estruturada
     if (error.response) {
       this.logger.error(
-        `HTTP Error: ${error.message}`,
-        `Status: ${error.response.status}, URL: ${error.config.url}`,
+        `HTTP Error: status ${error.response.status} for ${error.config?.method?.toUpperCase()} ${this.safeTarget(error.config?.url, error.config?.baseURL)}`,
       );
     } else {
-      // Caso o erro seja de rede ou outro tipo que não envolva resposta
-      this.logger.error(`HTTP Error: ${error.message}`, error.stack);
+      this.logger.error(
+        `HTTP network error for ${error.config?.method?.toUpperCase()} ${this.safeTarget(error.config?.url, error.config?.baseURL)}`,
+      );
     }
     return Promise.reject(error);
+  }
+
+  private safeTarget(url?: string, baseURL?: string): string {
+    try {
+      const target = new URL(url ?? '', baseURL);
+      return `${target.origin}${target.pathname}`;
+    } catch {
+      return (url ?? '').split('?')[0].slice(0, 256);
+    }
   }
 
   async get<T>(
@@ -82,7 +90,7 @@ export class HttpService {
 
   async post<T>(
     url: string,
-    data: any,
+    data: unknown,
     config?: AxiosRequestConfig,
   ): Promise<AxiosResponse<T>> {
     const response: AxiosResponse<T> = await this.axiosInstance.post(
@@ -95,7 +103,7 @@ export class HttpService {
 
   async put<T>(
     url: string,
-    data: any,
+    data: unknown,
     config?: AxiosRequestConfig,
   ): Promise<AxiosResponse<T>> {
     const response: AxiosResponse<T> = await this.axiosInstance.put(
@@ -108,7 +116,7 @@ export class HttpService {
 
   async patch<T>(
     url: string,
-    data: any,
+    data: unknown,
     config?: AxiosRequestConfig,
   ): Promise<AxiosResponse<T>> {
     const response: AxiosResponse<T> = await this.axiosInstance.patch(

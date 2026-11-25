@@ -13,6 +13,7 @@ import {
   UseInterceptors,
 } from '@nestjs/common';
 import { FileInterceptor } from '@nestjs/platform-express';
+import { Throttle } from '@nestjs/throttler';
 import { Response } from 'express';
 import { ApiBearerAuth, ApiTags } from '@nestjs/swagger';
 import { AuthenticatedRequest, AuthUser } from '../../../auth-user';
@@ -60,42 +61,49 @@ export class AuthController {
 
   @Post('register')
   @HttpCode(HttpStatus.CREATED)
+  @Throttle({ default: { limit: 5, ttl: 60_000 } })
   register(@Body() input: RegisterDto) {
     return this.registerUseCase.execute({ input });
   }
 
   @Post('activate')
   @HttpCode(HttpStatus.OK)
+  @Throttle({ default: { limit: 5, ttl: 60_000 } })
   activateAccount(@Body() input: AuthActionTokenDto) {
     return this.activateAccountUseCase.execute(input.token);
   }
 
   @Post('activation/resend')
   @HttpCode(HttpStatus.OK)
+  @Throttle({ default: { limit: 3, ttl: 60_000 } })
   resendActivation(@Body() input: EmailActionDto) {
     return this.resendActivationUseCase.execute(input.email);
   }
 
   @Post('password/forgot')
   @HttpCode(HttpStatus.OK)
+  @Throttle({ default: { limit: 3, ttl: 60_000 } })
   requestPasswordReset(@Body() input: EmailActionDto) {
     return this.requestPasswordResetUseCase.execute(input.email);
   }
 
   @Post('password/reset')
   @HttpCode(HttpStatus.OK)
+  @Throttle({ default: { limit: 5, ttl: 60_000 } })
   resetPassword(@Body() input: ResetPasswordDto) {
     return this.resetPasswordUseCase.execute(input);
   }
 
   @Post('login')
   @HttpCode(HttpStatus.OK)
+  @Throttle({ default: { limit: 5, ttl: 60_000 } })
   login(@Body() input: LoginDto) {
     return this.loginUseCase.execute({ input });
   }
 
   @Post('refresh')
   @HttpCode(HttpStatus.OK)
+  @Throttle({ default: { limit: 10, ttl: 60_000 } })
   refresh(@Body() input: RefreshTokenDto) {
     return this.refreshUseCase.execute({ input });
   }

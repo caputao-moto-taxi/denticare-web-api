@@ -88,8 +88,26 @@ Para testar a ligação real ao R2, execute
 O teste usa uma chave aleatória e tenta remover o objeto no fim.
 
 A API escuta em `http://localhost:3000` por padrão (`PORT` pode alterar a porta).
-O Swagger está disponível em `/api/doc`. No frontend, `VITE_API_URL` define a
-origem da API e, se omitida, usa `http://localhost:3000`.
+Em desenvolvimento, o Swagger está disponível em `/api/doc`. No frontend,
+`VITE_API_URL` define a origem da API e, se omitida, usa `http://localhost:3000`.
+
+## Segurança da API
+
+- Em produção, configure `CORS_ORIGINS` com as origens HTTPS exatas do frontend,
+  separadas por vírgula. A API rejeita wildcard e não inicia em produção sem
+  essa allowlist.
+- `TRUST_PROXY_HOPS` é `0` por padrão. Configure-o apenas com a quantidade exata
+  de proxies reversos confiáveis; não exponha a API diretamente quando confiar
+  em cabeçalhos encaminhados pelo proxy.
+- O throttling global limita pedidos por IP; endpoints de autenticação têm
+  limites mais restritos. O armazenamento padrão é por processo, portanto
+  ambientes com várias réplicas também devem aplicar limites num gateway/WAF ou
+  configurar um armazenamento distribuído.
+- O Swagger fica desativado fora de desenvolvimento, salvo ativação explícita
+  por `SWAGGER_ENABLED`. Fora de desenvolvimento, exige autenticação com
+  `USER_DOCS` e `PASS_DOCS` (mínimo de 16 caracteres) e tem limite de tentativas.
+- Em produção, os erros de validação não incluem detalhes internos. Use HTTPS
+  na terminação pública e não coloque valores de segredos no repositório.
 
 ## Fluxos persistentes
 
