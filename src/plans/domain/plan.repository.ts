@@ -10,6 +10,37 @@ export class PlanSearchParams extends SearchParams<PlanFilter> {}
 
 export class PlanSearchResult extends SearchResult {}
 
+export type PlanPromotionUpdate = {
+  isOnPromotion: boolean;
+  promotionalPrice: number | null;
+  promotionalStartAt: Date | null;
+  promotionalEndAt: Date | null;
+};
+
+export type PlanDetailsUpdate = {
+  name: string;
+  price: number;
+  currencyId: string;
+  duration: number;
+  totalBranch: number;
+};
+
+export type AddPlanBenefitInput = {
+  name: string;
+  details: string | null;
+};
+
+export type PlanBenefitOutput = {
+  id: string;
+  benefit: { id: string; name: string; details: string | null };
+};
+
+export type PlanCurrency = {
+  id: string;
+  name: string;
+  symbol: string;
+};
+
 export interface IPlanRepository extends ISearchableRepository<
   Plan,
   PlanId,
@@ -18,4 +49,11 @@ export interface IPlanRepository extends ISearchableRepository<
   PlanSearchResult
 > {
   listPaginated(query: ListQuery): Promise<ReturnType<typeof paginated>>;
+  listCurrencies(): Promise<PlanCurrency[]>;
+  updatePromotion(id: PlanId, promotion: PlanPromotionUpdate): Promise<void>;
+  updateDetails(id: PlanId, details: PlanDetailsUpdate): Promise<void>;
+  addBenefit(
+    id: PlanId,
+    benefit: AddPlanBenefitInput,
+  ): Promise<PlanBenefitOutput>;
 }

@@ -4,6 +4,10 @@ import {
   PlanSearchResult,
   PlanId,
   PlanSearchParams,
+  PlanCurrency,
+  PlanDetailsUpdate,
+  AddPlanBenefitInput,
+  PlanBenefitOutput,
 } from '../../../domain';
 import { PlanModelMapper } from './plan-model.mapper';
 import { NotFoundError } from '../../../../shared/domain/errors/not-found.error';
@@ -51,6 +55,14 @@ export class PlanPrismaRepository implements IPlanRepository {
     return paginated(data, total, query);
   }
 
+  async listCurrencies(): Promise<PlanCurrency[]> {
+    return this._prismaService.currency.findMany({
+      where: { deletedAt: null },
+      select: { id: true, name: true, symbol: true },
+      orderBy: { name: 'asc' },
+    });
+  }
+
   sortableFields: string[] = ['createdAt'];
 
   constructor(private _prismaService: PrismaService) {}
@@ -72,8 +84,8 @@ export class PlanPrismaRepository implements IPlanRepository {
     });
   }
   async findById(entityId: PlanId): Promise<Plan | null> {
-    const plan = await this._prismaService.plan.findUnique({
-      where: { id: entityId.value },
+    const plan = await this._prismaService.plan.findFirst({
+      where: { id: entityId.value, deletedAt: null },
     });
     return plan ? PlanModelMapper.toEntity(plan) : null;
   }
@@ -114,9 +126,68 @@ export class PlanPrismaRepository implements IPlanRepository {
       throw new NotFoundError(entity.id, Plan);
     }
   }
-  async delete(entityId: PlanId): Promise<void> {
-    await this._prismaService.plan.delete({
+  async updatePromotion(
+    entityId: PlanId,
+    promotion: {
+      isOnPromotion: boolean;
+      promotionalPrice: number | null;
+      promotionalStartAt: Date | null;
+      promotionalEndAt: Date | null;
+    },
+  ): Promise<void> {
+    await this._prismaService.plan.update({
       where: { id: entityId.value },
+      data: {
+        isOnPromotion: promotion.isOnPromotion,
+        promotionalPrice: promotion.promotionalPrice,
+        promotionStartDate: promotion.promotionalStartAt,
+        promotionEndDate: promotion.promotionalEndAt,
+      },
+    });
+  }
+  async updateDetails(
+    entityId: PlanId,
+    details: PlanDetailsUpdate,
+  ): Promise<void> {
+    await this._prismaService.plan.update({
+      where: { id: entityId.value },
+      data: {
+        name: details.name,
+        slug: details.name.toLowerCase().trim().replace(/\s+/g, '-'),
+        price: details.price,
+        currencyId: details.currencyId,
+        duration: details.duration,
+        total_branch: details.totalBranch,
+      },
+    });
+  }
+  async addBenefit(
+    planId: PlanId,
+    input: AddPlanBenefitInput,
+  ): Promise<PlanBenefitOutput> {
+    return this._prismaService.$transaction(async (transaction) => {
+      const benefit = await transaction.benefit.create({
+        data: { name: input.name, details: input.details },
+      });
+      const relation = await transaction.planBenefit.create({
+        data: { planId: planId.value, benefitId: benefit.id },
+        select: { id: true },
+      });
+
+      return {
+        id: relation.id,
+        benefit: {
+          id: benefit.id,
+          name: benefit.name,
+          details: benefit.details,
+        },
+      };
+    });
+  }
+  async delete(entityId: PlanId): Promise<void> {
+    await this._prismaService.plan.update({
+      where: { id: entityId.value },
+      data: { deletedAt: new Date() },
     });
   }
   getEntity(): typeof Plan {

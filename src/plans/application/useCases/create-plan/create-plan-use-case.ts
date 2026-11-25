@@ -11,21 +11,23 @@ import { CreatePlanInput } from './plan.input';
 
 export class CreatePlanUseCase implements IUseCase<
   CreatePlanInput,
-  CreatePlanOutput
+  CreatePlanOutput | { message: string }
 > {
   constructor(private readonly _repository: IPlanRepository) {}
 
   async execute(
     input: CreatePlanInput,
-  ): Promise<HttpResponse<CreatePlanOutput | any>> {
+  ): Promise<HttpResponse<CreatePlanOutput | { message: string }>> {
     try {
       if (
-        (input.isOnPromotion === true && input.promotionalPrice === null) ||
-        0
+        input.isOnPromotion &&
+        (input.promotionalPrice == null ||
+          input.promotionalPrice <= 0 ||
+          input.promotionalPrice >= input.price)
       ) {
         return badRequestResponse({
           message:
-            'Promotional price must be provided when the plan is on promotion.',
+            'Promotional price must be positive and lower than the plan price.',
         });
       }
 
@@ -45,8 +47,10 @@ export class CreatePlanUseCase implements IUseCase<
       await this._repository.insert(newPlan);
 
       return successResponse(PlanOutputMapper.toOutput(newPlan));
-    } catch (error: any) {
-      return errorResponse(error.message);
+    } catch (error: unknown) {
+      return errorResponse(
+        error instanceof Error ? error : new Error('Failed to create plan'),
+      );
     }
   }
 }

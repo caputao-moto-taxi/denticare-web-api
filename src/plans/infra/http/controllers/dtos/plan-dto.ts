@@ -1,13 +1,17 @@
-import { ApiProperty } from '@nestjs/swagger';
+import { ApiProperty, ApiPropertyOptional } from '@nestjs/swagger';
 import {
   Allow,
   IsBoolean,
   IsDate,
+  IsInt,
   IsNotEmpty,
   IsNumber,
   IsOptional,
   IsString,
+  MaxLength,
   Min,
+  IsUUID,
+  ValidateIf,
 } from 'class-validator';
 import { ErrorMessages } from '../../../../../shared/helpers/errorMessages';
 import { Type } from 'class-transformer';
@@ -23,6 +27,7 @@ export class CreatePlanDto {
   @IsNotEmpty({ message: ErrorMessages.PRICE_IS_REQUIRED })
   @Allow()
   @IsNumber()
+  @Min(0)
   price: number;
 
   @ApiProperty()
@@ -31,8 +36,9 @@ export class CreatePlanDto {
   currencyId: string;
 
   @ApiProperty()
-  @IsNumber()
+  @IsInt()
   @IsNotEmpty()
+  @Min(1)
   duration: number;
 
   @ApiProperty()
@@ -40,27 +46,97 @@ export class CreatePlanDto {
   @IsNotEmpty()
   isOnPromotion: boolean;
 
-  @ApiProperty()
+  @ApiPropertyOptional()
+  @IsOptional()
   @IsNumber()
   @Allow()
   promotionalPrice?: number;
 
-  @ApiProperty()
+  @ApiPropertyOptional()
   @Allow()
   @IsOptional()
   @IsDate()
   @Type(() => Date)
-  promotionalStartAt?: Date;
+  promotionalStartDate?: Date;
 
-  @ApiProperty()
+  @ApiPropertyOptional()
   @Allow()
   @IsOptional()
   @Type(() => Date)
-  promotionalEndAt?: Date;
+  promotionalEndDate?: Date;
 
   @ApiProperty()
-  @IsNumber()
+  @IsInt()
   @IsNotEmpty()
   @Min(1)
   totalBranch: number;
+}
+
+export class UpdatePlanPromotionDto {
+  @ApiProperty()
+  @IsBoolean()
+  isOnPromotion: boolean;
+
+  @ApiPropertyOptional()
+  @ValidateIf((input: UpdatePlanPromotionDto) => input.isOnPromotion)
+  @Type(() => Number)
+  @IsNumber()
+  @Min(0.01)
+  promotionalPrice?: number;
+
+  @ApiPropertyOptional()
+  @IsOptional()
+  @IsDate()
+  @Type(() => Date)
+  promotionalStartDate?: Date;
+
+  @ApiPropertyOptional()
+  @IsOptional()
+  @IsDate()
+  @Type(() => Date)
+  promotionalEndDate?: Date;
+}
+
+export class UpdatePlanDto {
+  @ApiProperty()
+  @IsString({ message: ErrorMessages.NAME_IS_REQUIRED })
+  @IsNotEmpty({ message: ErrorMessages.NAME_IS_REQUIRED })
+  @MaxLength(255)
+  name: string;
+
+  @ApiProperty()
+  @Type(() => Number)
+  @IsNumber()
+  @Min(0.01)
+  price: number;
+
+  @ApiProperty()
+  @IsUUID()
+  currencyId: string;
+
+  @ApiProperty()
+  @Type(() => Number)
+  @IsInt()
+  @Min(1)
+  duration: number;
+
+  @ApiProperty()
+  @Type(() => Number)
+  @IsInt()
+  @Min(1)
+  totalBranch: number;
+}
+
+export class AddPlanBenefitDto {
+  @ApiProperty()
+  @IsString()
+  @IsNotEmpty()
+  @MaxLength(255)
+  name: string;
+
+  @ApiPropertyOptional()
+  @IsOptional()
+  @IsString()
+  @MaxLength(2000)
+  details?: string;
 }
