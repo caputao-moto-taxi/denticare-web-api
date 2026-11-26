@@ -1,5 +1,8 @@
+import { Logger } from '@nestjs/common';
 import { DefaultAzureCredential } from '@azure/identity';
 import { SecretClient } from '@azure/keyvault-secrets';
+
+const logger = new Logger('AzureKeyVault');
 
 export const GetEnviromentVariable = async (name: string): Promise<string> => {
   const localValue = process.env[name];
@@ -26,7 +29,7 @@ export const GetEnviromentVariable = async (name: string): Promise<string> => {
 
     return secret.value;
   } catch (error) {
-    console.log(error);
+    logger.error(error);
 
     throw Error(
       `Error retrieving environment variable from Azure Key Vault. ENV: ${name}`,

@@ -15,7 +15,7 @@ export type GetPlanInput = {
 export class GetPlanUseCase implements IUseCase<GetPlanInput, GetPlanOutput> {
   constructor(private notificationRepository: IPlanRepository) {}
 
-  async execute(input: GetPlanInput): Promise<HttpResponse> {
+  async execute(input: GetPlanInput): Promise<HttpResponse<GetPlanOutput>> {
     try {
       const planId = new PlanId(input.id);
       const plan = await this.notificationRepository.findById(planId);
@@ -24,7 +24,7 @@ export class GetPlanUseCase implements IUseCase<GetPlanInput, GetPlanOutput> {
 
       return successResponse(PlanOutputMapper.toOutput(plan));
     } catch (error: unknown) {
-      return errorResponse(error as Error);
+      return errorResponse(error);
     }
   }
 }

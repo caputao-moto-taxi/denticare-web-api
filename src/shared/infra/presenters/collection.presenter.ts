@@ -20,5 +20,5 @@ export abstract class CollectionPresenter {
     return this.paginationPresenter;
   }
 
-  abstract get data(): any[];
+  abstract get data(): unknown[];
 }

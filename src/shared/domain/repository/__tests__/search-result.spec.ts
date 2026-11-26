@@ -1,16 +1,31 @@
+import { Entity } from '../../entity';
 import { SearchResult } from '../search-result';
+import { Uuid } from '../../value-objects/uuid.vo';
+
+class StubEntity extends Entity {
+  readonly entityId = new Uuid();
+
+  constructor(readonly name: string) {
+    super();
+  }
+
+  toJSON() {
+    return { id: this.entityId.value, name: this.name };
+  }
+}
 
 describe('SearchResult Unit Tests', () => {
   test('constructor props', () => {
+    const data = [new StubEntity('entity1'), new StubEntity('entity2')];
     let result = new SearchResult({
-      data: ['entity1', 'entity2'] as any,
+      data,
       total: 4,
       currentPage: 1,
       perPage: 2,
     });
 
     expect(result.toJSON()).toStrictEqual({
-      data: ['entity1', 'entity2'] as any,
+      data,
       total: 4,
       currentPage: 1,
       perPage: 2,
@@ -18,14 +33,14 @@ describe('SearchResult Unit Tests', () => {
     });
 
     result = new SearchResult({
-      data: ['entity1', 'entity2'] as any,
+      data,
       total: 4,
       currentPage: 1,
       perPage: 2,
     });
 
     expect(result.toJSON()).toStrictEqual({
-      data: ['entity1', 'entity2'] as any,
+      data,
       total: 4,
       currentPage: 1,
       perPage: 2,
@@ -35,7 +50,7 @@ describe('SearchResult Unit Tests', () => {
 
   it('should set lastPage = 1 when perPage field is greater than total field', () => {
     const result = new SearchResult({
-      data: [] as any,
+      data: [],
       total: 4,
       currentPage: 1,
       perPage: 15,
@@ -46,7 +61,7 @@ describe('SearchResult Unit Tests', () => {
 
   test('lastPage prop when total is not a multiple of perPage', () => {
     const result = new SearchResult({
-      data: [] as any,
+      data: [],
       total: 101,
       currentPage: 1,
       perPage: 20,

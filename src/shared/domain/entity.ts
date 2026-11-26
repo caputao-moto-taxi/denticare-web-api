@@ -4,5 +4,5 @@ export abstract class Entity {
   notification: Notification = new Notification();
 
   abstract get entityId(): ValueObject;
-  abstract toJSON(): any;
+  abstract toJSON(): unknown;
 }

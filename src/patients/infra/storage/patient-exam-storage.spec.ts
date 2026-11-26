@@ -2,7 +2,6 @@ import { ServiceUnavailableException } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import { S3Client } from '@aws-sdk/client-s3';
 import { NodeHttpHandler } from '@smithy/node-http-handler';
-import { Agent as HttpsAgent } from 'node:https';
 import { PatientExamStorage } from './patient-exam-storage';
 
 const mockS3Send = jest.fn();
@@ -43,11 +42,14 @@ describe('PatientExamStorage', () => {
     });
 
     const handlerOptions = jest.mocked(NodeHttpHandler).mock.calls[0][0];
-    const httpsAgent = handlerOptions.httpsAgent as HttpsAgent;
-    expect(httpsAgent.options).toEqual(
+    expect(handlerOptions).toEqual(
       expect.objectContaining({
-        minVersion: 'TLSv1.2',
-        rejectUnauthorized: true,
+        httpsAgent: expect.objectContaining({
+          options: expect.objectContaining({
+            minVersion: 'TLSv1.2',
+            rejectUnauthorized: true,
+          }),
+        }),
       }),
     );
     expect(jest.mocked(S3Client).mock.calls[0][0]).toEqual(

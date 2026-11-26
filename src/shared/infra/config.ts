@@ -2,13 +2,13 @@ import { config as readEnv } from 'dotenv';
 import { join } from 'path';
 
 export class Config {
-  static env: any = null;
+  static env: NodeJS.ProcessEnv | null = null;
 
   static db() {
     Config.readEnv();
 
     return {
-      dialect: 'sqlite' as any,
+      dialect: 'sqlite',
       host: Config.env.DB_HOST,
       logging: Config.env.DB_LOGGING === 'true',
     };

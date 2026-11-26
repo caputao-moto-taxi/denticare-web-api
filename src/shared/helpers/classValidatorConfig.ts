@@ -3,14 +3,10 @@ import { ValidationError, validate } from 'class-validator';
 const DEFAULT_ERROR_SEPARATOR = '; ';
 export class ClassValidatorHelper {
   static validationErrorToPlain(error: ValidationError) {
-    const msgError =
-      error.constraints && Object.keys(error.constraints).length > 0
-        ? Object.keys(error.constraints).map((key) => error.value[key] || '')
-        : [];
+    const msgError = error.constraints ? Object.values(error.constraints) : [];
 
     if (error.children && error.children.length > 0) {
       return error.children.reduce((messageErrors, currentError) => {
-        console.log(messageErrors, currentError);
         return [...messageErrors, ...this.validationErrorToPlain(currentError)];
       }, msgError);
     }
@@ -20,9 +16,9 @@ export class ClassValidatorHelper {
 
   static validationErrorsToPlain(validationErrors: ValidationError[] = []) {
     if (validationErrors && validationErrors.length > 0) {
-      return validationErrors.reduce((messageErrors: any[], currentError) => {
-        return [...messageErrors, ...this.validationErrorToPlain(currentError)];
-      }, [] as never[]);
+      return validationErrors.flatMap((error) =>
+        this.validationErrorToPlain(error),
+      );
     }
     return [];
   }

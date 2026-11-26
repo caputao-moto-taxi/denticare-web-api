@@ -4,8 +4,8 @@ import { AggregateRoot } from '../aggregate-root';
 export class DomainEventMediator {
   constructor(private eventEmitter: EventEmitter2) {}
 
-  register(event: string, handler: any) {
-    this.eventEmitter.on(event, handler);
+  register<T>(event: string, handler: (payload: T) => unknown) {
+    this.eventEmitter.on(event, (payload: unknown) => handler(payload as T));
   }
 
   async publish(aggregateRoot: AggregateRoot) {

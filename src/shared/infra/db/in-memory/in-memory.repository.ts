@@ -21,7 +21,7 @@ export abstract class InMemoryRepository<
   async insert(entity: E): Promise<void> {
     this.data.push(entity);
   }
-  async bulkInsert(entities: any[]): Promise<void> {
+  async bulkInsert(entities: E[]): Promise<void> {
     this.data.push(...entities);
   }
 
@@ -50,7 +50,7 @@ export abstract class InMemoryRepository<
     return typeof item === 'undefined' ? null : item;
   }
 
-  async findAll(): Promise<any[]> {
+  async findAll(): Promise<E[]> {
     return this.data;
   }
 
@@ -87,7 +87,7 @@ export abstract class InMemoryRepository<
     };
   }
 
-  abstract getEntity(): new (...args: any[]) => E;
+  abstract getEntity(): new (...args: never[]) => E;
 }
 
 export abstract class InMemorySearchableRepository<
@@ -134,24 +134,37 @@ export abstract class InMemorySearchableRepository<
     data: E[],
     sort: string | null,
     sortDir: SortDirection | null,
-    custom_getter?: (sort: string, item: E) => any,
+    custom_getter?: (sort: string, item: E) => unknown,
   ) {
     if (!sort || !this.sortableFields.includes(sort)) {
       return data;
     }
 
     return [...data].sort((a, b) => {
-      const aValue = custom_getter ? custom_getter(sort, a) : a[sort];
-      const bValue = custom_getter ? custom_getter(sort, b) : b[sort];
-      if (aValue < bValue) {
-        return sortDir === 'asc' ? -1 : 1;
-      }
-
-      if (aValue > bValue) {
-        return sortDir === 'asc' ? 1 : -1;
-      }
-
-      return 0;
+      const aValue = custom_getter
+        ? custom_getter(sort, a)
+        : Reflect.get(a, sort);
+      const bValue = custom_getter
+        ? custom_getter(sort, b)
+        : Reflect.get(b, sort);
+      const comparison = compareValues(aValue, bValue);
+      return sortDir === 'asc' ? comparison : -comparison;
     });
   }
+}
+
+function compareValues(a: unknown, b: unknown): number {
+  if (a === b) return 0;
+  if (a === null || a === undefined) return -1;
+  if (b === null || b === undefined) return 1;
+  if (typeof a === 'number' && typeof b === 'number') return a - b;
+  if (typeof a === 'string' && typeof b === 'string') {
+    return a < b ? -1 : a > b ? 1 : 0;
+  }
+  if (a instanceof Date && b instanceof Date) {
+    return a.getTime() - b.getTime();
+  }
+  const left = String(a);
+  const right = String(b);
+  return left < right ? -1 : left > right ? 1 : 0;
 }

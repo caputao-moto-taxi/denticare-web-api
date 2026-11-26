@@ -4,11 +4,11 @@ describe('Schema Unit Tests', () => {
   describe('DB Schema', () => {
     describe('DATABASE_URL', () => {
       test('should throw if value is missing or not a string', () => {
-        expect(() => CONFIG_DB_SCHEMA.DATABASE_URL(undefined as any)).toThrow(
+        expect(() => CONFIG_DB_SCHEMA.DATABASE_URL(undefined)).toThrow(
           'DATABASE_URL is required and must be a string',
         );
 
-        expect(() => CONFIG_DB_SCHEMA.DATABASE_URL(123 as any)).toThrow(
+        expect(() => CONFIG_DB_SCHEMA.DATABASE_URL(123)).toThrow(
           'DATABASE_URL is required and must be a string',
         );
       });

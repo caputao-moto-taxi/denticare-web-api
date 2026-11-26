@@ -59,7 +59,6 @@ describe('Database listing pagination', () => {
       Promise.all(operations),
     ),
   };
-  const hash = { hashPassword: jest.fn(), compare: jest.fn() };
   let module: TestingModule;
   let list: Record<
     string,
@@ -87,14 +86,12 @@ describe('Database listing pagination', () => {
         },
         {
           provide: DoctorsPrismaRepository,
-          useFactory: (db: PrismaService) =>
-            new DoctorsPrismaRepository(db, hash),
+          useFactory: (db: PrismaService) => new DoctorsPrismaRepository(db),
           inject: [PrismaService],
         },
         {
           provide: UsersPrismaRepository,
-          useFactory: (db: PrismaService) =>
-            new UsersPrismaRepository(db, hash),
+          useFactory: (db: PrismaService) => new UsersPrismaRepository(db),
           inject: [PrismaService],
         },
       ],

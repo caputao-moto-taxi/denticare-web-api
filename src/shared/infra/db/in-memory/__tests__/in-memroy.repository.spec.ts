@@ -31,7 +31,7 @@ class StubEntity extends Entity {
 }
 
 class StubInMemoryRepository extends InMemoryRepository<StubEntity, Uuid> {
-  getEntity(): new (...args: any[]) => StubEntity {
+  getEntity(): new (...args: never[]) => StubEntity {
     return StubEntity;
   }
 }

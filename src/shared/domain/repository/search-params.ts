@@ -2,12 +2,12 @@ import { ValueObject } from '../value-object';
 
 export type SortDirection = 'asc' | 'desc';
 
-export type SearchParamsConstructorProps<Filter = string> = {
-  page?: number;
-  perPage?: number;
-  sort?: string | null;
-  sortDir?: SortDirection | null;
-  filter?: Filter | null;
+export type SearchParamsConstructorProps = {
+  page?: unknown;
+  perPage?: unknown;
+  sort?: unknown;
+  sortDir?: unknown;
+  filter?: unknown;
 };
 
 export class SearchParams<Filter = string> extends ValueObject {
@@ -17,7 +17,7 @@ export class SearchParams<Filter = string> extends ValueObject {
   protected _sortDir: SortDirection | null;
   protected _filter: Filter | null;
 
-  constructor(props: SearchParamsConstructorProps<Filter> = {}) {
+  constructor(props: SearchParamsConstructorProps = {}) {
     super();
     this.page = props.page!;
     this.perPage = props.perPage!;
@@ -26,57 +26,43 @@ export class SearchParams<Filter = string> extends ValueObject {
     this.filter = props.filter!;
   }
 
-  get page() {
+  get page(): number {
     return this._page;
   }
 
-  private set page(value: number) {
-    let _page = +value;
-
-    if (Number.isNaN(_page) || _page <= 0 || parseInt(_page as any) !== _page) {
-      _page = 1;
-    }
-
-    this._page = _page;
+  private set page(value: unknown) {
+    this._page = positiveInteger(value, 1);
   }
 
-  get perPage() {
+  get perPage(): number {
     return this._perPage;
   }
 
-  private set perPage(value: number) {
-    let _perPage = value === (true as any) ? this._perPage : +value;
-
-    if (
-      Number.isNaN(_perPage) ||
-      _perPage <= 0 ||
-      parseInt(_perPage as any) !== _perPage
-    ) {
-      _perPage = this._perPage;
-    }
-
-    this._perPage = _perPage;
+  private set perPage(value: unknown) {
+    this._perPage = positiveInteger(value, this._perPage);
   }
 
   get sort(): string | null {
     return this._sort;
   }
 
-  private set sort(value: string | null) {
+  private set sort(value: unknown) {
     this._sort =
-      value === null || value === undefined || value === '' ? null : `${value}`;
+      value === null || value === undefined || value === ''
+        ? null
+        : String(value);
   }
 
   get sortDir(): SortDirection | null {
     return this._sortDir;
   }
 
-  private set sortDir(value: SortDirection | null) {
+  private set sortDir(value: unknown) {
     if (!this.sort) {
       this._sortDir = null;
       return;
     }
-    const dir = `${value}`.toLowerCase();
+    const dir = String(value).toLowerCase();
     this._sortDir = dir !== 'asc' && dir !== 'desc' ? 'asc' : dir;
   }
 
@@ -84,10 +70,20 @@ export class SearchParams<Filter = string> extends ValueObject {
     return this._filter;
   }
 
-  protected set filter(value: Filter | null) {
+  protected set filter(value: unknown) {
     this._filter =
-      value === null || value === undefined || (value as unknown) === ''
+      value === null || value === undefined || value === ''
         ? null
-        : (`${value}` as any);
+        : (String(value) as Filter);
   }
+}
+
+function positiveInteger(value: unknown, fallback: number): number {
+  const parsed =
+    typeof value === 'number'
+      ? value
+      : typeof value === 'string' && value.trim() !== ''
+        ? Number(value)
+        : Number.NaN;
+  return Number.isInteger(parsed) && parsed > 0 ? parsed : fallback;
 }

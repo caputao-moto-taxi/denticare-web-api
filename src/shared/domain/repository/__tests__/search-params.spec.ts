@@ -22,7 +22,7 @@ describe('SearchParams Unit Tests', () => {
     ];
 
     arrange.forEach((i) => {
-      expect(new SearchParams({ page: i.page as any }).page).toBe(i.expected);
+      expect(new SearchParams({ page: i.page }).page).toBe(i.expected);
     });
   });
 
@@ -49,9 +49,7 @@ describe('SearchParams Unit Tests', () => {
     ];
 
     arrange.forEach((i) => {
-      expect(new SearchParams({ perPage: i.perPage as any }).perPage).toBe(
-        i.expected,
-      );
+      expect(new SearchParams({ perPage: i.perPage }).perPage).toBe(i.expected);
     });
   });
 
@@ -74,7 +72,7 @@ describe('SearchParams Unit Tests', () => {
     ];
 
     arrange.forEach((i) => {
-      expect(new SearchParams({ sort: i.sort as any }).sort).toBe(i.expected);
+      expect(new SearchParams({ sort: i.sort }).sort).toBe(i.expected);
     });
   });
 
@@ -107,7 +105,7 @@ describe('SearchParams Unit Tests', () => {
 
     arrange.forEach((i) => {
       expect(
-        new SearchParams({ sort: 'field', sortDir: i.sortDir as any }).sortDir,
+        new SearchParams({ sort: 'field', sortDir: i.sortDir }).sortDir,
       ).toBe(i.expected);
     });
   });
@@ -132,9 +130,7 @@ describe('SearchParams Unit Tests', () => {
     ];
 
     arrange.forEach((i) => {
-      expect(new SearchParams({ filter: i.filter as any }).filter).toBe(
-        i.expected,
-      );
+      expect(new SearchParams({ filter: i.filter }).filter).toBe(i.expected);
     });
   });
 });

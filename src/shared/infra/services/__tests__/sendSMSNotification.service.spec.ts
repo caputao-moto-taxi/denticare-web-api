@@ -7,6 +7,14 @@ describe('SendSMSNotification - Brazilian Phone Number Formatting', () => {
     smsService = new SendSMSNotification();
   });
 
+  const callServiceMethod = (methodName: string, value: string): unknown => {
+    const method = Reflect.get(smsService, methodName);
+    if (typeof method !== 'function') {
+      throw new Error(`SendSMSNotification.${methodName} is unavailable`);
+    }
+    return Reflect.apply(method, smsService, [value]);
+  };
+
   describe('Brazilian Phone Number Formatting', () => {
     it('should format Brazilian mobile numbers without country code', () => {
       const testCases = [
@@ -22,7 +30,7 @@ describe('SendSMSNotification - Brazilian Phone Number Formatting', () => {
       ];
 
       testCases.forEach(({ input, expected }) => {
-        const result = (smsService as any).formatBrazilianPhoneNumber(input);
+        const result = callServiceMethod('formatBrazilianPhoneNumber', input);
         expect(result).toBe(expected);
       });
     });
@@ -41,7 +49,7 @@ describe('SendSMSNotification - Brazilian Phone Number Formatting', () => {
       ];
 
       testCases.forEach(({ input, expected }) => {
-        const result = (smsService as any).formatBrazilianPhoneNumber(input);
+        const result = callServiceMethod('formatBrazilianPhoneNumber', input);
         expect(result).toBe(expected);
       });
     });
@@ -55,7 +63,7 @@ describe('SendSMSNotification - Brazilian Phone Number Formatting', () => {
       ];
 
       testCases.forEach(({ input, expected }) => {
-        const result = (smsService as any).formatBrazilianPhoneNumber(input);
+        const result = callServiceMethod('formatBrazilianPhoneNumber', input);
         expect(result).toBe(expected);
       });
     });
@@ -71,7 +79,7 @@ describe('SendSMSNotification - Brazilian Phone Number Formatting', () => {
       ];
 
       testCases.forEach(({ input, expected }) => {
-        const result = (smsService as any).formatBrazilianPhoneNumber(input);
+        const result = callServiceMethod('formatBrazilianPhoneNumber', input);
         expect(result).toBe(expected);
       });
     });
@@ -88,7 +96,7 @@ describe('SendSMSNotification - Brazilian Phone Number Formatting', () => {
       ];
 
       testCases.forEach((input) => {
-        const result = (smsService as any).formatBrazilianPhoneNumber(input);
+        const result = callServiceMethod('formatBrazilianPhoneNumber', input);
         expect(result).toBe(input);
       });
     });
@@ -110,7 +118,7 @@ describe('SendSMSNotification - Brazilian Phone Number Formatting', () => {
       ];
 
       validMobileNumbers.forEach((number) => {
-        const result = (smsService as any).isValidBrazilianPhoneNumber(number);
+        const result = callServiceMethod('isValidBrazilianPhoneNumber', number);
         expect(result).toBe(true);
       });
     });
@@ -130,7 +138,7 @@ describe('SendSMSNotification - Brazilian Phone Number Formatting', () => {
       ];
 
       validLandlineNumbers.forEach((number) => {
-        const result = (smsService as any).isValidBrazilianPhoneNumber(number);
+        const result = callServiceMethod('isValidBrazilianPhoneNumber', number);
         expect(result).toBe(true);
       });
     });
@@ -147,7 +155,7 @@ describe('SendSMSNotification - Brazilian Phone Number Formatting', () => {
       ];
 
       invalidNumbers.forEach((number) => {
-        const result = (smsService as any).isValidBrazilianPhoneNumber(number);
+        const result = callServiceMethod('isValidBrazilianPhoneNumber', number);
         expect(result).toBe(false);
       });
     });
@@ -163,7 +171,7 @@ describe('SendSMSNotification - Brazilian Phone Number Formatting', () => {
       ];
 
       validNumbersWithFormatting.forEach((number) => {
-        const result = (smsService as any).isValidBrazilianPhoneNumber(number);
+        const result = callServiceMethod('isValidBrazilianPhoneNumber', number);
         expect(result).toBe(true);
       });
     });

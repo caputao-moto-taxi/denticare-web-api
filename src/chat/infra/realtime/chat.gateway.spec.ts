@@ -64,11 +64,13 @@ describe('ChatGateway', () => {
   });
 
   it('attaches the namespace to the realtime service', () => {
-    const namespace = {} as never;
+    const useMiddleware = jest.fn();
+    const namespace = { use: useMiddleware } as never;
 
     gateway.afterInit(namespace);
 
     expect(realtime.attach).toHaveBeenCalledWith(namespace);
+    expect(useMiddleware).toHaveBeenCalledWith(expect.any(Function));
   });
 
   it('rejects sockets without a token', async () => {

@@ -12,13 +12,13 @@ export class PlanRules {
   @Max(undefined, { groups: ['totalBranch'] })
   totalBranch: number;
 
-  constructor(entity: any) {
+  constructor(entity: object) {
     Object.assign(this, entity);
   }
 }
 
 export class PlanValidator extends ClassValidatorFields {
-  validate(plan: Notification, data: any, fields?: string[]): boolean {
+  validate(plan: Notification, data: object, fields?: string[]): boolean {
     const newFields = fields?.length
       ? fields
       : ['name', 'price', 'totalBranch'];

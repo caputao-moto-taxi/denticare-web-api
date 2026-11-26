@@ -1,14 +1,14 @@
 import { Entity } from '../entity';
 import { ValueObject } from '../value-object';
 
-type SearchResultConstructorProps<E extends Entity> = {
+type SearchResultConstructorProps<E> = {
   data: E[];
   total: number;
   currentPage: number;
   perPage: number;
 };
 
-export class SearchResult<E extends Entity = any> extends ValueObject {
+export class SearchResult<E = unknown> extends ValueObject {
   readonly data: E[];
   readonly total: number;
   readonly currentPage: number;
@@ -26,7 +26,11 @@ export class SearchResult<E extends Entity = any> extends ValueObject {
 
   toJSON(forceEntity = false) {
     return {
-      data: forceEntity ? this.data.map((item) => item.toJSON()) : this.data,
+      data: forceEntity
+        ? this.data.map((item) =>
+            item instanceof Entity ? item.toJSON() : item,
+          )
+        : this.data,
       total: this.total,
       currentPage: this.currentPage,
       perPage: this.perPage,

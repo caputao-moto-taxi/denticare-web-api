@@ -11,7 +11,7 @@ export interface IRepository<E extends Entity, EntityId extends ValueObject> {
   findAll(): Promise<E[]>;
   update(entity: E): Promise<void>;
   delete(entityId: EntityId): Promise<void>;
-  getEntity(): new (...args: any[]) => E;
+  getEntity(): new (...args: never[]) => E;
 }
 export interface ISearchableRepository<
   E extends Entity,

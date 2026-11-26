@@ -62,18 +62,18 @@ export class ValidationFilter<T> implements ExceptionFilter<T> {
     if (exception) {
       this.logger.debug(exception);
       if (this.logException) {
-        console.log(exception);
+        this.logger.error(exception);
       }
     } else if (exception instanceof HttpException) {
       this.logger.debug(exception.message);
       if (this.logException) {
-        console.log(exception);
+        this.logger.error(exception);
       }
       response.status(exception.getStatus()).json(exception.message);
     } else {
       this.logger.debug(exception);
       if (this.logException) {
-        console.log(exception);
+        this.logger.error(exception);
       }
 
       response.status(HttpStatus.INTERNAL_SERVER_ERROR).json(String(exception));

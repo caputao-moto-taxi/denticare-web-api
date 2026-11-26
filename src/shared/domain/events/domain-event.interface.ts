@@ -8,7 +8,7 @@ export interface IDomainEvent {
   getIntegrationEvent?(): IIntegrationEvent;
 }
 
-export interface IIntegrationEvent<T = any> {
+export interface IIntegrationEvent<T = unknown> {
   event_version: number;
   occurred_on: Date;
   payload: T;

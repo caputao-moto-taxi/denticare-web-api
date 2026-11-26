@@ -21,10 +21,10 @@ class StubEvent implements IDomainEvent {
   }
 }
 
-class StubIntegrationEvent implements IIntegrationEvent {
+class StubIntegrationEvent implements IIntegrationEvent<StubEvent> {
   occurred_on: Date;
   event_version: number;
-  payload: any;
+  payload: StubEvent;
   event_name: string;
   constructor(event: StubEvent) {
     this.occurred_on = event.occurred_on;

@@ -1,36 +1,46 @@
 import { HttpStatus } from '@nestjs/common';
 
-export type HttpResponse<T = any> =
+export type HttpResponse<T = unknown> =
   | HttpResponseType<T>
-  | HttpResponseType<string>;
+  | HttpResponseType<string>
+  | HttpResponseType<ErrorPayload>;
 
-export class HttpResponseType<T = any> {
+type ErrorPayload = { message: string; stack?: string };
+type HttpResponseInput<T> = {
   status: number;
   data: T;
-  headers?: Record<string, any>;
+  headers?: Record<string, string | number | readonly string[]>;
+};
 
-  constructor(input: HttpResponseType<T>) {
+type SanitizedData<T> = T | { raw: string };
+
+export class HttpResponseType<T = unknown> {
+  status: number;
+  data: SanitizedData<T>;
+  headers?: Record<string, string | number | readonly string[]>;
+
+  constructor(input: HttpResponseInput<T>) {
     this.status = input.status;
     this.data = sanitize(input.data);
     if (input.headers) this.headers = input.headers;
   }
 }
 
-export class HttpResponseTypeError<T = any> extends HttpResponseType<T> {
-  constructor(input: HttpResponseTypeError<T>) {
+export class HttpResponseTypeError<T = unknown> extends HttpResponseType<T> {
+  constructor(input: HttpResponseInput<T>) {
     super(input);
   }
 }
 
-export class ErrorResponse extends HttpResponseTypeError {
-  constructor(error: Error) {
+export class ErrorResponse extends HttpResponseTypeError<ErrorPayload> {
+  constructor(error: unknown) {
     super({
       status: HttpStatus.INTERNAL_SERVER_ERROR,
       data: sanitizeError(error),
     });
   }
 }
-export const errorResponse = (error: Error) => new ErrorResponse(error);
+export const errorResponse = (error: unknown) => new ErrorResponse(error);
 
 export class BadRequestResponse extends HttpResponseTypeError {
   constructor(message: string) {
@@ -41,7 +51,7 @@ export class BadRequestResponse extends HttpResponseTypeError {
   }
 }
 
-export const forbiddenResponse = (error: any) =>
+export const forbiddenResponse = (error: unknown) =>
   new HttpResponseType({
     status: HttpStatus.FORBIDDEN,
     data: sanitizeError(error),
@@ -53,13 +63,16 @@ export const badRequestResponse = (data: { message: string }) =>
     data,
   });
 
-export const successResponse = (data: any) =>
+export const successResponse = <T>(data: T): HttpResponseType<T> =>
   new HttpResponseType({
     status: HttpStatus.OK,
     data,
   });
 
-export const successResponseCustom = (data: any, headers?: any) =>
+export const successResponseCustom = <T>(
+  data: T,
+  headers?: Record<string, string | number | readonly string[]>,
+) =>
   new HttpResponseType({
     status: HttpStatus.OK,
     data,
@@ -72,52 +85,65 @@ export const noContentResponse = () =>
     data: null,
   });
 
-export class AcceptedResponse extends HttpResponseType {
-  constructor(data: any) {
+export class AcceptedResponse<T> extends HttpResponseType<T> {
+  constructor(data: T) {
     super({
       status: HttpStatus.ACCEPTED,
       data,
     });
   }
 }
-export const acceptedResponse = (data: any) => new AcceptedResponse(data);
+export const acceptedResponse = <T>(data: T) => new AcceptedResponse(data);
 
-export class CreatedResponse extends HttpResponseType {
-  constructor(data: any) {
+export class CreatedResponse<T> extends HttpResponseType<T> {
+  constructor(data: T) {
     super({
       status: HttpStatus.CREATED,
       data,
     });
   }
 }
-export const createdResponse = (data: any) => new CreatedResponse(data);
+export const createdResponse = <T>(data: T) => new CreatedResponse(data);
 
-export const notAcceptableResponse = (data: any) =>
+export const notAcceptableResponse = <T>(data: T) =>
   new HttpResponseType({
     status: HttpStatus.NOT_ACCEPTABLE,
     data,
   });
 
-export const unauthorized = (data: any) =>
+export const unauthorized = <T>(data: T) =>
   new HttpResponseType({
     status: HttpStatus.UNAUTHORIZED,
     data,
   });
 
-function sanitize(data: any): any {
+function sanitize<T>(data: T): SanitizedData<T> {
   if (typeof data !== 'object' || data === null) return data;
 
   try {
-    return JSON.parse(JSON.stringify(data));
-  } catch (_) {
+    return JSON.parse(JSON.stringify(data)) as T;
+  } catch {
     return { raw: String(data) };
   }
 }
 
-function sanitizeError(error: any): any {
+function sanitizeError(error: unknown): ErrorPayload {
   if (typeof error === 'string') return { message: error };
+  if (typeof error !== 'object' || error === null) {
+    return { message: 'Internal Server Error' };
+  }
+
+  const message =
+    'message' in error && typeof error.message === 'string'
+      ? error.message
+      : 'Internal Server Error';
+  const stack =
+    'stack' in error && typeof error.stack === 'string'
+      ? error.stack
+      : undefined;
+
   return {
-    message: error?.message ?? 'Internal Server Error',
-    stack: error?.stack,
+    message,
+    ...(stack ? { stack } : {}),
   };
 }

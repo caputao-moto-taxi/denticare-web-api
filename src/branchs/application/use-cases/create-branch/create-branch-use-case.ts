@@ -10,7 +10,8 @@ export class CreateBranchUseCase implements UseCase {
     private _headquarterRepository: IHeadquarterRepository,
     private _branchRepository: IBranchRepository,
   ) {}
-  execute(request: any): Promise<HttpResponse<any>> {
+  execute(request: unknown): Promise<HttpResponse<unknown>> {
+    void request;
     throw new Error('Method not implemented.');
   }
 }

@@ -10,7 +10,7 @@ type DB_SCHEMA_TYPE = {
 };
 
 export const CONFIG_DB_SCHEMA = {
-  DATABASE_URL: (value: string) => {
+  DATABASE_URL: (value: unknown) => {
     if (!value || typeof value !== 'string') {
       throw new Error('DATABASE_URL is required and must be a string');
     }
@@ -39,7 +39,7 @@ export class ConfigModule extends NestConfigModule {
             : []),
         environmentFilePath,
       ],
-      validate: (config: Record<string, any>) => {
+      validate: (config: Record<string, unknown>) => {
         Object.keys(CONFIG_DB_SCHEMA).forEach((key) => {
           CONFIG_DB_SCHEMA[key](config[key]);
         });

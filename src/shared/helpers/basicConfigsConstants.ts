@@ -18,9 +18,9 @@ export const appDocCustomCss = `
 
 export function getAllowedCorsOrigins(): string[] {
   const isProduction = process.env.NODE_ENV === 'production';
-  const configuredOrigins = process.env.CORS_ORIGINS?.split(',')
-    .map((origin) => origin.trim()) || []
-    .filter(Boolean);
+  const configuredOrigins =
+    process.env.CORS_ORIGINS?.split(',').map((origin) => origin.trim()) ||
+    [].filter(Boolean);
   const origins = configuredOrigins?.length
     ? configuredOrigins
     : isProduction
@@ -30,7 +30,7 @@ export function getAllowedCorsOrigins(): string[] {
           'http://localhost:5174',
           'http://127.0.0.1:5173',
           'http://127.0.0.1:5174',
-          'http://localhost:3000'
+          'http://localhost:3000',
         ];
 
   if (isProduction && origins.length === 0) {

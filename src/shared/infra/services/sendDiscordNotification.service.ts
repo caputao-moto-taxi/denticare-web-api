@@ -4,6 +4,7 @@ import {
   errorResponse,
   successResponse,
 } from '../../contracts/httpContracts';
+import type { HttpResponse } from '../../contracts/httpContracts';
 import { GetEnviromentVariable } from '../azure';
 
 export interface SendDiscordNotificationProps {
@@ -18,7 +19,6 @@ export class SendDiscordNotificationService {
     if (discordClient) return discordClient;
 
     const token = await GetEnviromentVariable('DISCORD_BOT_TOKEN');
-    console.log('Discord Bot Token:', token);
     discordClient = new Client({
       intents: [GatewayIntentBits.Guilds, GatewayIntentBits.GuildMessages],
     });
@@ -30,7 +30,7 @@ export class SendDiscordNotificationService {
   public async execute({
     channelName,
     content,
-  }: SendDiscordNotificationProps): Promise<any> {
+  }: SendDiscordNotificationProps): Promise<HttpResponse<unknown>> {
     try {
       const client = await this.getClient();
       const guildId = await GetEnviromentVariable('DISCORD_GUILD_ID');
@@ -52,9 +52,8 @@ export class SendDiscordNotificationService {
       }
 
       await channel.send(content);
-      console.log('Notification sent to Discord channel:', channelName);
       return successResponse(true);
-    } catch (error: any) {
+    } catch (error: unknown) {
       return errorResponse(error);
     }
   }

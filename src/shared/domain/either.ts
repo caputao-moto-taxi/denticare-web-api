@@ -29,13 +29,11 @@ export class Either<Ok = unknown, ErrorType = Error> implements Iterable<
     return this.error !== null;
   }
 
-  static safe<Ok = unknown, ErrorType = Error>(
-    fn: () => Ok,
-  ): Either<Ok, ErrorType> {
+  static safe<Ok = unknown>(fn: () => Ok): Either<Ok, unknown> {
     try {
       return Either.ok(fn());
-    } catch (e: any) {
-      return Either.fail(e);
+    } catch (error: unknown) {
+      return Either.fail<unknown, Ok>(error);
     }
   }
 
@@ -85,7 +83,7 @@ export class Either<Ok = unknown, ErrorType = Error> implements Iterable<
    */
   chainEach<NewOk, NewError>(
     fn: (value: Flatten<Ok>) => Either<Flatten<NewOk>, Flatten<NewError>>,
-  ): Either<NewOk, NewError> {
+  ): Either<Flatten<NewOk>[], Flatten<NewError>[] | ErrorType> {
     if (this.isOk()) {
       if (!Array.isArray(this.ok)) {
         throw new Error('Method chainEach only works with arrays');
@@ -95,18 +93,22 @@ export class Either<Ok = unknown, ErrorType = Error> implements Iterable<
       });
       const errors = result.filter((r) => r.isFail());
       if (errors.length > 0) {
-        return Either.fail(errors.map((e) => e.error)) as any;
+        return Either.fail<Flatten<NewError>[] | ErrorType, Flatten<NewOk>[]>(
+          errors.map((e) => e.error),
+        );
       }
-      return Either.ok(result.map((r) => r.ok)) as any;
+      return Either.ok(result.map((r) => r.ok));
     }
-    return Either.fail<ErrorType>(this.error) as any;
+    return Either.fail<Flatten<NewError>[] | ErrorType, Flatten<NewOk>[]>(
+      this.error,
+    );
   }
 
   asArray(): [Ok, ErrorType] {
     return [this.ok, this.error];
   }
 
-  [Symbol.iterator](): Iterator<Value<Ok, ErrorType>, any, undefined> {
+  [Symbol.iterator](): Iterator<Value<Ok, ErrorType>, unknown, undefined> {
     return new EitherIterator<Ok, ErrorType>({
       ok: this.ok,
       error: this.error,

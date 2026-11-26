@@ -36,7 +36,7 @@ class StubInMemorySearchableRepository extends InMemorySearchableRepository<
 > {
   sortableFields: string[] = ['name'];
 
-  getEntity(): new (...args: any[]) => StubEntity {
+  getEntity(): new (...args: never[]) => StubEntity {
     return StubEntity;
   }
 
@@ -64,7 +64,7 @@ describe('InMemorySearchableRepository Unit Tests', () => {
   describe('applyFilter method', () => {
     it('should no filter data when filter param is null', async () => {
       const data = [new StubEntity({ name: 'name value', price: 5 })];
-      const spyFilterMethod = jest.spyOn(data, 'filter' as any);
+      const spyFilterMethod = jest.spyOn(data, 'filter');
       const dataFiltered = await repository['applyFilter'](data, null);
       expect(dataFiltered).toStrictEqual(data);
       expect(spyFilterMethod).not.toHaveBeenCalled();
@@ -77,7 +77,7 @@ describe('InMemorySearchableRepository Unit Tests', () => {
         new StubEntity({ name: 'fake', price: 0 }),
       ];
 
-      const spyFilterMethod = jest.spyOn(data, 'filter' as any);
+      const spyFilterMethod = jest.spyOn(data, 'filter');
       let dataFiltered = await repository['applyFilter'](data, 'TEST');
 
       expect(dataFiltered).toStrictEqual([data[0], data[1]]);

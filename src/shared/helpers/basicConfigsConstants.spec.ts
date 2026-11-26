@@ -47,9 +47,9 @@ function checkOrigin(
   if (typeof originOption !== 'function') {
     throw new Error('Expected a dynamic CORS origin validator');
   }
-  let allowed: boolean | undefined;
+  let allowed = false;
   originOption(origin, (_error, result) => {
-    allowed = result;
+    allowed = result === true;
   });
   return allowed;
 }
