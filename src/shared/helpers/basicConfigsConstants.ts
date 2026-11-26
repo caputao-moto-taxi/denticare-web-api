@@ -19,7 +19,7 @@ export const appDocCustomCss = `
 export function getAllowedCorsOrigins(): string[] {
   const isProduction = process.env.NODE_ENV === 'production';
   const configuredOrigins = process.env.CORS_ORIGINS?.split(',')
-    .map((origin) => origin.trim())
+    .map((origin) => origin.trim()) || []
     .filter(Boolean);
   const origins = configuredOrigins?.length
     ? configuredOrigins
